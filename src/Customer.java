@@ -1,5 +1,5 @@
 /**
- * Created by mahmud on 2015-09-16.
+ * Created by numan947 on 2015-09-16.
  */
 public class Customer {
     private String name;
