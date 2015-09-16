@@ -7,7 +7,7 @@ public class Customer {
     private String email;
 
 
-    public Customer();
+
     public Customer(String name){
         this.name=name;
     }
@@ -20,13 +20,13 @@ public class Customer {
     {
         this.gender=gender;
     }
-    public void setEmail(string email)
+    public void setEmail(String email)
     {
         this.email=email;
     }
     public void print()
     {
-        //cout<<name<<" ("<<gender<<") "<<"at "<<email<<endl;
+        System.out.println(name+" ("+gender+") at "+email);
     }
     public String getName()
     {

@@ -8,7 +8,7 @@ public class Account {
     private double balance;
     private String branch;
 
-    public Account()
+
     public Account(Customer customer, int accountNumber,double balance)
     {
         this.balance=balance;
@@ -35,7 +35,7 @@ public class Account {
         if(balance>=amount)
             this.balance-=amount;
         else
-        //cout<<"Amount withdrawn exceeds the current balance!"<<endl;
+        System.out.println("Amount withdrawn exceeds the current balance!");
     }
     public String getCustomerName()
     {
@@ -53,9 +53,8 @@ public class Account {
     {
         return this.balance;
     }
-    public void print()
-    {
-        //cout << "Customer: " << this->customer.getName() <<" Branch: " << this->getBranch() << " A/C no: " << this->getAccountNumber() << " Balance: " << this->getBalance() << endl;
+    public void print() {
+        System.out.println("Customer: " + this.customer.getName() + " Branch: " + this.getBranch() + " A/C no: " + this.getAccountNumber() + " Balance " + this.getBalance());
     }
     public void setBalance(double balance)
     {
