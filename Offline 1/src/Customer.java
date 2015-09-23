@@ -7,7 +7,6 @@ public class Customer {
     private String email;
 
 
-
     public Customer(String name){
         this.name=name;
     }
