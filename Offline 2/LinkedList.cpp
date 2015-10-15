@@ -50,12 +50,39 @@ public:
 };
 
 class LinkedList: public LinkedListBase {
+public:
+    void add(Element e)
+    {
+        if(this->tail==0) //inserting the first item
+        {
+            e.setNext(0);
+            e.setPrev(0);
+            this->head=&e;
+            this->tail=&e;
+        }
+        else{
+            e.setPrev(tail);
+            e.setNext(tail->getNext());
+            tail->setNext(&e);
+            tail=&e;
+        }
+        this->size+=1;
+    }
+
 
 };
 
 // a very simple main
 int main() {
-	LinkedList ll;
+	LinkedList ll;int p;Element q;
+	for(int i=0;i<5;i++){
+        cin>>p;
+        q.setValue(p);
+        q.setNext(0);
+        q.setPrev(0);
+        ll.add(q);
+	}
+
 	cout << ll.getSize() << endl;
 	return 0;
 }
