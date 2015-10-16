@@ -1,4 +1,6 @@
 #include<iostream>
+#include<cstdio>
+#define dbg(x) printf("HERE COMES THE PACKAGE %d\n",x)
 using namespace std;
 
 class Element {
@@ -50,38 +52,106 @@ public:
 };
 
 class LinkedList: public LinkedListBase {
+private:
+    void prin(Element *h)
+    {
+        if(h==0)return;
+        cout<<h->getValue()<<" ";
+        prin(h->getNext());
+    }
+
 public:
+    LinkedList()
+    {
+        this->head=this->tail=0;
+        this->size=0;
+    }
+    void print()
+    {
+        prin(this->head);
+    }
+
+    void HEAD()//HEAD ONLY
+    {
+        cout<<this->head->getValue()<<endl;
+    }
+    void TAIL()//TAIL ONLY
+    {
+        cout<<this->tail->getValue()<<endl;
+    }
+
+    Element* searchPos(Element *head,int pos)
+    {
+        if(pos==0)return head;
+        searchPos(head->getNext(),pos-1);
+    }
+
+
     void add(Element e)
     {
-        if(this->tail==0) //inserting the first item
+        Element *newElement;
+        newElement=new Element;
+        newElement->setValue(e.getValue());
+
+        //cout<<"TAIL POS=="<<tail<<endl;
+        //scout<<"HEAD POS=="<<head<<endl;
+        if(this->getSize()==0) //inserting the first item
         {
-            e.setNext(0);
-            e.setPrev(0);
-            this->head=&e;
-            this->tail=&e;
+            newElement->setNext(0);
+            newElement->setPrev(0);
+            this->head=newElement;
+            this->tail=newElement;
+            dbg(9);
         }
         else{
-            e.setPrev(tail);
-            e.setNext(tail->getNext());
-            tail->setNext(&e);
-            tail=&e;
+
+            newElement->setPrev(this->tail);
+            newElement->setNext(this->tail->getNext());
+            tail->setNext(newElement);
+            //delete tail;
+            tail=newElement;
+            dbg(11);
         }
         this->size+=1;
     }
+    void add(int index,Element element)
+    {
+        if(index<this->size){
+            Element* temp=searchPos(this->head,index);
+            element.setNext(temp);
+            element.setPrev(temp->getPrev());
+            temp->getPrev()->setNext(&element);
+            temp->setPrev(&element);
+        }
+    }
+
+
+
 
 
 };
 
 // a very simple main
 int main() {
-	LinkedList ll;int p;Element q;
+	LinkedList ll;int p;
 	for(int i=0;i<5;i++){
-        cin>>p;
+        cin>>p;Element q;
+        //q=new Element;
         q.setValue(p);
         q.setNext(0);
         q.setPrev(0);
         ll.add(q);
 	}
+	//q.setNext(0);
+	//q.setPrev(0);
+	//q.setValue(1000);
+
+	ll.HEAD();
+	ll.TAIL();
+
+	cout<<endl<<endl<<endl;
+	ll.print();
+
 
 	cout << ll.getSize() << endl;
 	return 0;
