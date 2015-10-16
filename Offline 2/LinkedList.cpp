@@ -51,49 +51,45 @@ public:
 	}
 };
 
+
 class LinkedList: public LinkedListBase {
 private:
     void PRINT(Element *h)
     {
-        if(h==0)return;
+        if(h==tail)return;
+       // dbg(99);
         cout<<h->getValue()<<" ";
         PRINT(h->getNext());
     }
 
 public:
-    LinkedList()
+    /*LinkedList()
     {
         this->head=this->tail=0;
         this->size=0;
-    }
+    }*/
     void print()
     {
-        if(head==0){
+        if(head->getNext()==tail){
             cout<<"List is empty"<<endl;
             return;
         }
-        PRINT(this->head);
+        PRINT(this->head->getNext());
     }
 
-    void HEAD()//HEAD ONLY
-    {
-        cout<<this->head->getValue()<<endl;
-    }
-    void TAIL()//TAIL ONLY
-    {
-        cout<<this->tail->getValue()<<endl;
-    }
 
     Element* searchPos(Element *h,int pos)
     {
         if(pos==0)return h;
         searchPos(h->getNext(),pos-1);
     }
+
+
     bool contains(Element e)
     {
         Element * temp ;
-        temp = head;
-        while (temp != 0)
+        temp = head->getNext();
+        while (temp != tail)
         {
             if (temp->getValue() == e.getValue()) return true ;
             temp = temp->getNext() ;
@@ -106,20 +102,19 @@ public:
         Element *newElement;
         newElement=new Element;
         newElement->setValue(e.getValue());
-
+        //cout<<"HEAD-->>"<<head->getNext()<<"  "<<"TAIL-->>"<<tail->getPrev()<<endl;
         if(this->getSize()==0) //inserting the first item
         {
-            newElement->setNext(0);
-            newElement->setPrev(0);
-            this->head=newElement;
-            this->tail=newElement;
+            newElement->setNext(tail);
+            newElement->setPrev(head);
+            head->setNext(newElement);
+            tail->setPrev(newElement);
         }
         else{
-
-            newElement->setPrev(this->tail);
-            newElement->setNext(this->tail->getNext());
-            tail->setNext(newElement);
-            tail=newElement;
+            newElement->setPrev(tail->getPrev());
+            newElement->setNext(tail);
+            tail->getPrev()->setNext(newElement);
+            tail->setPrev(newElement);
         }
         this->size+=1;
     }
@@ -137,18 +132,20 @@ public:
 
         if(this->getSize()==0) //inserting the first item
         {
-            newElement->setNext(0);
-            newElement->setPrev(0);
-            this->head=newElement;
-            this->tail=newElement;
+            newElement->setNext(tail);
+            newElement->setPrev(head);
+            head->setNext(newElement);
+            tail->setPrev(newElement);
         }
         else{
-            newElement->setNext(head);
-            newElement->setPrev(head->getPrev());
-            head=newElement;
+            newElement->setNext(head->getNext());
+            newElement->setPrev(head);
+            head->getNext()->setPrev(newElement);
+            head->setNext(newElement);
         }
         this->size+=1;
     }
+
     void add(int index,Element element)/*Inserts the specified element at the specified position in this list.*/
     {
         Element *newElement;
@@ -157,7 +154,7 @@ public:
         if(index==this->size)add(element);
         else if(index==0)addFirst(element);
         else if(index<this->size){
-            Element* temp=searchPos(this->head,index);
+            Element* temp=searchPos(this->head->getNext(),index);
             newElement->setNext(temp);
             newElement->setPrev(temp->getPrev());
             temp->getPrev()->setNext(newElement);
@@ -165,43 +162,57 @@ public:
             this->size+=1;
         }
     }
+    int Size()
+    {
+        return getSize();
+    }
+
     void clear()
     {
         delete head;
         delete tail;
-        size=0;
-        head=tail=0;
+        head=new Element;
+        tail=new Element;
+		head->setNext(tail);
+		tail->setPrev(head);
+		size = 0;
     }
-    int Size()
+
+
+    Element getFirst()
     {
-        return this->size;
+        return *(head->getNext());
     }
+
+
+    Element getLast()
+    {
+        return *(tail->getPrev());
+    }
+
 
     Element get(int index)
     {
+        if(index==0)return getFirst();
+        else if(index==getSize()-1)return getLast();
+
         Element* temp;
-        temp=head;
-        Element p;
+        temp=head->getNext();
         while(index--){
             temp=temp->getNext();
         }
-        p=*temp;
-        return p;
+        return *temp;
     }
-    Element getFirst()
-    {
-        return *head;
-    }
-    Element getLast()
-    {
-        return *tail;
-    }
+
+
+
+
     int indexOf(Element e)
     {
         Element * temp ;
-        temp = head;
+        temp = head->getNext();
         int i=0;
-        while (temp != 0)
+        while (temp != tail)
         {
             if (temp->getValue() == e.getValue()) return i ;
             temp = temp->getNext() ;
@@ -214,39 +225,37 @@ public:
     int lastIndexOf(Element e)
     {
         Element *temp;
-        temp=tail;
+        temp=tail->getPrev();
         int i=size-1;
-        while(temp!=0){
+        while(temp!=head){
             if(temp->getValue()==e.getValue())return i;
             temp=temp->getPrev();
+            i--;
         }
         return -1;
     }
+
     Element removeFirst()
     {
-        Element ret=*head;
-        head->getNext()->setPrev(0);
-        head=head->getNext();
+        Element* ret=(head->getNext());
+        head->setNext(ret->getNext());
+        ret->getNext()->setPrev(head);
         size--;
-        return ret;
+        return *ret;
     }
     Element removeLast()
     {
-        Element ret=*tail;
-        tail->getPrev()->setNext(0);
-        tail=tail->getPrev();
+        Element* ret=(tail->getPrev());
+        tail->setPrev(ret->getPrev());
+        ret->getPrev()->setNext(tail);
         size--;
-        return ret;
+        return *ret;
     }
-
 
     Element remove(int idx)
     {
-        Element ret;
-        ret.setValue(-1000);
-        if(idx<0||idx>=size)return ret;
-        Element* temp=searchPos(this->head,idx);
-        ret=*temp;
+        //if(idx<0||idx>=size)return ret;
+        Element* temp=searchPos(this->head->getNext(),idx);
 
         if(temp==head)return removeFirst();
         else if(temp==tail)return removeLast();
@@ -254,7 +263,7 @@ public:
         temp->getNext()->setPrev(temp->getPrev());
         temp->getPrev()->setNext(temp->getNext());
         this->size-=1;
-        return ret;
+        return *temp;
     }
 
 
@@ -267,71 +276,130 @@ public:
 
 int main()
 {
+
+    printf("1.add(Element e) 2.add(int index, Element element) 3.addFirst(Element e) 4.addLast(Element e)\n\n");
+    printf("5.print() 6.contains(Element e) 7.get(int index) 8.getFirst() 9.getLast() 10.indexOf(Element e)\n\n");
+    printf("11.lastIndexOf(Element e) 12.remove(int index) 13.remove(Element e) 14.removeFirst() 15.removeFirstOccurrence(Element e)\n");
+    printf("16.removeLast() 17.removeLastOccurrence(Element e) 18.size() 19.isEmpty() 20.toString() 21.clear()\n");
+
     LinkedList ll;int p;Element q;
-        printf("1. Insert new item. 2.Insert at pos_>>pos>>elem. 3. addLast. \n");
-        printf("4. Add first. 5.print.\n");
-        printf("6. SizeofList. 7.Clear list 8.check if item is in the list 9.get idx's value 10.remove i'th index's val & show\n");
     while(1)
     {
-
-
         int ch;
         scanf("%d",&ch);
-        if(ch==1)
-        {
-            int item;
-            scanf("%d", &item);
-            q.setValue(item);
+
+        if(ch==1){
+            scanf("%d",&p);
+            q.setValue(p);
             ll.add(q);
         }
-        else if(ch==2)
-        {
-            int item,pos;
-            scanf("%d %d",&pos, &item);
-            q.setValue(item);
-            ll.add(pos,q);
+        if(ch==2){
+            int i;
+            scanf("%d%d",&i,&p);
+            q.setValue(p);
+            ll.add(i,q);
         }
-        else if(ch==3)
-        {
-            int item;
-            scanf("%d", &item);
-            q.setValue(item);
-            ll.addLast(q);
-        }
-        else if(ch==4)
-        {
-            int item;
-            scanf("%d", &item);
-            q.setValue(item);
+        if(ch==3){
+            scanf("%d",&p);
+            q.setValue(p);
             ll.addFirst(q);
         }
-        else if(ch==5)
-        {
-            ll.print();
-            cout<<endl;
+        if(ch==4){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.addLast(q);
         }
-        else if(ch==6){
-            cout<<ll.Size()<<endl;
-
+        if(ch==5){
+            ll.print();cout<<endl;
         }
-        else if(ch==7)
-        {
-            ll.clear();
-        }
-        else if(ch==8){
-            int i;scanf("%d",&i);
-            q.setValue(i);
+        if(ch==6){
+            scanf("%d",&p);
+            q.setValue(p);
             if(ll.contains(q))cout<<"YES"<<endl;
             else cout<<"NO"<<endl;
         }
-        else if(ch==9){
-            int idx;scanf("%d",&idx);
-            cout<<ll.get(idx).getValue()<<endl;
+
+        if(ch==7){
+            scanf("%d",&p);
+            cout<<ll.get(p).getValue()<<endl;
         }
-        else if(ch==10){
-            int id;cin>>id;
-            cout<<ll.remove(id).getValue()<<endl;
+
+        if(ch==8){
+            cout<<ll.getFirst().getValue()<<endl;
         }
+
+        if(ch==9){
+            cout<<ll.getLast().getValue()<<endl;
+        }
+
+        if(ch==10){
+            scanf("%d",&p);
+            q.setValue(p);
+            cout<<ll.indexOf(q)<<endl;
+        }
+
+        if(ch==11){
+            scanf("%d",&p);
+            q.setValue(p);
+            cout<<ll.lastIndexOf(q)<<endl;
+        }
+        if(ch==12){
+            scanf("%d",&p);
+            cout<<ll.remove(p).getValue()<<endl;
+        }
+        if(ch==13){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.add(q);
+        }
+        if(ch==14){
+            cout<<ll.removeFirst().getValue()<<endl;
+        }
+
+        if(ch==15){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.add(q);
+        }
+
+        if(ch==16){
+            cout<<ll.removeLast().getValue()<<endl;
+        }
+
+        if(ch==17){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.add(q);
+        }
+
+        if(ch==18){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.add(q);
+        }
+
+        if(ch==19){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.add(q);
+        }
+
+        if(ch==20){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.add(q);
+        }
+
+        if(ch==21){
+
+        }
+
+        if(ch==22){
+            scanf("%d",&p);
+            q.setValue(p);
+            ll.add(q);
+        }
+
     }
 
 }
