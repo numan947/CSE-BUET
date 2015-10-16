@@ -347,11 +347,15 @@ int main()
 {
 
     printf("1.add(Element e) 2.add(int index, Element element) 3.addFirst(Element e) 4.addLast(Element e)\n\n");
+
     printf("5.print() 6.contains(Element e) 7.get(int index) 8.getFirst() 9.getLast() 10.indexOf(Element e)\n\n");
+
     printf("11.lastIndexOf(Element e) 12.remove(int index) 13.remove(Element e) 14.removeFirst() 15.removeFirstOccurrence(Element e)\n");
-    printf("16.removeLast() 17.removeLastOccurrence(Element e) 18.Size() 19.isEmpty() 20.toString() 21.clear()\n");
+
+    printf("16.removeLast() 17.removeLastOccurrence(Element e) 18.Size() 19.isEmpty() 20.toString() 21.clear() 22.exit\n");
 
     LinkedList ll;int p;Element q;
+
     while(1)
     {
         int ch;
@@ -458,11 +462,9 @@ int main()
             ll.clear();
         }
 
-        /*if(ch==22){
-            scanf("%d",&p);
-            q.setValue(p);
-            ll.add(q);
-        }*/
+        if(ch==22){
+            break;
+        }
 
     }
 
