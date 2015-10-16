@@ -3,6 +3,19 @@
 #define dbg(x) printf("HERE COMES THE PACKAGE %d\n",x)
 using namespace std;
 
+void intToString(string &s,int p)
+{
+    //cout<<p<<endl;
+    if(p<10){
+        s+=(char)(p+'0');
+        return;
+    }
+    else intToString(s,p/10);
+    s+=(char)(p%10)+'0';
+}
+
+
+
 class Element {
 private:
     Element * next;
@@ -52,22 +65,21 @@ public:
 };
 
 
+
+
 class LinkedList: public LinkedListBase {
 private:
+
     void PRINT(Element *h)
     {
         if(h==tail)return;
-       // dbg(99);
         cout<<h->getValue()<<" ";
         PRINT(h->getNext());
     }
 
+
 public:
-    /*LinkedList()
-    {
-        this->head=this->tail=0;
-        this->size=0;
-    }*/
+
     void print()
     {
         if(head->getNext()==tail){
@@ -97,6 +109,7 @@ public:
         return false;
     }
 
+
     void add(Element e)/*Appends the specified element to the end of this list.*/
     {
         Element *newElement;
@@ -119,10 +132,12 @@ public:
         this->size+=1;
     }
 
+
     void addLast(Element e)//Appends the specified element to the end of this list.
     {
         add(e);
     }
+
 
     void addFirst(Element e)//Inserts the specified element at the beginning of this list.
     {
@@ -146,6 +161,7 @@ public:
         this->size+=1;
     }
 
+
     void add(int index,Element element)/*Inserts the specified element at the specified position in this list.*/
     {
         Element *newElement;
@@ -162,10 +178,13 @@ public:
             this->size+=1;
         }
     }
+
+
     int Size()
     {
         return getSize();
     }
+
 
     void clear()
     {
@@ -205,8 +224,6 @@ public:
     }
 
 
-
-
     int indexOf(Element e)
     {
         Element * temp ;
@@ -222,6 +239,7 @@ public:
 
     }
 
+
     int lastIndexOf(Element e)
     {
         Element *temp;
@@ -235,6 +253,7 @@ public:
         return -1;
     }
 
+
     Element removeFirst()
     {
         Element* ret=(head->getNext());
@@ -243,6 +262,8 @@ public:
         size--;
         return *ret;
     }
+
+
     Element removeLast()
     {
         Element* ret=(tail->getPrev());
@@ -251,6 +272,7 @@ public:
         size--;
         return *ret;
     }
+
 
     Element remove(int idx)
     {
@@ -267,8 +289,55 @@ public:
     }
 
 
+    bool remove(Element e)
+    {
+        int idx=indexOf(e);
+        if(idx==-1)return false;
+        remove(idx);
+        return true;
+    }
 
 
+    bool removeFirstOccurrence(Element e)
+    {
+        remove(e);
+    }
+
+
+    bool removeLastOccurrence(Element e)
+    {
+        int idx=lastIndexOf(e);
+        if(idx==-1)return false;
+        remove(idx);
+        return true;
+    }
+
+
+    bool isEmpty()
+    {
+        return size==0;
+    }
+
+
+    string toString()
+    {
+        string ret="";
+        if(isEmpty())return ret;
+
+        Element* temp=head->getNext();
+        string t="";
+        intToString(t,temp->getValue());
+        ret+=t;
+        temp=temp->getNext();
+        while(temp!=tail){
+            t="";
+            intToString(t,temp->getValue());
+            ret+=",";
+            ret+=t;
+            temp=temp->getNext();
+        }
+        return ret;
+    }
 
 };
 
@@ -280,7 +349,7 @@ int main()
     printf("1.add(Element e) 2.add(int index, Element element) 3.addFirst(Element e) 4.addLast(Element e)\n\n");
     printf("5.print() 6.contains(Element e) 7.get(int index) 8.getFirst() 9.getLast() 10.indexOf(Element e)\n\n");
     printf("11.lastIndexOf(Element e) 12.remove(int index) 13.remove(Element e) 14.removeFirst() 15.removeFirstOccurrence(Element e)\n");
-    printf("16.removeLast() 17.removeLastOccurrence(Element e) 18.size() 19.isEmpty() 20.toString() 21.clear()\n");
+    printf("16.removeLast() 17.removeLastOccurrence(Element e) 18.Size() 19.isEmpty() 20.toString() 21.clear()\n");
 
     LinkedList ll;int p;Element q;
     while(1)
@@ -350,7 +419,7 @@ int main()
         if(ch==13){
             scanf("%d",&p);
             q.setValue(p);
-            ll.add(q);
+            cout<<ll.remove(q)<<endl;
         }
         if(ch==14){
             cout<<ll.removeFirst().getValue()<<endl;
@@ -359,7 +428,7 @@ int main()
         if(ch==15){
             scanf("%d",&p);
             q.setValue(p);
-            ll.add(q);
+            cout<<ll.removeFirstOccurrence(q)<<endl;
         }
 
         if(ch==16){
@@ -369,13 +438,11 @@ int main()
         if(ch==17){
             scanf("%d",&p);
             q.setValue(p);
-            ll.add(q);
+            cout<<ll.removeLastOccurrence(q)<<endl;
         }
 
         if(ch==18){
-            scanf("%d",&p);
-            q.setValue(p);
-            ll.add(q);
+            cout<<ll.Size()<<endl;
         }
 
         if(ch==19){
@@ -385,20 +452,19 @@ int main()
         }
 
         if(ch==20){
-            scanf("%d",&p);
-            q.setValue(p);
-            ll.add(q);
+            string tt=ll.toString();
+            cout<<tt<<endl;
         }
 
         if(ch==21){
-
+            ll.clear();
         }
 
-        if(ch==22){
+        /*if(ch==22){
             scanf("%d",&p);
             q.setValue(p);
             ll.add(q);
-        }
+        }*/
 
     }
 
