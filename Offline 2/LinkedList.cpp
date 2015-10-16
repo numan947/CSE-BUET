@@ -446,9 +446,7 @@ int main()
         }
 
         if(ch==19){
-            scanf("%d",&p);
-            q.setValue(p);
-            ll.add(q);
+            cout<<ll.isEmpty()<<endl;
         }
 
         if(ch==20){
