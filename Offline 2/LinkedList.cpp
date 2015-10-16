@@ -53,11 +53,11 @@ public:
 
 class LinkedList: public LinkedListBase {
 private:
-    void prin(Element *h)
+    void PRINT(Element *h)
     {
         if(h==0)return;
         cout<<h->getValue()<<" ";
-        prin(h->getNext());
+        PRINT(h->getNext());
     }
 
 public:
@@ -68,7 +68,7 @@ public:
     }
     void print()
     {
-        prin(this->head);
+        PRINT(this->head);
     }
 
     void HEAD()//HEAD ONLY
@@ -87,41 +87,44 @@ public:
     }
 
 
-    void add(Element e)
+    void add(Element e)/*Appends the specified element to the end of this list.*/
     {
         Element *newElement;
         newElement=new Element;
         newElement->setValue(e.getValue());
 
-        //cout<<"TAIL POS=="<<tail<<endl;
-        //scout<<"HEAD POS=="<<head<<endl;
         if(this->getSize()==0) //inserting the first item
         {
             newElement->setNext(0);
             newElement->setPrev(0);
             this->head=newElement;
             this->tail=newElement;
-            dbg(9);
         }
         else{
 
             newElement->setPrev(this->tail);
             newElement->setNext(this->tail->getNext());
             tail->setNext(newElement);
-            //delete tail;
             tail=newElement;
-            dbg(11);
         }
         this->size+=1;
     }
-    void add(int index,Element element)
+
+
+
+    void add(int index,Element element)/*Inserts the specified element at the specified position in this list.*/
     {
-        if(index<this->size){
+        Element *newElement;
+        newElement=new Element;
+        newElement->setValue(element.getValue());
+        if(index==this->size)add(element);
+        else if(index<this->size){
             Element* temp=searchPos(this->head,index);
-            element.setNext(temp);
-            element.setPrev(temp->getPrev());
-            temp->getPrev()->setNext(&element);
-            temp->setPrev(&element);
+            newElement->setNext(temp);
+            newElement->setPrev(temp->getPrev());
+            temp->getPrev()->setNext(newElement);
+            temp->setPrev(newElement);
+            this->size+=1;
         }
     }
 
@@ -133,9 +136,9 @@ public:
 
 // a very simple main
 int main() {
-	LinkedList ll;int p;
+	LinkedList ll;int p;Element q;
 	for(int i=0;i<5;i++){
-        cin>>p;Element q;
+        cin>>p;
         //q=new Element;
         q.setValue(p);
         q.setNext(0);
@@ -144,15 +147,15 @@ int main() {
 	}
 	//q.setNext(0);
 	//q.setPrev(0);
-	//q.setValue(1000);
+	q.setValue(1000);
+    ll.add(5,q);
+	//ll.HEAD();
+	//ll.TAIL();
 
-	ll.HEAD();
-	ll.TAIL();
-
-	cout<<endl<<endl<<endl;
+	//cout<<endl<<endl<<endl;
 	ll.print();
 
 
-	cout << ll.getSize() << endl;
+	cout <<endl<< ll.getSize() << endl;
 	return 0;
 }
