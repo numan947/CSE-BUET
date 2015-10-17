@@ -1,7 +1,9 @@
 #include<iostream>
 #include<cstdio>
-#define dbg(x) printf("HERE COMES THE PACKAGE %d\n",x)
+#define dbg(x) printf("Problem %d\n",x)
 using namespace std;
+
+
 
 void intToString(string &s,int p)
 {
@@ -13,6 +15,8 @@ void intToString(string &s,int p)
     else intToString(s,p/10);
     s+=(char)(p%10)+'0';
 }
+
+
 
 
 
@@ -42,6 +46,9 @@ public:
 	}
 };
 
+
+
+
 class LinkedListBase {
 protected:
 	Element * head;
@@ -67,6 +74,8 @@ public:
 
 
 
+
+
 class LinkedList: public LinkedListBase {
 private:
 
@@ -83,7 +92,7 @@ public:
     void print()
     {
         if(head->getNext()==tail){
-            cout<<"List is empty"<<endl;
+            cout<<"List is empty";
             return;
         }
         PRINT(this->head->getNext());
@@ -180,13 +189,13 @@ public:
     }
 
 
-    int Size()
+    int Size()/*Returns the number of elements in this list.*/
     {
         return getSize();
     }
 
 
-    void clear()
+    void clear()/*Removes all of the elements from this list.*/
     {
         delete head;
         delete tail;
@@ -198,19 +207,19 @@ public:
     }
 
 
-    Element getFirst()
+    Element getFirst()/*Returns the first element in this list.*/
     {
         return *(head->getNext());
     }
 
 
-    Element getLast()
+    Element getLast()/*Returns the last element in this list.*/
     {
         return *(tail->getPrev());
     }
 
 
-    Element get(int index)
+    Element get(int index)/*Returns the element at the specified position in this list.*/
     {
         if(index==0)return getFirst();
         else if(index==getSize()-1)return getLast();
@@ -224,7 +233,8 @@ public:
     }
 
 
-    int indexOf(Element e)
+    int indexOf(Element e)/*Returns the index of the first occurrence of the
+    specified element in this list, or -1 if this list does not contain the element.*/
     {
         Element * temp ;
         temp = head->getNext();
@@ -240,7 +250,8 @@ public:
     }
 
 
-    int lastIndexOf(Element e)
+    int lastIndexOf(Element e)/*Returns the index of the last occurrence of the
+specified element in this list, or -1 if this list does not contain the element.*/
     {
         Element *temp;
         temp=tail->getPrev();
@@ -254,7 +265,7 @@ public:
     }
 
 
-    Element removeFirst()
+    Element removeFirst()/*Removes and returns the first element from this list.*/
     {
         Element* ret=(head->getNext());
         head->setNext(ret->getNext());
@@ -264,7 +275,7 @@ public:
     }
 
 
-    Element removeLast()
+    Element removeLast()/*Removes and returns the last element from this list.*/
     {
         Element* ret=(tail->getPrev());
         tail->setPrev(ret->getPrev());
@@ -274,7 +285,8 @@ public:
     }
 
 
-    Element remove(int idx)
+    Element remove(int idx)/*Removes the element at the specified position in
+this list.*/
     {
         //if(idx<0||idx>=size)return ret;
         Element* temp=searchPos(this->head->getNext(),idx);
@@ -289,7 +301,8 @@ public:
     }
 
 
-    bool remove(Element e)
+    bool remove(Element e)/*Removes the first occurrence of the specified
+element from this list, if it is present*/
     {
         int idx=indexOf(e);
         if(idx==-1)return false;
@@ -298,13 +311,17 @@ public:
     }
 
 
-    bool removeFirstOccurrence(Element e)
+    bool removeFirstOccurrence(Element e)/*Removes the first occurrence
+of the specified element in this list (when traversing the list from head to
+tail).*/
     {
         remove(e);
     }
 
 
-    bool removeLastOccurrence(Element e)
+    bool removeLastOccurrence(Element e)/*Removes the last occurrence
+of the specified element in this list (when traversing the list from head to
+tail).*/
     {
         int idx=lastIndexOf(e);
         if(idx==-1)return false;
@@ -313,13 +330,14 @@ public:
     }
 
 
-    bool isEmpty()
+    bool isEmpty()/*Returns whether the list is empty or not.*/
     {
         return size==0;
     }
 
 
-    string toString()
+    string toString()/*Returns a string representation of this list, containing
+the String representation of each element separated by comma(,).*/
     {
         string ret="";
         if(isEmpty())return ret;
@@ -423,7 +441,8 @@ int main()
         if(ch==13){
             scanf("%d",&p);
             q.setValue(p);
-            cout<<ll.remove(q)<<endl;
+            if(ll.remove(q))cout<<"Element "<<p<<" is deleted"<<endl;
+            else cout<<"There's no element "<<p<<" in the list"<<endl;
         }
         if(ch==14){
             cout<<ll.removeFirst().getValue()<<endl;
@@ -432,7 +451,9 @@ int main()
         if(ch==15){
             scanf("%d",&p);
             q.setValue(p);
-            cout<<ll.removeFirstOccurrence(q)<<endl;
+            //cout<<ll.removeFirstOccurrence(q)<<endl;
+            if(ll.removeFirstOccurrence(q))cout<<"The First occurrence of "<<p<<" is deleted"<<endl;
+            else cout<<"There's no "<<p<<" in the list"<<endl;
         }
 
         if(ch==16){
@@ -442,15 +463,19 @@ int main()
         if(ch==17){
             scanf("%d",&p);
             q.setValue(p);
-            cout<<ll.removeLastOccurrence(q)<<endl;
+            if(ll.removeLastOccurrence(q))cout<<"The Last occurrence of "<<p<<" is deleted"<<endl;
+            else cout<<"There's no "<<p<<" in the list"<<endl;
         }
 
         if(ch==18){
+            cout<<"Number of elements in the list ";
             cout<<ll.Size()<<endl;
         }
 
         if(ch==19){
-            cout<<ll.isEmpty()<<endl;
+            //cout<<ll.isEmpty()<<endl;
+            if(ll.isEmpty())cout<<"The list is empty"<<endl;
+            else cout<<"The list is not empty"<<endl;
         }
 
         if(ch==20){
@@ -460,6 +485,7 @@ int main()
 
         if(ch==21){
             ll.clear();
+            cout<<"List is cleared"<<endl;
         }
 
         if(ch==22){
