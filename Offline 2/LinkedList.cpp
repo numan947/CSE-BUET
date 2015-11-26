@@ -1,11 +1,11 @@
 #include<iostream>
 #include<cstdio>
-#define dbg(x) printf("Problem %d\n",x)
+#define dbg(x) printf("Problem %d\n",x)/*Used for debugging purposes*/
 using namespace std;
 
 
 
-void intToString(string &s,int p)
+void intToString(string &s,int p)//converts an integer into a string
 {
     //cout<<p<<endl;
     if(p<10){
@@ -89,7 +89,7 @@ private:
 
 public:
 
-    void print()
+    void print()/*Prints The containing numbers*/
     {
         if(head->getNext()==tail){
             cout<<"List is empty";
@@ -99,7 +99,8 @@ public:
     }
 
 
-    Element* searchPos(Element *h,int pos)
+    Element* searchPos(Element *h,int pos)/*As it was needed in several functions to find the node given a certain index, I implemented this
+    function for to work easily. I used head to tail traversal & recursion in this method*/
     {
         if(pos==0)return h;
         searchPos(h->getNext(),pos-1);
@@ -138,7 +139,7 @@ public:
             tail->getPrev()->setNext(newElement);
             tail->setPrev(newElement);
         }
-        this->size+=1;
+        LinkedListBase::size+=1;
     }
 
 
@@ -167,7 +168,7 @@ public:
             head->getNext()->setPrev(newElement);
             head->setNext(newElement);
         }
-        this->size+=1;
+        LinkedListBase::size+=1;
     }
 
 
@@ -176,20 +177,20 @@ public:
         Element *newElement;
         newElement=new Element;
         newElement->setValue(element.getValue());
-        if(index==this->size)add(element);
+        if(index==LinkedListBase::size)add(element);
         else if(index==0)addFirst(element);
-        else if(index<this->size){
-            Element* temp=searchPos(this->head->getNext(),index);
+        else if(index<LinkedListBase::size){
+            Element* temp=searchPos(this->head->getNext(),index);//Used the method I implemented here
             newElement->setNext(temp);
             newElement->setPrev(temp->getPrev());
             temp->getPrev()->setNext(newElement);
             temp->setPrev(newElement);
-            this->size+=1;
+            LinkedListBase::size+=1;
         }
     }
 
 
-    int Size()/*Returns the number of elements in this list.*/
+    int size()/*Returns the number of elements in this list.*/
     {
         return getSize();
     }
@@ -203,7 +204,7 @@ public:
         tail=new Element;
 		head->setNext(tail);
 		tail->setPrev(head);
-		size = 0;
+		LinkedListBase::size = 0;
     }
 
 
@@ -255,7 +256,7 @@ specified element in this list, or -1 if this list does not contain the element.
     {
         Element *temp;
         temp=tail->getPrev();
-        int i=size-1;
+        int i=LinkedListBase::size-1;
         while(temp!=head){
             if(temp->getValue()==e.getValue())return i;
             temp=temp->getPrev();
@@ -270,7 +271,7 @@ specified element in this list, or -1 if this list does not contain the element.
         Element* ret=(head->getNext());
         head->setNext(ret->getNext());
         ret->getNext()->setPrev(head);
-        size--;
+        LinkedListBase::size--;
         return *ret;
     }
 
@@ -280,7 +281,7 @@ specified element in this list, or -1 if this list does not contain the element.
         Element* ret=(tail->getPrev());
         tail->setPrev(ret->getPrev());
         ret->getPrev()->setNext(tail);
-        size--;
+        LinkedListBase::size--;
         return *ret;
     }
 
@@ -289,14 +290,14 @@ specified element in this list, or -1 if this list does not contain the element.
 this list.*/
     {
         //if(idx<0||idx>=size)return ret;
-        Element* temp=searchPos(this->head->getNext(),idx);
+        Element* temp=searchPos(this->head->getNext(),idx);//Used the method I implemented here
 
         if(temp==head)return removeFirst();
         else if(temp==tail)return removeLast();
 
         temp->getNext()->setPrev(temp->getPrev());
         temp->getPrev()->setNext(temp->getNext());
-        this->size-=1;
+        LinkedListBase::size-=1;
         return *temp;
     }
 
@@ -323,7 +324,14 @@ tail).*/
 of the specified element in this list (when traversing the list from head to
 tail).*/
     {
-        int idx=lastIndexOf(e);
+        int idx=-1;
+        int i=0;
+        Element *temp=head->getNext();
+        while(temp!=tail){
+            if(temp->getValue()==e.getValue())idx=i;
+            i++;
+            temp=temp->getNext();
+        }
         if(idx==-1)return false;
         remove(idx);
         return true;
@@ -332,7 +340,7 @@ tail).*/
 
     bool isEmpty()/*Returns whether the list is empty or not.*/
     {
-        return size==0;
+        return LinkedListBase::size==0;
     }
 
 
@@ -366,11 +374,11 @@ int main()
 
     printf("1.add(Element e) 2.add(int index, Element element) 3.addFirst(Element e) 4.addLast(Element e)\n\n");
 
-    printf("5.print() 6.contains(Element e) 7.get(int index) 8.getFirst() 9.getLast() 10.indexOf(Element e)\n\n");
+    printf("5.clear() 6.contains(Element e) 7.get(int index) 8.getFirst() 9.getLast() 10.indexOf(Element e)\n\n");
 
     printf("11.lastIndexOf(Element e) 12.remove(int index) 13.remove(Element e) 14.removeFirst() 15.removeFirstOccurrence(Element e)\n");
 
-    printf("16.removeLast() 17.removeLastOccurrence(Element e) 18.Size() 19.isEmpty() 20.toString() 21.clear() 22.exit\n");
+    printf("16.removeLast() 17.removeLastOccurrence(Element e) 18.Size() 19.isEmpty() 20.toString() 21.print() 22.exit\n");
 
     LinkedList ll;int p;Element q;
 
@@ -400,7 +408,7 @@ int main()
             q.setValue(p);
             ll.addLast(q);
         }
-        if(ch==5){
+        if(ch==21){
             ll.print();cout<<endl;
         }
         if(ch==6){
@@ -469,7 +477,7 @@ int main()
 
         if(ch==18){
             cout<<"Number of elements in the list ";
-            cout<<ll.Size()<<endl;
+            cout<<ll.size()<<endl;
         }
 
         if(ch==19){
@@ -483,7 +491,7 @@ int main()
             cout<<tt<<endl;
         }
 
-        if(ch==21){
+        if(ch==5){
             ll.clear();
             cout<<"List is cleared"<<endl;
         }
