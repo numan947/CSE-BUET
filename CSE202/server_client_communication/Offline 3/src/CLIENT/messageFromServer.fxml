@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CLIENT.clientMessage">
+   <children>
+      <TextArea fx:id="messagefield" editable="false" layoutX="23.0" layoutY="73.0" prefHeight="179.0" prefWidth="555.0" promptText="Server's Message will be here" />
+      <Label layoutX="22.0" layoutY="30.0" prefHeight="36.0" prefWidth="190.0" text="From Server With Love" />
+      <Button fx:id="closeButton" layoutX="477.0" layoutY="286.0" mnemonicParsing="false" onAction="#closeMessage" prefHeight="36.0" prefWidth="101.0" text="Close" />
+   </children>
+</AnchorPane>

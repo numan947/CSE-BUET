@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="246.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CLIENT.ClientLogin">
+   <children>
+      <Label layoutX="54.0" layoutY="76.0" prefHeight="25.0" prefWidth="88.0" text="Client Name">
+         <font>
+            <Font name="Times New Roman Bold" size="16.0" />
+         </font></Label>
+      <TextField fx:id="ClientName" layoutX="155.0" layoutY="76.0" prefHeight="25.0" prefWidth="290.0" />
+      <Button fx:id="connect" layoutX="231.0" layoutY="148.0" mnemonicParsing="false" onAction="#LoginAction" prefHeight="25.0" prefWidth="78.0" text="Connect">
+         <font>
+            <Font name="Courier New Bold" size="12.0" />
+         </font></Button>
+      <Button fx:id="Reset" layoutX="367.0" layoutY="148.0" mnemonicParsing="false" onAction="#ResetAction" prefHeight="25.0" prefWidth="78.0" text="Reset">
+         <font>
+            <Font name="Courier New Bold" size="12.0" />
+         </font></Button>
+   </children>
+</AnchorPane>

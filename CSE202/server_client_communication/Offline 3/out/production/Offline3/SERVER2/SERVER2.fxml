@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="358.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SERVER2.ServerThread">
+   <children>
+      <Label layoutX="43.0" layoutY="67.0" prefHeight="28.0" prefWidth="130.0" text="Client List">
+         <font>
+            <Font name="Times New Roman Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="300.0" layoutY="73.0" prefHeight="17.0" prefWidth="124.0" text="Message Box">
+         <font>
+            <Font name="Times New Roman Bold" size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="Table" layoutX="43.0" layoutY="95.0" prefHeight="200.0" prefWidth="200.0" />
+      <TextArea fx:id="messageBox" layoutX="300.0" layoutY="95.0" prefHeight="200.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>
