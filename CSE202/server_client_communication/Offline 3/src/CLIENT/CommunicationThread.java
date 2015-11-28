@@ -20,7 +20,7 @@ public class CommunicationThread implements Runnable{
         try {
             while(true) {
                 in= (String) util.read();
-                System.out.println("in dis comThread" + in);
+                System.out.println("In communication Thread: " + in);
                 main.setMessage(in);
             }
         } catch (Exception e) {
