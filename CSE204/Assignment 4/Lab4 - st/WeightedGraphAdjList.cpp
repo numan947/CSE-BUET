@@ -280,6 +280,7 @@ void Graph::removeEdge(int u, int v)
         adjList[v].removeItem(u);
         weightList[v].removeItemAt(pos);
     }
+    this->nEdges--;
 }
 
 bool Graph::isEdge(int u, int v)
@@ -298,8 +299,14 @@ bool Graph::isEdge(int u, int v)
 int Graph::getDegree(int u)
 {
     //returns the degree of vertex u
-    return adjList[u].getLength();
-
+    int deg = adjList[u].getLength();
+    /*if(directed){
+        for(int i=0;i<nVertices;i++){
+            if(i==u)continue;
+            if(adjList[i].searchItem(u)!=NULL_VALUE)deg++;
+        }
+    }*/
+    return deg;
 }
 
 void Graph::printAdjVertices(int u)

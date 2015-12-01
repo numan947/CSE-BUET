@@ -165,6 +165,7 @@ void Graph::removeEdge(int u, int v)
     if(u<0 || u>=nVertices || v<0 || v>=nVertices) return;
     matrix[u][v]=0;
     if(!directed)matrix[v][u]=0;
+    this->nEdges--;
 }
 
 bool Graph::isEdge(int u, int v)
@@ -181,9 +182,11 @@ int Graph::getDegree(int u)
     int cnt=0;
     for(int i=0;i<nVertices;i++){
         if(matrix[u][i])cnt++;
+        /*if(directed){
+            if(matrix[i][u])cnt++;
+        }*/
     }
     return cnt;
-
 }
 
 void Graph::printAdjVertices(int u)
