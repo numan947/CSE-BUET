@@ -9,6 +9,8 @@
 #define BLACK 3
 using namespace std;
 
+
+
 class Queue
 {
     int queueInitSize ;
@@ -208,6 +210,7 @@ class Graph
 	bool directed ;
 	ArrayList  * adjList ;
     int *color,*parent,*dist;
+    int *visited;
 	//define other variables required for bfs such as color, parent, and dist
 	//you must use pointers and dynamic allocation
 
@@ -225,6 +228,7 @@ public:
     void printGraph();
 	void bfs(int source); //will run bfs in the graph
 	void dfs(int source); //will run dfs in the graph
+	void findComponents();
 };
 
 
@@ -236,6 +240,7 @@ Graph::Graph(bool dir)
 	parent=0;
 	color=0;
 	dist=0;
+	visited=0;
 	directed = dir ; //set direction of the graph
 	//define other variables to be initialized
 }
@@ -247,10 +252,12 @@ void Graph::setnVertices(int n)
 	if(parent!=0)delete[] parent;
 	if(color!=0)delete[]color;
 	if(dist!=0)delete[]dist;
+	if(visited!=0)delete[]visited;
 	adjList = new ArrayList[nVertices] ;
 	parent=new int[nVertices];
 	color=new int[nVertices];
 	dist=new int[nVertices];
+	visited=new int[nVertices];
 }
 
 void Graph::addEdge(int u, int v)
@@ -264,7 +271,7 @@ void Graph::addEdge(int u, int v)
 void Graph::removeEdge(int u, int v)
 {
     //write this function
-    if(u<0 || u>=nVertices || v<0 || v>=nVertices) return;
+    if(u<0 || u>=nVertices || v<0 || v>=nVertices||this->nEdges==0) return;
     adjList[u].removeItem(v);
     if(!directed){
         adjList[v].removeItem(u);
@@ -318,7 +325,7 @@ bool Graph::hasCommonAdjacent(int u, int v)
 }
 
 
-
+/*
 void Graph::bfs(int source)
 {
     //complete this function
@@ -351,13 +358,16 @@ void Graph::bfs(int source)
         }
         color[u]=BLACK;
     }
-}
+}*/
 
 int Graph::getDist(int u, int v)
 {
     //returns the shortest path distance from u to v
     //must call bfs using u as the source vertex, then use distance array to find the distance
     if(u<0 || u>=nVertices || v<0 || v>=nVertices) return refINFINITY;
+    for(int i=0;i<nVertices;i++)visited[i]=0;
+
+
     bfs(u);
     if(dist[v]!=refINFINITY)return dist[v];
     return refINFINITY ;
@@ -383,13 +393,80 @@ Graph::~Graph()///NEED SOME CHECKING :/
     delete[] parent;
     delete[] color;
     delete[] dist;
+    delete[]visited;
     parent=0;color=0;dist=0;
     delete[] adjList;
     adjList=0;
 }
-
-
 //**********************Graph class ends here******************************
+
+
+
+
+/***************************ONLINE**************************************/
+//Need to comment out original BFS assignment before using it, it is choice number 10 in the list
+
+
+
+void Graph::bfs(int source)
+{
+    //complete this function
+    //initialize BFS variables
+
+    if(visited[source])return;
+    if(source<0 || source>=nVertices) return;
+    for(int i=0; i<nVertices; i++)
+    {
+        color[i] = WHITE ;
+        parent[i] = -1 ;
+        dist[i] = refINFINITY ;
+    }
+
+    Queue q ;
+    color[source] = GREY;
+    dist[source] = 0 ;
+    visited[source]=1;
+    q.enqueue(source) ;
+
+    while( !q.empty() )
+    {
+        //complete this part
+        int u=q.dequeue();
+
+        for(int i=0;i<adjList[u].getLength();i++){
+            int v=adjList[u].getItem(i);
+            if(color[v]==WHITE&&!visited[v]){
+                dist[v]=1+dist[u];
+                parent[v]=u;
+                color[v]=GREY;
+                visited[v]=1;
+                q.enqueue(v);
+            }
+        }
+        color[u]=BLACK;
+    }
+}
+
+
+void Graph::findComponents()
+{
+    for(int i=0;i<nVertices;i++){
+        visited[i]=0;
+    }
+
+    int cnt=0;
+
+    for(int i=0;i<nVertices;i++){
+        if(!visited[i])bfs(i),cnt++;
+    }
+    cout<<"Number Of Components "<<cnt<<endl;
+}
+
+/***************************************************************************************/
+
+
+
+
 
 
 //******main function to test your code*************************
@@ -401,11 +478,12 @@ int main(void)
     scanf("%d", &n);
     g.setnVertices(n);
 
+
     while(1)
     {
         if(kase++)printf("\n");
         printf("1. Add edge. 2.Delete edge 3. getDegree 4. printAdjacent Vertices\n");
-        printf("5. Print Graph  6.hasCommonAdjacent 7.bfs with source 8.getDist of two nodes 9.break\n");
+        printf("5. Print Graph  6.hasCommonAdjacent 7.bfs with source 8.getDist of two nodes 9.is Edge 10.findComponents 11.break\n");
 
         int ch;
         scanf("%d",&ch);
@@ -457,6 +535,14 @@ int main(void)
             else cout<<"NO PATH FROM "<<u<<" TO "<<v<<endl;
         }
         else if(ch==9){
+            int u,v;
+            cin>>u>>v;
+            cout<<g.isEdge(u,v)<<endl;
+        }
+        else if(ch==10){
+            g.findComponents();
+        }
+        else if(ch==11){
             break;
         }
     }

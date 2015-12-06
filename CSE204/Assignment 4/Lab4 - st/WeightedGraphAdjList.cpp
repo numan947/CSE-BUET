@@ -272,6 +272,7 @@ void Graph::addEdge(int u, int v,int w)
 void Graph::removeEdge(int u, int v)
 {
     //write this function
+    if(u<0 || u>=nVertices || v<0 || v>=nVertices||this->nEdges==0) return;
     int pos=adjList[u].searchItem(v);
     adjList[u].removeItem(v);
     weightList[u].removeItemAt(pos);
@@ -431,7 +432,7 @@ int main(void)
     while(1)
     {
         printf("1. Add edge. 2.Delete edge 3. getDegree 4. printAdjacent Vertices\n");
-        printf("5. Print Graph  6.hasCommonAdjacent 7.bfs with source 8.getDist of two nodes 9.break\n");
+        printf("5. Print Graph  6.hasCommonAdjacent 7.bfs with source 8.getDist of two nodes 9.isEDge 10.break\n");
 
         int ch;
         scanf("%d",&ch);
@@ -483,6 +484,11 @@ int main(void)
             else cout<<"NO PATH FROM "<<u<<" TO "<<v<<endl;
         }
         else if(ch==9){
+            int u,v;
+            cin>>u>>v;
+            cout<<g.isEdge(u,v)<<endl;
+        }
+        else if(ch==10){
             break;
         }
     }

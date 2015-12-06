@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane alignment="CENTER" hgap="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="127.0" prefWidth="772.0" vgap="1.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geass.PanelController">
+  <columnConstraints>
+      <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Slider fx:id="positionSlider" max="1.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <HBox alignment="CENTER" fillHeight="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2">
+         <children>
+            <Button fx:id="SeekL" mnemonicParsing="false" onAction="#seekLAction" prefHeight="63.0" prefWidth="63.0" />
+            <Button fx:id="playButton" mnemonicParsing="false" onAction="#playAction" prefHeight="63.0" prefWidth="75.0" />
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopAction" prefHeight="63.0" prefWidth="75.0" />
+            <Button fx:id="SeekR" mnemonicParsing="false" onAction="#seekRAction" prefHeight="63.0" prefWidth="63.0" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <Button fx:id="OpenFileButton" mnemonicParsing="false" onAction="#chooseFile" prefHeight="61.0" prefWidth="65.0" text="Open.." GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+      <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="120.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="2">
+         <children>
+            <Label fx:id="totalPlayTime" prefHeight="17.0" prefWidth="66.0" text="Total" />
+            <ImageView fx:id="loImg" fitHeight="23.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER" />
+            <Slider fx:id="volumeSlider" max="1.0" />
+            <ImageView fx:id="hiImg" fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </HBox>
+      <Label fx:id="currentPlayTime" text="current" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="StatusLabel" prefHeight="17.0" prefWidth="54.0" text="STATUS" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+   </children>
+   <padding>
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+   </padding>
+</GridPane>
