@@ -43,6 +43,8 @@ public class CODE extends Application {
         stage=primaryStage;
         BorderPane bp=new BorderPane();
         HBox hbox=new HBox();
+
+
         //mediaNaming
         mediaName.setValue("Makise Kurisu Player :)");
 
@@ -71,7 +73,6 @@ public class CODE extends Application {
 
 
 
-
         //controlling the fxmls
         control3.setMain(this);
         control3.INITIALIZE();
@@ -93,11 +94,11 @@ public class CODE extends Application {
         HBox.setHgrow(root1, Priority.ALWAYS);
         HBox.setHgrow(root2,Priority.NEVER);
 
-        //bp.setRight(root3);
+        //BorderPane settings
         bp.setBottom(hbox);
 
+        //primaryStage settings
         primaryStage.titleProperty().bind(mediaName);
-
         primaryStage.setScene(new Scene(bp,1000,700));
         primaryStage.show();
     }

@@ -59,7 +59,10 @@ public class mediaListController {
     void INITIALIZE()//sets the tablecoloumns value factory :p and other important things ;)
     {
         hashCol.setCellValueFactory(new PropertyValueFactory<mediaForList,String>("mediaPos"));
+        hashCol.setResizable(false);
         FileNameCol.setCellValueFactory(new PropertyValueFactory<mediaForList, String>("mediaName"));
+        FileNameCol.setMinWidth(366);
+        FileNameCol.setResizable(false);
         mediaList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         cnt=0;
         mediaList.setOnMouseClicked(click->{

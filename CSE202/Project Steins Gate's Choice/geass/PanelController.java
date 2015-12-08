@@ -189,6 +189,7 @@ public class PanelController {
         if(!showinglist) {
 
             playliststage.setScene(main.playlistScene);
+            playliststage.setMinWidth(400);
             playliststage.setResizable(false);
             playliststage.show();
             showinglist=true;
