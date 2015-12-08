@@ -36,13 +36,18 @@
       <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="120.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="2">
          <children>
             <Label fx:id="totalPlayTime" prefHeight="17.0" prefWidth="66.0" text="Total" />
-            <ImageView fx:id="loImg" fitHeight="23.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER" />
+            <ImageView fx:id="loImg" fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER" />
             <Slider fx:id="volumeSlider" max="1.0" />
-            <ImageView fx:id="hiImg" fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="hiImg" fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
       <Label fx:id="currentPlayTime" text="current" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Label fx:id="StatusLabel" prefHeight="17.0" prefWidth="54.0" text="STATUS" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+         <children>
+            <Button fx:id="playListButton" mnemonicParsing="false" onAction="#showPlayList" prefHeight="25.0" prefWidth="29.0" />
+         </children>
+      </HBox>
    </children>
    <padding>
       <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />

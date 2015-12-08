@@ -5,8 +5,10 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -21,6 +23,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 public class PanelController {
 
@@ -28,12 +31,23 @@ public class PanelController {
     MediaModel mediaModel;
     private StatusListener status;
     private CurrentTimeListener currentTime;
-    ImageView playPauseIcon,seeR,seeL,stopIcon;
-    Image playIcon,pauseIcon;
+    ImageView playPauseIcon,seeR,seeL,stopIcon,playlistImgview;
+    Image playIcon,pauseIcon,hi,lo,playlistImg;
     boolean atEndOfMedia=false;
     boolean stopRequested=false;
     private Duration duration;
     String mediaName;
+    boolean showinglist=false;
+    Stage playliststage;
+
+
+    public void setMediaList(mediaListController mediaList) {
+        this.mediaList = mediaList;
+    }
+
+    mediaListController mediaList;
+    @FXML
+    private Button playListButton;
 
     @FXML
     private Slider positionSlider;
@@ -71,23 +85,42 @@ public class PanelController {
     @FXML
     private Button stopButton;
 
+    void setMediaModel(String url)
+    {
+        if(url!=null){
+          //  removeAllListeners(mediaModel.getPlayer());
+            this.mediaModel.setUrl(url);
+            ENABLEALL();
+            mediaModel.getPlayer().play();
+        }
+    }
+
+
     @FXML
     void chooseFile(ActionEvent actionEvent) {
-        Stage chooserStage=new Stage();
         FileChooser fc=new FileChooser();
-        fc.setTitle("Mad Scientisto :3 :3 ");
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("audioFile","*.mp3"));
-        //chooserStage.initModality(Modality.WINDOW_MODAL);
-        //chooserStage.initOwner(main.stage.getScene().getWindow());
-        File file=fc.showOpenDialog(main.stage);
-        if(file!=null){
-            this.mediaName=file.getName();
-            main.mediaName.setValue("NOW PLAYING "+ mediaName);
-            mediaModel.setUrl(file.toURI().toString());
-            ENABLEALL();
-            //removeAllListeners(mediaModel.getPlayer());
-            addAllListeners(mediaModel.getPlayer());
-            mediaModel.getPlayer().play();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("AudioFiles","*.mp3"));
+        List<File> lst=fc.showOpenMultipleDialog(main.stage);
+
+        if(lst!=null) {
+
+            for (File f : lst) {
+                mediaForList mm = new mediaForList();
+                mediaList.cnt++;
+                mm.setMediaPos(Integer.toString(mediaList.cnt));
+                mm.setMediaFile(f);
+                mm.setMediaName(f.getName());
+                mediaList.mediaList.getItems().add(mm);
+            }
+
+            if (this.mediaModel.getPlayer() == null) {
+                ObservableList<mediaForList> items = mediaList.mediaList.getItems();
+                mediaList.nowPlaying = 0;
+                mediaForList nowMedia = items.get(mediaList.nowPlaying);
+                main.mediaName.setValue("NOW PLAYING" + " " + nowMedia.getMediaName());
+                setMediaModel(nowMedia.getMediaFile().toURI().toString());
+                System.out.println("NOW PLAYING " + mediaList.nowPlaying);
+            }
         }
     }
 
@@ -141,17 +174,45 @@ public class PanelController {
 
     @FXML
     void seekRAction(ActionEvent event) {
-        SeekAndUpdate(mediaModel.getPlayer().getTotalDuration().subtract(Duration.seconds(1)));
+        //SeekAndUpdate(mediaModel.getPlayer().getTotalDuration().subtract(Duration.seconds(1)));
+        mediaList.getNext();
     }
 
     @FXML
     void seekLAction(ActionEvent event) {
-        SeekAndUpdate(Duration.ZERO);
+        //SeekAndUpdate(Duration.ZERO);
+        mediaList.getPrev();
+    }
+
+    @FXML
+    void showPlayList(ActionEvent event) {
+        if(!showinglist) {
+
+            playliststage.setScene(main.playlistScene);
+            playliststage.setResizable(false);
+            playliststage.show();
+            showinglist=true;
+        }
+        else{
+            playliststage.close();
+            showinglist=false;
+        }
+
     }
 
 
     void INITVIEW(MediaModel mediamodel)
     {
+        //Iitiating PlayList variables & others :P
+        playliststage=new Stage();
+        playliststage.setOnCloseRequest(e->{
+            playliststage.close();
+            showinglist=false;
+        });
+        playlistImg=new Image(getClass().getResource("playlistimg.png").toString());
+        playlistImgview=new ImageView(playlistImg);
+        playListButton.setGraphic(playlistImgview);
+
         //Seek Buttons views
         URL url=getClass().getResource("seekL.jpg");
         seeL=new ImageView(url.toString());
@@ -169,17 +230,20 @@ public class PanelController {
         stopIcon=new ImageView(getClass().getResource("stop.jpg").toString());
         stopButton.setGraphic(stopIcon);
 
+        //volume Icons
+        hi=new Image(getClass().getResource("hivol.png").toString());
+        lo=new Image(getClass().getResource("lovol.png").toString());
+        hiImg.setImage(hi);
+        loImg.setImage(lo);
+
 
         //newing listeners
         status=new StatusListener();
         currentTime=new CurrentTimeListener();
 
         this.mediaModel=mediamodel;
+        volumeSlider.setValue(.50);
 
-
-        //mediamodel.playerProperty().addListener(new MediaPlayerListener());???
-
-      //  System.out.println("MEDIA MODEL -_- "+mediamodel.getPlayer());
         //PositionListener
         positionSlider.valueChangingProperty().addListener((observable, oldValue, newValue) -> {
             if(oldValue&&!newValue){
@@ -187,8 +251,8 @@ public class PanelController {
                 SeekAndUpdate(mediamodel.getPlayer().getTotalDuration().multiply(pos));
             }
         });
-//        addAllListeners(mediaModel.getPlayer());
-       // mediamodel.getPlayer().play();
+
+
     }
 
     void DISABLEALL()
@@ -206,6 +270,11 @@ public class PanelController {
         SeekL.setDisable(false);
         SeekR.setDisable(false);
         stopButton.setDisable(false);
+
+        addAllListeners(mediaModel.getPlayer());
+        mediaModel.getPlayer().setVolume(volumeSlider.getValue());
+        mediaModel.getPlayer().play();
+
     }
 
 
@@ -235,6 +304,7 @@ public class PanelController {
             positionSlider.setValue(0.0);
             mediaModel.getPlayer().stop();
             playPauseIcon.setImage(playIcon);
+            mediaList.getNext();
         });
     }
 
@@ -297,15 +367,12 @@ public class PanelController {
 
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    MediaPlayer mediaPlayer = mediaModel.getPlayer();
-                    Duration currentTime = mediaPlayer.getCurrentTime();
-                    //System.out.println("HELLO CURRENTTIME -_- "+ currentTime.toSeconds());
-                    currentPlayTime.setText(processDuration((Duration)newValue));
-                    if(newValue!=null)updatePositionSlider((Duration) newValue);
-                }
+            Platform.runLater(() -> {
+                MediaPlayer mediaPlayer = mediaModel.getPlayer();
+                Duration currentTime1 = mediaPlayer.getCurrentTime();
+                //System.out.println("HELLO CURRENTTIME -_- "+ currentTime.toSeconds());
+                currentPlayTime.setText(processDuration((Duration)newValue));
+                if(newValue!=null)updatePositionSlider((Duration) newValue);
             });
 
         }

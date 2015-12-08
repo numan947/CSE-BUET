@@ -1,8 +1,11 @@
 package geass;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class MetaDataController {
 
@@ -29,6 +32,19 @@ public class MetaDataController {
         mediaArtist.textProperty().bind(media.artistNameProperty());
         mediaTitle.textProperty().bind(media.songTitleProperty());
         mediaYear.textProperty().bind(media.songYearProperty());
+        albumCover.setOnMouseClicked(click->{
+            if(click.getClickCount()==2){
+                ImageView view=new ImageView(albumCover.getImage());
+                VBox box=new VBox();
+                Stage stage=new Stage();
+                box.getChildren().add(view);
+                stage.setScene(new Scene(box,view.getFitWidth(),view.getFitHeight()));
+                stage.show();
+            }
+
+
+        });
+
     }
 
 

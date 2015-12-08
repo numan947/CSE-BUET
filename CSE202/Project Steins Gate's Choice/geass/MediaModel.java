@@ -12,7 +12,7 @@ import javafx.scene.media.MediaPlayer;
  */
 public class MediaModel {
 
-    private final String default_img_url=getClass().getResource("332321.png").toString();
+    private final String default_img_url=getClass().getResource("326271.png").toString();
 
     private final Image default_img=new Image(default_img_url);
 
