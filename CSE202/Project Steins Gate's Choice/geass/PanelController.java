@@ -3,22 +3,25 @@ package geass;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -31,15 +34,19 @@ public class PanelController {
     MediaModel mediaModel;
     private StatusListener status;
     private CurrentTimeListener currentTime;
-    ImageView playPauseIcon,seeR,seeL,stopIcon,playlistImgview;
-    Image playIcon,pauseIcon,hi,lo,playlistImg;
-    boolean atEndOfMedia=false;
-    boolean stopRequested=false;
+    ImageView playPauseIcon,seeR,seeL,stopIcon,playlistImgview,repeatView,fileOpenImageView,fsImageView,muteView;
+    Image playIcon,pauseIcon,hi,lo,playlistImg,repIcon1,repIcon2,fileOpenImage,fsImage,muteImg;
+    boolean repeat=false;
+
     private Duration duration;
     String mediaName;
     boolean showinglist=false;
     Stage playliststage;
+    mediaViewController playerview;
 
+    public void setPlayerview(mediaViewController playerview) {
+        this.playerview = playerview;
+    }
 
     public void setMediaList(mediaListController mediaList) {
         this.mediaList = mediaList;
@@ -50,7 +57,7 @@ public class PanelController {
     private Button playListButton;
 
     @FXML
-    private Slider positionSlider;
+    protected Slider positionSlider;
 
     @FXML
     private Button SeekL;
@@ -85,12 +92,40 @@ public class PanelController {
     @FXML
     private Button stopButton;
 
-    void setMediaModel(String url)
+    @FXML
+    private Button fullScreenButton;
+
+    @FXML
+    private Button repeatButton;
+
+    @FXML
+    private Button muteButton;
+
+
+
+    void setMediaModel(String url)//THIS IS WHERE THE PLAY BEGINS mu ha ha ha...
     {
         if(url!=null){
           //  removeAllListeners(mediaModel.getPlayer());
             this.mediaModel.setUrl(url);
             ENABLEALL();
+
+            String fileType=url.substring(url.lastIndexOf('.')+1);
+            System.out.println(fileType);
+            if(fileType.equals("MP4")||fileType.equals("mp4")){
+                playerview.mediaView.setMediaPlayer(this.mediaModel.getPlayer());
+
+                DoubleProperty mvw =playerview.mediaView.fitWidthProperty();
+                DoubleProperty mvh = playerview.mediaView.fitHeightProperty();
+
+                mvw.bind(Bindings.selectDouble(playerview.mediaView.sceneProperty(), "width"));
+                mvh.bind(Bindings.selectDouble(playerview.mediaView.sceneProperty(), "height"));
+                playerview.mediaView.setPreserveRatio(true);
+                if(main.hbox.getChildren().remove(main.root2));
+            }
+            else if(fileType.equals("MP3")||fileType.equals("mp3")){
+                main.hbox.getChildren().add(main.root2);
+            }
             mediaModel.getPlayer().play();
         }
     }
@@ -99,7 +134,7 @@ public class PanelController {
     @FXML
     void chooseFile(ActionEvent actionEvent) {
         FileChooser fc=new FileChooser();
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("AudioFiles","*.mp3"));
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MediaFiles","*.mp3","*.mp4"));
         List<File> lst=fc.showOpenMultipleDialog(main.stage);
 
         if(lst!=null) {
@@ -117,9 +152,11 @@ public class PanelController {
                 ObservableList<mediaForList> items = mediaList.mediaList.getItems();
                 mediaList.nowPlaying = 0;
                 mediaForList nowMedia = items.get(mediaList.nowPlaying);
+                this.mediaName=nowMedia.getMediaName();
                 main.mediaName.setValue("NOW PLAYING" + " " + nowMedia.getMediaName());
                 setMediaModel(nowMedia.getMediaFile().toURI().toString());
                 System.out.println("NOW PLAYING " + mediaList.nowPlaying);
+
             }
         }
     }
@@ -147,7 +184,7 @@ public class PanelController {
             if (status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY || status == MediaPlayer.Status.STOPPED) {
                 stopButton.setDisable(false);
                 mediaPlayer.play();
-                main.mediaName.setValue("Now Playing "+mediaName);
+                main.mediaName.setValue("Now Playing "+this.mediaName);
             }
             else {
                 mediaPlayer.pause();
@@ -185,11 +222,40 @@ public class PanelController {
     }
 
     @FXML
+    void repaetAction(ActionEvent event) {
+        if(repeat){
+            repeatView.setImage(repIcon1);
+            repeat=false;
+        }
+        else{
+            repeatView.setImage(repIcon2);
+            repeat=true;
+        }
+
+    }
+
+
+    @FXML
+    void muteAction(ActionEvent event) {
+        if(mediaModel.getPlayer().isMute()){
+            mediaModel.getPlayer().setMute(false);
+            muteView.setImage(hi);
+        }
+        else{
+            mediaModel.getPlayer().setMute(true);
+            muteView.setImage(muteImg);
+        }
+
+
+    }
+
+    @FXML
     void showPlayList(ActionEvent event) {
         if(!showinglist) {
 
             playliststage.setScene(main.playlistScene);
             playliststage.setMinWidth(400);
+            playliststage.setAlwaysOnTop(true);
             playliststage.setResizable(false);
             playliststage.show();
             showinglist=true;
@@ -206,6 +272,7 @@ public class PanelController {
     {
         //Iitiating PlayList variables & others :P
         playliststage=new Stage();
+        playliststage.initStyle(StageStyle.DECORATED);
         playliststage.setOnCloseRequest(e->{
             playliststage.close();
             showinglist=false;
@@ -215,9 +282,9 @@ public class PanelController {
         playListButton.setGraphic(playlistImgview);
 
         //Seek Buttons views
-        URL url=getClass().getResource("seekL.jpg");
+        URL url=getClass().getResource("seekL.png");
         seeL=new ImageView(url.toString());
-        url=getClass().getResource("seekR.jpg");
+        url=getClass().getResource("seekR.png");
         seeR=new ImageView(url.toString());
         SeekL.setGraphic(seeL);
         SeekR.setGraphic(seeR);
@@ -228,7 +295,7 @@ public class PanelController {
         playPauseIcon=new ImageView(playIcon);
         playButton.setGraphic(playPauseIcon);
         //Stop Button views
-        stopIcon=new ImageView(getClass().getResource("stop.jpg").toString());
+        stopIcon=new ImageView(getClass().getResource("stop.png").toString());
         stopButton.setGraphic(stopIcon);
 
         //volume Icons
@@ -236,6 +303,30 @@ public class PanelController {
         lo=new Image(getClass().getResource("lovol.png").toString());
         hiImg.setImage(hi);
         loImg.setImage(lo);
+
+        //repeatIcons
+        repIcon1=new Image(getClass().getResource("repeatIcon1.png").toString());
+        repIcon2=new Image(getClass().getResource("repeatIcon2.png").toString());
+        repeatView=new ImageView();
+        repeatView.setImage(repIcon1);
+        repeatButton.setGraphic(repeatView);
+
+        //FileOpenIcons
+        fileOpenImage=new Image(getClass().getResource("fileopen.png").toString());
+        fileOpenImageView=new ImageView(fileOpenImage);
+        OpenFileButton.setGraphic(fileOpenImageView);
+
+        //FullScreenIcons
+        fsImage=new Image(getClass().getResource("fsicon.png").toString());
+        fsImageView=new ImageView(fsImage);
+        fullScreenButton.setGraphic(fsImageView);
+
+        //MuteIcons
+        muteImg=new Image(getClass().getResource("muteImg.png").toString());
+        muteView=new ImageView();
+        muteView.setImage(hi);
+        muteButton.setGraphic(muteView);
+
 
 
         //newing listeners
@@ -253,6 +344,13 @@ public class PanelController {
             }
         });
 
+        fullScreenButton.setOnAction(e->{
+
+            main.stage.setFullScreen(true);
+           // main.bp.setBottom(null);
+
+        });
+
 
     }
 
@@ -263,18 +361,32 @@ public class PanelController {
         SeekR.setDisable(true);
         SeekL.setDisable(true);
         stopButton.setDisable(true);
+        muteButton.setDisable(true);
     }
     void ENABLEALL()
     {
+        muteButton.setDisable(false);
         positionSlider.setDisable(false);
         playButton.setDisable(false);
         SeekL.setDisable(false);
         SeekR.setDisable(false);
         stopButton.setDisable(false);
-
-        addAllListeners(mediaModel.getPlayer());
         mediaModel.getPlayer().setVolume(volumeSlider.getValue());
-        mediaModel.getPlayer().play();
+        volumeSlider.valueProperty().bindBidirectional(mediaModel.getPlayer().volumeProperty());
+        addAllListeners(mediaModel.getPlayer());
+
+        /*playerview.mediaView.getMediaPlayer().setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                double w=main.stage.getWidth();
+                double h=main.stage.getHeight();
+                playerview.mediaView.setFitHeight(h);
+                playerview.mediaView.setFitWidth(w);
+            }
+        });*/
+
+
+        // mediaModel.getPlayer().play();
 
     }
 
@@ -300,12 +412,13 @@ public class PanelController {
             Duration total=mp.getTotalDuration();
             totalPlayTime.setText(processDuration(total));
         });
-        volumeSlider.valueProperty().bindBidirectional(newValue.volumeProperty());
+
         newValue.setOnEndOfMedia(() -> {
             positionSlider.setValue(0.0);
             mediaModel.getPlayer().stop();
             playPauseIcon.setImage(playIcon);
-            mediaList.getNext();
+            if(!repeat) mediaList.getNext();
+            else mediaList.getNOW();
         });
     }
 

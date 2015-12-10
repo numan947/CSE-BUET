@@ -37,10 +37,6 @@ public class mediaListController {
     }
 
 
-    Hashtable<String,File>playlist=new Hashtable<>();
-
-
-
     @FXML
     private Button addButton;
 
@@ -108,7 +104,7 @@ public class mediaListController {
 
     @FXML
     void deleteMedia(ActionEvent event) {
-        Media NP=panel.mediaModel.getPlayer().getMedia();
+        //Media NP=panel.mediaModel.getPlayer().getMedia();
         ObservableList<mediaForList>del=mediaList.getSelectionModel().getSelectedItems();
         mediaList.getItems().removeAll(del);
         ObservableList<mediaForList>items=mediaList.getItems();
@@ -129,6 +125,7 @@ public class mediaListController {
         int total=items.size();
         nowPlaying=((nowPlaying%total)+total)%total;
         mediaForList nowMedia=items.get(nowPlaying);
+        panel.mediaName=nowMedia.getMediaName();
         main.mediaName.setValue("NOW PLAYING"+" "+nowMedia.getMediaName());
 
         panel.setMediaModel(nowMedia.getMediaFile().toURI().toString());
@@ -142,11 +139,27 @@ public class mediaListController {
         int total=items.size();
         nowPlaying=((nowPlaying%total)+total)%total;
         mediaForList nowMedia=items.get(nowPlaying);
+        panel.mediaName=nowMedia.getMediaName();
         main.mediaName.setValue("NOW PLAYING"+" "+nowMedia.getMediaName());
 
         panel.setMediaModel(nowMedia.getMediaFile().toURI().toString());
         System.out.println("NOW PLAYING "+nowPlaying);
     }
+    void getNOW()
+    {
+        ObservableList<mediaForList>items=mediaList.getItems();
+
+        int total=items.size();
+        nowPlaying=((nowPlaying%total)+total)%total;
+        mediaForList nowMedia=items.get(nowPlaying);
+        panel.mediaName=nowMedia.getMediaName();
+        main.mediaName.setValue("NOW PLAYING"+" "+nowMedia.getMediaName());
+
+        panel.setMediaModel(nowMedia.getMediaFile().toURI().toString());
+        System.out.println("NOW PLAYING "+nowPlaying);
+    }
+
+
 
 
 }
