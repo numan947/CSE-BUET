@@ -2,6 +2,7 @@ package geass;/**
  * Created by numan947 on 2015-12-03.
  */
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -10,17 +11,19 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +40,7 @@ public class CODE extends Application {
     BorderPane bp=new BorderPane();
     HBox hbox=new HBox();
     StackPane pp=new StackPane();
+    FadeTransition ft;
     //loaders and parents
     FXMLLoader loader1,loader2,loader3,loader4;
     Parent root1,root2,root3,root4;
@@ -69,8 +73,9 @@ public class CODE extends Application {
 
 
 
+
         //mediaNaming
-        mediaName.setValue("Makise Kurisu Player :)");
+        mediaName.setValue("MK Player :)");
 
 
         //default Media and MediaViews
@@ -132,6 +137,8 @@ public class CODE extends Application {
         panelScene=new Scene(root1,745,95);
         fullScreen=new Scene(pp,300,400);
         mainScene=new Scene(bp,900,645);
+        hbox.setMinHeight(80);
+        hbox.setMinWidth(900);
 
 
 
@@ -148,18 +155,32 @@ public class CODE extends Application {
 
         HBox.setHgrow(root1, Priority.ALWAYS);
         HBox.setHgrow(root2,Priority.NEVER);
-        BINDALL();
+        //BINDALL();
 
         //BorderPane settings
 
 
-        bp.setCenter(pp);
-        Stage stage1=new Stage();
+        bp.setCenter(control4.mediaView);
+        /*Stage stage1=new Stage();
         stage1.setScene(new Scene(hbox,400,100));
         stage1.show();
-        stage1.setAlwaysOnTop(true);
+        stage1.setAlwaysOnTop(true);*/
+        BINDALL();
+        root1.setStyle("-fx-background-color: #3E3E3E");
+        hbox.setStyle("-fx-background-color: #3E3E3E");
 
-        //bp.setBottom(hbox);
+        //Fade transition
+        ft=new FadeTransition(Duration.millis(1000),hbox);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+        ft.setCycleCount(1);
+        ft.setOnFinished(e->{
+            Platform.runLater(() -> {
+               mainScene.heightProperty().add(80.0);
+            });
+        });
+
+       bp.setBottom(hbox);
         //bp.getCenter().setDisable(true);
         bp.setRight(null);
         bp.setLeft(null);
@@ -169,7 +190,7 @@ public class CODE extends Application {
         primaryStage.setOnCloseRequest(e->{
             Platform.exit();
         });
-
+        setupContextMenu();
         primaryStage.setResizable(false);
         primaryStage.titleProperty().bind(mediaName);
         primaryStage.setScene(mainScene);
@@ -181,9 +202,11 @@ public class CODE extends Application {
     void INITDragDropEvent(Scene scene)
     {
 
+        applyControlHiding(hbox);
+        onFullScreenHideControl(stage);
         scene.setOnDragOver(dragEvent->{
             Dragboard db=dragEvent.getDragboard();
-            if(db.hasFiles()){
+                    if(db.hasFiles()){
                 dragEvent.acceptTransferModes(TransferMode.COPY);
             }
             else dragEvent.consume();
@@ -214,10 +237,56 @@ public class CODE extends Application {
     {
         MediaView view=control4.mediaView;
         view.fitWidthProperty().bind(mainScene.widthProperty());
-        view.fitHeightProperty().bind(mainScene.heightProperty().subtract(60));
+        view.fitHeightProperty().bind(mainScene.heightProperty().subtract(80));
+        control4.mediaView.setPreserveRatio(false);
+    }
+
+    void setupContextMenu()
+    {
+        this.stage.addEventHandler(MouseEvent.MOUSE_CLICKED, event->{
+            if(event.getButton()== MouseButton.SECONDARY){
+                control1.cm.show(this.stage,event.getScreenX(),event.getScreenY());
+            }
+        });
+    }
+
+    private void applyControlHiding(Node node) {
+        hbox.setOnMouseEntered(e->{
+            showConstantMediaControlBar();
+        });
+        hbox.setOnMouseExited(e->{
+            if(stage.isFullScreen())
+                showTempMediaControlBar();
+        });
 
     }
 
+    private void onFullScreenHideControl(Stage stage) {
+        try {
+            stage.fullScreenProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue) {
+                    showTempMediaControlBar();
+                } else {
+                    showConstantMediaControlBar();
+                }
+            });
+        } catch (Exception iep) {
+            iep.printStackTrace();
+        }
+    }
+
+    private void showTempMediaControlBar(){
+        //menuBar.setOpacity(0);
+        hbox.setOpacity(1.0);
+        ft.play();
+    }
+
+    private void showConstantMediaControlBar(){
+        //menuBar.setOpacity(1);
+
+        ft.stop();
+        hbox.setOpacity(1.0);
+    }
 
 
 

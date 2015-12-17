@@ -10,18 +10,20 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCharacterCombination;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -38,6 +40,17 @@ public class PanelController {
     Image playIcon,pauseIcon,hi,lo,playlistImg,repIcon1,repIcon2,fileOpenImage,fsImage,muteImg;
     boolean repeat=false;
 
+
+    ContextMenu cm=new ContextMenu();
+    MenuItem closeItem=new MenuItem("Close");
+    MenuItem exitFS=new MenuItem("Exit Fullscreen");
+    MenuItem playList=new MenuItem("Show playlist");
+    MenuItem openItem=new MenuItem("Open Files...");
+    MenuItem playFile=new MenuItem("Play");
+    MenuItem stopFile=new MenuItem("stop");
+    MenuItem about=new MenuItem("About");
+
+
     private Duration duration;
     String mediaName;
     boolean showinglist=false;
@@ -47,10 +60,12 @@ public class PanelController {
     public void setPlayerview(mediaViewController playerview) {
         this.playerview = playerview;
     }
-
     public void setMediaList(mediaListController mediaList) {
         this.mediaList = mediaList;
     }
+
+
+
 
     mediaListController mediaList;
     @FXML
@@ -115,17 +130,18 @@ public class PanelController {
             if(fileType.equals("MP4")||fileType.equals("mp4")){
                 playerview.mediaView.setMediaPlayer(this.mediaModel.getPlayer());
 
-                DoubleProperty mvw =playerview.mediaView.fitWidthProperty();
+                /*DoubleProperty mvw =playerview.mediaView.fitWidthProperty();
                 DoubleProperty mvh = playerview.mediaView.fitHeightProperty();
 
                 mvw.bind(Bindings.selectDouble(playerview.mediaView.sceneProperty(), "width"));
-                mvh.bind(Bindings.selectDouble(playerview.mediaView.sceneProperty(), "height"));
-                playerview.mediaView.setPreserveRatio(true);
+                mvh.bind(Bindings.selectDouble(playerview.mediaView.sceneProperty(), "height"));*/
+                //playerview.mediaView.setPreserveRatio(true);
                 if(main.hbox.getChildren().remove(main.root2));
             }
             else if(fileType.equals("MP3")||fileType.equals("mp3")){
                 main.hbox.getChildren().add(main.root2);
             }
+            playFile.setText("Pause");
             mediaModel.getPlayer().play();
         }
     }
@@ -133,32 +149,7 @@ public class PanelController {
 
     @FXML
     void chooseFile(ActionEvent actionEvent) {
-        FileChooser fc=new FileChooser();
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MediaFiles","*.mp3","*.mp4"));
-        List<File> lst=fc.showOpenMultipleDialog(main.stage);
-
-        if(lst!=null) {
-
-            for (File f : lst) {
-                mediaForList mm = new mediaForList();
-                mediaList.cnt++;
-                mm.setMediaPos(Integer.toString(mediaList.cnt));
-                mm.setMediaFile(f);
-                mm.setMediaName(f.getName());
-                mediaList.mediaList.getItems().add(mm);
-            }
-
-            if (this.mediaModel.getPlayer() == null) {
-                ObservableList<mediaForList> items = mediaList.mediaList.getItems();
-                mediaList.nowPlaying = 0;
-                mediaForList nowMedia = items.get(mediaList.nowPlaying);
-                this.mediaName=nowMedia.getMediaName();
-                main.mediaName.setValue("NOW PLAYING" + " " + nowMedia.getMediaName());
-                setMediaModel(nowMedia.getMediaFile().toURI().toString());
-                System.out.println("NOW PLAYING " + mediaList.nowPlaying);
-
-            }
-        }
+        OpenFile(OpenFileButton.getScene().getWindow());
     }
 
     @FXML
@@ -251,21 +242,9 @@ public class PanelController {
 
     @FXML
     void showPlayList(ActionEvent event) {
-        if(!showinglist) {
-
-            playliststage.setScene(main.playlistScene);
-            playliststage.setMinWidth(400);
-            playliststage.setAlwaysOnTop(true);
-            playliststage.setResizable(false);
-            playliststage.show();
-            showinglist=true;
-        }
-        else{
-            playliststage.close();
-            showinglist=false;
-        }
-
+        showList();
     }
+
 
 
     void INITVIEW(MediaModel mediamodel)
@@ -351,6 +330,8 @@ public class PanelController {
 
         });
 
+        INITCONTEXTMENU();
+
 
     }
 
@@ -374,20 +355,63 @@ public class PanelController {
         mediaModel.getPlayer().setVolume(volumeSlider.getValue());
         volumeSlider.valueProperty().bindBidirectional(mediaModel.getPlayer().volumeProperty());
         addAllListeners(mediaModel.getPlayer());
+    }
 
-        /*playerview.mediaView.getMediaPlayer().setOnReady(new Runnable() {
-            @Override
-            public void run() {
-                double w=main.stage.getWidth();
-                double h=main.stage.getHeight();
-                playerview.mediaView.setFitHeight(h);
-                playerview.mediaView.setFitWidth(w);
+    void INITCONTEXTMENU()
+    {
+
+
+        closeItem.setOnAction(event->{
+            Platform.exit();
+        });
+
+
+        exitFS.setOnAction(event->{
+            main.stage.setFullScreen(false);
+        });
+
+
+        playList.setOnAction(event->{
+            showList();
+        });
+
+
+        openItem.setOnAction(event->{
+            OpenFile(playerview.mediaView.getScene().getWindow());
+        });
+
+
+        playFile.setOnAction(event->{
+            if(mediaModel.getPlayer().getStatus()==Status.PLAYING){
+                mediaModel.getPlayer().pause();
+                playPauseIcon.setImage(playIcon);
+                playFile.setText("Play");
+
             }
-        });*/
+            else{
+                if(mediaModel.getPlayer().getStatus()==Status.STOPPED)stopFile.setDisable(false);
+                mediaModel.getPlayer().play();
+                playPauseIcon.setImage(pauseIcon);
+                playFile.setText("Pause");
+            }
+        });
 
 
-        // mediaModel.getPlayer().play();
+        stopFile.setOnAction(event->{
+            //stopFile
+            if(mediaModel.getPlayer().getStatus()!=Status.STOPPED){
+                mediaModel.getPlayer().stop();
+                stopFile.setDisable(true);
+            }
+        });
 
+
+        about.setOnAction(event->{
+            //showAbout
+        });
+
+
+        cm.getItems().addAll(playList,playFile,stopFile,openItem,exitFS,closeItem);
     }
 
 
@@ -505,6 +529,53 @@ public class PanelController {
     void setMain(CODE main)
     {
         this.main=main;
+    }
+
+    void showList()
+    {
+        if(!showinglist) {
+
+            playliststage.setScene(main.playlistScene);
+            playliststage.setMinWidth(400);
+            playliststage.setAlwaysOnTop(true);
+            playliststage.setResizable(false);
+            playliststage.show();
+            showinglist=true;
+        }
+        else{
+            playliststage.close();
+            showinglist=false;
+        }
+    }
+
+    void OpenFile(Window window)
+    {
+        FileChooser fc=new FileChooser();
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MediaFiles","*.mp3","*.mp4"));
+        List<File> lst=fc.showOpenMultipleDialog(window);
+
+        if(lst!=null) {
+
+            for (File f : lst) {
+                mediaForList mm = new mediaForList();
+                mediaList.cnt++;
+                mm.setMediaPos(Integer.toString(mediaList.cnt));
+                mm.setMediaFile(f);
+                mm.setMediaName(f.getName());
+                mediaList.mediaList.getItems().add(mm);
+            }
+
+            if (this.mediaModel.getPlayer() == null) {
+                ObservableList<mediaForList> items = mediaList.mediaList.getItems();
+                mediaList.nowPlaying = 0;
+                mediaForList nowMedia = items.get(mediaList.nowPlaying);
+                this.mediaName=nowMedia.getMediaName();
+                main.mediaName.setValue("NOW PLAYING" + " " + nowMedia.getMediaName());
+                setMediaModel(nowMedia.getMediaFile().toURI().toString());
+                System.out.println("NOW PLAYING " + mediaList.nowPlaying);
+
+            }
+        }
     }
 
 
