@@ -1,5 +1,6 @@
 package geass;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
@@ -35,11 +36,22 @@ public class mediaViewController {
         mediaView.addEventFilter(MouseEvent.MOUSE_PRESSED,e->{
             if(e.getButton().equals(MouseButton.PRIMARY)){
                 if(e.getClickCount()==2){
-                    if(main.stage.isFullScreen()){
+                    if(main.stage.isFullScreen()&&main.bp.getCenter()==mediaView){
                         main.stage.setFullScreen(false);
-
+                        Platform.runLater(() -> {
+                            int h= (int) main.stage.getHeight();
+                            mediaView.setFitHeight(h-110);
+                            System.out.println("IN MVC:: eventFilters");
+                        });
                     }
                     else{
+                        if(main.bp.getCenter()==mediaView) {
+                            Platform.runLater(() -> {
+                                int h = (int) main.stage.getHeight();
+                                mediaView.setFitHeight(h - 80);
+                                System.out.println("IN MVC::eventFilters");
+                            });
+                        }
                         main.stage.setFullScreen(true);
                     }
                 }

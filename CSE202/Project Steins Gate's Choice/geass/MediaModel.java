@@ -146,16 +146,16 @@ public class MediaModel {
     {
         switch (key){
             case "album":
-                setAlbumName(Value.toString());
+                setAlbumName("Album: "+Value.toString());
                 break;
             case "artist":
-                setArtistName(Value.toString());
+                setArtistName("Artist: "+Value.toString());
                 break;
             case "title":
-                setSongTitle(Value.toString());
+                setSongTitle("Title: "+Value.toString());
                 break;
             case "year":
-                setSongYear(Value.toString());
+                setSongYear("Year: "+Value.toString());
                 break;
             case "image":
                 setAlbumCover((Image) Value);

@@ -35,33 +35,34 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
-      <Button fx:id="OpenFileButton" mnemonicParsing="false" onAction="#chooseFile" prefHeight="11.0" prefWidth="25.0" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER" />
       <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="120.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="5">
          <children>
-            <Label fx:id="totalPlayTime" prefHeight="17.0" prefWidth="40.0" text="Total" />
+            <Label fx:id="totalPlayTime" prefHeight="17.0" prefWidth="40.0" text="Total" textFill="WHITE" />
             <ImageView fx:id="loImg" fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER" />
             <Slider fx:id="volumeSlider" max="1.0" prefHeight="14.0" prefWidth="126.0" HBox.hgrow="ALWAYS" />
             <ImageView fx:id="hiImg" fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
-      <Label fx:id="currentPlayTime" text="current" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label fx:id="currentPlayTime" text="current" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <children>
-            <Label fx:id="StatusLabel" alignment="CENTER" prefHeight="17.0" prefWidth="71.0" text="STATUS" />
+            <Label fx:id="StatusLabel" alignment="CENTER" prefHeight="17.0" prefWidth="71.0" text="STATUS" textFill="WHITE" />
          </children>
       </HBox>
-      <Button fx:id="playListButton" alignment="CENTER" mnemonicParsing="false" onAction="#showPlayList" prefHeight="25.0" prefWidth="25.0" GridPane.columnIndex="1" />
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.columnIndex="4">
+      <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" spacing="80.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowSpan="2">
          <children>
+            <Button fx:id="OpenFileButton" mnemonicParsing="false" onAction="#chooseFile" prefHeight="11.0" prefWidth="25.0" />
+            <Button fx:id="playListButton" alignment="CENTER" mnemonicParsing="false" onAction="#showPlayList" prefHeight="25.0" prefWidth="25.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowSpan="2">
+         <children>
+            <Button fx:id="muteButton" mnemonicParsing="false" onAction="#muteAction" prefHeight="25.0" prefWidth="25.0" />
             <Button fx:id="repeatButton" mnemonicParsing="false" onAction="#repaetAction" prefHeight="25.0" prefWidth="25.0" />
             <Button fx:id="fullScreenButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" />
          </children>
-         <padding>
-            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-         </padding>
       </HBox>
-      <Button fx:id="muteButton" mnemonicParsing="false" onAction="#muteAction" prefHeight="25.0" prefWidth="25.0" GridPane.columnIndex="3" />
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

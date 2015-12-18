@@ -1,5 +1,6 @@
 package geass;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -67,6 +68,11 @@ public class mediaListController {
                 nowPlaying=mediaList.getSelectionModel().getSelectedIndex();
                 main.mediaName.setValue("NOW PLAYING "+selected.getMediaName());
                 panel.setMediaModel(selected.getMediaFile().toURI().toString());
+                Platform.runLater(()->{
+                    mediaList.requestFocus();
+                    mediaList.getFocusModel().focus(nowPlaying);
+                    System.out.println("HI NOW "+nowPlaying);
+                });
             }
         });
 
@@ -78,8 +84,8 @@ public class mediaListController {
     void addMedia(ActionEvent event) {
 
         FileChooser fc=new FileChooser();
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("AudioFiles","*.mp3"));
-        List<File>lst=fc.showOpenMultipleDialog(main.stage);
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MediaFiles","*.mp3","*.mp4"));
+        List<File>lst=fc.showOpenMultipleDialog(addButton.getScene().getWindow());
         if(lst!=null) {
 
             for (File f : lst) {
@@ -97,6 +103,11 @@ public class mediaListController {
                 main.mediaName.setValue("NOW PLAYING" + " " + nowMedia.getMediaName());
                 panel.setMediaModel(nowMedia.getMediaFile().toURI().toString());
                 System.out.println("NOW PLAYING " + nowPlaying);
+
+                Platform.runLater(()->{
+                    mediaList.requestFocus();
+                    mediaList.getFocusModel().focus(nowPlaying);
+                });
             }
         }
     }
@@ -130,6 +141,10 @@ public class mediaListController {
 
         panel.setMediaModel(nowMedia.getMediaFile().toURI().toString());
         System.out.println("NOW PLAYING "+nowPlaying);
+        Platform.runLater(()->{
+            mediaList.requestFocus();
+            mediaList.getFocusModel().focus(nowPlaying);
+        });
     }
 
     void getPrev()
@@ -144,6 +159,11 @@ public class mediaListController {
 
         panel.setMediaModel(nowMedia.getMediaFile().toURI().toString());
         System.out.println("NOW PLAYING "+nowPlaying);
+        Platform.runLater(()->{
+            mediaList.requestFocus();
+            mediaList.getFocusModel().focus(nowPlaying);
+        });
+
     }
     void getNOW()
     {
@@ -157,6 +177,13 @@ public class mediaListController {
 
         panel.setMediaModel(nowMedia.getMediaFile().toURI().toString());
         System.out.println("NOW PLAYING "+nowPlaying);
+
+        Platform.runLater(()->{
+            mediaList.requestFocus();
+            mediaList.getFocusModel().focus(nowPlaying);
+        });
+
+
     }
 
 

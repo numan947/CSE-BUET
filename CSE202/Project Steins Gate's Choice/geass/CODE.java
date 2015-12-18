@@ -3,21 +3,21 @@ package geass;/**
  */
 
 import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.MediaView;
@@ -40,7 +40,8 @@ public class CODE extends Application {
     BorderPane bp=new BorderPane();
     HBox hbox=new HBox();
     StackPane pp=new StackPane();
-    FadeTransition ft;
+    boolean controlboxshowoff;
+
     //loaders and parents
     FXMLLoader loader1,loader2,loader3,loader4;
     Parent root1,root2,root3,root4;
@@ -149,38 +150,34 @@ public class CODE extends Application {
 
 
         //PrimaryStage configurations
-        hbox.getChildren().add(root1);
+        hbox.getChildren().addAll(root1);
         //hbox.getChildren().add(root2);
         hbox.setAlignment(Pos.CENTER);
 
+
         HBox.setHgrow(root1, Priority.ALWAYS);
         HBox.setHgrow(root2,Priority.NEVER);
-        //BINDALL();
-
-        //BorderPane settings
-
 
         bp.setCenter(control4.mediaView);
-        /*Stage stage1=new Stage();
-        stage1.setScene(new Scene(hbox,400,100));
-        stage1.show();
-        stage1.setAlwaysOnTop(true);*/
+
         BINDALL();
         root1.setStyle("-fx-background-color: #3E3E3E");
         hbox.setStyle("-fx-background-color: #3E3E3E");
 
-        //Fade transition
-        ft=new FadeTransition(Duration.millis(1000),hbox);
-        ft.setFromValue(1.0);
-        ft.setToValue(0.0);
-        ft.setCycleCount(1);
-        ft.setOnFinished(e->{
-            Platform.runLater(() -> {
-               mainScene.heightProperty().add(80.0);
-            });
+        bp.setOnMouseClicked(click->{
+            if(bp.getCenter()==root2&&click.getButton()== MouseButton.PRIMARY&&click.getClickCount()==2){
+                if(stage.isFullScreen())stage.setFullScreen(false);
+                else stage.setFullScreen(true);
+            }
+            else click.consume();
         });
+        applyMousePointerHiding();
+
 
        bp.setBottom(hbox);
+
+        control4.mediaView.setStyle("-fx-background-color: #3E3E3E");
+        bp.setStyle("-fx-background-color: #000000");
         //bp.getCenter().setDisable(true);
         bp.setRight(null);
         bp.setLeft(null);
@@ -190,6 +187,7 @@ public class CODE extends Application {
         primaryStage.setOnCloseRequest(e->{
             Platform.exit();
         });
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         setupContextMenu();
         primaryStage.setResizable(false);
         primaryStage.titleProperty().bind(mediaName);
@@ -217,6 +215,7 @@ public class CODE extends Application {
                 List<File>lst=db.getFiles();
                 int cnt=control3.mediaList.getItems().size();
                 File frst=lst.get(0);
+                int np=control3.mediaList.getItems().size();
                 for(File f:lst){
                     mediaForList mm=new mediaForList();
                     mm.setMediaFile(f);
@@ -228,6 +227,11 @@ public class CODE extends Application {
                     control1.setMediaModel(frst.toURI().toString());
                     this.mediaName.setValue("NOW PLAYING "+frst.getName());
                     control1.mediaName=frst.getName();
+                    Platform.runLater(()->{
+                        control3.mediaList.requestFocus();
+                        control3.mediaList.getFocusModel().focus(np);
+                        System.out.println("HI NUMAN "+np);
+                    });
                 }
             }
         });
@@ -237,7 +241,7 @@ public class CODE extends Application {
     {
         MediaView view=control4.mediaView;
         view.fitWidthProperty().bind(mainScene.widthProperty());
-        view.fitHeightProperty().bind(mainScene.heightProperty().subtract(80));
+        //view.fitHeightProperty().bind(mainScene.heightProperty().subtract(80));
         control4.mediaView.setPreserveRatio(false);
     }
 
@@ -255,8 +259,12 @@ public class CODE extends Application {
             showConstantMediaControlBar();
         });
         hbox.setOnMouseExited(e->{
-            if(stage.isFullScreen())
+            if(stage.isFullScreen()&&bp.getCenter()==control4.mediaView) {
+
                 showTempMediaControlBar();
+
+            }
+
         });
 
     }
@@ -265,6 +273,7 @@ public class CODE extends Application {
         try {
             stage.fullScreenProperty().addListener((observable, oldValue, newValue) -> {
                 if(newValue) {
+                    if(bp.getCenter()==control4.mediaView)
                     showTempMediaControlBar();
                 } else {
                     showConstantMediaControlBar();
@@ -276,16 +285,39 @@ public class CODE extends Application {
     }
 
     private void showTempMediaControlBar(){
-        //menuBar.setOpacity(0);
-        hbox.setOpacity(1.0);
-        ft.play();
+        Platform.runLater(()->{
+            int h= (int) stage.getHeight();
+            control4.mediaView.setFitHeight(h-1.1);
+            System.out.println("IN MAIN::showTEMPCONTROLBAR");
+        });
+        controlboxshowoff=false;
+        hbox.setOpacity(0.0);
+
     }
 
-    private void showConstantMediaControlBar(){
-        //menuBar.setOpacity(1);
-
-        ft.stop();
+    void showConstantMediaControlBar(){
+        if(stage.isFullScreen()&&bp.getCenter()==control4.mediaView) {
+            controlboxshowoff=true;
+            Platform.runLater(() -> {
+                int h = (int) stage.getHeight();
+                control4.mediaView.setFitHeight(h - 80);
+                System.out.println("IN MAIN::showConstantControls");
+            });
+        }
         hbox.setOpacity(1.0);
+    }
+
+    void applyMousePointerHiding()
+    {
+        PauseTransition idle = new PauseTransition(Duration.seconds(1.5));
+        idle.setOnFinished(e ->bp.setCursor(Cursor.NONE));
+        bp.addEventHandler(Event.ANY, e -> {
+            idle.playFromStart();
+            bp.setCursor(Cursor.DEFAULT);
+        });
+        hbox.addEventHandler(Event.ANY,e->{
+            hbox.setCursor(Cursor.DEFAULT);
+        });
     }
 
 

@@ -126,23 +126,39 @@ public class PanelController {
             ENABLEALL();
 
             String fileType=url.substring(url.lastIndexOf('.')+1);
-            System.out.println(fileType);
             if(fileType.equals("MP4")||fileType.equals("mp4")){
+                main.bp.setCenter(main.control4.mediaView);
+                main.bp.setBottom(main.hbox);
                 playerview.mediaView.setMediaPlayer(this.mediaModel.getPlayer());
+                System.out.println(mediaModel.getPlayer());
+                main.bp.setTop(null);
 
-                /*DoubleProperty mvw =playerview.mediaView.fitWidthProperty();
-                DoubleProperty mvh = playerview.mediaView.fitHeightProperty();
 
-                mvw.bind(Bindings.selectDouble(playerview.mediaView.sceneProperty(), "width"));
-                mvh.bind(Bindings.selectDouble(playerview.mediaView.sceneProperty(), "height"));*/
                 //playerview.mediaView.setPreserveRatio(true);
-                if(main.hbox.getChildren().remove(main.root2));
+                main.root2.setOpacity(0.0);
             }
             else if(fileType.equals("MP3")||fileType.equals("mp3")){
-                main.hbox.getChildren().add(main.root2);
+                main.bp.setCenter(main.root2);
+                main.root2.setOpacity(1.0);
             }
             playFile.setText("Pause");
             mediaModel.getPlayer().play();
+            if(main.bp.getCenter()==playerview.mediaView) {
+                Platform.runLater(() -> {
+                    int h = (int) main.stage.getHeight();
+                    //int h=playerview.mediaView.getMediaPlayer().getMedia().getHeight();
+
+                    if(main.stage.isFullScreen()){
+                        if(main.controlboxshowoff)
+                            playerview.mediaView.setFitHeight(h-80);
+                        else playerview.mediaView.setFitHeight(h-1.2);
+                    }
+                    else {
+                        playerview.mediaView.setFitHeight(h - 110);
+                    }
+                    System.out.println("IN PanelControl:: setURl");
+                });
+            }
         }
     }
 
@@ -324,9 +340,15 @@ public class PanelController {
         });
 
         fullScreenButton.setOnAction(e->{
-
-            main.stage.setFullScreen(true);
-           // main.bp.setBottom(null);
+            if(main.stage.isFullScreen()){
+                Platform.runLater(() -> {
+                    int h = (int) main.stage.getHeight();
+                    main.control4.mediaView.setFitHeight(h - 110);
+                    System.out.println("IN Panel Controls::fs button");
+                });
+                main.stage.setFullScreen(false);
+            }
+            else main.stage.setFullScreen(true);
 
         });
 
@@ -543,9 +565,24 @@ public class PanelController {
             showinglist=true;
         }
         else{
+            int gf=main.control3.nowPlaying;
             playliststage.close();
+            main.control3.mediaList.getSelectionModel().clearSelection();
             showinglist=false;
+            Platform.runLater(()->{
+                main.control3.mediaList.requestFocus();
+                main.control3.mediaList.getFocusModel().focus(gf);
+            });
         }
+        playliststage.setOnCloseRequest(event->{
+            int gf=main.control3.nowPlaying;
+            main.control3.mediaList.getSelectionModel().clearSelection();
+            showinglist=false;
+            Platform.runLater(()->{
+                main.control3.mediaList.requestFocus();
+                main.control3.mediaList.getFocusModel().focus(gf);
+            });
+        });
     }
 
     void OpenFile(Window window)

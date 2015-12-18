@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 public class MetaDataController {
 
+    boolean ishow=false;
     @FXML
     private ImageView albumCover;
 
@@ -32,22 +33,16 @@ public class MetaDataController {
         mediaArtist.textProperty().bind(media.artistNameProperty());
         mediaTitle.textProperty().bind(media.songTitleProperty());
         mediaYear.textProperty().bind(media.songYearProperty());
+        Stage stage=new Stage();
         albumCover.setOnMouseClicked(click->{
             if(click.getClickCount()==2){
                 ImageView view=new ImageView(albumCover.getImage());
                 VBox box=new VBox();
-                Stage stage=new Stage();
                 box.getChildren().add(view);
                 stage.setScene(new Scene(box,view.getFitWidth(),view.getFitHeight()));
                 stage.show();
             }
-
-
         });
-
     }
-
-
-
 }
 
