@@ -125,6 +125,7 @@ public class CODE extends Application {
         control3.setPanel(control1);
 
         control2.INITIALIZE(model);
+        control2.setMain(this);
 
         control1.INITVIEW(model);
         control1.DISABLEALL();
@@ -169,7 +170,6 @@ public class CODE extends Application {
                 if(stage.isFullScreen())stage.setFullScreen(false);
                 else stage.setFullScreen(true);
             }
-            else click.consume();
         });
         applyMousePointerHiding();
 
@@ -213,13 +213,13 @@ public class CODE extends Application {
             Dragboard db=dragevent.getDragboard();
             if(db.hasFiles()){
                 List<File>lst=db.getFiles();
-                int cnt=control3.mediaList.getItems().size();
+
                 File frst=lst.get(0);
                 int np=control3.mediaList.getItems().size();
                 for(File f:lst){
                     mediaForList mm=new mediaForList();
                     mm.setMediaFile(f);
-                    mm.setMediaPos(Integer.toString(++cnt));
+                    mm.setMediaPos(Integer.toString(++control3.cnt));
                     mm.setMediaName(f.getName());
                     control3.mediaList.getItems().add(mm);
                 }
@@ -247,10 +247,13 @@ public class CODE extends Application {
 
     void setupContextMenu()
     {
-        this.stage.addEventHandler(MouseEvent.MOUSE_CLICKED, event->{
+        bp.addEventHandler(MouseEvent.MOUSE_CLICKED, event->{
             if(event.getButton()== MouseButton.SECONDARY){
                 control1.cm.show(this.stage,event.getScreenX(),event.getScreenY());
             }
+        });
+        hbox.addEventHandler(MouseEvent.MOUSE_CLICKED,event->{
+            event.consume();
         });
     }
 

@@ -14,7 +14,7 @@ public class MediaModel {
 
     private final String default_img_url=getClass().getResource("326271.png").toString();
 
-    private final Image default_img=new Image(default_img_url);
+    final Image default_img=new Image(default_img_url);
 
     private final StringProperty albumName=new SimpleStringProperty(this,"album");
     private final StringProperty artistName=new SimpleStringProperty(this,"artist");

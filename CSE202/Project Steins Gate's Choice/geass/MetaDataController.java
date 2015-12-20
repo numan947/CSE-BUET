@@ -8,8 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MetaDataController {
+    CODE main;
 
-    boolean ishow=false;
     @FXML
     private ImageView albumCover;
 
@@ -35,14 +35,22 @@ public class MetaDataController {
         mediaYear.textProperty().bind(media.songYearProperty());
         Stage stage=new Stage();
         albumCover.setOnMouseClicked(click->{
+
             if(click.getClickCount()==2){
-                ImageView view=new ImageView(albumCover.getImage());
-                VBox box=new VBox();
-                box.getChildren().add(view);
-                stage.setScene(new Scene(box,view.getFitWidth(),view.getFitHeight()));
-                stage.show();
+                if(albumCover.getImage()!=main.model.default_img) {
+                    ImageView view = new ImageView(albumCover.getImage());
+                    VBox box = new VBox();
+                    box.getChildren().add(view);
+                    stage.setScene(new Scene(box, view.getFitWidth(), view.getFitHeight()));
+                    stage.show();
+                }
             }
         });
+    }
+
+    void setMain(CODE main)
+    {
+        this.main=main;
     }
 }
 

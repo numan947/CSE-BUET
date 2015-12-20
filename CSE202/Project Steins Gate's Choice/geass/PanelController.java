@@ -38,7 +38,7 @@ public class PanelController {
     private CurrentTimeListener currentTime;
     ImageView playPauseIcon,seeR,seeL,stopIcon,playlistImgview,repeatView,fileOpenImageView,fsImageView,muteView;
     Image playIcon,pauseIcon,hi,lo,playlistImg,repIcon1,repIcon2,fileOpenImage,fsImage,muteImg;
-    boolean repeat=false;
+    boolean repeat=false,alldisable=true;
 
 
     ContextMenu cm=new ContextMenu();
@@ -141,6 +141,15 @@ public class PanelController {
                 main.bp.setCenter(main.root2);
                 main.root2.setOpacity(1.0);
             }
+            else{
+                System.out.println("fileTypeNotSupported");
+
+                DISABLEALL();
+                if(mediaList.mediaList.getItems().size()>1)
+                mediaList.getNext();
+                return;
+            }
+
             playFile.setText("Pause");
             mediaModel.getPlayer().play();
             if(main.bp.getCenter()==playerview.mediaView) {
@@ -359,12 +368,17 @@ public class PanelController {
 
     void DISABLEALL()
     {
+        currentPlayTime.setText("00:00");
+        totalPlayTime.setText("00:00");
+        positionSlider.setValue(0.0);
         positionSlider.setDisable(true);
+        playPauseIcon.setImage(playIcon);
         playButton.setDisable(true);
         SeekR.setDisable(true);
         SeekL.setDisable(true);
         stopButton.setDisable(true);
         muteButton.setDisable(true);
+        alldisable=true;
     }
     void ENABLEALL()
     {
@@ -377,6 +391,7 @@ public class PanelController {
         mediaModel.getPlayer().setVolume(volumeSlider.getValue());
         volumeSlider.valueProperty().bindBidirectional(mediaModel.getPlayer().volumeProperty());
         addAllListeners(mediaModel.getPlayer());
+        alldisable=false;
     }
 
     void INITCONTEXTMENU()
@@ -468,7 +483,7 @@ public class PanelController {
         });
     }
 
-    private void removeAllListeners(MediaPlayer oldValue) {
+    void removeAllListeners(MediaPlayer oldValue) {
         volumeSlider.valueProperty().unbind();
         oldValue.statusProperty().removeListener(status);
         oldValue.currentTimeProperty().removeListener(currentTime);
@@ -537,17 +552,7 @@ public class PanelController {
 
         }
     }
-/*
-    private class MediaPlayerListener implements ChangeListener<MediaPlayer> {
-        @Override
-        public void changed(ObservableValue<? extends MediaPlayer> observable,
-                            MediaPlayer oldValue, MediaPlayer newValue) {
-            if (oldValue != null) {
-                removeAllListeners(oldValue);
-            }
-            addAllListeners(newValue);
-        }
-    }*/
+
     void setMain(CODE main)
     {
         this.main=main;
