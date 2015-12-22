@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text layoutX="38.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Project Submitted By---">
+         <font>
+            <Font name="Comic Sans MS Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="45.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1. S.Mahmudul Hasan">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="46.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2. Mahathir Ahmad">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="54.0" layoutY="262.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rifat Shahriyar">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="252.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1305043">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="252.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1305045">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="49.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Supervised By--">
+         <font>
+            <Font name="Comic Sans MS Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="56.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assistant Professor">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="50.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Level 2/ Term 1">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="56.0" layoutY="310.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Department Of CSE, BUET">
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

@@ -1,46 +1,48 @@
 package geass;
 
+/**
+ * Created by numan947 on 2015-12-03.
+ */
+
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCharacterCombination;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
-import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
-
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+
+/**
+ *PanelController class is controller of our PlayerControls fxml file,
+ * It contains several variables and Initializes various features of the Player controls
+ * It contains two inner classes, StatusListener and CurrentTimeListener
+ */
 
 public class PanelController {
 
     CODE main;
     MediaModel mediaModel;
+    //Listeners for mediaplayer
     private StatusListener status;
     private CurrentTimeListener currentTime;
+
+    //Image and Imageviews of different buttons
     ImageView playPauseIcon,seeR,seeL,stopIcon,playlistImgview,repeatView,fileOpenImageView,fsImageView,muteView;
     Image playIcon,pauseIcon,hi,lo,playlistImg,repIcon1,repIcon2,fileOpenImage,fsImage,muteImg;
-    boolean repeat=false,alldisable=true;
 
-
+    //ContextMenu & it's Items
     ContextMenu cm=new ContextMenu();
     MenuItem closeItem=new MenuItem("Close");
     MenuItem exitFS=new MenuItem("Exit Fullscreen");
@@ -50,12 +52,19 @@ public class PanelController {
     MenuItem stopFile=new MenuItem("stop");
     MenuItem about=new MenuItem("About");
 
+    //Button tooltips
+    Tooltip playt,stopt,seelt,seert,mutet,repet,opent,listt,fst;
 
-    private Duration duration;
+
     String mediaName;
-    boolean showinglist=false;
-    Stage playliststage;
+    boolean showinglist=false,repeat=false;
+
+    Stage playliststage,aboutStage;
+
+    //controllers for fxmls
     mediaViewController playerview;
+    mediaListController mediaList;
+
 
     public void setPlayerview(mediaViewController playerview) {
         this.playerview = playerview;
@@ -65,9 +74,6 @@ public class PanelController {
     }
 
 
-
-
-    mediaListController mediaList;
     @FXML
     private Button playListButton;
 
@@ -90,7 +96,7 @@ public class PanelController {
     private ImageView loImg;
 
     @FXML
-    private Slider volumeSlider;
+    Slider volumeSlider;
 
     @FXML
     private ImageView hiImg;
@@ -99,7 +105,7 @@ public class PanelController {
     private Label currentPlayTime;
 
     @FXML
-    private Label StatusLabel;
+    protected Label StatusLabel;
 
     @FXML
     private Button playButton;
@@ -116,89 +122,111 @@ public class PanelController {
     @FXML
     private Button muteButton;
 
+    /**
+     * setMediaModel method sets the url of the media to be played
+     * given an url, it checks the validity of mediaType and sets the borderPane's center children accordingly and also
+     * starts playing the media
+     */
 
 
-    void setMediaModel(String url)//THIS IS WHERE THE PLAY BEGINS mu ha ha ha...
+    void setMediaModel(String url)
     {
-        if(url!=null){
-          //  removeAllListeners(mediaModel.getPlayer());
+        if(url!=null && mediaList.validated(new File(url))){
+
+
             this.mediaModel.setUrl(url);
             ENABLEALL();
 
+            //validating fileType (mp4/mp3) and setting the view of borderpane's center child
             String fileType=url.substring(url.lastIndexOf('.')+1);
             if(fileType.equals("MP4")||fileType.equals("mp4")){
                 main.bp.setCenter(main.control4.mediaView);
-                main.bp.setBottom(main.hbox);
                 playerview.mediaView.setMediaPlayer(this.mediaModel.getPlayer());
-                System.out.println(mediaModel.getPlayer());
-                main.bp.setTop(null);
-
-
-                //playerview.mediaView.setPreserveRatio(true);
-                main.root2.setOpacity(0.0);
+                //System.out.println(mediaModel.getPlayer());
             }
+
+
             else if(fileType.equals("MP3")||fileType.equals("mp3")){
                 main.bp.setCenter(main.root2);
-                main.root2.setOpacity(1.0);
             }
+
+
             else{
                 System.out.println("fileTypeNotSupported");
-
                 DISABLEALL();
                 if(mediaList.mediaList.getItems().size()>1)
                 mediaList.getNext();
                 return;
             }
 
+
             playFile.setText("Pause");
             mediaModel.getPlayer().play();
+
+            /**
+             * If the center is mediaView then, full screening will hide mediaControls else mediaCotrols
+             * will be always visible
+             */
             if(main.bp.getCenter()==playerview.mediaView) {
+                /**
+                 * The code snippet below, resizes the mediaview once gone in fullScreen mode or vice versa, as the
+                 * size of mediaView can't be changed from javafx's thread, we used Platform.Runlater to complete this task
+                 * as a part of javafx application thread, as it's just some simple logic code, it doesn't BLOCK javafx's application thread
+                 */
+
                 Platform.runLater(() -> {
                     int h = (int) main.stage.getHeight();
-                    //int h=playerview.mediaView.getMediaPlayer().getMedia().getHeight();
 
                     if(main.stage.isFullScreen()){
                         if(main.controlboxshowoff)
                             playerview.mediaView.setFitHeight(h-80);
                         else playerview.mediaView.setFitHeight(h-1.2);
                     }
+
                     else {
                         playerview.mediaView.setFitHeight(h - 110);
                     }
-                    System.out.println("IN PanelControl:: setURl");
+
+                    //System.out.println("IN PanelControl:: setURl");
                 });
             }
         }
     }
 
 
+    /**
+     * chooseFile the method which is called when openFiles button is pressed
+     *
+     */
+
     @FXML
     void chooseFile(ActionEvent actionEvent) {
         OpenFile(OpenFileButton.getScene().getWindow());
     }
 
+    /**
+     * Plays the media & also checks status of the mediaPlayer
+     */
+
     @FXML
     void playAction(ActionEvent event) {
 
-        //System.out.println("PLAY -_-");
-       // System.out.println(mediaModel.getPlayer());
-       // System.out.println(mediaModel.getPlayer().getStatus().toString());
-       // System.out.println("ENDOFMEDIA "+atEndOfMedia);
-       // System.out.println("CURRENT TIME PROPERTY "+ mediaModel.getPlayer().currentTimeProperty().getValue().toSeconds());
-
-
-
         MediaPlayer mediaPlayer = mediaModel.getPlayer();
+
         if(null != mediaPlayer) {
             MediaPlayer.Status status = mediaPlayer.getStatus();
             if (status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED) {
-                // don't do anything in these states
+                /**
+                 * usually UNKNOWN status is the status of mediaplayer, when it is just created, we replaced it with Ready Label
+                 * HALTED status is given when critical error takes place
+                 */
                 return;
             }
 
 
             if (status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY || status == MediaPlayer.Status.STOPPED) {
                 stopButton.setDisable(false);
+                stopFile.setDisable(false);
                 mediaPlayer.play();
                 main.mediaName.setValue("Now Playing "+this.mediaName);
             }
@@ -211,7 +239,9 @@ public class PanelController {
         }
     }
 
-
+    /**
+     * stopAction method handles the action of stop button and update the views accordingly
+     */
     @FXML
     void stopAction(ActionEvent event) {
         MediaPlayer mediaPlayer = mediaModel.getPlayer();
@@ -219,73 +249,109 @@ public class PanelController {
             mediaPlayer.stop();
             playPauseIcon.setImage(playIcon);
             stopButton.setDisable(true);
+            stopFile.setDisable(true);
+            playFile.setText("Play");
             main.mediaName.setValue("mediaPlayer Stopped");
+            positionSlider.setValue(0.0);
         } else {
             event.consume();
         }
     }
 
+    /**
+     * seekRAction method gets and plays the next mediafile in the playlist
+     **/
+
     @FXML
     void seekRAction(ActionEvent event) {
-        //SeekAndUpdate(mediaModel.getPlayer().getTotalDuration().subtract(Duration.seconds(1)));
         mediaList.getNext();
     }
 
+    /**
+     * seekLAction method gets and plays the previous mediafile in the playlist
+     **/
+
     @FXML
     void seekLAction(ActionEvent event) {
-        //SeekAndUpdate(Duration.ZERO);
-        mediaList.getPrev();
+       mediaList.getPrev();
     }
+
+    /**
+     * repeatAction method handles repeatButton's event, it either enables or disables
+     * repeating current file based on the current status
+     */
 
     @FXML
     void repaetAction(ActionEvent event) {
         if(repeat){
             repeatView.setImage(repIcon1);
+            repet.setText("Repeat This File");
             repeat=false;
         }
         else{
             repeatView.setImage(repIcon2);
+            repet.setText("Repeat PlayList");
             repeat=true;
         }
-
     }
 
+    /**
+     * muteAction method mutes or unmutes the mediaPlayer
+     */
 
     @FXML
     void muteAction(ActionEvent event) {
         if(mediaModel.getPlayer().isMute()){
             mediaModel.getPlayer().setMute(false);
             muteView.setImage(hi);
+            mutet.setText("Mute Audio");
         }
         else{
             mediaModel.getPlayer().setMute(true);
             muteView.setImage(muteImg);
+            mutet.setText("Unmute Audio");
         }
-
-
     }
 
+    /**
+     * showPlaylist method shows the playlist
+     *
+     */
     @FXML
     void showPlayList(ActionEvent event) {
         showList();
     }
 
-
+    /**
+     * INITVIEW method initializes different images, imageviews, buttons, sliders etc and also
+     * ContextMenu. It's the very first method that's called from the main(CODE) class
+     */
 
     void INITVIEW(MediaModel mediamodel)
     {
-        //Iitiating PlayList variables & others :P
+        //Initiating playlist stage
         playliststage=new Stage();
         playliststage.initStyle(StageStyle.DECORATED);
-        playliststage.setOnCloseRequest(e->{
+        playliststage.setOnCloseRequest(e -> {
             playliststage.close();
-            showinglist=false;
+            showinglist = false;
         });
+        playliststage.setTitle("Play List");
+        playliststage.setMinWidth(400);
+        playliststage.setAlwaysOnTop(true);
+        playliststage.setResizable(false);
+
+        //initializing about stage
+        aboutStage=new Stage();
+        aboutStage.initStyle(StageStyle.DECORATED);
+
+        //playlistbutton's image
         playlistImg=new Image(getClass().getResource("playlistimg.png").toString());
         playlistImgview=new ImageView(playlistImg);
         playListButton.setGraphic(playlistImgview);
 
-        //Seek Buttons views
+
+        //Seek Buttons' views
         URL url=getClass().getResource("seekL.png");
         seeL=new ImageView(url.toString());
         url=getClass().getResource("seekR.png");
@@ -293,20 +359,25 @@ public class PanelController {
         SeekL.setGraphic(seeL);
         SeekR.setGraphic(seeR);
 
-        //PlayPause Button views
+
+        //PlayPause Button's views
         playIcon=new Image(getClass().getResource("play.png").toString());
         pauseIcon=new Image(getClass().getResource("pause.png").toString());
         playPauseIcon=new ImageView(playIcon);
         playButton.setGraphic(playPauseIcon);
-        //Stop Button views
+
+
+        //Stop Button's views
         stopIcon=new ImageView(getClass().getResource("stop.png").toString());
         stopButton.setGraphic(stopIcon);
+
 
         //volume Icons
         hi=new Image(getClass().getResource("hivol.png").toString());
         lo=new Image(getClass().getResource("lovol.png").toString());
         hiImg.setImage(hi);
         loImg.setImage(lo);
+
 
         //repeatIcons
         repIcon1=new Image(getClass().getResource("repeatIcon1.png").toString());
@@ -315,15 +386,18 @@ public class PanelController {
         repeatView.setImage(repIcon1);
         repeatButton.setGraphic(repeatView);
 
+
         //FileOpenIcons
         fileOpenImage=new Image(getClass().getResource("fileopen.png").toString());
         fileOpenImageView=new ImageView(fileOpenImage);
         OpenFileButton.setGraphic(fileOpenImageView);
 
+
         //FullScreenIcons
         fsImage=new Image(getClass().getResource("fsicon.png").toString());
         fsImageView=new ImageView(fsImage);
         fullScreenButton.setGraphic(fsImageView);
+
 
         //MuteIcons
         muteImg=new Image(getClass().getResource("muteImg.png").toString());
@@ -332,39 +406,76 @@ public class PanelController {
         muteButton.setGraphic(muteView);
 
 
-
         //newing listeners
         status=new StatusListener();
         currentTime=new CurrentTimeListener();
 
+        //setting this class's mediamodel
         this.mediaModel=mediamodel;
+
+        //setting default volume
         volumeSlider.setValue(.50);
 
-        //PositionListener
+
+        //adding listener to position slider
         positionSlider.valueChangingProperty().addListener((observable, oldValue, newValue) -> {
-            if(oldValue&&!newValue){
-                double pos=positionSlider.getValue();
+            if (oldValue && !newValue) {
+                double pos = positionSlider.getValue();
                 SeekAndUpdate(mediamodel.getPlayer().getTotalDuration().multiply(pos));
             }
         });
 
-        fullScreenButton.setOnAction(e->{
-            if(main.stage.isFullScreen()){
+        //Resetting focus after dragging position slider
+        positionSlider.setOnMouseReleased(event -> {
+            if (main.bp.getCenter() == playerview.mediaView)
+                playerview.mediaView.requestFocus();
+            else if (main.bp.getCenter() == main.root2) main.root2.requestFocus();
+            else main.def.requestFocus();
+        });
+
+        //Clicking on position slider will update it's position as well as mediaplayer's position
+        positionSlider.setOnMouseClicked(event -> {
+
+            System.out.println(positionSlider.getValue() + " VS " + event.getX() / 300);
+            SeekAndUpdate(mediamodel.getPlayer().getTotalDuration().multiply(event.getX() / 300));
+
+        });
+
+        //Resetting focus after dragging volume slider
+        volumeSlider.setOnMouseReleased(event -> {
+            if (main.bp.getCenter() == playerview.mediaView) playerview.mediaView.requestFocus();
+            else if (main.bp.getCenter() == main.root2) playerview.mediaView.requestFocus();
+            else main.def.requestFocus();
+        });
+
+        //fullScreen button action
+        fullScreenButton.setOnAction(e -> {
+            if (main.stage.isFullScreen()) {
                 Platform.runLater(() -> {
                     int h = (int) main.stage.getHeight();
                     main.control4.mediaView.setFitHeight(h - 110);
                     System.out.println("IN Panel Controls::fs button");
                 });
                 main.stage.setFullScreen(false);
-            }
-            else main.stage.setFullScreen(true);
+            } else main.stage.setFullScreen(true);
 
         });
 
+        //default status label
+        StatusLabel.setText("READY");
+
+
+        //initializing contextmenu
         INITCONTEXTMENU();
 
-
+        //initializing tooltip
+        INITTOOLTIP();
     }
+
+    /**
+     * DISABLEALL fucntion disable most of the control buttons of control box. It's done
+     * to avoid getting nullpointer exception. As at the very beginning no media is added to the mediaplayer
+     */
 
     void DISABLEALL()
     {
@@ -378,10 +489,18 @@ public class PanelController {
         SeekL.setDisable(true);
         stopButton.setDisable(true);
         muteButton.setDisable(true);
-        alldisable=true;
+        playFile.setDisable(true);
+        stopFile.setDisable(true);
     }
+
+    /**
+     * ENABLEALL function enables all the player controls, adds the status & currenttime listeners to the mediaPlayer
+     * and also binds mediaPlayer's volume with the value of volumeslider
+     */
+
     void ENABLEALL()
     {
+        addAllListeners(mediaModel.getPlayer());
         muteButton.setDisable(false);
         positionSlider.setDisable(false);
         playButton.setDisable(false);
@@ -390,21 +509,51 @@ public class PanelController {
         stopButton.setDisable(false);
         mediaModel.getPlayer().setVolume(volumeSlider.getValue());
         volumeSlider.valueProperty().bindBidirectional(mediaModel.getPlayer().volumeProperty());
-        addAllListeners(mediaModel.getPlayer());
-        alldisable=false;
+
+        playFile.setDisable(false);
+        stopFile.setDisable(false);
     }
+
+    /**
+     * In the very beginning this function is called to cancel default focus on the buttons of the control panel
+     */
+
+    void removeAllFocus()
+    {
+        muteButton.setFocusTraversable(false);
+        repeatButton.setFocusTraversable(false);
+        fullScreenButton.setFocusTraversable(false);
+        stopButton.setFocusTraversable(false);
+        playButton.setFocusTraversable(false);
+        volumeSlider.setFocusTraversable(false);
+        positionSlider.setFocusTraversable(false);
+        SeekL.setFocusTraversable(false);
+        SeekR.setFocusTraversable(false);
+        playListButton.setFocusTraversable(false);
+        OpenFileButton.setFocusTraversable(false);
+    }
+
+    /**
+     * INITCONTEXTMENU method initializes contex menu and it's items
+     */
 
     void INITCONTEXTMENU()
     {
-
-
         closeItem.setOnAction(event->{
             Platform.exit();
         });
 
 
         exitFS.setOnAction(event->{
-            main.stage.setFullScreen(false);
+            if(main.stage.isFullScreen()){
+                Platform.runLater(() -> {
+                    int h = (int) main.stage.getHeight();
+                    main.control4.mediaView.setFitHeight(h - 110);
+                    System.out.println("IN Panel Controls::fs button");
+                });
+                main.stage.setFullScreen(false);
+            }
+            else event.consume();
         });
 
 
@@ -414,11 +563,14 @@ public class PanelController {
 
 
         openItem.setOnAction(event->{
-            OpenFile(playerview.mediaView.getScene().getWindow());
+            OpenFile(main.bp.getScene().getWindow());
         });
 
 
         playFile.setOnAction(event->{
+            if(stopButton.isDisabled()||stopFile.isDisable()) {
+                stopButton.setDisable(false); stopFile.setDisable(false);
+            }
             if(mediaModel.getPlayer().getStatus()==Status.PLAYING){
                 mediaModel.getPlayer().pause();
                 playPauseIcon.setImage(playIcon);
@@ -439,31 +591,82 @@ public class PanelController {
             if(mediaModel.getPlayer().getStatus()!=Status.STOPPED){
                 mediaModel.getPlayer().stop();
                 stopFile.setDisable(true);
+                stopButton.setDisable(true);
+                playPauseIcon.setImage(playIcon);
+                playFile.setText("Play");
+                positionSlider.setValue(0.0);
             }
         });
 
 
         about.setOnAction(event->{
-            //showAbout
+            if(aboutStage.isShowing())aboutStage.close();
+            else{
+                aboutStage.setScene(main.aboutScene);
+                aboutStage.setTitle("About MK Player");
+                aboutStage.setResizable(false);
+                aboutStage.show();
+            }
         });
 
 
-        cm.getItems().addAll(playList,playFile,stopFile,openItem,exitFS,closeItem);
+        cm.getItems().addAll(playList,playFile,stopFile,openItem,exitFS,about,closeItem);
+    }
+
+    /**
+     * INITTOOLTIP method initializes and adds tooltips of different buttons
+     */
+    void INITTOOLTIP()
+    {
+        playt=new Tooltip();
+        playButton.setTooltip(playt);
+
+
+        stopt=new Tooltip();
+        stopButton.setTooltip(stopt);
+        stopt.setText("Stop File");
+
+
+        seelt=new Tooltip();
+        SeekL.setTooltip(seelt);
+        seelt.setText("Play Next Media");
+
+
+        seert=new Tooltip();
+        SeekR.setTooltip(seert);
+        seert.setText("Play Previous Media");
+
+
+        mutet=new Tooltip();
+        muteButton.setTooltip(mutet);
+        mutet.setText("Mute Audio");
+
+
+        repet=new Tooltip();
+        repeatButton.setTooltip(repet);
+        repet.setText("Repeat This File");
+
+
+        opent=new Tooltip();
+        OpenFileButton.setTooltip(opent);
+        opent.setText("Open Files...");
+
+
+        listt=new Tooltip();
+        playListButton.setTooltip(listt);
+        listt.setText("Show Playlist");
+
+
+        fst=new Tooltip();
+        fullScreenButton.setTooltip(fst);
+        fst.setText("Make Full Screen");
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * addAllListeners method adds statuslistener and currenttime listener to the mediaplayer, when new media is assigned
+     * it also sets the total duration of new media file and also defines what to do when the media is at it's end
+     */
 
     private void addAllListeners(MediaPlayer newValue) {
         newValue.statusProperty().addListener(status);
@@ -483,11 +686,19 @@ public class PanelController {
         });
     }
 
+    /**
+     * removes all the listeners from the player when the playlist is empty
+     */
     void removeAllListeners(MediaPlayer oldValue) {
         volumeSlider.valueProperty().unbind();
         oldValue.statusProperty().removeListener(status);
         oldValue.currentTimeProperty().removeListener(currentTime);
     }
+
+    /**
+     * given a Duration Object processDuration method converts it to
+     * minutes and seconds and then return these as String
+     */
 
     private String processDuration(Duration duration) {
         double millis = duration.toMillis();
@@ -496,56 +707,85 @@ public class PanelController {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    private void updatePositionSlider(Duration duration)
+    /**
+     * given a Duration object updatePositionSlider method updates the position of the positionSlider
+     * the value of this slider is from 0 to 1
+     */
+
+    void updatePositionSlider(Duration duration)
     {
-       // System.out.println("positionSlider value "+positionSlider.getValue()+"\ncurrentTIme "+duration.toSeconds());
-        if(positionSlider.isValueChanging())return;
+       if(positionSlider.isValueChanging())return;
         Duration total=mediaModel.getPlayer().getTotalDuration();
-       // System.out.println(total.toSeconds());
-        if(total!=null)positionSlider.setValue(duration.toMillis()/total.toMillis());
+       if(total!=null)positionSlider.setValue(duration.toMillis()/total.toMillis());
     }
 
-
-
-    private void UpdateStatus(Status status)
+    /**
+     * given a Status object UpdateStatus updates the Status of the StatusLabel
+     * it also updates the icon of playbutton
+     */
+    void UpdateStatus(Status status)
     {
+        //System.out.println("UPDATE "+mediaModel.getPlayer().getCurrentTime());
         if(status==Status.UNKNOWN||status==null){
             positionSlider.setDisable(true);
-            StatusLabel.setText("Loading...");
+            StatusLabel.setText("UNKNOWN");
         }
         else{
             positionSlider.setDisable(false);
             StatusLabel.setText(status.toString());
-            if(status==Status.PLAYING)playPauseIcon.setImage(pauseIcon);
-            else if(status==Status.PAUSED)playPauseIcon.setImage(playIcon);
+            if(status==Status.PLAYING){
+                playFile.setText("Pause");
+                playPauseIcon.setImage(pauseIcon);
+                playt.setText("Pause File");
+            }
+            else if(status==Status.PAUSED){
+                playFile.setText("Play");
+                playPauseIcon.setImage(playIcon);
+                playt.setText("Play File");
+            }
         }
     }
 
-
-    private void SeekAndUpdate(Duration duration)
+    /**
+     * given a Duration object SeekAndUpdate method
+     * seeks and update the mediaplyer's position as well as positionslider's position
+     * to the saught time
+     */
+    void SeekAndUpdate(Duration duration)
     {
-        if(mediaModel.getPlayer().getStatus()==Status.STOPPED)mediaModel.getPlayer().pause();
+        if(mediaModel.getPlayer().getStatus()==Status.STOPPED){
+            stopButton.setDisable(false);
+            stopFile.setDisable(false);
+            mediaModel.getPlayer().pause();
+        }
         mediaModel.getPlayer().seek(duration);
         if(mediaModel.getPlayer().getStatus()!=Status.PLAYING)updatePositionSlider(duration);
     }
 
 
-    private class StatusListener implements InvalidationListener {
+    /**
+     * this class impelents change listener, and the value of status is changed, it updates the status
+     */
+    private class StatusListener implements ChangeListener {
+
         @Override
-        public void invalidated(Observable observable) {
+        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
             Platform.runLater(() -> {
-                UpdateStatus(mediaModel.getPlayer().getStatus());
+                UpdateStatus((Status) newValue);
             });
+
         }
     }
+
+    /**
+     * this class also implements changeListener and when current time
+     */
+
     private class CurrentTimeListener implements ChangeListener {
 
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
             Platform.runLater(() -> {
-                MediaPlayer mediaPlayer = mediaModel.getPlayer();
-                Duration currentTime1 = mediaPlayer.getCurrentTime();
-                //System.out.println("HELLO CURRENTTIME -_- "+ currentTime.toSeconds());
                 currentPlayTime.setText(processDuration((Duration)newValue));
                 if(newValue!=null)updatePositionSlider((Duration) newValue);
             });
@@ -553,49 +793,82 @@ public class PanelController {
         }
     }
 
+
     void setMain(CODE main)
     {
         this.main=main;
     }
 
+
+    /**
+     * showList function manages the showing of the playlist it also resets focus to currently playing
+     * file
+     */
+
     void showList()
     {
         if(!showinglist) {
-
             playliststage.setScene(main.playlistScene);
-            playliststage.setMinWidth(400);
-            playliststage.setAlwaysOnTop(true);
-            playliststage.setResizable(false);
             playliststage.show();
             showinglist=true;
         }
+
+
         else{
             int gf=main.control3.nowPlaying;
             playliststage.close();
             main.control3.mediaList.getSelectionModel().clearSelection();
             showinglist=false;
+
+            /**the code snippet in below
+             *sets the default focus of
+             *the tableview(playlist) to
+             *currently playing media
+             */
+
             Platform.runLater(()->{
                 main.control3.mediaList.requestFocus();
                 main.control3.mediaList.getFocusModel().focus(gf);
             });
         }
+
         playliststage.setOnCloseRequest(event->{
             int gf=main.control3.nowPlaying;
             main.control3.mediaList.getSelectionModel().clearSelection();
             showinglist=false;
-            Platform.runLater(()->{
+
+            /**the code snippet in below
+             *sets the default focus of
+             *the tableview(playlist) to
+             *currently playing media
+             */
+            Platform.runLater(() -> {
                 main.control3.mediaList.requestFocus();
                 main.control3.mediaList.getFocusModel().focus(gf);
             });
         });
+
+        playliststage.focusedProperty().addListener(event->{
+            if(!playliststage.isFocused()){
+                main.control3.mediaList.getSelectionModel().clearSelection();
+                Platform.runLater(() -> {
+                    main.control3.mediaList.requestFocus();
+                    main.control3.mediaList.getFocusModel().focus(main.control3.nowPlaying);
+                });
+            }
+        });
     }
 
+    /**
+     * OpenFile method handles the openning of file from the control box, when a file is opened from control box, it's appended
+     * At the end of playlist & started playing immediately
+     */
     void OpenFile(Window window)
     {
         FileChooser fc=new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MediaFiles","*.mp3","*.mp4"));
         List<File> lst=fc.showOpenMultipleDialog(window);
-
+        mediaList.nowPlaying=mediaList.cnt;
         if(lst!=null) {
 
             for (File f : lst) {
@@ -607,20 +880,25 @@ public class PanelController {
                 mediaList.mediaList.getItems().add(mm);
             }
 
-            if (this.mediaModel.getPlayer() == null) {
-                ObservableList<mediaForList> items = mediaList.mediaList.getItems();
-                mediaList.nowPlaying = 0;
-                mediaForList nowMedia = items.get(mediaList.nowPlaying);
-                this.mediaName=nowMedia.getMediaName();
-                main.mediaName.setValue("NOW PLAYING" + " " + nowMedia.getMediaName());
-                setMediaModel(nowMedia.getMediaFile().toURI().toString());
-                System.out.println("NOW PLAYING " + mediaList.nowPlaying);
 
-            }
+            ObservableList<mediaForList> items = mediaList.mediaList.getItems();
+            mediaForList nowMedia = items.get(mediaList.nowPlaying);
+            this.mediaName=nowMedia.getMediaName();
+            main.mediaName.setValue("NOW PLAYING" + " " + nowMedia.getMediaName());
+            setMediaModel(nowMedia.getMediaFile().toURI().toString());
+            //System.out.println("NOW PLAYING " + mediaList.nowPlaying);
+
+            /**the code snippet in below
+             *sets the default focus of
+             *the tableview(playlist) to
+             *currently playing media
+             */
+
+            Platform.runLater(()->{
+                main.control3.mediaList.requestFocus();
+                main.control3.mediaList.getFocusModel().focus(mediaList.nowPlaying);
+                System.out.println("HI NUMAN "+mediaList.nowPlaying);
+            });
         }
     }
-
-
-
-
 }

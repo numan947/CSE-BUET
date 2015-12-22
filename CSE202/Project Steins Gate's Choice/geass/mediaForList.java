@@ -2,9 +2,12 @@ package geass;
 
 import java.io.File;
 
-/**
- * Created by numan947 on 2015-12-08.
+
+/**Basically it is The media file. It stores each media as file
+ *with it's name & it's position in the table view
+ *It's used for supporting positioning in the tableview
  */
+
 public class mediaForList {
     File mediaFile;
     String mediaName;
