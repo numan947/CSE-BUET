@@ -13,6 +13,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLDecoder;
 
 /**This is the controller class for our Playlist.
  * cnt & nowplaying tracks the number of elements corrently in the list & the current song number
@@ -27,7 +29,7 @@ public class mediaListController {
     CODE main;
     int cnt,nowPlaying;
     PanelController panel;
-    File playListDir=new File("Playlists");
+    File playListDir;
 
     public PanelController getPanel() {
         return panel;
@@ -78,6 +80,19 @@ public class mediaListController {
      */
      void INITIALIZE()
     {
+        URL url = CODE.class.getProtectionDomain().getCodeSource().getLocation();
+        String jarPath = null;
+        try {
+            jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String parentPath = new File(jarPath).getParentFile().getPath();
+        String separator=System.getProperty("file.separator");
+        playListDir=new File(parentPath+separator+"Playlists"+separator);
+
+
+
         hashCol.setCellValueFactory(new PropertyValueFactory<mediaForList,String>("mediaPos"));
         hashCol.setResizable(false);
         FileNameCol.setCellValueFactory(new PropertyValueFactory<mediaForList, String>("mediaName"));
@@ -222,13 +237,15 @@ public class mediaListController {
 
     void SAVELIST(File f)
     {
+        BufferedWriter out=null;
         try {
-            FileWriter fileWriter=new FileWriter(f);
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "UTF-8"));
+
             ObservableList<mediaForList>items=mediaList.getItems();
             for(mediaForList m:items){
-                fileWriter.write(m.getMediaFile().getAbsolutePath()+"VICTORIQADEBLOIS");
+                out.write(m.getMediaFile().getAbsolutePath() + "VICTORIQADEBLOIS");
             }
-            fileWriter.close();
+            out.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -257,7 +274,7 @@ public class mediaListController {
         BufferedReader bufferedReader=null;
 
         try {
-            bufferedReader=new BufferedReader(new FileReader(file));
+            bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
             String tmp;
             while((tmp=bufferedReader.readLine())!=null){
                 ALLURLS+=tmp;

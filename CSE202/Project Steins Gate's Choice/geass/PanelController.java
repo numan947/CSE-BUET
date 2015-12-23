@@ -40,7 +40,7 @@ public class PanelController {
 
     //Image and Imageviews of different buttons
     ImageView playPauseIcon,seeR,seeL,stopIcon,playlistImgview,repeatView,fileOpenImageView,fsImageView,muteView;
-    Image playIcon,pauseIcon,hi,lo,playlistImg,repIcon1,repIcon2,fileOpenImage,fsImage,muteImg;
+    Image playIcon,pauseIcon,hi,lo,playlistImg,repIcon1,repIcon2,fileOpenImage,fsImage,muteImg1,muteImg2;
 
     //ContextMenu & it's Items
     ContextMenu cm=new ContextMenu();
@@ -58,6 +58,7 @@ public class PanelController {
 
     String mediaName;
     boolean showinglist=false,repeat=false;
+    double prevvol;
 
     Stage playliststage,aboutStage;
 
@@ -131,6 +132,7 @@ public class PanelController {
 
     void setMediaModel(String url)
     {
+        System.out.println(prevvol);
         if(url!=null && mediaList.validated(new File(url))){
 
 
@@ -162,6 +164,7 @@ public class PanelController {
 
             playFile.setText("Pause");
             mediaModel.getPlayer().play();
+            if(volumeSlider.getValue()==0.0)mediaModel.getPlayer().setMute(true);
 
             /**
              * If the center is mediaView then, full screening will hide mediaControls else mediaCotrols
@@ -214,8 +217,8 @@ public class PanelController {
         MediaPlayer mediaPlayer = mediaModel.getPlayer();
 
         if(null != mediaPlayer) {
-            MediaPlayer.Status status = mediaPlayer.getStatus();
-            if (status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED) {
+            Status status = mediaPlayer.getStatus();
+            if (status == Status.UNKNOWN || status == Status.HALTED) {
                 /**
                  * usually UNKNOWN status is the status of mediaplayer, when it is just created, we replaced it with Ready Label
                  * HALTED status is given when critical error takes place
@@ -224,7 +227,7 @@ public class PanelController {
             }
 
 
-            if (status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY || status == MediaPlayer.Status.STOPPED) {
+            if (status == Status.PAUSED || status == Status.READY || status == Status.STOPPED) {
                 stopButton.setDisable(false);
                 stopFile.setDisable(false);
                 mediaPlayer.play();
@@ -303,12 +306,15 @@ public class PanelController {
     void muteAction(ActionEvent event) {
         if(mediaModel.getPlayer().isMute()){
             mediaModel.getPlayer().setMute(false);
-            muteView.setImage(hi);
+            volumeSlider.setValue(prevvol);
+            muteView.setImage(muteImg2);
             mutet.setText("Mute Audio");
         }
         else{
+            prevvol=volumeSlider.getValue();
+            volumeSlider.setValue(0.0);
             mediaModel.getPlayer().setMute(true);
-            muteView.setImage(muteImg);
+            muteView.setImage(muteImg1);
             mutet.setText("Unmute Audio");
         }
     }
@@ -400,9 +406,10 @@ public class PanelController {
 
 
         //MuteIcons
-        muteImg=new Image(getClass().getResource("muteImg.png").toString());
+        muteImg1=new Image(getClass().getResource("muteImg1.png").toString());
+        muteImg2=new Image(getClass().getResource("muteImg2.png").toString());
         muteView=new ImageView();
-        muteView.setImage(hi);
+        muteView.setImage(muteImg2);
         muteButton.setGraphic(muteView);
 
 
@@ -470,6 +477,7 @@ public class PanelController {
 
         //initializing tooltip
         INITTOOLTIP();
+
     }
 
     /**
@@ -672,8 +680,8 @@ public class PanelController {
         newValue.statusProperty().addListener(status);
         newValue.currentTimeProperty().addListener(currentTime);
         newValue.totalDurationProperty().addListener(observable -> {
-            MediaPlayer mp=mediaModel.getPlayer();
-            Duration total=mp.getTotalDuration();
+            MediaPlayer mp = mediaModel.getPlayer();
+            Duration total = mp.getTotalDuration();
             totalPlayTime.setText(processDuration(total));
         });
 
@@ -681,9 +689,10 @@ public class PanelController {
             positionSlider.setValue(0.0);
             mediaModel.getPlayer().stop();
             playPauseIcon.setImage(playIcon);
-            if(!repeat) mediaList.getNext();
+            if (!repeat) mediaList.getNext();
             else mediaList.getNOW();
         });
+
     }
 
     /**
