@@ -6,6 +6,7 @@ import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 
 /**
  * Created by numan947 on 2015-12-03.
@@ -19,7 +20,6 @@ import javafx.scene.media.MediaPlayer;
  *We used albumName,artistName,songTitle,songYear as StringProperty and Image as ObjectProperty so that later we can bind METADATA to it
  */
 public class MediaModel {
-
     private final String default_img_url=getClass().getResource("1234.png").toString();
 
     final Image default_img=new Image(default_img_url);
@@ -130,7 +130,6 @@ public class MediaModel {
     {
         resetProperties();
 
-        try{
             Media media=new Media(url);
 
             /**MapChangeListener listens for change in the media's METADATA if, the media is changed, the METADATA is changed and the
@@ -146,10 +145,6 @@ public class MediaModel {
             player.get().setOnError(()->{
                 System.out.println(player.get().getError().getMessage());
             });
-
-        }catch (Exception e){
-            System.out.println("ERROR AT INIT MEDIA "+e);
-        }
     }
 
     /**

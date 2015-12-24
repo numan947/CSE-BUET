@@ -21,9 +21,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -46,14 +44,15 @@ public class CODE extends Application {
     boolean controlboxshowoff;
 
     //loaders and parents
-    FXMLLoader loader1,loader2,loader3,loader4,loader5;
-    Parent root1,root2,root3,root4,root5;
+    FXMLLoader loader1,loader2,loader3,loader4,loader5,loader6;
+    Parent root1,root2,root3,root4,root5,root6;
 
     //Movable Scenes
     Scene playlistScene;
     Scene panelScene;
     Scene mainScene;
     Scene aboutScene;
+    Scene errorScene;
 
     //Scene Controllers
     PanelController control1;
@@ -84,39 +83,45 @@ public class CODE extends Application {
         model=new MediaModel();
 
 
-        //loading fxml4
+
+        //loading fxml4 (mediaview)
         loader4=new FXMLLoader(getClass().getResource("mediaView.fxml"));
         root4=loader4.load();
         control4=loader4.getController();
 
 
-        //loading fxml3
+        //loading fxml3 (PlayList)
         loader3=new FXMLLoader(getClass().getResource("mediaList.fxml"));
         root3=loader3.load();
         control3=loader3.getController();
 
 
-        //loading fxml1
+        //loading fxml1 (ControlPanel)
         loader1=new FXMLLoader(getClass().getResource("PlayerControls.fxml"));
         root1=loader1.load();
         control1=loader1.getController();
 
 
-        //loading fxml2
+        //loading fxml2(metaData)
         loader2=new FXMLLoader(getClass().getResource("MetaData.fxml"));
         root2=loader2.load();
         control2=loader2.getController();
 
 
-        //loading fxml5
+        //loading fxml5(About)
         loader5=new FXMLLoader(getClass().getResource("credits.fxml"));
         root5=loader5.load();
+
+        //loading fxml6(Error Scene)
+        loader6=new FXMLLoader(getClass().getResource("unavailable.fxml"));
+        root6=loader6.load();
 
         //Setting up different Scenes
         playlistScene=new Scene(root3,213,397);
         panelScene=new Scene(root1,745,95);
         mainScene=new Scene(bp,900,645);
         aboutScene=new Scene(root5,344,423);
+        errorScene=new Scene(root6);
 
 
         //controlling the fxmls (interconnecting different controllers)
@@ -139,6 +144,8 @@ public class CODE extends Application {
         control1.removeAllFocus();
         control1.playliststage.initOwner(stage);
         control1.aboutStage.initOwner(stage);
+        control1.errorStage.initOwner(control1.playliststage);
+
 
 
         //Applying DragNDrop to scnens
@@ -279,7 +286,7 @@ public class CODE extends Application {
                     Platform.runLater(() -> {
                         int h = (int) stage.getHeight();
                         control4.mediaView.setFitHeight(h - 110);
-                        System.out.println("IN initDRAGNDrops ::ESCAPE Button");
+                        System.out.println(" ::ESCAPE Button");
                     });
                     stage.setFullScreen(false);
                 }

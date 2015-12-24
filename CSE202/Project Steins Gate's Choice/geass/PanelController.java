@@ -10,6 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -60,7 +61,7 @@ public class PanelController {
     boolean showinglist=false,repeat=false;
     double prevvol;
 
-    Stage playliststage,aboutStage;
+    Stage playliststage,aboutStage,errorStage;
 
     //controllers for fxmls
     mediaViewController playerview;
@@ -130,68 +131,74 @@ public class PanelController {
      */
 
 
-    void setMediaModel(String url)
-    {
+    void setMediaModel(String url) {
         System.out.println(prevvol);
-        if(url!=null && mediaList.validated(new File(url))){
+        boolean noerr=true;
+        if (url != null && mediaList.validated(new File(url))) {
 
-
-            this.mediaModel.setUrl(url);
-            ENABLEALL();
-
-            //validating fileType (mp4/mp3) and setting the view of borderpane's center child
-            String fileType=url.substring(url.lastIndexOf('.')+1);
-            if(fileType.equals("MP4")||fileType.equals("mp4")){
-                main.bp.setCenter(main.control4.mediaView);
-                playerview.mediaView.setMediaPlayer(this.mediaModel.getPlayer());
-                //System.out.println(mediaModel.getPlayer());
-            }
-
-
-            else if(fileType.equals("MP3")||fileType.equals("mp3")){
-                main.bp.setCenter(main.root2);
-            }
-
-
-            else{
-                System.out.println("fileTypeNotSupported");
+            try {
+                this.mediaModel.setUrl(url);
+            }catch (Exception e){
+                errorStage.setScene(main.errorScene);
+                errorStage.show();
+                if(mediaModel.getPlayer()!=null)
+                    mediaModel.getPlayer().stop();
+                main.bp.setCenter(main.def);
+                if(mediaModel.getPlayer()!=null)
+                removeAllListeners(mediaModel.getPlayer());
                 DISABLEALL();
-                if(mediaList.mediaList.getItems().size()>1)
-                mediaList.getNext();
-                return;
+                System.out.println(e);
+                noerr=false;
             }
 
+            if (this.mediaModel.getPlayer() != null&&noerr) {
+                ENABLEALL();
+                //validating fileType (mp4/mp3) and setting the view of borderpane's center child
+                String fileType = url.substring(url.lastIndexOf('.') + 1);
+                if (fileType.equals("MP4") || fileType.equals("mp4")) {
+                    main.bp.setCenter(main.control4.mediaView);
+                    playerview.mediaView.setMediaPlayer(this.mediaModel.getPlayer());
+                    //System.out.println(mediaModel.getPlayer());
+                } else if (fileType.equals("MP3") || fileType.equals("mp3")) {
+                    main.bp.setCenter(main.root2);
+                } else {
+                    System.out.println("fileTypeNotSupported");
+                    DISABLEALL();
+                    if (mediaList.mediaList.getItems().size() > 1)
+                        mediaList.getNext();
+                    return;
+                }
 
-            playFile.setText("Pause");
-            mediaModel.getPlayer().play();
-            if(volumeSlider.getValue()==0.0)mediaModel.getPlayer().setMute(true);
 
-            /**
-             * If the center is mediaView then, full screening will hide mediaControls else mediaCotrols
-             * will be always visible
-             */
-            if(main.bp.getCenter()==playerview.mediaView) {
+                playFile.setText("Pause");
+                mediaModel.getPlayer().play();
+                if (volumeSlider.getValue() == 0.0) mediaModel.getPlayer().setMute(true);
+
                 /**
-                 * The code snippet below, resizes the mediaview once gone in fullScreen mode or vice versa, as the
-                 * size of mediaView can't be changed from javafx's thread, we used Platform.Runlater to complete this task
-                 * as a part of javafx application thread, as it's just some simple logic code, it doesn't BLOCK javafx's application thread
+                 * If the center is mediaView then, full screening will hide mediaControls else mediaCotrols
+                 * will be always visible
                  */
+                if (main.bp.getCenter() == playerview.mediaView) {
+                    /**
+                     * The code snippet below, resizes the mediaview once gone in fullScreen mode or vice versa, as the
+                     * size of mediaView can't be changed from javafx's thread, we used Platform.Runlater to complete this task
+                     * as a part of javafx application thread, as it's just some simple logic code, it doesn't BLOCK javafx's application thread
+                     */
 
-                Platform.runLater(() -> {
-                    int h = (int) main.stage.getHeight();
+                    Platform.runLater(() -> {
+                        int h = (int) main.stage.getHeight();
 
-                    if(main.stage.isFullScreen()){
-                        if(main.controlboxshowoff)
-                            playerview.mediaView.setFitHeight(h-80);
-                        else playerview.mediaView.setFitHeight(h-1.2);
-                    }
+                        if (main.stage.isFullScreen()) {
+                            if (main.controlboxshowoff)
+                                playerview.mediaView.setFitHeight(h - 80);
+                            else playerview.mediaView.setFitHeight(h - 1.2);
+                        } else {
+                            playerview.mediaView.setFitHeight(h - 110);
+                        }
 
-                    else {
-                        playerview.mediaView.setFitHeight(h - 110);
-                    }
-
-                    //System.out.println("IN PanelControl:: setURl");
-                });
+                        //System.out.println("IN PanelControl:: setURl");
+                    });
+                }
             }
         }
     }
@@ -351,6 +358,12 @@ public class PanelController {
         aboutStage=new Stage();
         aboutStage.initStyle(StageStyle.DECORATED);
 
+        //initializing errorstage
+        errorStage=new Stage();
+        errorStage.initStyle(StageStyle.UTILITY);
+        errorStage.setAlwaysOnTop(true);
+        errorStage.setResizable(false);
+
         //playlistbutton's image
         playlistImg=new Image(getClass().getResource("playlistimg.png").toString());
         playlistImgview=new ImageView(playlistImg);
@@ -444,14 +457,17 @@ public class PanelController {
         positionSlider.setOnMouseClicked(event -> {
 
             System.out.println(positionSlider.getValue() + " VS " + event.getX() / 300);
-            SeekAndUpdate(mediamodel.getPlayer().getTotalDuration().multiply(event.getX() / 300));
+            Status curstat=mediamodel.getPlayer().getStatus();
 
+            mediamodel.getPlayer().pause();
+            SeekAndUpdate(mediamodel.getPlayer().getTotalDuration().multiply(event.getX() / 300));
+            if(curstat==Status.PLAYING)mediamodel.getPlayer().play();
         });
 
         //Resetting focus after dragging volume slider
         volumeSlider.setOnMouseReleased(event -> {
             if (main.bp.getCenter() == playerview.mediaView) playerview.mediaView.requestFocus();
-            else if (main.bp.getCenter() == main.root2) playerview.mediaView.requestFocus();
+            else if (main.bp.getCenter() == main.root2) main.root2.requestFocus();
             else main.def.requestFocus();
         });
 
