@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.media.SubtitleTrack;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -457,11 +458,11 @@ public class PanelController {
         positionSlider.setOnMouseClicked(event -> {
 
             System.out.println(positionSlider.getValue() + " VS " + event.getX() / 300);
-            Status curstat=mediamodel.getPlayer().getStatus();
+            Status curstat = mediamodel.getPlayer().getStatus();
 
             mediamodel.getPlayer().pause();
             SeekAndUpdate(mediamodel.getPlayer().getTotalDuration().multiply(event.getX() / 300));
-            if(curstat==Status.PLAYING)mediamodel.getPlayer().play();
+            if (curstat == Status.PLAYING) mediamodel.getPlayer().play();
         });
 
         //Resetting focus after dragging volume slider

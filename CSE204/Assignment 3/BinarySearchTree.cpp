@@ -398,9 +398,9 @@ int getMinItem() //returns the minimum item in the tree
     }
     struct treeNode* node=root;
     int mini=node->item;
-    while(node->left!=NULL){
-        node=node->left;
+    while(node!=0){
         mini=node->item;
+        node=node->left;
     }
     return mini;
 }
@@ -414,9 +414,10 @@ int getMaxItem() //returns the maximum item in the tree
     }
     struct treeNode* node=root;
     int maxi=node->item;
-    while(node->right!=0){
-        node=node->right;
+    while(node!=0){
         maxi=node->item;
+        node=node->right;
+
     }
     return maxi;
 }
@@ -461,6 +462,81 @@ int findLCA(struct treeNode* node,int item1,int item2)
     return temp->item;
 }
 
+struct treeNode* findParent(int item)
+{
+    struct treeNode*tmp1,*tmp2,*tmp3;
+    tmp1=root;
+    while(tmp1->item!=item){
+        tmp2=tmp1;
+        if(item<tmp1->item)tmp1=tmp1->left;
+        else tmp1=tmp1->right;
+    }
+    return tmp2;
+};
+int normalDelete(int item)
+{
+    struct treeNode*tmp1,*tmp2,*tmp3;
+    tmp1=searchItem(root,item);
+    if(tmp1==0)return FALSE_VALUE;
+    tmp2=findParent(item);
+
+    if(tmp1->left!=0&&tmp1->right!=0){
+        tmp3=findsuccessor(tmp1,tmp1->item);
+        int ttt=tmp3->item;
+        normalDelete(ttt);
+        tmp1->item=ttt;
+        return TRUE_VALUE;
+    }
+    else if(tmp1->left==0){
+        if(tmp2->left==tmp1){
+            tmp2->left=tmp1->right;
+        }
+        else tmp2->right=tmp1->right;
+
+        free(tmp1);
+        return TRUE_VALUE;
+    }
+    else{
+        if(tmp2->left==tmp1)tmp2->left=tmp1->left;
+        else tmp2->right=tmp1->left;
+        free(tmp1);
+        return TRUE_VALUE;
+    }
+}
+int rootDelete()
+{
+    struct treeNode*tmp1,*tmp2,*tmp3;
+
+    if(root->left==0){
+        tmp1=root;
+        root=root->right;
+        free(tmp1);
+        return TRUE_VALUE;
+    }
+
+    else if(root->right==0){
+        tmp1=root;
+        root=root->left;
+        free(tmp1);
+        return TRUE_VALUE;
+    }
+    else{
+        tmp1=findsuccessor(root,root->item);
+        int ttt=tmp1->item;
+        normalDelete(ttt);
+        root->item=ttt;
+        return TRUE_VALUE;
+    }
+}
+int DELETE(int item)
+{
+    struct treeNode*tmp1,*tmp2,*tmp3;
+    tmp1=searchItem(root,item);
+    if(tmp1==root)rootDelete();
+    else normalDelete(item);
+}
+
+
 
 
 
@@ -486,7 +562,8 @@ int main(void)
         {
             int item;
             scanf("%d", &item);
-            deleteItem(root, item);
+            //deleteItem(root, item);
+            DELETE(item);
         }
         else if(ch==3)
         {
