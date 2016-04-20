@@ -1,4 +1,7 @@
-;S.MAHMDUL HASAN (NUMAN) 1305043
+;S.MAHMDUL HASAN (NUMAN) 1305043 
+
+.model small
+.stack 100h
 
 .DATA               
     num dw 0
@@ -19,6 +22,9 @@
 
 
 main proc
+    
+    mov ax, @data
+    mov ds, ax
         
     ;check if greater than 10000
 INPUT:   
@@ -62,6 +68,7 @@ INPUT:
     
    
    ;swap if necessary
+   
    
    
    ;while n1<=n2
