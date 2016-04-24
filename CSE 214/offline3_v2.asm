@@ -1,3 +1,7 @@
+;Prepared by S.Mahmudul Hasan (Numan)
+;------------1305043
+;------------Sec: A1
+
 .MODEL SMALL
 .STACK 100h
 .DATA
