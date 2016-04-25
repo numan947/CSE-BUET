@@ -27,7 +27,7 @@ int main()
     */
 
 
-    freopen("input.txt","r",stdin);
+    freopen("G:\\Important\\C,C++\\input.txt","r",stdin);
     gets(seq1);
     gets(seq2);
 
@@ -48,9 +48,9 @@ int main()
             }
             else{
                 dp[i+1][j+1]=max(dp[i+1][j+1],dp[i][j]-MISMATCH);
-                dp[i+1][j+1]=max(dp[i+1][j+1],dp[i+1][j]-GAP);
-                dp[i+1][j+1]=max(dp[i+1][j+1],dp[i][j+1]-GAP);
             }
+            dp[i+1][j+1]=max(dp[i+1][j+1],dp[i+1][j]-GAP);
+            dp[i+1][j+1]=max(dp[i+1][j+1],dp[i][j+1]-GAP);
         }
     }
 

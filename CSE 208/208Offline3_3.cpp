@@ -16,7 +16,7 @@ char seq2[MAX];
 
 int main()
 {
-    freopen("input.txt","r",stdin);
+    freopen("G:\\Important\\C,C++\\input.txt","r",stdin);
     gets(seq1);
     gets(seq2);
 
@@ -28,11 +28,11 @@ int main()
     int *D1=new int[n2+1];
 
 
-    for(int j=0;j<=n2+1;j++)D0[j]=-j;
+    for(int j=0;j<=n2;j++)D0[j]=-j;
 
-    for(int i=1;i<=n1+1;i++){
+    for(int i=1;i<=n1;i++){
         D1[0]=-i;
-        for(int j=1;j<=n2+1;j++){
+        for(int j=1;j<=n2;j++){
             D1[j]=-INF;
             if(seq1[i-1]==seq2[j-1]){
                 D1[j]=D0[j-1]+MATCH;
@@ -44,8 +44,13 @@ int main()
                 D1[j]=max(D1[j],D1[j-1]-GAP);
             }
         }
-        swap(D0,D1);
+        if(i<n1){
+            int*temp;
+            temp=D0;//swapping
+            D0=D1;
+            D1=temp;
+        }
     }
-    cout<<D1[n2+1];
+    cout<<D1[n2];
 
 }

@@ -31,7 +31,7 @@ int main()
         dog
     */
 
-    freopen("input.txt","r",stdin);
+    freopen("G:\\Important\\C,C++\\input.txt","r",stdin);
     gets(seq1);
     gets(seq2);
 
@@ -51,11 +51,13 @@ int main()
             if(seq1[i]==seq2[j])dp[i+1][j+1]=MATCH+dp[i][j];
             else{
                 dp[i+1][j+1]=max(dp[i+1][j+1],dp[i][j]-MISMATCH);
-                dp[i+1][j+1]=max(dp[i+1][j+1],dp[i+1][j]-GAP);
-                dp[i+1][j+1]=max(dp[i+1][j+1],dp[i][j+1]-GAP);
-                dp[i+1][j+1]=max(dp[i+1][j+1],0);
             }
-            if(dp[i+1][j+1]>mx){
+
+            dp[i+1][j+1]=max(dp[i+1][j+1],dp[i+1][j]-GAP);
+            dp[i+1][j+1]=max(dp[i+1][j+1],dp[i][j+1]-GAP);
+            dp[i+1][j+1]=max(dp[i+1][j+1],0);
+
+            if(dp[i+1][j+1]>=mx){
                 mx=dp[i+1][j+1];
                 mi=i;
                 mj=j;

@@ -200,9 +200,9 @@ gen_number proc
         pop bp
         
         pop bx;ret address
-        pop cx;sentinnel
         pop cx;var1
         pop cx;var2
+        pop cx;sentinnel
         push ax;result push
         push bx;ret address push
           
@@ -220,7 +220,7 @@ print_num proc
     
     ;special case 0-9
     cmp num,10
-    jle SPECIAL
+    jl SPECIAL
     
     
     mov cnt,0    
