@@ -18,41 +18,13 @@
 .CODE
 
 main proc
-    mov ax,@data
-    mov ds,ax
+   mov ax,@data
+   mov ds,ax
     
-    input1:
-        mov ah,1
-        int 21h
-        add al,-48
-        cmp al,0
-        jl input2
-        cmp al,9
-        jg input2
-        mov bl,al
-        
-        mov ax,10
-        IMUL n1
-        mov n1,ax
-        add n1,bx
-        jmp input1 
-    
-    input2:
-        mov ah,1
-        int 21h
-        add al,-48
-        cmp al,0
-        jl inputend
-        cmp al,9
-        jg inputend
-        mov bl,al
-        
-        mov ax,10
-        IMUL n2
-        mov n2,ax
-        add n2,bx
-        jmp input2   
-   inputend:
+   call take_input
+   pop n1
+   call take_input
+   pop n2
    
    mov ah,2
    mov dl,0ah
@@ -67,7 +39,7 @@ main proc
        
     ;let the two numbers be in ax and bx
     
-    push res            ;pushing sentinnel for return purpose
+
     push ax
     push bx
     
@@ -79,12 +51,11 @@ main proc
     mov num,ax          ;for printing purpose of the generated number
     
     
-    push num            ;pushing num to make it available in print_num
+    push num            ;pushing num to makes it available in print_num
     call print_num
 
 
-    push res            ;pushing sentinnel for return purpose
-    push ax             ;pushing ax to make it available in get_unit
+    push ax             ;pushing ax to makes it available in get_unit
     call get_unit       ;return result in stack
         
     
@@ -122,15 +93,11 @@ main proc
 
 
 
-
-
-
-
 ;returns result in stack
 get_unit proc
     pop cx      ;as cx won't be affected so it's okay to store the ret address here
     pop ax      ;the dividend
-    pop res     ;the sentinnel
+
     
     
     mov dx,0
@@ -147,7 +114,7 @@ get_unit proc
                
                
                               
-;the generated number will be in ax
+;the generated number will be in stack, pop to retrive
 gen_number proc
     
     push bp
@@ -177,7 +144,6 @@ gen_number proc
         ;compute (a-1,b)
         mov cx,[bp+6]
         dec cx 
-        push res;sentinnel pushing
         push cx
         push [bp+4]
         call gen_number
@@ -186,33 +152,30 @@ gen_number proc
         ;compute (a,b-1)
         mov cx,[bp+4]
         dec cx
-        push res ;sentinnel pushing
         push [bp+6]
         push cx
         call gen_number 
         
         
-        pop bx
-        pop ax
-        add ax,bx
+        pop bx      ;res1 pop
+        pop ax      ;res2 pop
+        add ax,bx   ;add and push
     
     RETURN:
-        pop bp
+        pop bp      ;restore bp
         
-        pop bx;ret address
-        pop cx;var1
-        pop cx;var2
-        pop cx;sentinnel
-        push ax;result push
-        push bx;ret address push
+        pop bx      ;ret address
+        
+        pop cx      ;var1 discard
+        pop cx      ;var2 discard
+        
+        push ax     ;result push
+        push bx     ;ret address push
           
         RET 
     gen_number endp
     
-
-
-
-
+    
 ;the number is in num
 print_num proc
     pop bx  ;ret address
@@ -258,10 +221,39 @@ print_num proc
         int 21h  
         
     RETURN1:
-        push bx
+        push bx ;ret address push
         RET
     print_num endp
 
+
+take_input proc
+    pop cx
+    mov num,0
+    input:
+        mov ah,1
+        int 21h
+        add al,-48
+        cmp al,0
+        jl DONE
+        cmp al,9
+        jg DONE
+        mov bl,al
+        
+        mov ax,10
+        IMUL num
+        mov num,ax
+        add num,bx
+        jmp input
+     DONE:
+        push num ;result push
+        push cx  ;ret address push
+        RET 
+        
 end main
+
+
+
+
+
 
     

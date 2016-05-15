@@ -40,9 +40,10 @@ int main()
             else{
 
                 D1[j]=max(D1[j],D0[j-1]-MISMATCH);
-                D1[j]=max(D1[j],D0[j]-GAP);
-                D1[j]=max(D1[j],D1[j-1]-GAP);
+
             }
+            D1[j]=max(D1[j],D0[j]-GAP);
+            D1[j]=max(D1[j],D1[j-1]-GAP);
         }
         if(i<n1){
             int*temp;

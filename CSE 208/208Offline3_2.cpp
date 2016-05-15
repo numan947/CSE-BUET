@@ -45,7 +45,7 @@ int main()
     for(int j=0;j<=n2;j++)dp[0][j]=0;
 
 
-    int mx=0,mi,mj;
+    int mx=-INF,mi,mj;
     for(int i=0;i<n1;i++){
         for(int j=0;j<n2;j++){
             if(seq1[i]==seq2[j])dp[i+1][j+1]=MATCH+dp[i][j];
@@ -112,6 +112,8 @@ int main()
 
     cout<<endl<<seq1<<endl<<seq2<<endl<<endl;;
     cout<<"Optimal Local Alignment:"<<endl;
+    if(!res1.size()||!res2.size())cout<<"NO OPTIMAL LOCAL ALIGNMENT IS POSSIBLE";
+
     cout<<res1<<endl;
     for(int i=0;i<res1.size();i++)cout<<"|";
     cout<<endl;
