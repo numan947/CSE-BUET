@@ -298,6 +298,7 @@ public:
 
 int main()
 {
+    freopen("input.txt","r",stdin);
     int totalRow;
     cin>>totalRow;
     SymbolTable *myTable=new SymbolTable(totalRow);
@@ -310,26 +311,33 @@ int main()
 
     while(cin>>val)
     {
-        cout<<val<<endl;
+        cout<<val;
         switch(val)
         {
             case 'I'://insertlast
                 cin>>nm>>tp;
                 vv.setName(nm);
                 vv.setType(tp);
+                cout<<" "<<nm<<" "<<tp<<endl;
                 myTable->Insert(vv);
+                cout<<endl;
                 break;
 
             case 'P'://printItem
                 myTable->Print();
+                cout<<endl;
                 break;
             case 'D':
                 cin>>nm;
+                cout<<" "<<nm<<endl;
                 myTable->Delete(nm);
+                cout<<endl;
                 break;
             case 'L':
                 cin>>nm;
+                cout<<" "<<nm<<endl;
                 myTable->LookUp(nm);
+                cout<<endl;
                 break;
             default:
                 cout<<"INVALID COMMAND, commands are -\nto Insert: I name type\nto Lookup: L name\nto Delete: D name\nto Print the whole table: P\n"<<endl;
