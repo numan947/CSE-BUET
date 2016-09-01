@@ -5,7 +5,12 @@ using namespace std;
 #define DEFAULT_TABLE_SIZE 10
 
 
-
+/**
+ * Simple [utility function for comparing two strings]
+ * @param  a [string 1]
+ * @param  b [string 2]
+ * @return   [true or false based on the testing]
+ */
 bool compareString(string a, string b)
 {
     if(a.size()!=b.size())return false;
@@ -16,7 +21,10 @@ bool compareString(string a, string b)
     return true;
 }
 
-
+/**
+ * [SymbolInfo class contain properties of an item in
+ * SymbolTable]
+ */
 class SymbolInfo{
 
     string Name;
@@ -42,6 +50,11 @@ public:
     }
 };
 
+
+/**
+ * [Utility class to get the column position of an item
+ * and the item itself]
+ */
 class Position
 {
 
@@ -52,8 +65,9 @@ public:
 
 
 
-
-
+/**
+ * [Utility class which makes the nodes in the linked list]
+ */
 class Node{
 
 public:
@@ -62,14 +76,20 @@ public:
     Node *prev;
 };
 
-
+/**
+ * [Main linked list is implemented here]
+ */
 class LinkeList{
 
     Node *head,*tail;
     int length;
 
-
-    Node* SearchItemInternal(string val)
+   /**
+    * private [function which is used to find specific node itself]
+    * @param  val [string which is part of an item in list]
+    * @return     [pointer to the element containing the string]
+    */
+   Node* SearchItemInternal(string val)
     {
         Node *tmp=head;
         while(tmp!=0){
@@ -80,12 +100,20 @@ class LinkeList{
     }
 
 public:
+    /**
+     * [Initializes the linked list]
+     */
     void InitList()
     {
         head=tail=0;
         length=0;
     }
 
+    /**
+     * [inserts item at the first position of the linked list]
+     * @param  val [self explanatory]
+     * @return     [self explanatory]
+     */
     Position InsertFirst(SymbolInfo val)
     {
         Position IP;
@@ -108,6 +136,11 @@ public:
         return IP;
     }
 
+    /**
+     * [adds the item at the end of the linked list]
+     * @param  val [self explanatory]
+     * @return     [self explanatory]
+     */
     Position InsertLast(SymbolInfo val)
     {
         Position IP;
@@ -129,7 +162,11 @@ public:
         length++;
         return IP;
     }
-
+    /**
+     * [Searches the table with name specified in val]
+     * @param  val [self explanatory]
+     * @return     [returns the position val is found or not]
+     */
     Position SearchItem(string val) //todo: change return type may be....?
     {
         Position SP;
@@ -150,7 +187,9 @@ public:
         return SP;
     }
 
-
+    /**
+     * [prints linked list from first to last]
+     */
     void PrintListForward()
     {
         if(head==0){
@@ -164,7 +203,11 @@ public:
         }
 
     }
-
+    /**
+     * [Searches and delets the item if found in the table]
+     * @param  val [self explanatory]
+     * @return     [whether deletion is failed or not]
+     */
     Position DeleteItem(string val)
     {
         Position DP;
@@ -198,7 +241,10 @@ public:
         length--;
         return DP;
     }
-
+    /**
+     * [returns the length of the linked list]
+     * @return [self explanatory]
+     */
     int GetLength()
     {
         return length;
@@ -299,6 +345,9 @@ public:
 int main()
 {
     freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+
+
     int totalRow;
     cin>>totalRow;
     SymbolTable *myTable=new SymbolTable(totalRow);
