@@ -369,24 +369,25 @@ int main()
                 vv.setType(tp);
                 cout<<" "<<nm<<" "<<tp<<endl;
                 myTable->Insert(vv);
-                cout<<endl;
+                cout<<endl<<endl;
                 break;
 
             case 'P'://printItem
-                myTable->Print();
                 cout<<endl;
+                myTable->Print();
+                cout<<endl<<endl;
                 break;
             case 'D':
                 cin>>nm;
                 cout<<" "<<nm<<endl;
                 myTable->Delete(nm);
-                cout<<endl;
+                cout<<endl<<endl;
                 break;
             case 'L':
                 cin>>nm;
                 cout<<" "<<nm<<endl;
                 myTable->LookUp(nm);
-                cout<<endl;
+                cout<<endl<<endl;
                 break;
             default:
                 cout<<"INVALID COMMAND, commands are -\nto Insert: I name type\nto Lookup: L name\nto Delete: D name\nto Print the whole table: P\n"<<endl;
