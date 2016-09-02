@@ -250,6 +250,20 @@ public:
         return length;
     }
 
+    ~LinkeList()
+    {
+        Node* tmp;
+        while(head!=0)
+        {
+            tmp=head;
+            head=head->next;
+            delete tmp;
+        }
+        head=tail=0;
+        length=0;
+    }
+
+
 };
 
 
@@ -334,6 +348,11 @@ public:
             table[i].PrintListForward();
             cout<<endl;
         }
+    }
+
+    ~SymbolTable()
+    {
+        delete[]table;
     }
 
 
