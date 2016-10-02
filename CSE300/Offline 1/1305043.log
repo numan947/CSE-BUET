@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.9)  2 OCT 2016 12:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.9)  2 OCT 2016 15:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -229,44 +229,56 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 3.
-)
-\tf@toc=\write4
-\openout4 = `1305043.toc'.
-
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.22 \chapter
-             {Introduction} [1
+l.33 ...erline {4.2}Exclamations}{12}{section.4.2}
+                                                   [1
 
-]
+])
+\tf@toc=\write4
+\openout4 = `1305043.toc'.
+
+ [2]
 Chapter 1.
-[2
+[3
 
 ]
 Chapter 2.
-[3
+[4
 
-] [4] [5] [6]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
- [7]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
+] [5] [6] [7] [8]
+Chapter 3.
+[9
+
+] [10] [11]
+Chapter 4.
+[12
+
+] [13] [14]
+Chapter 5.
+[15
+
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 274.
+ [16]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 274.
  (./1305043.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 274.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 274.
 Package rerunfilecheck Info: File `1305043.out' has not changed.
-(rerunfilecheck)             Checksum: 518B95A70BAC310710665DA81342D7E6;1130.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
+(rerunfilecheck)             Checksum: E49F57879E57D07EB6BE693F2143D5D9;2704.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 274.
  ) 
 Here is how much of TeX's memory you used:
- 5293 strings out of 493029
- 76578 string characters out of 6136235
- 162487 words of memory out of 5000000
- 8803 multiletter control sequences out of 15000+600000
+ 5348 strings out of 493029
+ 77173 string characters out of 6136235
+ 165491 words of memory out of 5000000
+ 8826 multiletter control sequences out of 15000+600000
  9812 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 29i,6n,35p,548b,338s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,6n,35p,548b,387s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/te
@@ -274,10 +286,10 @@ xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/font
 s/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on 1305043.pdf (8 pages, 110732 bytes).
+Output written on 1305043.pdf (17 pages, 136635 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 164 compressed objects within 2 object streams
- 29 named destinations out of 1000 (max. 500000)
- 161 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 344 PDF objects out of 1000 (max. 8388607)
+ 314 compressed objects within 4 object streams
+ 61 named destinations out of 1000 (max. 500000)
+ 345 words of extra memory for PDF output out of 10000 (max. 10000000)
 
