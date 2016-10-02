@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.9)  2 OCT 2016 15:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.9)  2 OCT 2016 17:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -233,7 +233,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.33 ...erline {4.2}Exclamations}{12}{section.4.2}
+l.33 ...erline {4.2}Exclamations}{11}{section.4.2}
                                                    [1
 
 ])
@@ -260,22 +260,30 @@ Chapter 4.
 Chapter 5.
 [15
 
-]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 274.
- [16]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 274.
+] [16]
+Chapter 6.
+[17
+
+] [18] [19]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 326.
+ [20]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 326.
  (./1305043.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 274.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 274.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 326.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 326.
 Package rerunfilecheck Info: File `1305043.out' has not changed.
-(rerunfilecheck)             Checksum: E49F57879E57D07EB6BE693F2143D5D9;2704.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 274.
+(rerunfilecheck)             Checksum: 79B57014BED08F2BAB3195B4665107BB;4322.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 326.
  ) 
 Here is how much of TeX's memory you used:
- 5348 strings out of 493029
- 77173 string characters out of 6136235
- 165491 words of memory out of 5000000
- 8826 multiletter control sequences out of 15000+600000
+ 5397 strings out of 493029
+ 77754 string characters out of 6136235
+ 166548 words of memory out of 5000000
+ 8849 multiletter control sequences out of 15000+600000
  9812 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  29i,6n,35p,548b,387s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -286,10 +294,10 @@ xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/font
 s/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on 1305043.pdf (17 pages, 136635 bytes).
+Output written on 1305043.pdf (21 pages, 146806 bytes).
 PDF statistics:
- 344 PDF objects out of 1000 (max. 8388607)
- 314 compressed objects within 4 object streams
- 61 named destinations out of 1000 (max. 500000)
- 345 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 478 PDF objects out of 1000 (max. 8388607)
+ 443 compressed objects within 5 object streams
+ 87 named destinations out of 1000 (max. 500000)
+ 521 words of extra memory for PDF output out of 10000 (max. 10000000)
 

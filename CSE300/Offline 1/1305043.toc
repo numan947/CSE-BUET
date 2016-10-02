@@ -41,3 +41,25 @@
 \contentsline {section}{\numberline {4.10}Syllabication}{14}{section.4.10}
 \contentsline {section}{\numberline {4.11}Titles}{14}{section.4.11}
 \contentsline {chapter}{\numberline {5}Commonly Misused Words and Expressions}{15}{chapter.5}
+\contentsline {chapter}{\numberline {6}An Approach to Style}{17}{chapter.6}
+\contentsline {section}{\numberline {6.1}Placing Oneself in the Background}{17}{section.6.1}
+\contentsline {section}{\numberline {6.2}Writing in a Natural Way}{17}{section.6.2}
+\contentsline {section}{\numberline {6.3}Working from A Suitable Design}{17}{section.6.3}
+\contentsline {section}{\numberline {6.4}Writing with Nouns And Verbs}{17}{section.6.4}
+\contentsline {section}{\numberline {6.5}Revise and Rewrite}{18}{section.6.5}
+\contentsline {section}{\numberline {6.6}Avoid Overwriting}{18}{section.6.6}
+\contentsline {section}{\numberline {6.7}Avoid Overstating}{18}{section.6.7}
+\contentsline {section}{\numberline {6.8}Avoiding Usage of Qualifiers}{18}{section.6.8}
+\contentsline {section}{\numberline {6.9}Not Affecting Breezy Manner}{18}{section.6.9}
+\contentsline {section}{\numberline {6.10}Using Orthodox Spelling}{18}{section.6.10}
+\contentsline {section}{\numberline {6.11}Avoid unnecessary Explanations}{18}{section.6.11}
+\contentsline {section}{\numberline {6.12}Constructing Awkward Adverbs}{19}{section.6.12}
+\contentsline {section}{\numberline {6.13}Making Sure The Reader Knows The Speaker}{19}{section.6.13}
+\contentsline {section}{\numberline {6.14}Avoiding Fancy Words}{19}{section.6.14}
+\contentsline {section}{\numberline {6.15}Restricting The Use of Dialect}{19}{section.6.15}
+\contentsline {section}{\numberline {6.16}Being Clear}{19}{section.6.16}
+\contentsline {section}{\numberline {6.17}Not Injecting Opinion}{19}{section.6.17}
+\contentsline {section}{\numberline {6.18}Using Figure of Speech Sparingly}{20}{section.6.18}
+\contentsline {section}{\numberline {6.19}Not Taking Shortcuts at the Cost of Clarity}{20}{section.6.19}
+\contentsline {section}{\numberline {6.20}Avoiding Foreign Language}{20}{section.6.20}
+\contentsline {section}{\numberline {6.21}Preferring The Standard to The Offbeat}{20}{section.6.21}
