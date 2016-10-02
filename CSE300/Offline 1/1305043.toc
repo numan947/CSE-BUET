@@ -46,13 +46,13 @@
 \contentsline {section}{\numberline {6.2}Writing in a Natural Way}{20}{section.6.2}
 \contentsline {section}{\numberline {6.3}Working from A Suitable Design}{20}{section.6.3}
 \contentsline {section}{\numberline {6.4}Writing with Nouns And Verbs}{21}{section.6.4}
-\contentsline {section}{\numberline {6.5}Revise and Rewrite}{21}{section.6.5}
+\contentsline {section}{\numberline {6.5}Revise And Rewrite}{21}{section.6.5}
 \contentsline {section}{\numberline {6.6}Avoid Overwriting}{21}{section.6.6}
 \contentsline {section}{\numberline {6.7}Avoid Overstating}{21}{section.6.7}
 \contentsline {section}{\numberline {6.8}Avoiding Usage of Qualifiers}{21}{section.6.8}
 \contentsline {section}{\numberline {6.9}Not Affecting Breezy Manner}{21}{section.6.9}
 \contentsline {section}{\numberline {6.10}Using Orthodox Spelling}{22}{section.6.10}
-\contentsline {section}{\numberline {6.11}Avoid unnecessary Explanations}{22}{section.6.11}
+\contentsline {section}{\numberline {6.11}Avoid Unnecessary Explanations}{22}{section.6.11}
 \contentsline {section}{\numberline {6.12}Constructing Awkward Adverbs}{22}{section.6.12}
 \contentsline {section}{\numberline {6.13}Making Sure The Reader Knows The Speaker}{22}{section.6.13}
 \contentsline {section}{\numberline {6.14}Avoiding Fancy Words}{22}{section.6.14}
@@ -60,7 +60,7 @@
 \contentsline {section}{\numberline {6.16}Being Clear}{23}{section.6.16}
 \contentsline {section}{\numberline {6.17}Not Injecting Opinion}{23}{section.6.17}
 \contentsline {section}{\numberline {6.18}Using Figure of Speech Sparingly}{23}{section.6.18}
-\contentsline {section}{\numberline {6.19}Not Taking Shortcuts at the Cost of Clarity}{23}{section.6.19}
+\contentsline {section}{\numberline {6.19}Not Taking Shortcuts at The Cost of Clarity}{23}{section.6.19}
 \contentsline {section}{\numberline {6.20}Avoiding Foreign Language}{24}{section.6.20}
 \contentsline {section}{\numberline {6.21}Preferring The Standard to The Offbeat}{24}{section.6.21}
 \contentsline {chapter}{\numberline {7}Conclusion}{25}{chapter.7}
