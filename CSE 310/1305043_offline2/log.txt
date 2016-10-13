@@ -113,11 +113,9 @@ Error at line 24: Multi charachter constant 'an'
 Line no 24: TOKEN <SEMICOLON> Lexeme ; found
 Error at line 25: Multi charachter constant 'abcd'
 Line no 25: TOKEN <SEMICOLON> Lexeme ; found
-Unrecognized charachter found at line 26: '
-Line no 26: TOKEN <ID> Lexeme asdasd found
+Error at line 26: Undetermined sequence 'asdasd
 Line no 26: TOKEN <SEMICOLON> Lexeme ; found
 Line no 27: TOKEN <ID> Lexeme asdasd found
-Unrecognized charachter found at line 27: '
 Line no 27: TOKEN <SEMICOLON> Lexeme ; found
 Line no 28: TOKEN <INT> Lexeme int found
 Line no 28: TOKEN <ID> Lexeme tooManyDecimal found
@@ -172,4 +170,4 @@ Line no 44: TOKEN <ASSIGNOP> Lexeme = found
 Line no 44: TOKEN <CONST_CHAR> Lexeme '\0' found
 Line no 44: TOKEN <SEMICOLON> Lexeme ; found
 Line no 45: TOKEN <CURL> Lexeme } found
-Error at line 46: Unfinished String "return 0;}
+Error at line 46: Unfinished String "return /*0;}

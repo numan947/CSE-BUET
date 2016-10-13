@@ -2,7 +2,6 @@
 
 %x mlcomment
 %x mlstring
-%x WTFSTATE
 
 
 %{
@@ -12,9 +11,11 @@
 #include"1305043_symbolTable.cpp"
 
 int line_count=1;
+int error_count=0;
 
 FILE *logFile;
 FILE *tokenFile;
+SymbolInfo myInfo;
 SymbolTable *myTable;
 
 string buff;
@@ -50,13 +51,14 @@ MULTI_CHAR_CONST '(..)+.*'
 
 NOT_FINISHED_STR (.)*[<<EOF>>]
 
-QUOTE_ERROR  [\'.*$]{-}[']
+QUOTE_ERROR '[^'\n;]*
 
 
 %%
 
 
 {NEWLINE} {line_count++;}
+
 {WHITESPACE} {}
 
 
@@ -233,7 +235,9 @@ QUOTE_ERROR  [\'.*$]{-}[']
 {INT_LIT} 	{
 				fprintf(tokenFile,"<CONST_INT,%s>",yytext);
 				fprintf(logFile,"Line no %d: TOKEN <CONST_INT> Lexeme %s found\n",line_count,yytext);
-				//insert in symbol table and print symbol table content(only non empty buckets)
+				myInfo.setType("CONST_INT");
+				myInfo.setName(yytext);
+				myTable->Insert(myInfo);
 			}
 
 {FLOAT_LIT} 	{
@@ -276,6 +280,7 @@ QUOTE_ERROR  [\'.*$]{-}[']
 				}
 <mlcomment><<EOF>> {
 				fprintf(logFile,"Error at line %d: Undeterminated comment %s\n",line_count,buff.c_str());
+				error_count++;
 				BEGIN(INITIAL);
 }
 
@@ -329,31 +334,37 @@ QUOTE_ERROR  [\'.*$]{-}[']
 					buff+=*ch++;
 				}
 				fprintf(logFile,"Error at line %d: Unfinished String %s\n",myCount,buff.c_str());
+				error_count++;
 				BEGIN(INITIAL);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 {MULTI_CHAR_CONST} {
 				fprintf(logFile,"Error at line %d: Multi charachter constant %s\n",line_count,yytext);
+				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 
 
 {ILL_FORMED_NUMBR} {
 				fprintf(logFile,"Error at line %d: Ill formed number %s\n",line_count,yytext);
+				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 
 {TOO_MANY_DECIMAL} {
 				fprintf(logFile,"Error at line %d: Too many decimal points %s\n",line_count,yytext);
+				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 {INVALID_PREFIX} {
 				fprintf(logFile,"Error at line %d: Invalid prefix %s\n",line_count,yytext);
+				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 
 {QUOTE_ERROR} {
 				fprintf(logFile,"Error at line %d: Undetermined sequence %s\n",line_count,yytext);
+				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 
@@ -361,6 +372,7 @@ QUOTE_ERROR  [\'.*$]{-}[']
 
 .			{
 				fprintf(logFile,"Unrecognized charachter found at line %d: %s\n",line_count,yytext);
+				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 

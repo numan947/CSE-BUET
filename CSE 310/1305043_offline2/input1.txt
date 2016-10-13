@@ -24,7 +24,7 @@ int main(void){
 	'an';
 	'abcd';
 	'asdasd;
-	asdasd';
+	asdasd;
 	int tooManyDecimal=1.2.3456.698.245;
 	float illFormedNumber=1.5E+2.
 
@@ -43,5 +43,5 @@ int main(void){
 		d[3]='\n';
 		e[4]='\0';
 	}
-	"return 0;
+	"return /*0;
 }
