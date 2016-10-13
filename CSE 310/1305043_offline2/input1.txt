@@ -1,6 +1,6 @@
 int main(void){
 	int x,y;
-	char ch='a';
+	char ch='a';             
 	char ch='\0';
 	char ch='\v';
 	char ch='\b';

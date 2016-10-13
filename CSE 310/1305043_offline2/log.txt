@@ -111,23 +111,9 @@ Line no 22: TOKEN <CONST_INT> Lexeme 2 found
 Line no 22: TOKEN <CONST_INT> Lexeme +3 found
 Line no 22: TOKEN <SEMICOLON> Lexeme ; found
 Line no 23: TOKEN <COMMENT> Lexeme //single line comment found
-Line no 24: TOKEN <COMMENT> Lexeme /****multi*** found
-Line no 25: TOKEN <MULOP> Lexeme * found
-Line no 25: TOKEN <MULOP> Lexeme * found
-Line no 25: TOKEN <MULOP> Lexeme * found
-Line no 25: TOKEN <MULOP> Lexeme * found
-Line no 25: TOKEN <ID> Lexeme line found
-Line no 25: TOKEN <MULOP> Lexeme * found
-Line no 25: TOKEN <MULOP> Lexeme * found
-Line no 25: TOKEN <MULOP> Lexeme * found
-Line no 26: TOKEN <MULOP> Lexeme * found
-Line no 26: TOKEN <MULOP> Lexeme * found
-Line no 26: TOKEN <MULOP> Lexeme * found
-Line no 26: TOKEN <ID> Lexeme comment found
-Line no 26: TOKEN <MULOP> Lexeme * found
-Line no 26: TOKEN <MULOP> Lexeme * found
-Line no 26: TOKEN <MULOP> Lexeme * found
-Line no 26: TOKEN <COMMENT> Lexeme / found
+Line no 24: TOKEN <COMMENT> Lexeme /****multi***
+	****line***
+	***comment***/ found
 Line no 27: TOKEN <IF> Lexeme if found
 Line no 27: TOKEN <PAREN> Lexeme ( found
 Line no 27: TOKEN <ID> Lexeme y found

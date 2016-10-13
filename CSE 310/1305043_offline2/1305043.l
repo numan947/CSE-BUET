@@ -1,5 +1,7 @@
 %option noyywrap
 
+%x mlcomment
+
 %{
 #include<stdio.h>
 #include<stdlib.h>
@@ -27,18 +29,20 @@ IDENTIFIER [a-zA-Z_]+[a-zA-Z_0-9]*
 
 CHAR_LIT ['](.|\\n|\\t|\\\\|\\\"|\\a|\\f|\\r|\\b|\\v|\\0)[']
 
-SNGL_CMNT [/]+.*
+SNGL_CMNT "//".*
 
 SNGL_STRNG \".*\"
 
+MULT_CMNT "/*"
 
-MULT_CMNT []
 
-MULT_STRNG []
 
 %%
 
+
 {NEWLINE} {line_count++;}
+
+
 
 "if"	{
 			fprintf(tokenFile,"<IF>");
@@ -223,6 +227,28 @@ MULT_STRNG []
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 
+
+
+{MULT_CMNT}		{
+				BEGIN(mlcomment);
+				fprintf(logFile,"Line no %d: TOKEN <COMMENT> Lexeme %s",line_count,yytext);				
+			}
+<mlcomment>\n 	{
+					line_count++;
+					fprintf(logFile,"%s",yytext);
+				} 
+<mlcomment>[^*\n]+	{
+					fprintf(logFile,"%s",yytext);
+					}
+<mlcomment>("*"+[^/\n])* {
+						fprintf(logFile,"%s",yytext);
+				}
+<mlcomment>"*"+"/" {
+					fprintf(logFile,"%s found\n",yytext);
+					BEGIN(INITIAL);
+				}
+
+
 {SNGL_CMNT} {
 				fprintf(logFile,"Line no %d: TOKEN <COMMENT> Lexeme %s found\n",line_count,yytext);
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -232,15 +258,13 @@ MULT_STRNG []
 
 
 
-
-
-
-
+			
 {SNGL_STRNG} 	{
 				fprintf(tokenFile,"<STRING,%s>",yytext);
 				fprintf(logFile,"Line no %d: TOKEN <STRING> Lexeme %s found\n",line_count,yytext);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
+
 
 
 
