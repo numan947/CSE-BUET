@@ -1,10 +1,14 @@
 %option noyywrap
 
 %x mlcomment
+%x mlstring
+%x WTFSTATE
+
 
 %{
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include"1305043_symbolTable.cpp"
 
 int line_count=1;
@@ -13,35 +17,47 @@ FILE *logFile;
 FILE *tokenFile;
 SymbolTable *myTable;
 
+string buff;
+int myCount;
+
 %}
 
 WHITESPACE [ \t\f\r\v]+
 
-LETTER [a-zA-Z]
+INT_LIT [0-9]+
 
-INT_LIT [-+]?[0-9]+
-
-FLOAT_LIT [-+]?([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?
+FLOAT_LIT ([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?
 
 NEWLINE \n
 
 IDENTIFIER [a-zA-Z_]+[a-zA-Z_0-9]*
 
-CHAR_LIT ['](.|\\n|\\t|\\\\|\\\"|\\a|\\f|\\r|\\b|\\v|\\0)[']
+CHAR_LIT '(.|\\n|\\t|\\\\|\\\"|\\a|\\f|\\r|\\b|\\v|\\0)'
 
 SNGL_CMNT "//".*
 
-SNGL_STRNG \".*\"
-
 MULT_CMNT "/*"
 
+STRING_LIT \"
+
+TOO_MANY_DECIMAL ([0-9]*\.[0-9]*){2,}([eE][-+]?[0-9]+)?
+
+ILL_FORMED_NUMBR ([0-9]*\.[0-9]+)([eE]\.*[-+]*\.*[0-9]*\.*[0-9]*)
+
+INVALID_PREFIX [0-9]+[a-zA-Z\.]+[a-zA-Z0-9\.]*
+
+MULTI_CHAR_CONST '(..)+.*'
+
+NOT_FINISHED_STR (.)*[<<EOF>>]
+
+QUOTE_ERROR  [\'.*$]{-}[']
 
 
 %%
 
 
 {NEWLINE} {line_count++;}
-
+{WHITESPACE} {}
 
 
 "if"	{
@@ -111,9 +127,14 @@ MULT_CMNT "/*"
 		}
 
 
+"++"		|
 
-
-
+"--"		{
+			fprintf(tokenFile,"<INCOP,%s>",yytext);
+			fprintf(logFile,"Line no %d: TOKEN <INCOP> Lexeme %s found\n",line_count,yytext);
+			//insert in symbol table and print symbol table content(only non empty buckets)
+			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+		}
 
 
 
@@ -230,23 +251,33 @@ MULT_CMNT "/*"
 
 
 {MULT_CMNT}		{
+				myCount=line_count;
+				buff="";
+				buff+=yytext;		
 				BEGIN(mlcomment);
-				fprintf(logFile,"Line no %d: TOKEN <COMMENT> Lexeme %s",line_count,yytext);				
+					
 			}
 <mlcomment>\n 	{
 					line_count++;
-					fprintf(logFile,"%s",yytext);
+					buff+=yytext;
 				} 
 <mlcomment>[^*\n]+	{
-					fprintf(logFile,"%s",yytext);
+					buff+=yytext;
+
 					}
 <mlcomment>("*"+[^/\n])* {
-						fprintf(logFile,"%s",yytext);
+					buff+=yytext;
+
 				}
 <mlcomment>"*"+"/" {
-					fprintf(logFile,"%s found\n",yytext);
+					buff+=yytext;
+					fprintf(logFile,"Line no %d: TOKEN <COMMENT> Lexeme %s found\n",myCount,buff.c_str());	
 					BEGIN(INITIAL);
 				}
+<mlcomment><<EOF>> {
+				fprintf(logFile,"Error at line %d: Undeterminated comment %s\n",line_count,buff.c_str());
+				BEGIN(INITIAL);
+}
 
 
 {SNGL_CMNT} {
@@ -255,13 +286,81 @@ MULT_CMNT "/*"
 			}
 			
 
+{STRING_LIT} 	{
+				myCount=line_count;
+				buff="";
+				buff+=yytext;
+				BEGIN(mlstring);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+<mlstring>\n {line_count++;}
+
+<mlstring>[\\]. {
+		char *ch=yytext;
+		while(*ch){
+			if(*ch=='\n'||*ch=='\r'||*ch=='\\'||*ch=='\\'){
+				*ch++;continue;
+			}
+			buff+=*ch++;
+		}
+	}
+<mlstring>{STRING_LIT}	{
+		buff+=yytext;
+	BEGIN(INITIAL);
+	fprintf(logFile,"Line no %d: TOKEN <STRING> Lexeme",myCount);
+	fprintf(logFile," %s found\n",buff.c_str());
+	fprintf(tokenFile,"<STRING,%s>",buff.c_str());
+}
+<mlstring>[^\"\n] {
+		char *ch=yytext;
+		while(*ch){
+			if(*ch=='\n'||*ch=='\r'||*ch=='\\'){
+				*ch++;continue;
+			}
+			buff+=*ch++;
+		}
+}
+<mlstring><<EOF>> {
+				char *ch=yytext;
+				while(*ch){
+						if(*ch=='\n'||*ch=='\r'||*ch=='\\'){
+						*ch++;continue;
+					}
+					buff+=*ch++;
+				}
+				fprintf(logFile,"Error at line %d: Unfinished String %s\n",myCount,buff.c_str());
+				BEGIN(INITIAL);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+{MULTI_CHAR_CONST} {
+				fprintf(logFile,"Error at line %d: Multi charachter constant %s\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+
+
+{ILL_FORMED_NUMBR} {
+				fprintf(logFile,"Error at line %d: Ill formed number %s\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+
+{TOO_MANY_DECIMAL} {
+				fprintf(logFile,"Error at line %d: Too many decimal points %s\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+{INVALID_PREFIX} {
+				fprintf(logFile,"Error at line %d: Invalid prefix %s\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+
+{QUOTE_ERROR} {
+				fprintf(logFile,"Error at line %d: Undetermined sequence %s\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
 
 
 
-			
-{SNGL_STRNG} 	{
-				fprintf(tokenFile,"<STRING,%s>",yytext);
-				fprintf(logFile,"Line no %d: TOKEN <STRING> Lexeme %s found\n",line_count,yytext);
+.			{
+				fprintf(logFile,"Unrecognized charachter found at line %d: %s\n",line_count,yytext);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 

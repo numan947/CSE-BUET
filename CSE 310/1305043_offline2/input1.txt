@@ -11,15 +11,29 @@ int main(void){
 	char ch='\\';
 	char ch='\t';
 	char ch='\n';
-	char ch='asdf';
 	float ff=10.25;
 	float tt=1.7E25;
-	char d[10]="abcd";
+	char d[10]="ab\"cd";
 	char e[10]="ab\
 	cd\
 	ef";
 	x=10;
-	y=x*10%2+3;
+	y=x*10%2-3;
+
+	x=-56;
+	'an';
+	'abcd';
+	'asdasd;
+	asdasd';
+	int tooManyDecimal=1.2.3456.698.245;
+	float illFormedNumber=1.5E+2.
+
+	int incop;
+	incop++;
+
+	int 12.54EEE45;
+	char multiChar='asd';
+
 	//single line comment
 	/****multi***
 	****line***
@@ -29,5 +43,5 @@ int main(void){
 		d[3]='\n';
 		e[4]='\0';
 	}
-	return 0;
+	"return 0;
 }
