@@ -13,10 +13,28 @@ SymbolTable *myTable;
 
 %}
 
-WHITESPACE [ \t\f\r\v]+ 
+WHITESPACE [ \t\f\r\v]+
+
 LETTER [a-zA-Z]
-DIGIT [0-9]
+
+INT_LIT [-+]?[0-9]+
+
+FLOAT_LIT [-+]?([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?
+
 NEWLINE \n
+
+IDENTIFIER [a-zA-Z_]+[a-zA-Z_0-9]*
+
+CHAR_LIT ['](.|\\n|\\t|\\\\|\\\"|\\a|\\f|\\r|\\b|\\v|\\0)[']
+
+SNGL_CMNT [/]+.*
+
+SNGL_STRNG \".*\"
+
+
+MULT_CMNT []
+
+MULT_STRNG []
 
 %%
 
@@ -179,18 +197,52 @@ NEWLINE \n
 			// There is a '|' in "+"'s rule, this means match execute the action for following rule
 		}
 
-
-
-
-
+{IDENTIFIER} 	{
+				fprintf(tokenFile,"<ID,%s>",yytext);
+				fprintf(logFile,"Line no %d: TOKEN <ID> Lexeme %s found\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+			
 
 		
-{DIGIT}+ 	{
+{INT_LIT} 	{
 				fprintf(tokenFile,"<CONST_INT,%s>",yytext);
 				fprintf(logFile,"Line no %d: TOKEN <CONST_INT> Lexeme %s found\n",line_count,yytext);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
+
+{FLOAT_LIT} 	{
+				fprintf(tokenFile,"<CONST_FLOAT,%s>",yytext);
+				fprintf(logFile,"Line no %d: TOKEN <CONST_FLOAT> Lexeme %s found\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+
+{CHAR_LIT} 	{
+				fprintf(tokenFile,"<CONST_CHAR,%s>",yytext);
+				fprintf(logFile,"Line no %d: TOKEN <CONST_CHAR> Lexeme %s found\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+
+{SNGL_CMNT} {
+				fprintf(logFile,"Line no %d: TOKEN <COMMENT> Lexeme %s found\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
 			
+
+
+
+
+
+
+
+
+{SNGL_STRNG} 	{
+				fprintf(tokenFile,"<STRING,%s>",yytext);
+				fprintf(logFile,"Line no %d: TOKEN <STRING> Lexeme %s found\n",line_count,yytext);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+
+
 
 %%
 

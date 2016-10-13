@@ -1,6 +1,19 @@
-int main(){
+int main(void){
 	int x,y;
-	char c;
+	char ch='a';
+	char ch='\0';
+	char ch='\v';
+	char ch='\b';
+	char ch='\r';
+	char ch='\f';
+	char ch='\a';
+	char ch='\"';
+	char ch='\\';
+	char ch='\t';
+	char ch='\n';
+	char ch='asdf';
+	float ff=10.25;
+	float tt=1.7E25;
 	char d[10]="abcd";
 	char e[10]="ab\
 	cd\
