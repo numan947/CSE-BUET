@@ -170,4 +170,12 @@ Line no 44: TOKEN <ASSIGNOP> Lexeme = found
 Line no 44: TOKEN <CONST_CHAR> Lexeme '\0' found
 Line no 44: TOKEN <SEMICOLON> Lexeme ; found
 Line no 45: TOKEN <CURL> Lexeme } found
-Error at line 46: Unfinished String "return /*0;}
+Error at line 46: Unfinished String "return /*0;
+Line no 47: TOKEN <CURL> Lexeme } found
+
+
+
+Total Lines: 47
+
+
+Total Errors: 8

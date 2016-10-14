@@ -2,7 +2,7 @@
 
 %x mlcomment
 %x mlstring
-
+%x helpState
 
 %{
 #include<stdio.h>
@@ -134,8 +134,9 @@ QUOTE_ERROR '[^'\n;]*
 "--"		{
 			fprintf(tokenFile,"<INCOP,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <INCOP> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("INCOP");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 
@@ -145,16 +146,18 @@ QUOTE_ERROR '[^'\n;]*
 "-"		{
 			fprintf(tokenFile,"<ADDOP,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <ADDOP> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("ADDOP");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 "*"		|
 "/"		|
 "%"		{
 			fprintf(tokenFile,"<MULOP,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <MULOP> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("MULOP");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 "<"		|
@@ -243,13 +246,17 @@ QUOTE_ERROR '[^'\n;]*
 {FLOAT_LIT} 	{
 				fprintf(tokenFile,"<CONST_FLOAT,%s>",yytext);
 				fprintf(logFile,"Line no %d: TOKEN <CONST_FLOAT> Lexeme %s found\n",line_count,yytext);
-				//insert in symbol table and print symbol table content(only non empty buckets)
+				myInfo.setType("CONST_FLOAT");
+				myInfo.setName(yytext);
+				myTable->Insert(myInfo);
 			}
 
 {CHAR_LIT} 	{
 				fprintf(tokenFile,"<CONST_CHAR,%s>",yytext);
 				fprintf(logFile,"Line no %d: TOKEN <CONST_CHAR> Lexeme %s found\n",line_count,yytext);
-				//insert in symbol table and print symbol table content(only non empty buckets)
+				myInfo.setType("CONST_CHAR");
+				myInfo.setName(yytext);
+				myTable->Insert(myInfo);
 			}
 
 
@@ -279,7 +286,7 @@ QUOTE_ERROR '[^'\n;]*
 					BEGIN(INITIAL);
 				}
 <mlcomment><<EOF>> {
-				fprintf(logFile,"Error at line %d: Undeterminated comment %s\n",line_count,buff.c_str());
+				fprintf(logFile,"Error at line %d: Undeterminated comment %s\n",myCount,buff.c_str());
 				error_count++;
 				BEGIN(INITIAL);
 }
@@ -298,9 +305,11 @@ QUOTE_ERROR '[^'\n;]*
 				BEGIN(mlstring);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
-<mlstring>\n {line_count++;}
+<mlstring>\\ {/*fprintf(logFile,"Line no. %d: backslash found\n",line_count);*/BEGIN(helpState);}
 
-<mlstring>[\\]. {
+<helpState>\n {line_count++;BEGIN(mlstring);}
+
+<mlstring>\\\" {
 		char *ch=yytext;
 		while(*ch){
 			if(*ch=='\n'||*ch=='\r'||*ch=='\\'||*ch=='\\'){
@@ -326,6 +335,21 @@ QUOTE_ERROR '[^'\n;]*
 		}
 }
 <mlstring><<EOF>> {
+				char *ch=yytext;
+				while(*ch){
+						if(*ch=='\n'||*ch=='\r'||*ch=='\\'){
+						*ch++;continue;
+					}
+					buff+=*ch++;
+				}
+				fprintf(logFile,"Error at line %d: Unfinished String %s\n",myCount,buff.c_str());
+				error_count++;
+				BEGIN(INITIAL);
+				//insert in symbol table and print symbol table content(only non empty buckets)
+			}
+
+<mlstring>\n  	{
+				line_count++;
 				char *ch=yytext;
 				while(*ch){
 						if(*ch=='\n'||*ch=='\r'||*ch=='\\'){
@@ -400,6 +424,10 @@ int main(int argc,char *argv[]){
 
 	yyin=fin;
 	yylex();
+
+	fprintf(logFile,"\n\n\nTotal Lines: %d\n",line_count);
+	fprintf(logFile,"\n\nTotal Errors: %d\n",error_count);
+
 	fclose(yyin);
 	fclose(tokenFile);
 	fclose(logFile);
