@@ -168,15 +168,17 @@ QUOTE_ERROR '[^'\n;]*
 "!="	{
 			fprintf(tokenFile,"<RELOP,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <RELOP> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("RELOP");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 "="		{
 			fprintf(tokenFile,"<ASSIGNOP,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <ASSIGNOP> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("ASSIGNOP");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 "&&"	|
@@ -184,53 +186,61 @@ QUOTE_ERROR '[^'\n;]*
 "!"		{
 			fprintf(tokenFile,"<LOGICOP,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <LOGICOP> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("LOGICOP");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 "("		|
 ")"		{
 			fprintf(tokenFile,"<PAREN,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <PAREN> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("PAREN");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 "{"		|
 "}"		{
 			fprintf(tokenFile,"<CURL,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <CURL> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("CURL");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 "["		|
 "]"		{
 			fprintf(tokenFile,"<BRACKET,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <BRACKET> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("BRACKET");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 
 ","		{
 			fprintf(tokenFile,"<COMMA,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <COMMA> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("COMMA");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 ";"		{
 			fprintf(tokenFile,"<SEMICOLON,%s>",yytext);
 			fprintf(logFile,"Line no %d: TOKEN <SEMICOLON> Lexeme %s found\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			myInfo.setType("SEMICOLON");
+			myInfo.setName(yytext);
+			myTable->Insert(myInfo);
 		}
 
 {IDENTIFIER} 	{
 				fprintf(tokenFile,"<ID,%s>",yytext);
 				fprintf(logFile,"Line no %d: TOKEN <ID> Lexeme %s found\n",line_count,yytext);
-				//insert in symbol table and print symbol table content(only non empty buckets)
+				myInfo.setType("ID");
+				myInfo.setName(yytext);
+				myTable->Insert(myInfo);
 			}
 			
 
