@@ -190,7 +190,7 @@ public:
     /**
      * [prints linked list from first to last]
      */
-    void PrintListForward()
+    void PrintListForward(FILE *logFile)
     {
         if(head==0){
             //cout<<"List is empty"<<endl;
@@ -198,7 +198,8 @@ public:
         }
         Node *tmp=head;
         while(tmp!=0){
-            cout<<" <"<<tmp->val.getName()<<" : "<<tmp->val.getType()<<">";
+            //cout<<" <"<<tmp->val.getName()<<" : "<<tmp->val.getType()<<">";
+            fprintf(logFile," <%s : %s>",tmp->val.getName().c_str(),tmp->val.getType().c_str());
             tmp=tmp->next;
         }
 
@@ -303,17 +304,18 @@ public:
         return newhsh;
     }
 
-    void Insert(SymbolInfo symbol)
+    bool Insert(SymbolInfo symbol)
     {
         unsigned long long hsh=getHash(symbol.getName());
         int pos=hsh%rowSize;
         Position pp=table[pos].SearchItem(symbol.getName());
         if(pp.col!=-1){
-            cout<<"<"<<pp.val.getName()<<","<<pp.val.getType()<<"> "<<"already exists at(row,col) "<<pos<<", "<<pp.col<<endl;
-            return;
+            //cout<<"<"<<pp.val.getName()<<","<<pp.val.getType()<<"> "<<"already exists at(row,col) "<<pos<<", "<<pp.col<<endl;
+            return false;
         }
         pp=table[pos].InsertLast(symbol);
-        cout<<"<"<<symbol.getName()<<","<<symbol.getType()<<"> "<<"Inserted at position(row,col) "<<pos<<", "<<pp.col<<endl;
+        //cout<<"<"<<symbol.getName()<<","<<symbol.getType()<<"> "<<"Inserted at position(row,col) "<<pos<<", "<<pp.col<<endl;
+        return true;
     }
 
     void LookUp(string name)
@@ -341,12 +343,16 @@ public:
 
 
 
-    void Print()
+    void Print(FILE *logFile)
     {
         for(int i=0;i<rowSize;i++){
-            cout<<i<<" "<<"-->";
-            table[i].PrintListForward();
-            cout<<endl;
+           if(table[i].GetLength()>0){
+                //cout<<i<<" "<<"-->";
+                fprintf(logFile, "%d -->",i );
+                table[i].PrintListForward(logFile);
+                //cout<<endl;
+                fprintf(logFile, "\n" );
+            }
         }
     }
 

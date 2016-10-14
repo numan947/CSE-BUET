@@ -34,7 +34,7 @@ int main(void){
 	int 12.54EEE45;
 	char multiChar='asd';
 
-	//single line comment
+	//single line comment asdasd
 	/****multi***
 	****line***
 	***comment***/
