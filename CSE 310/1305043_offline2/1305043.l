@@ -228,36 +228,45 @@ QUOTE_ERROR '[^'\n;]*
 
 "("		|
 ")"		{
-			fprintf(tokenFile,"<PAREN,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <PAREN> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("PAREN");
+			buff="";buff+=yytext;
+			if(buff=="(")buff="LPAREN";
+			else buff="RPAREN";
+			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
+			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : PAREN> already exists\n",yytext);
+			if(!checkInsert)fprintf(logFile,"<%s : %s> already exists\n",yytext,buff.c_str());
 			myTable->Print(logFile);
 			fprintf(logFile,"\n\n");
 		}
 
 "{"		|
 "}"		{
-			fprintf(tokenFile,"<CURL,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <CURL> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("CURL");
+			buff="";buff+=yytext;
+			if(buff=="{")buff="LCURL";
+			else buff="RCURL";
+			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
+			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : CURL> already exists\n",yytext);
+			if(!checkInsert)fprintf(logFile,"<%s : %s> already exists\n",yytext,buff.c_str());
 			myTable->Print(logFile);
 			fprintf(logFile,"\n\n");
 		}
 
 "["		|
 "]"		{
-			fprintf(tokenFile,"<BRACKET,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <BRACKET> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("BRACKET");
+			buff="";buff+=yytext;
+			if(buff=="[")buff="LTHIRD";
+			else buff="RTHIRD";
+			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
+			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : BRACKET> already exists\n",yytext);
+			if(!checkInsert)fprintf(logFile,"<%s : %s> already exists\n",yytext,buff.c_str());
 			myTable->Print(logFile);
 			fprintf(logFile,"\n\n");
 		}
