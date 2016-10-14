@@ -49,7 +49,7 @@ ILL_FORMED_NUMBR ([0-9]*\.[0-9]+)([eE]\.*[-+]*\.*[0-9]*\.*[0-9]*)
 
 INVALID_PREFIX [0-9]+[a-zA-Z\.]+[a-zA-Z0-9\.]*
 
-MULTI_CHAR_CONST '([^\'\n]+[^\'\n]+)+[^\'\n]*'
+MULTI_CHAR_CONST '([^\']+[^\']+)+[^\']*'
 
 QUOTE_ERROR '[^'\n;]*
 
@@ -390,23 +390,20 @@ QUOTE_ERROR '[^'\n;]*
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 <mlstring>\\ {
-	//fprintf(logFile,"Line no. %d: backslash found\n",line_count);
-	BEGIN(helpState);
+		fprintf(logFile,"Line no. %d: backslash found\n",line_count);
+		BEGIN(helpState);
+	}
 
-}
+<helpState>[\n\r] {
+		line_count++;
+		fprintf(logFile,"Line no. %d: newline found\n",line_count);
+		BEGIN(mlstring);
+	}
 <helpState>[^\n\r] {
-	//fprintf(logFile,"Line no. %d: begin from helpState 1\n",line_count);
-	buff+=yytext;
 	BEGIN(mlstring);
 }
 
-<helpState>\n {
-		//fprintf(logFile,"Line no. %d: begin from helpState 2\n",line_count);
-		line_count++;
-		BEGIN(mlstring);
-	}
-
-<mlstring>\\[nbt\\] {
+<mlstring>\\\" {
 		char *ch=yytext;
 		ch++;
 		while(*ch){
@@ -470,7 +467,7 @@ QUOTE_ERROR '[^'\n;]*
 					}
 					buff+=*ch++;
 				}
-				fprintf(logFile,"Line no %3d: ddERROR!! - Unfinished String %s\n",myCount,buff.c_str());
+				fprintf(logFile,"Line no %3d: asdERROR!! - Unfinished String %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
 				error_count++;
 				BEGIN(INITIAL);

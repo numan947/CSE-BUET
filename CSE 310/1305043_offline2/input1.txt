@@ -1,4 +1,6 @@
 int main(void){
+	"a\td\\d"
+	'a'='b'+'c';
 	int x,y;
 	char ch='a';             
 	char ch='\0';
@@ -24,7 +26,7 @@ int main(void){
 	'an';
 	'abcd';
 	'asdasd;
-	asdasd;
+	asdasd';
 	int tooManyDecimal=1.2.3456.698.245;
 	float illFormedNumber=1.5E+2.
 
@@ -38,7 +40,7 @@ int main(void){
 	/****multi***
 	****line***
 	***comment***/
-	if(y==10){
+	/*if(y==10){
 		c='a';
 		d[3]='\n';
 		e[4]='\0';
