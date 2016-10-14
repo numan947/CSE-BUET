@@ -50,8 +50,6 @@ INVALID_PREFIX [0-9]+[a-zA-Z\.]+[a-zA-Z0-9\.]*
 
 MULTI_CHAR_CONST '(..)+.*'
 
-NOT_FINISHED_STR (.)*[<<EOF>>]
-
 QUOTE_ERROR '[^'\n;]*
 
 

@@ -908,7 +908,7 @@ YY_DECL
 		}
 
 	{
-#line 58 "1305043.l"
+#line 56 "1305043.l"
 
 
 
@@ -972,17 +972,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 61 "1305043.l"
+#line 59 "1305043.l"
 {line_count++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 63 "1305043.l"
+#line 61 "1305043.l"
 {}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 66 "1305043.l"
+#line 64 "1305043.l"
 {
 			fprintf(tokenFile,"<IF>");
 			fprintf(logFile,"Line no %3d: TOKEN <IF> Lexeme <%s> found\n",line_count,yytext);
@@ -991,7 +991,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 72 "1305043.l"
+#line 70 "1305043.l"
 {
 			fprintf(tokenFile,"<ELSE>");
 			fprintf(logFile,"Line no %3d: TOKEN <ELSE> Lexeme <%s> found\n",line_count,yytext);
@@ -1000,7 +1000,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 77 "1305043.l"
+#line 75 "1305043.l"
 {
 			fprintf(tokenFile,"<FOR>");
 			fprintf(logFile,"Line no %3d: TOKEN <FOR> Lexeme <%s> found\n",line_count,yytext);
@@ -1009,7 +1009,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 82 "1305043.l"
+#line 80 "1305043.l"
 {
 			fprintf(tokenFile,"<WHILE>");
 			fprintf(logFile,"Line no %3d: TOKEN <WHILE> Lexeme <%s> found\n",line_count,yytext);
@@ -1018,7 +1018,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 87 "1305043.l"
+#line 85 "1305043.l"
 {
 			fprintf(tokenFile,"<DO>");
 			fprintf(logFile,"Line no %3d: TOKEN <DO> Lexeme <%s> found\n",line_count,yytext);
@@ -1027,7 +1027,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 92 "1305043.l"
+#line 90 "1305043.l"
 {
 			fprintf(tokenFile,"<BREAK>");
 			fprintf(logFile,"Line no %3d: TOKEN <BREAK> Lexeme <%s> found\n",line_count,yytext);
@@ -1036,7 +1036,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 97 "1305043.l"
+#line 95 "1305043.l"
 {
 			fprintf(tokenFile,"<INT>");
 			fprintf(logFile,"Line no %3d: TOKEN <INT> Lexeme <%s> found\n",line_count,yytext);
@@ -1045,7 +1045,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 102 "1305043.l"
+#line 100 "1305043.l"
 {
 			fprintf(tokenFile,"<CHAR>");
 			fprintf(logFile,"Line no %3d: TOKEN <CHAR> Lexeme <%s> found\n",line_count,yytext);
@@ -1054,7 +1054,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 107 "1305043.l"
+#line 105 "1305043.l"
 {
 			fprintf(tokenFile,"<FLOAT>");
 			fprintf(logFile,"Line no %3d: TOKEN <FLOAT> Lexeme <%s> found\n",line_count,yytext);
@@ -1063,7 +1063,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 112 "1305043.l"
+#line 110 "1305043.l"
 {
 			fprintf(tokenFile,"<DOUBLE>");
 			fprintf(logFile,"Line no %3d: TOKEN <DOUBLE> Lexeme <%s> found\n",line_count,yytext);
@@ -1072,7 +1072,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 117 "1305043.l"
+#line 115 "1305043.l"
 {
 			fprintf(tokenFile,"<VOID>");
 			fprintf(logFile,"Line no %3d: TOKEN <VOID> Lexeme <%s> found\n",line_count,yytext);
@@ -1081,7 +1081,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 122 "1305043.l"
+#line 120 "1305043.l"
 {
 			fprintf(tokenFile,"<RETURN>");
 			fprintf(logFile,"Line no %3d: TOKEN <RETURN> Lexeme <%s> found\n",line_count,yytext);
@@ -1090,7 +1090,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 127 "1305043.l"
+#line 125 "1305043.l"
 {
 			fprintf(tokenFile,"<SWITCH>");
 			fprintf(logFile,"Line no %3d: TOKEN <SWITCH> Lexeme <%s> found\n",line_count,yytext);
@@ -1099,7 +1099,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 132 "1305043.l"
+#line 130 "1305043.l"
 {
 			fprintf(tokenFile,"<CASE>");
 			fprintf(logFile,"Line no %3d: TOKEN <CASE> Lexeme <%s> found\n",line_count,yytext);
@@ -1108,7 +1108,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 137 "1305043.l"
+#line 135 "1305043.l"
 {
 			fprintf(tokenFile,"<DEFAULT>");
 			fprintf(logFile,"Line no %3d: TOKEN <DEFAULT> Lexeme <%s> found\n",line_count,yytext);
@@ -1117,7 +1117,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 142 "1305043.l"
+#line 140 "1305043.l"
 {
 			fprintf(tokenFile,"<CONTINUE>");
 			fprintf(logFile,"Line no %3d: TOKEN <CONTINUE> Lexeme <%s> found\n",line_count,yytext);
@@ -1125,10 +1125,10 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 19:
-#line 150 "1305043.l"
+#line 148 "1305043.l"
 case 20:
 YY_RULE_SETUP
-#line 151 "1305043.l"
+#line 149 "1305043.l"
 {
 			fprintf(tokenFile,"<INCOP,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <INCOP> Lexeme <%s> found\n",line_count,yytext);
@@ -1141,10 +1141,10 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 21:
-#line 165 "1305043.l"
+#line 163 "1305043.l"
 case 22:
 YY_RULE_SETUP
-#line 166 "1305043.l"
+#line 164 "1305043.l"
 {
 			fprintf(tokenFile,"<ADDOP,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
@@ -1157,12 +1157,12 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 23:
-#line 177 "1305043.l"
+#line 175 "1305043.l"
 case 24:
-#line 178 "1305043.l"
+#line 176 "1305043.l"
 case 25:
 YY_RULE_SETUP
-#line 178 "1305043.l"
+#line 176 "1305043.l"
 {
 			fprintf(tokenFile,"<MULOP,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
@@ -1175,18 +1175,18 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 26:
-#line 190 "1305043.l"
+#line 188 "1305043.l"
 case 27:
-#line 191 "1305043.l"
+#line 189 "1305043.l"
 case 28:
-#line 192 "1305043.l"
+#line 190 "1305043.l"
 case 29:
-#line 193 "1305043.l"
+#line 191 "1305043.l"
 case 30:
-#line 194 "1305043.l"
+#line 192 "1305043.l"
 case 31:
 YY_RULE_SETUP
-#line 194 "1305043.l"
+#line 192 "1305043.l"
 {
 			fprintf(tokenFile,"<RELOP,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
@@ -1201,7 +1201,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 206 "1305043.l"
+#line 204 "1305043.l"
 {
 			fprintf(tokenFile,"<ASSIGNOP,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
@@ -1214,12 +1214,12 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 33:
-#line 218 "1305043.l"
+#line 216 "1305043.l"
 case 34:
-#line 219 "1305043.l"
+#line 217 "1305043.l"
 case 35:
 YY_RULE_SETUP
-#line 219 "1305043.l"
+#line 217 "1305043.l"
 {
 			fprintf(tokenFile,"<LOGICOP,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
@@ -1232,10 +1232,10 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 36:
-#line 231 "1305043.l"
+#line 229 "1305043.l"
 case 37:
 YY_RULE_SETUP
-#line 231 "1305043.l"
+#line 229 "1305043.l"
 {
 			fprintf(tokenFile,"<PAREN,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <PAREN> Lexeme <%s> found\n",line_count,yytext);
@@ -1248,10 +1248,10 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 38:
-#line 243 "1305043.l"
+#line 241 "1305043.l"
 case 39:
 YY_RULE_SETUP
-#line 243 "1305043.l"
+#line 241 "1305043.l"
 {
 			fprintf(tokenFile,"<CURL,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <CURL> Lexeme <%s> found\n",line_count,yytext);
@@ -1264,10 +1264,10 @@ YY_RULE_SETUP
 		}
 	YY_BREAK
 case 40:
-#line 255 "1305043.l"
+#line 253 "1305043.l"
 case 41:
 YY_RULE_SETUP
-#line 255 "1305043.l"
+#line 253 "1305043.l"
 {
 			fprintf(tokenFile,"<BRACKET,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <BRACKET> Lexeme <%s> found\n",line_count,yytext);
@@ -1281,7 +1281,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 267 "1305043.l"
+#line 265 "1305043.l"
 {
 			fprintf(tokenFile,"<COMMA,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <COMMA> Lexeme <%s> found\n",line_count,yytext);
@@ -1295,7 +1295,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 278 "1305043.l"
+#line 276 "1305043.l"
 {
 			fprintf(tokenFile,"<SEMICOLON,%s>",yytext);
 			fprintf(logFile,"Line no %3d: TOKEN <SEMICOLON> Lexeme <%s> found\n",line_count,yytext);
@@ -1309,7 +1309,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 289 "1305043.l"
+#line 287 "1305043.l"
 {
 				fprintf(tokenFile,"<ID,%s>",yytext);
 				fprintf(logFile,"Line no %3d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
@@ -1323,7 +1323,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 302 "1305043.l"
+#line 300 "1305043.l"
 {
 				fprintf(tokenFile,"<CONST_INT,%s>",yytext);
 				fprintf(logFile,"Line no %3d: TOKEN <CONST_INT> Lexeme <%s> found\n",line_count,yytext);
@@ -1337,7 +1337,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 313 "1305043.l"
+#line 311 "1305043.l"
 {
 				fprintf(tokenFile,"<CONST_FLOAT,%s>",yytext);
 				fprintf(logFile,"Line no %3d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
@@ -1351,7 +1351,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 324 "1305043.l"
+#line 322 "1305043.l"
 {
 				fprintf(tokenFile,"<CONST_CHAR,%s>",yytext);
 				fprintf(logFile,"Line no %3d: TOKEN <CONST_CHAR> Lexeme <%s> found\n",line_count,yytext);
@@ -1365,7 +1365,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 337 "1305043.l"
+#line 335 "1305043.l"
 {
 				myCount=line_count;
 				buff="";
@@ -1377,7 +1377,7 @@ YY_RULE_SETUP
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 344 "1305043.l"
+#line 342 "1305043.l"
 {
 					line_count++;
 					buff+=yytext;
@@ -1385,7 +1385,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 348 "1305043.l"
+#line 346 "1305043.l"
 {
 					buff+=yytext;
 
@@ -1393,7 +1393,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 352 "1305043.l"
+#line 350 "1305043.l"
 {
 					buff+=yytext;
 
@@ -1401,7 +1401,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 356 "1305043.l"
+#line 354 "1305043.l"
 {
 					buff+=yytext;
 					fprintf(logFile,"Line no %3d: TOKEN <COMMENT> Lexeme <%s> found\n",myCount,buff.c_str());
@@ -1410,7 +1410,7 @@ YY_RULE_SETUP
 				}
 	YY_BREAK
 case YY_STATE_EOF(mlcomment):
-#line 362 "1305043.l"
+#line 360 "1305043.l"
 {
 				fprintf(logFile,"Line no %3d: ERROR!! - Undeterminated comment %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
@@ -1420,7 +1420,7 @@ case YY_STATE_EOF(mlcomment):
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 370 "1305043.l"
+#line 368 "1305043.l"
 {
 				buff="";
 				char *ch=yytext;
@@ -1438,7 +1438,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 386 "1305043.l"
+#line 384 "1305043.l"
 {
 				myCount=line_count;
 				buff="";
@@ -1449,18 +1449,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 393 "1305043.l"
+#line 391 "1305043.l"
 {/*fprintf(logFile,"Line no. %d: backslash found\n",line_count);*/BEGIN(helpState);}
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 395 "1305043.l"
+#line 393 "1305043.l"
 {line_count++;BEGIN(mlstring);}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 397 "1305043.l"
+#line 395 "1305043.l"
 {
 		char *ch=yytext;
 		while(*ch){
@@ -1473,7 +1473,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 406 "1305043.l"
+#line 404 "1305043.l"
 {
 					buff+=yytext;
 					BEGIN(INITIAL);
@@ -1486,7 +1486,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 415 "1305043.l"
+#line 413 "1305043.l"
 {
 		char *ch=yytext;
 		while(*ch){
@@ -1498,7 +1498,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(mlstring):
-#line 424 "1305043.l"
+#line 422 "1305043.l"
 {
 				char *ch=yytext;
 				while(*ch){
@@ -1517,7 +1517,7 @@ case YY_STATE_EOF(mlstring):
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 439 "1305043.l"
+#line 437 "1305043.l"
 {
 				line_count++;
 				char *ch=yytext;
@@ -1536,7 +1536,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 454 "1305043.l"
+#line 452 "1305043.l"
 {
 				fprintf(logFile,"Line no %3d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
@@ -1546,7 +1546,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 462 "1305043.l"
+#line 460 "1305043.l"
 {
 				fprintf(logFile,"Line no %3d: ERROR!! - Ill formed number %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
@@ -1556,7 +1556,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 469 "1305043.l"
+#line 467 "1305043.l"
 {
 				fprintf(logFile,"Line no %3d: ERROR!! - Too many decimal points %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
@@ -1566,7 +1566,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 475 "1305043.l"
+#line 473 "1305043.l"
 {
 				fprintf(logFile,"Line no %3d: ERROR!! - Invalid prefix %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
@@ -1576,7 +1576,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 482 "1305043.l"
+#line 480 "1305043.l"
 {
 				fprintf(logFile,"Line no %3d: ERROR!! - Undetermined sequence %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
@@ -1586,7 +1586,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 491 "1305043.l"
+#line 489 "1305043.l"
 {
 				fprintf(logFile,"Unrecognized charachter found at line %3d: %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
@@ -1596,7 +1596,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 501 "1305043.l"
+#line 499 "1305043.l"
 ECHO;
 	YY_BREAK
 #line 1603 "1305043.c"
@@ -2601,7 +2601,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 501 "1305043.l"
+#line 499 "1305043.l"
 
 
 
