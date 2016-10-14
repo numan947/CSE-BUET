@@ -8,6 +8,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+using namespace std;
 #include"1305043_symbolTable.cpp"
 
 int line_count=1;
@@ -36,7 +37,7 @@ IDENTIFIER [a-zA-Z_]+[a-zA-Z_0-9]*
 
 CHAR_LIT '(.|\\n|\\t|\\\\|\\\"|\\a|\\f|\\r|\\b|\\v|\\0)'
 
-SNGL_CMNT "//"+[^\n]*
+SNGL_CMNT "//".*
 
 MULT_CMNT "/*"
 
