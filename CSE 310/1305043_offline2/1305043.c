@@ -986,7 +986,7 @@ YY_RULE_SETUP
 #line 65 "1305043.l"
 {
 			fprintf(tokenFile,"<IF>");
-			fprintf(logFile,"Line no %3d: TOKEN <IF> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <IF> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -995,7 +995,7 @@ YY_RULE_SETUP
 #line 71 "1305043.l"
 {
 			fprintf(tokenFile,"<ELSE>");
-			fprintf(logFile,"Line no %3d: TOKEN <ELSE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <ELSE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1004,7 +1004,7 @@ YY_RULE_SETUP
 #line 76 "1305043.l"
 {
 			fprintf(tokenFile,"<FOR>");
-			fprintf(logFile,"Line no %3d: TOKEN <FOR> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <FOR> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1013,7 +1013,7 @@ YY_RULE_SETUP
 #line 81 "1305043.l"
 {
 			fprintf(tokenFile,"<WHILE>");
-			fprintf(logFile,"Line no %3d: TOKEN <WHILE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <WHILE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1022,7 +1022,7 @@ YY_RULE_SETUP
 #line 86 "1305043.l"
 {
 			fprintf(tokenFile,"<DO>");
-			fprintf(logFile,"Line no %3d: TOKEN <DO> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <DO> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1031,7 +1031,7 @@ YY_RULE_SETUP
 #line 91 "1305043.l"
 {
 			fprintf(tokenFile,"<BREAK>");
-			fprintf(logFile,"Line no %3d: TOKEN <BREAK> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <BREAK> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1040,7 +1040,7 @@ YY_RULE_SETUP
 #line 96 "1305043.l"
 {
 			fprintf(tokenFile,"<INT>");
-			fprintf(logFile,"Line no %3d: TOKEN <INT> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <INT> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1049,7 +1049,7 @@ YY_RULE_SETUP
 #line 101 "1305043.l"
 {
 			fprintf(tokenFile,"<CHAR>");
-			fprintf(logFile,"Line no %3d: TOKEN <CHAR> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <CHAR> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1058,7 +1058,7 @@ YY_RULE_SETUP
 #line 106 "1305043.l"
 {
 			fprintf(tokenFile,"<FLOAT>");
-			fprintf(logFile,"Line no %3d: TOKEN <FLOAT> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <FLOAT> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1067,7 +1067,7 @@ YY_RULE_SETUP
 #line 111 "1305043.l"
 {
 			fprintf(tokenFile,"<DOUBLE>");
-			fprintf(logFile,"Line no %3d: TOKEN <DOUBLE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <DOUBLE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1076,7 +1076,7 @@ YY_RULE_SETUP
 #line 116 "1305043.l"
 {
 			fprintf(tokenFile,"<VOID>");
-			fprintf(logFile,"Line no %3d: TOKEN <VOID> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <VOID> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1085,7 +1085,7 @@ YY_RULE_SETUP
 #line 121 "1305043.l"
 {
 			fprintf(tokenFile,"<RETURN>");
-			fprintf(logFile,"Line no %3d: TOKEN <RETURN> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <RETURN> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1094,7 +1094,7 @@ YY_RULE_SETUP
 #line 126 "1305043.l"
 {
 			fprintf(tokenFile,"<SWITCH>");
-			fprintf(logFile,"Line no %3d: TOKEN <SWITCH> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <SWITCH> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1103,7 +1103,7 @@ YY_RULE_SETUP
 #line 131 "1305043.l"
 {
 			fprintf(tokenFile,"<CASE>");
-			fprintf(logFile,"Line no %3d: TOKEN <CASE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <CASE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1112,7 +1112,7 @@ YY_RULE_SETUP
 #line 136 "1305043.l"
 {
 			fprintf(tokenFile,"<DEFAULT>");
-			fprintf(logFile,"Line no %3d: TOKEN <DEFAULT> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <DEFAULT> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1121,7 +1121,7 @@ YY_RULE_SETUP
 #line 141 "1305043.l"
 {
 			fprintf(tokenFile,"<CONTINUE>");
-			fprintf(logFile,"Line no %3d: TOKEN <CONTINUE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <CONTINUE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 	YY_BREAK
@@ -1132,7 +1132,7 @@ YY_RULE_SETUP
 #line 150 "1305043.l"
 {
 			fprintf(tokenFile,"<INCOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <INCOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <INCOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("INCOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1148,7 +1148,7 @@ YY_RULE_SETUP
 #line 165 "1305043.l"
 {
 			fprintf(tokenFile,"<ADDOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("ADDOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1166,7 +1166,7 @@ YY_RULE_SETUP
 #line 177 "1305043.l"
 {
 			fprintf(tokenFile,"<MULOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("MULOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1190,7 +1190,7 @@ YY_RULE_SETUP
 #line 193 "1305043.l"
 {
 			fprintf(tokenFile,"<RELOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("RELOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1205,7 +1205,7 @@ YY_RULE_SETUP
 #line 205 "1305043.l"
 {
 			fprintf(tokenFile,"<ASSIGNOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("ASSIGNOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1223,7 +1223,7 @@ YY_RULE_SETUP
 #line 218 "1305043.l"
 {
 			fprintf(tokenFile,"<LOGICOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("LOGICOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1242,7 +1242,7 @@ YY_RULE_SETUP
 			if(buff=="(")buff="LPAREN";
 			else buff="RPAREN";
 			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
 			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1261,7 +1261,7 @@ YY_RULE_SETUP
 			if(buff=="{")buff="LCURL";
 			else buff="RCURL";
 			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
 			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1280,7 +1280,7 @@ YY_RULE_SETUP
 			if(buff=="[")buff="LTHIRD";
 			else buff="RTHIRD";
 			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
 			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1294,7 +1294,7 @@ YY_RULE_SETUP
 #line 275 "1305043.l"
 {
 			fprintf(tokenFile,"<COMMA,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <COMMA> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <COMMA> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("COMMA");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1308,7 +1308,7 @@ YY_RULE_SETUP
 #line 286 "1305043.l"
 {
 			fprintf(tokenFile,"<SEMICOLON,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <SEMICOLON> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <SEMICOLON> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("SEMICOLON");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -1322,7 +1322,7 @@ YY_RULE_SETUP
 #line 297 "1305043.l"
 {
 				fprintf(tokenFile,"<ID,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("ID");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -1336,7 +1336,7 @@ YY_RULE_SETUP
 #line 310 "1305043.l"
 {
 				fprintf(tokenFile,"<CONST_INT,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <CONST_INT> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <CONST_INT> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("CONST_INT");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -1350,7 +1350,7 @@ YY_RULE_SETUP
 #line 321 "1305043.l"
 {
 				fprintf(tokenFile,"<CONST_FLOAT,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("CONST_FLOAT");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -1364,7 +1364,7 @@ YY_RULE_SETUP
 #line 332 "1305043.l"
 {
 				fprintf(tokenFile,"<CONST_CHAR,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <CONST_CHAR> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <CONST_CHAR> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("CONST_CHAR");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -1414,7 +1414,7 @@ YY_RULE_SETUP
 #line 364 "1305043.l"
 {
 					buff+=yytext;
-					fprintf(logFile,"Line no %3d: TOKEN <COMMENT> Lexeme <%s> found\n",myCount,buff.c_str());
+					fprintf(logFile,"Line no %03d: TOKEN <COMMENT> Lexeme <%s> found\n",myCount,buff.c_str());
 					fprintf(logFile,"\n\n");	
 					BEGIN(INITIAL);
 				}
@@ -1422,7 +1422,7 @@ YY_RULE_SETUP
 case YY_STATE_EOF(mlcomment):
 #line 370 "1305043.l"
 {
-				fprintf(logFile,"Line no %3d: ERROR!! - Undeterminated comment %s\n",myCount,buff.c_str());
+				fprintf(logFile,"Line no %03d: ERROR!! - Undeterminated comment %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
 				error_count++;
 				BEGIN(INITIAL);
@@ -1435,13 +1435,13 @@ YY_RULE_SETUP
 				buff="";
 				char *ch=yytext;
 				while(*ch){
-					if(*ch=='\n'||*ch=='\r'){
+					if(*ch=='\r'){
 						*ch++;
 						continue;
 					}
 					buff+=*ch++;
 				}
-				fprintf(logFile,"Line no %3d: TOKEN <COMMENT> Lexeme <%s> found\n",line_count,buff.c_str());
+				fprintf(logFile,"Line no %03d: TOKEN <COMMENT> Lexeme <%s> found\n",line_count,buff.c_str());
 				fprintf(logFile,"\n\n");
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
@@ -1518,7 +1518,7 @@ YY_RULE_SETUP
 					buff+=yytext;
 					BEGIN(INITIAL);
 					fprintf(tokenFile,"<STRING,%s>",buff.c_str());
-					fprintf(logFile,"Line no %3d: TOKEN <STRING> Lexeme",myCount);
+					fprintf(logFile,"Line no %03d: TOKEN <STRING> Lexeme",myCount);
 					fprintf(logFile," %s found\n",buff.c_str());
 					fprintf(tokenFile,"<STRING,%s>",buff.c_str());
 					fprintf(logFile,"\n\n");
@@ -1547,7 +1547,7 @@ case YY_STATE_EOF(mlstring):
 					}
 					buff+=*ch++;
 				}
-				fprintf(logFile,"Line no %3d: ERROR!! - Unfinished String %s\n",myCount,buff.c_str());
+				fprintf(logFile,"Line no %03d: ERROR!! - Unfinished String %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
 				error_count++;
 				BEGIN(INITIAL);
@@ -1567,7 +1567,7 @@ YY_RULE_SETUP
 					}
 					buff+=*ch++;
 				}
-				fprintf(logFile,"Line no %3d: ddERROR!! - Unfinished String %s\n",myCount,buff.c_str());
+				fprintf(logFile,"Line no %03d: ddERROR!! - Unfinished String %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
 				error_count++;
 				BEGIN(INITIAL);
@@ -1578,7 +1578,7 @@ case 62:
 YY_RULE_SETUP
 #line 488 "1305043.l"
 {
-				fprintf(logFile,"Line no %3d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -1588,7 +1588,7 @@ case 63:
 YY_RULE_SETUP
 #line 496 "1305043.l"
 {
-				fprintf(logFile,"Line no %3d: ERROR!! - Ill formed number %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Ill formed number %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -1598,7 +1598,7 @@ case 64:
 YY_RULE_SETUP
 #line 503 "1305043.l"
 {
-				fprintf(logFile,"Line no %3d: ERROR!! - Too many decimal points %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Too many decimal points %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -1608,7 +1608,7 @@ case 65:
 YY_RULE_SETUP
 #line 509 "1305043.l"
 {
-				fprintf(logFile,"Line no %3d: ERROR!! - Invalid prefix %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Invalid prefix %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -1618,7 +1618,7 @@ case 66:
 YY_RULE_SETUP
 #line 516 "1305043.l"
 {
-				fprintf(logFile,"Line no %3d: ERROR!! - Ill formed charachter error %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Ill formed charachter error %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -1628,7 +1628,7 @@ case 67:
 YY_RULE_SETUP
 #line 525 "1305043.l"
 {
-				fprintf(logFile,"Unrecognized charachter found at line %3d: %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Unrecognized charachter found %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -2665,8 +2665,8 @@ int main(int argc,char *argv[]){
 	yyin=fin;
 	yylex();
 
-	fprintf(logFile,"\n\nTOTAL LINES: %3d\n",line_count);
-	fprintf(logFile,"\n\nTOTAL ERRORS: %3d\n",error_count);
+	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
+	fprintf(logFile,"\n\nTOTAL ERRORS: %03d\n",error_count);
 
 	fclose(yyin);
 	fclose(tokenFile);

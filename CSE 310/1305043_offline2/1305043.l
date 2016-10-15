@@ -64,83 +64,83 @@ QUOTE_ERROR '[^'\n;]*
 
 "if"	{
 			fprintf(tokenFile,"<IF>");
-			fprintf(logFile,"Line no %3d: TOKEN <IF> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <IF> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 		
 "else"	{
 			fprintf(tokenFile,"<ELSE>");
-			fprintf(logFile,"Line no %3d: TOKEN <ELSE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <ELSE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "for"	{
 			fprintf(tokenFile,"<FOR>");
-			fprintf(logFile,"Line no %3d: TOKEN <FOR> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <FOR> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "while"	{
 			fprintf(tokenFile,"<WHILE>");
-			fprintf(logFile,"Line no %3d: TOKEN <WHILE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <WHILE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "do"	{
 			fprintf(tokenFile,"<DO>");
-			fprintf(logFile,"Line no %3d: TOKEN <DO> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <DO> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "break"	{
 			fprintf(tokenFile,"<BREAK>");
-			fprintf(logFile,"Line no %3d: TOKEN <BREAK> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <BREAK> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "int"	{
 			fprintf(tokenFile,"<INT>");
-			fprintf(logFile,"Line no %3d: TOKEN <INT> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <INT> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "char"	{
 			fprintf(tokenFile,"<CHAR>");
-			fprintf(logFile,"Line no %3d: TOKEN <CHAR> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <CHAR> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "float"	{
 			fprintf(tokenFile,"<FLOAT>");
-			fprintf(logFile,"Line no %3d: TOKEN <FLOAT> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <FLOAT> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "double"	{
 			fprintf(tokenFile,"<DOUBLE>");
-			fprintf(logFile,"Line no %3d: TOKEN <DOUBLE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <DOUBLE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "void"	{
 			fprintf(tokenFile,"<VOID>");
-			fprintf(logFile,"Line no %3d: TOKEN <VOID> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <VOID> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "return"	{
 			fprintf(tokenFile,"<RETURN>");
-			fprintf(logFile,"Line no %3d: TOKEN <RETURN> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <RETURN> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "switch"	{
 			fprintf(tokenFile,"<SWITCH>");
-			fprintf(logFile,"Line no %3d: TOKEN <SWITCH> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <SWITCH> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "case"	{
 			fprintf(tokenFile,"<CASE>");
-			fprintf(logFile,"Line no %3d: TOKEN <CASE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <CASE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "default"	{
 			fprintf(tokenFile,"<DEFAULT>");
-			fprintf(logFile,"Line no %3d: TOKEN <DEFAULT> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <DEFAULT> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 "continue"	{
 			fprintf(tokenFile,"<CONTINUE>");
-			fprintf(logFile,"Line no %3d: TOKEN <CONTINUE> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <CONTINUE> Lexeme <%s> found\n",line_count,yytext);
 			fprintf(logFile,"\n\n");
 		}
 
@@ -149,7 +149,7 @@ QUOTE_ERROR '[^'\n;]*
 
 "--"		{
 			fprintf(tokenFile,"<INCOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <INCOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <INCOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("INCOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -164,7 +164,7 @@ QUOTE_ERROR '[^'\n;]*
 
 "-"		{
 			fprintf(tokenFile,"<ADDOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("ADDOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -176,7 +176,7 @@ QUOTE_ERROR '[^'\n;]*
 "/"		|
 "%"		{
 			fprintf(tokenFile,"<MULOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("MULOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -192,7 +192,7 @@ QUOTE_ERROR '[^'\n;]*
 "=="	|
 "!="	{
 			fprintf(tokenFile,"<RELOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("RELOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -204,7 +204,7 @@ QUOTE_ERROR '[^'\n;]*
 
 "="		{
 			fprintf(tokenFile,"<ASSIGNOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("ASSIGNOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -217,7 +217,7 @@ QUOTE_ERROR '[^'\n;]*
 "||"	|
 "!"		{
 			fprintf(tokenFile,"<LOGICOP,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("LOGICOP");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -232,7 +232,7 @@ QUOTE_ERROR '[^'\n;]*
 			if(buff=="(")buff="LPAREN";
 			else buff="RPAREN";
 			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
 			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -247,7 +247,7 @@ QUOTE_ERROR '[^'\n;]*
 			if(buff=="{")buff="LCURL";
 			else buff="RCURL";
 			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
 			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -262,7 +262,7 @@ QUOTE_ERROR '[^'\n;]*
 			if(buff=="[")buff="LTHIRD";
 			else buff="RTHIRD";
 			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
 			myInfo.setType(buff);
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -274,7 +274,7 @@ QUOTE_ERROR '[^'\n;]*
 
 ","		{
 			fprintf(tokenFile,"<COMMA,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <COMMA> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <COMMA> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("COMMA");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -285,7 +285,7 @@ QUOTE_ERROR '[^'\n;]*
 
 ";"		{
 			fprintf(tokenFile,"<SEMICOLON,%s>",yytext);
-			fprintf(logFile,"Line no %3d: TOKEN <SEMICOLON> Lexeme <%s> found\n",line_count,yytext);
+			fprintf(logFile,"Line no %03d: TOKEN <SEMICOLON> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("SEMICOLON");
 			myInfo.setName(yytext);
 			checkInsert=myTable->Insert(myInfo);
@@ -296,7 +296,7 @@ QUOTE_ERROR '[^'\n;]*
 
 {IDENTIFIER} 	{
 				fprintf(tokenFile,"<ID,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("ID");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -309,7 +309,7 @@ QUOTE_ERROR '[^'\n;]*
 		
 {INT_LIT} 	{
 				fprintf(tokenFile,"<CONST_INT,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <CONST_INT> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <CONST_INT> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("CONST_INT");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -320,7 +320,7 @@ QUOTE_ERROR '[^'\n;]*
 
 {FLOAT_LIT} 	{
 				fprintf(tokenFile,"<CONST_FLOAT,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("CONST_FLOAT");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -331,7 +331,7 @@ QUOTE_ERROR '[^'\n;]*
 
 {CHAR_LIT} 	{
 				fprintf(tokenFile,"<CONST_CHAR,%s>",yytext);
-				fprintf(logFile,"Line no %3d: TOKEN <CONST_CHAR> Lexeme <%s> found\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: TOKEN <CONST_CHAR> Lexeme <%s> found\n",line_count,yytext);
 				myInfo.setType("CONST_CHAR");
 				myInfo.setName(yytext);
 				checkInsert=myTable->Insert(myInfo);
@@ -363,12 +363,12 @@ QUOTE_ERROR '[^'\n;]*
 				}
 <mlcomment>"*"+"/" {
 					buff+=yytext;
-					fprintf(logFile,"Line no %3d: TOKEN <COMMENT> Lexeme <%s> found\n",myCount,buff.c_str());
+					fprintf(logFile,"Line no %03d: TOKEN <COMMENT> Lexeme <%s> found\n",myCount,buff.c_str());
 					fprintf(logFile,"\n\n");	
 					BEGIN(INITIAL);
 				}
 <mlcomment><<EOF>> {
-				fprintf(logFile,"Line no %3d: ERROR!! - Undeterminated comment %s\n",myCount,buff.c_str());
+				fprintf(logFile,"Line no %03d: ERROR!! - Undeterminated comment %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
 				error_count++;
 				BEGIN(INITIAL);
@@ -379,13 +379,13 @@ QUOTE_ERROR '[^'\n;]*
 				buff="";
 				char *ch=yytext;
 				while(*ch){
-					if(*ch=='\n'||*ch=='\r'){
+					if(*ch=='\r'){
 						*ch++;
 						continue;
 					}
 					buff+=*ch++;
 				}
-				fprintf(logFile,"Line no %3d: TOKEN <COMMENT> Lexeme <%s> found\n",line_count,buff.c_str());
+				fprintf(logFile,"Line no %03d: TOKEN <COMMENT> Lexeme <%s> found\n",line_count,buff.c_str());
 				fprintf(logFile,"\n\n");
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
@@ -441,7 +441,7 @@ QUOTE_ERROR '[^'\n;]*
 					buff+=yytext;
 					BEGIN(INITIAL);
 					fprintf(tokenFile,"<STRING,%s>",buff.c_str());
-					fprintf(logFile,"Line no %3d: TOKEN <STRING> Lexeme",myCount);
+					fprintf(logFile,"Line no %03d: TOKEN <STRING> Lexeme",myCount);
 					fprintf(logFile," %s found\n",buff.c_str());
 					fprintf(tokenFile,"<STRING,%s>",buff.c_str());
 					fprintf(logFile,"\n\n");
@@ -463,7 +463,7 @@ QUOTE_ERROR '[^'\n;]*
 					}
 					buff+=*ch++;
 				}
-				fprintf(logFile,"Line no %3d: ERROR!! - Unfinished String %s\n",myCount,buff.c_str());
+				fprintf(logFile,"Line no %03d: ERROR!! - Unfinished String %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
 				error_count++;
 				BEGIN(INITIAL);
@@ -479,14 +479,14 @@ QUOTE_ERROR '[^'\n;]*
 					}
 					buff+=*ch++;
 				}
-				fprintf(logFile,"Line no %3d: ddERROR!! - Unfinished String %s\n",myCount,buff.c_str());
+				fprintf(logFile,"Line no %03d: ddERROR!! - Unfinished String %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
 				error_count++;
 				BEGIN(INITIAL);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 {MULTI_CHAR_CONST} {
-				fprintf(logFile,"Line no %3d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -494,27 +494,27 @@ QUOTE_ERROR '[^'\n;]*
 
 
 {ILL_FORMED_NUMBR} {
-				fprintf(logFile,"Line no %3d: ERROR!! - Ill formed number %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Ill formed number %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 
 {TOO_MANY_DECIMAL} {
-				fprintf(logFile,"Line no %3d: ERROR!! - Too many decimal points %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Too many decimal points %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 {INVALID_PREFIX} {
-				fprintf(logFile,"Line no %3d: ERROR!! - Invalid prefix %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Invalid prefix %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 
 {QUOTE_ERROR} {
-				fprintf(logFile,"Line no %3d: ERROR!! - Ill formed charachter error %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Ill formed charachter error %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -523,7 +523,7 @@ QUOTE_ERROR '[^'\n;]*
 
 
 .			{
-				fprintf(logFile,"Unrecognized charachter found at line %3d: %s\n",line_count,yytext);
+				fprintf(logFile,"Line no %03d: ERROR!! - Unrecognized charachter found %s\n",line_count,yytext);
 				fprintf(logFile,"\n\n");
 				error_count++;
 				//insert in symbol table and print symbol table content(only non empty buckets)
@@ -554,8 +554,8 @@ int main(int argc,char *argv[]){
 	yyin=fin;
 	yylex();
 
-	fprintf(logFile,"\n\nTOTAL LINES: %3d\n",line_count);
-	fprintf(logFile,"\n\nTOTAL ERRORS: %3d\n",error_count);
+	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
+	fprintf(logFile,"\n\nTOTAL ERRORS: %03d\n",error_count);
 
 	fclose(yyin);
 	fclose(tokenFile);

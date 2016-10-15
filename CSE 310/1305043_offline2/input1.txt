@@ -1,5 +1,7 @@
 int main(void){
-	"a\td\\d"
+	.
+	"a\td\\/d"
+	"\hjhsddsadasd"
 	'a'='b'+'c';
 	int x,y;
 	char ch='a';             
@@ -28,7 +30,7 @@ int main(void){
 	'asdasd;
 	asdasd';
 	int tooManyDecimal=1.2.3456.698.245;
-	float illFormedNumber=1.5E+2.
+	float illFormedNumber=1.5E2.65;
 
 	int incop;
 	incop++;
