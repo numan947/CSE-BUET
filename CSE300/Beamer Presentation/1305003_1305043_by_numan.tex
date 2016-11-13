@@ -1,0 +1,300 @@
+\documentclass[9pt]{beamer}
+\usetheme{keynote}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{graphics}
+
+
+\title{Comparison of Color Feature for Image Retrival}
+\author{S.R. Kodituwakku \inst{1} \and S.Selvarajah \inst{2}}
+
+
+\institute{\inst{1}Department of Statistics \& Computer Science, University of Peradeniya \and %
+               		  \inst{2} Department of Physical Science, Vavuniya Campus, University of Jaffna}
+
+\date{\parbox{\linewidth}{\centering%
+  \today\endgraf\medskip
+  Presented By\endgraf\bigskip
+  Abdullah Al Mamun \hspace*{3cm} S. Mahmudul Hasan\endgraf\medskip
+  1305003 \hspace*{4.5cm} 		  1305043\endgraf\bigskip
+  Dept.\ of Computer Science \& Engineering (CSE), \endgraf\medskip
+  Bangladesh University of Engineering and Technology (BUET)}}
+
+
+
+
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+
+
+
+
+
+
+\section{Methodology}
+
+\begin{frame}
+\fontsize{18pt}{30}\selectfont
+\centering
+METHODOLOGY
+\end{frame}
+
+\subsection{Color Reduction}
+\begin{frame}
+\frametitle{Color Reduction}
+\pause
+True Color: supports 24-bit for three RGB colors\\[\baselineskip]
+\pause
+Total number of possible colors: $2^{24}$\\[\baselineskip]
+\pause
+Reduced to: 256
+\end{frame}
+
+\subsection{Histogram Based Image Retrival}
+\begin{frame}
+\frametitle{Histogram Based Image Retrival}
+Two techniques:\\[\baselineskip]
+\pause
+\begin{description}
+\item[GCH] Global Color Histogram
+\pause
+\item[LCH] Local Color Histogram\\[\baselineskip]
+\pause
+\end{description}
+GCH:\\ Represents images with \textbf{single} histogram.\\[\baselineskip]
+\pause
+LCH:\\ Images are divided into fixed blocks of \textbf{size 8x8} \& histogram is obtained for \textbf{each} block
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Histogram Based Image Retrival}
+Steps for using histogram:\\
+\pause
+\begin{itemize}[label=$\star$]
+\setlength\itemsep{2em}
+
+\item Histograms of all images in the databes are computed \& stored
+\pause
+\item Histogram of the query image is computed
+\pause
+\item Measure similarity of database's images and query images using euclidian distance metrics
+\pause
+\item Identify relevant images using a fixed threshold value\\[\baselineskip]
+\end{itemize}
+\pause
+\textbf{Euclidian Distance Metrics?}\\[\baselineskip]
+\pause
+For \textbf{3D}
+\begin{equation}
+distance((x,y,z),(a,b,c)) = \sqrt{(x-a)^2+(y-b)^2+(z-c)^2}
+\end{equation}
+\pause
+Let,
+Image A: $(x_1, x_2,\ldots,x_n)$\\
+Image B: $(y_1, y_2,\ldots,y_n)$\\[\baselineskip]
+\pause
+Distance between A \& B = $\sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}$
+\end{frame}
+
+\subsection{Extraction of Visual Feature}
+\begin{frame}
+\frametitle{Extraction of Visual Feature}
+\pause
+Viusal features are extracted using color histograms and moments in equations...\textbf{MAMUN}\\[\baselineskip]
+\pause
+\begin{itemize}[label=$\star$]
+\setlength\itemsep{2em}
+
+\item Mean and std. deviations of database images are calculated and stored
+\pause
+\item Database's images's mean and std. deviations are compared with that of query image
+\pause
+\item Relevant images are ranked by using a fixed threshold value of the difference between the properties being compared\\[\baselineskip]
+\pause
+\end{itemize}
+\end{frame}
+
+\subsection{Coherence Bassed Image Retrival}
+\begin{frame}
+\frametitle{Coherence Measure}
+Pixels: \textbf{Coherent} or \textbf{Incoherent}\\[\baselineskip]
+\pause
+Coherent pixels:\\
+\pause
+\begin{itemize}[label=$\star$]
+\item Part of a sizable contiguous region
+\pause
+\item Pixel groups are determined by computing \textbf{connected components} using \textbf{8} connected neighbours within a color bucket
+\pause
+\item Size of connected components need to exceed a fixed value (1\% of the total image area)\\[\baselineskip]
+\pause
+\end{itemize}
+Incoherent pixels: The rest of the pixels\\[\baselineskip]
+\pause
+The color space of the image is discretized to \textbf{3 distinct color (R,G,B)}.\\[\baselineskip]
+\pause
+Pixels within a color bucket is classified as coherent or incoherent.\\[\baselineskip]
+\pause
+A \textbf{color coherence vector} is used to represent this classification for each color.\\[\baselineskip]
+\pause
+Relevant images are retrived by computing the similarity between the \textbf{query vector} and \textbf{image vectors}.
+
+\end{frame}
+
+\begin{frame}
+\fontsize{18pt}{30}\selectfont
+\centering
+RESULTS
+\end{frame}
+
+
+\section{Results}
+\begin{frame}
+\frametitle{Results}
+\pause
+General purpose image database containing 14500 images is used.\\[\baselineskip]
+\pause
+\textbf{Categories: }\\[\baselineskip]
+\pause
+\begin{multicols}{4}
+    \begin{itemize}[label=$\blacksquare$]
+        \item Africans \& villages
+        \item Beaches
+        \item Buildings
+        \item Buses
+        \item Dinosaurs
+        \item Elephants
+        \item Flowers
+        \item Horses
+        \item Mountains \& glaciers
+        \item Foods
+        \item Faces
+        \item Objects
+        \item Drawings
+        \item Textures
+        \item Natural scenes\\[\baselineskip]
+    \end{itemize}
+\end{multicols}
+\pause
+Image Format:\textbf{ JPEG}\\
+Imgae Size: \textbf{$384x256$}\\
+Image Representation: \textbf{RGB color space}\\[\baselineskip]
+\pause
+\textbf{Five} different image of each catergory are used as query image some having \textbf{uniform} color distribution, some having \textbf{non-uniform} color distribution and other having \textbf{average} color distribution\\
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Results}
+
+\pause
+\begin{minipage}{.9\textwidth}
+\begin{table}
+\caption{\textbf{Category - Dinosaurs}}
+
+\resizebox{.5\columnwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Descriptor & Recall & Precision\\
+\hline
+\multirow{2}{*}{\textbf{CM}} & 0.100137931 & 0.698748797\\
+& 0.09862069 & 0.754219409\\
+& 0.097586207 & 0.815092166\\
+\hline
+\multirow{2}{*}{\textbf{GCH}} & 0.099586207 & 0.529325513\\ & 0.09862069 & 0.580121704\\ & 0.096551724 & 0.615114236\\
+\hline
+\multirow{2}{*}{\textbf{LCH}} & 0.097586207 & 0.5\\ & 0.095586207 & 0.508064516\\
+& 0.093586207 & 0.534672971\\
+\hline
+\multirow{2}{*}{\textbf{CCV}} & 0.10062069 & 0.555597867\\ & 0.099586207 & 0.585801217\\ & 0.096551724 & 0.631483987\\
+\hline
+\end{tabular}
+}
+\end{table}
+\end{minipage}
+
+\pause
+\begin{minipage}{.9\textwidth}
+\begin{table}
+\caption{\textbf{Category - Africans}}
+
+\resizebox{.5\columnwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Descriptor & Recall & Precision\\
+\hline
+\multirow{2}{*}{\textbf{GCH \& CCV}} & 0.088531187 & 0.871287129\\
+& 0.08249497 & 0.872340426\\
+& 0.079476861 & 0.877777778\\
+\hline
+\multirow{2}{*}{\textbf{LCH \& CCV}} & 0.100603622 & 0.487804878\\
+& 0.099597586 & 0.5\\
+& 0.097585513 & 0.510526316\\
+\hline
+\multirow{2}{*}{\textbf{CCV, CM, LCH \& GCH}} & 0.095573441 & 0.95959596\\
+& 0.09054326 & 0.97826087\\
+& 0.088531187 & 0.988764045\\
+\hline
+\multirow{2}{*}{\textbf{GCH, LCH \& CCV}} & 0.098591549 & 0.439461883\\
+& 0.096579477 & 0.507936508\\
+& 0.095573441 & 0.50802139\\
+\hline
+\end{tabular}
+}
+\end{table}
+\end{minipage}
+\end{frame}
+
+
+
+\begin{frame}
+\fontsize{18pt}{30}\selectfont
+\centering
+DECISIONS
+\end{frame}
+
+
+\section{Decisions}
+\begin{frame}
+\frametitle{Decisions}
+\pause
+No feature is superior to other as performance is color distribution dependent.\\[\baselineskip]
+\pause
+\begin{description}
+\item[Uniform Color Distribution] Color histogram gives better performance
+\pause
+\item[Average Color Distribution] Color moments gives better performance
+\pause
+\item[Widely Scattered Colors] CCV gives better performance\\[\baselineskip]
+\end{description}
+\pause
+The \textbf{combination} of different descriptors gives most satisfactory results.
+\end{frame}
+
+\begin{frame}
+\fontsize{18pt}{30}\selectfont
+\centering
+Thank you!\\[\baselineskip]
+\pause
+Questions?
+\end{frame}
+
+
+\end{document}
