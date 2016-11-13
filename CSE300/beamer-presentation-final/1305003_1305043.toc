@@ -1,0 +1,13 @@
+\beamer@endinputifotherversion {3.36pt}
+\beamer@sectionintoc {2}{Problem}{4}{0}{1}
+\beamer@subsectionintoc {2}{1}{Image Retrieval}{5}{0}{1}
+\beamer@subsectionintoc {2}{2}{Application}{8}{0}{1}
+\beamer@sectionintoc {3}{Proposal}{10}{0}{2}
+\beamer@subsectionintoc {3}{1}{Color Features}{12}{0}{2}
+\beamer@sectionintoc {4}{Methodology}{28}{0}{3}
+\beamer@subsectionintoc {4}{1}{Color Reduction}{29}{0}{3}
+\beamer@subsectionintoc {4}{2}{Histogram Based Image Retrival}{33}{0}{3}
+\beamer@subsectionintoc {4}{3}{Extraction of Visual Feature}{47}{0}{3}
+\beamer@subsectionintoc {4}{4}{Coherence Bassed Image Retrival}{52}{0}{3}
+\beamer@sectionintoc {5}{Results}{62}{0}{4}
+\beamer@sectionintoc {6}{Decisions}{79}{0}{5}
