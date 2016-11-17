@@ -15,6 +15,7 @@ void yyerror(char*);
 
 extern YYSTYPE yylval;
 extern SymbolTable *myTable;
+extern FILE* logFile;
 
 
 
@@ -174,7 +175,19 @@ QUOTE_ERROR '[^'\n;]*
 "++"		|
 
 "--"		{
-			return INCOP;
+			buff="";buff+=yytext;
+			if(buff=="++"){
+				SymbolInfo* info=new SymbolInfo(buff,"INCOP");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
+				return INCOP;
+			}
+			else{
+			 	SymbolInfo* info=new SymbolInfo(buff,"DECOP");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
+			 	return DECOP;
+			 }
 
 	/*
 			fprintf(tokenFile,"<INCOP,%s>",yytext);
@@ -192,7 +205,12 @@ QUOTE_ERROR '[^'\n;]*
 "+"		|
 
 "-"		{
-		return ADDOP;
+			buff="";buff+=yytext;
+			SymbolInfo *info=new SymbolInfo(buff,"ADDOP");
+			yylval=(YYSTYPE)info;
+			myTable->Insert(*info);
+			return ADDOP;
+
 		/*	fprintf(tokenFile,"<ADDOP,%s>",yytext);
 			fprintf(logFile,"Line no %03d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
 			myInfo.setType("ADDOP");
@@ -205,6 +223,10 @@ QUOTE_ERROR '[^'\n;]*
 "*"		|
 "/"		|
 "%"		{
+			buff="";buff+=yytext;
+			SymbolInfo *info=new SymbolInfo(buff,"MULOP");
+			yylval=(YYSTYPE)info;
+			myTable->Insert(*info);
 			return MULOP;
 			/*fprintf(tokenFile,"<MULOP,%s>",yytext);
 			fprintf(logFile,"Line no %03d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
@@ -222,7 +244,10 @@ QUOTE_ERROR '[^'\n;]*
 ">="	|
 "=="	|
 "!="	{
-
+			buff="";buff+=yytext;
+			SymbolInfo* info=new SymbolInfo(buff,"RELOP");
+			yylval=(YYSTYPE)info;
+			myTable->Insert(*info);
 			return RELOP;
 		/*	fprintf(tokenFile,"<RELOP,%s>",yytext);
 			fprintf(logFile,"Line no %03d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
@@ -236,6 +261,10 @@ QUOTE_ERROR '[^'\n;]*
 		}
 
 "="		{
+			buff="";buff+=yytext;
+			SymbolInfo* info=new SymbolInfo(buff,"ASSIGNOP");
+			yylval=(YYSTYPE)info;
+			myTable->Insert(*info);
 			return ASSIGNOP;
 			/*fprintf(tokenFile,"<ASSIGNOP,%s>",yytext);
 			fprintf(logFile,"Line no %03d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
@@ -250,6 +279,10 @@ QUOTE_ERROR '[^'\n;]*
 "&&"	|
 "||"	|
 "!"		{
+			buff="";buff+=yytext;
+			SymbolInfo *info=new SymbolInfo(buff,"LOGICOP");
+			yylval=(YYSTYPE)info;
+			myTable->Insert(*info);
 			return LOGICOP;
 		/*	fprintf(tokenFile,"<LOGICOP,%s>",yytext);
 			fprintf(logFile,"Line no %03d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
@@ -265,11 +298,15 @@ QUOTE_ERROR '[^'\n;]*
 ")"		{
 			buff="";buff+=yytext;
 			if(buff=="("){
-				buff="LPAREN";
+				SymbolInfo *info=new SymbolInfo(buff,"LPAREN");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
 				return LPAREN;
 			}
 			else{
-				buff="RPAREN";
+				SymbolInfo *info=new SymbolInfo(buff,"RPAREN");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
 				return RPAREN;	
 			} 
 /*
@@ -287,11 +324,15 @@ QUOTE_ERROR '[^'\n;]*
 "}"		{
 			buff="";buff+=yytext;
 			if(buff=="{"){
-				buff="LCURL";
+				SymbolInfo* info=new SymbolInfo(buff,"LCURL");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
 				return LCURL;
 			}
 			else{
-				buff="RCURL";
+				SymbolInfo* info=new SymbolInfo(buff,"RCURL");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
 				return RCURL;
 			}
 
@@ -310,11 +351,15 @@ QUOTE_ERROR '[^'\n;]*
 "]"		{
 			buff="";buff+=yytext;
 			if(buff=="["){
-				buff="LTHIRD";
+				SymbolInfo* info=new SymbolInfo(buff,"LTHIRD");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
 				return LTHIRD;
 			}
 			else{
-				buff="RTHIRD";
+				SymbolInfo* info=new SymbolInfo(buff,"RTHIRD");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
 				return RTHIRD;
 			}
 			/*
@@ -330,6 +375,10 @@ QUOTE_ERROR '[^'\n;]*
 
 
 ","		{
+			buff="";buff+=yytext;
+			SymbolInfo* info=new SymbolInfo(buff,"COMMA");
+			yylval=(YYSTYPE)info;
+			myTable->Insert(*info);
 			return COMMA;
 			/*
 			fprintf(tokenFile,"<COMMA,%s>",yytext);
@@ -343,6 +392,10 @@ QUOTE_ERROR '[^'\n;]*
 		*/}
 
 ";"		{
+			buff="";buff+=yytext;
+			SymbolInfo* info=new SymbolInfo(buff,"SEMICOLON");
+			yylval=(YYSTYPE)info;
+			myTable->Insert(*info);
 			return SEMICOLON;
 			/*
 			fprintf(tokenFile,"<SEMICOLON,%s>",yytext);
@@ -356,6 +409,10 @@ QUOTE_ERROR '[^'\n;]*
 		*/}
 
 {IDENTIFIER} {
+				buff="";buff+=yytext;
+				SymbolInfo* info=new SymbolInfo(buff,"ID");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
 				return ID;
 			/*	fprintf(tokenFile,"<ID,%s>",yytext);
 				fprintf(logFile,"Line no %03d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
@@ -370,6 +427,11 @@ QUOTE_ERROR '[^'\n;]*
 
 		
 {INT_LIT} 	{
+				buff="";buff+=yytext;
+				SymbolInfo*info=new SymbolInfo(buff,"CONST_INT");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
+
 				return CONST_INT;
 	/*
 				fprintf(tokenFile,"<CONST_INT,%s>",yytext);
@@ -383,7 +445,12 @@ QUOTE_ERROR '[^'\n;]*
 	*/		}
 
 {FLOAT_LIT} {
-				return FLOAT_LIT;
+
+				buff="";buff+=yytext;
+				SymbolInfo* info=new SymbolInfo(buff,"CONST_FLOAT");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
+				return CONST_FLOAT;
 	/*
 				fprintf(tokenFile,"<CONST_FLOAT,%s>",yytext);
 				fprintf(logFile,"Line no %03d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
@@ -396,7 +463,11 @@ QUOTE_ERROR '[^'\n;]*
 	*/		}
 
 {CHAR_LIT} 	{
-				return CHAR_LIT;
+				buff="";buff+=yytext;
+				SymbolInfo *info=new SymbolInfo(buff,"CONST_CHAR");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
+				return CONST_CHAR;
 
 	/*
 				fprintf(tokenFile,"<CONST_CHAR,%s>",yytext);
@@ -510,6 +581,10 @@ QUOTE_ERROR '[^'\n;]*
 <mlstring>{STRING_LIT}	{
 					buff+=yytext;
 					BEGIN(INITIAL);
+
+					SymbolInfo *info=new SymbolInfo(buff,"STRING");
+					yylval=(YYSTYPE)info;
+					myTable->Insert(*info);
 					return STRING;
 					// fprintf(tokenFile,"<STRING,%s>",buff.c_str());
 					// fprintf(logFile,"Line no %03d: TOKEN <STRING> Lexeme",myCount);
@@ -556,6 +631,23 @@ QUOTE_ERROR '[^'\n;]*
 				BEGIN(INITIAL);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
+"println"	{
+
+			return PRINTLN;
+			
+			}
+
+"main"		{
+			return MAIN;
+			}
+
+"!"		{
+				buff="";buff+=yytext;
+				SymbolInfo* info=new SymbolInfo(buff,"NOT");
+				yylval=(YYSTYPE)info;
+				myTable->Insert(*info);
+				return NOT;
+		}
 {MULTI_CHAR_CONST} {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -612,3 +704,31 @@ int yywrap(void)
 
 
 
+/*int main(int argc,char *argv[]){
+	
+	if(argc!=2){
+		printf("No input file provided\n");
+		return 0;
+	}
+	
+	FILE *fin=fopen(argv[1],"r");
+	if(fin==NULL){
+		printf("File can't be opened\n");
+		return 0;
+	}
+	
+	logFile= fopen("1305043_log.txt","w");
+	tokenFile= fopen("1305043_token.txt","w");
+	myTable=new SymbolTable(15);
+
+	yyin=fin;
+	yylex();
+
+	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
+	fprintf(logFile,"\n\nTOTAL ERRORS: %03d\n",error_count);
+
+	fclose(yyin);
+	fclose(tokenFile);
+	fclose(logFile);
+	return 0;
+}*/

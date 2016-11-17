@@ -2,6 +2,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include"1305043_symbolTable.cpp"
 #define YYSTYPE double      /* yyparse() stack type */
 
 void yyerror(char *s){
@@ -9,10 +10,16 @@ void yyerror(char *s){
 }
 
 int yylex(void);
+extern FILE* yyin;
+SymbolTable *myTable;
+FILE* logFile;
+
+extern int line_count;
+extern int error_count;
 
 %}
 
-%token IF ELSE FOR WHILE DO BREAK INT CHAR FLOAT DOUBLE VOID RETURN SWITCH CASE DEFAULT CONTINUE INCOP ADDOP MULOP RELOP ASSIGNOP LOGICOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON ID CONST_LIT FLOAT_LIT CHAR_LIT STRING
+%token IF ELSE FOR WHILE DO BREAK INT CHAR FLOAT DOUBLE VOID RETURN SWITCH CASE DEFAULT CONTINUE INCOP DECOP ADDOP MULOP RELOP ASSIGNOP LOGICOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON ID CONST_INT CONST_FLOAT CONST_CHAR STRING MAIN PRINTLN NOT
 
 %%
 
@@ -100,9 +107,34 @@ factor	: variable
 	;
 %%
 
-main(void)
+main(int argc,char *argv[])
 {
-	//yydebug=1;
+/*	//yydebug=1;
 	yyparse();
+	return 0;
+*/
+
+
+	if(argc!=2){
+		printf("No input file provided\n");
+		return 0;
+	}
+	
+	FILE *fin=fopen(argv[1],"r");
+	if(fin==NULL){
+		printf("File can't be opened\n");
+		return 0;
+	}
+	
+	logFile= fopen("1305043_log.txt","w");
+	myTable=new SymbolTable(15);
+
+	yyin=fin;
+	yyparse();
+
+	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
+
+	fclose(yyin);
+	fclose(logFile);
 	return 0;
 }

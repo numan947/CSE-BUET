@@ -11,15 +11,6 @@ using namespace std;
  * @param  b [string 2]
  * @return   [true or false based on the testing]
  */
-bool compareString(string a, string b)
-{
-    if(a.size()!=b.size())return false;
-
-    int len=a.size();
-    for(int i=0;i<len;i++)if(a[i]!=b[i])return false;
-
-    return true;
-}
 
 /**
  * [SymbolInfo class contain properties of an item in
@@ -29,9 +20,14 @@ class SymbolInfo{
 
     string Name;
     string Type;
+    string Value;
 
 public:
-    SymbolInfo(String Name, String Type)
+    SymbolInfo()
+    {
+        
+    }
+    SymbolInfo(string Name, string Type)
     {
         this->Name=Name;
         this->Type=Type;
@@ -45,6 +41,10 @@ public:
     {
         this->Type=type;
     }
+    void setValue(string value)
+    {
+        this->Value=value;
+    }
 
     string getName()
     {
@@ -54,6 +54,10 @@ public:
     {
         return this->Type;
     }
+    string getValue()
+    {
+        return this->Value;
+    } 
 };
 
 
@@ -100,10 +104,22 @@ class LinkeList{
         Node *tmp=head;
         while(tmp!=0){
             if(compareString(tmp->val.getName(),val))return tmp;
+
             tmp=tmp->next;
         }
         return 0;
     }
+
+  bool compareString(string a, string b)
+	{
+	    if(a.size()!=b.size())return false;
+
+	    int len=a.size();
+	    for(int i=0;i<len;i++)if(a[i]!=b[i])return false;
+
+	    return true;
+	}
+
 
 public:
     /**
