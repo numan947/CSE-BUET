@@ -78,8 +78,8 @@ extern FILE* yyin;
 SymbolTable *myTable;
 FILE* logFile;
 
-extern int line_count;
-extern int error_count;
+int line_count=1;
+int error_count=0;
 
 
 #line 86 "y.tab.c" /* yacc.c:339  */
@@ -516,11 +516,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    27,    27,    31,    32,    33,    37,    38,    41,    42,
-      43,    46,    47,    48,    49,    52,    53,    57,    58,    59,
-      60,    61,    62,    63,    64,    67,    68,    71,    72,    75,
-      76,    79,    80,    83,    84,    87,    88,    91,    92,    95,
-      96,    97,   100,   101,   102,   103,   104,   105,   106
+       0,    26,    26,    30,    31,    32,    36,    37,    40,    41,
+      42,    45,    46,    47,    48,    51,    52,    56,    57,    58,
+      59,    60,    61,    62,    63,    66,    67,    70,    71,    74,
+      75,    78,    79,    82,    83,    86,    87,    90,    91,    94,
+      95,    96,    99,   100,   101,   102,   103,   104,   105
 };
 #endif
 
@@ -1613,7 +1613,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 108 "1305043.y" /* yacc.c:1906  */
+#line 107 "1305043.y" /* yacc.c:1906  */
 
 
 main(int argc,char *argv[])
@@ -1641,9 +1641,11 @@ main(int argc,char *argv[])
 	yyin=fin;
 	yyparse();
 
-	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
+
 
 	fclose(yyin);
+	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
 	fclose(logFile);
+
 	return 0;
 }

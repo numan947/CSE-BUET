@@ -1,3 +1,9 @@
+Line no 001: TOKEN <INT> Lexeme <int> found
+
+
+Line no 001: TOKEN <ID> Lexeme <main> found
+
+
 
 
 TOTAL LINES: 001

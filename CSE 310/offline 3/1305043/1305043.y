@@ -14,15 +14,14 @@ extern FILE* yyin;
 SymbolTable *myTable;
 FILE* logFile;
 
-extern int line_count;
-extern int error_count;
+int line_count=1;
+int error_count=0;
 
 %}
 
 %token IF ELSE FOR WHILE DO BREAK INT CHAR FLOAT DOUBLE VOID RETURN SWITCH CASE DEFAULT CONTINUE INCOP DECOP ADDOP MULOP RELOP ASSIGNOP LOGICOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON ID CONST_INT CONST_FLOAT CONST_CHAR STRING MAIN PRINTLN NOT
 
 %%
-
 
 Program : INT MAIN LPAREN RPAREN compound_statement
 	;
@@ -132,9 +131,11 @@ main(int argc,char *argv[])
 	yyin=fin;
 	yyparse();
 
-	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
+
 
 	fclose(yyin);
+	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
 	fclose(logFile);
+
 	return 0;
 }
