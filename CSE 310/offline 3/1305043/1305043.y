@@ -20,14 +20,16 @@ int error_count=0;
 %}
 
 %token IF ELSE FOR WHILE DO BREAK INT CHAR FLOAT DOUBLE VOID RETURN SWITCH CASE DEFAULT CONTINUE INCOP DECOP ADDOP MULOP RELOP ASSIGNOP LOGICOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON ID CONST_INT CONST_FLOAT CONST_CHAR STRING MAIN PRINTLN NOT
+%nonassoc HELP_ELSE_GET_PRECEDENCE
+%nonassoc ELSE
 
 %%
 
-Program : INT MAIN LPAREN RPAREN compound_statement
+Program : INT MAIN LPAREN RPAREN compound_statement {printf("IS IT A ZOMBIE?");}
 	;
 
 
-compound_statement : LCURL var_declaration statements RCURL
+compound_statement : LCURL var_declaration statements RCURL 
 		   | LCURL statements RCURL
 		   | LCURL RCURL
 		   ;
@@ -53,16 +55,22 @@ statements : statement
 	   ;
 
 
+
+
+
+
 statement  : expression_statement 
 	   | compound_statement 
 	   | FOR LPAREN expression_statement expression_statement expression RPAREN statement 
-	   | IF LPAREN expression RPAREN statement
+	   | IF LPAREN expression RPAREN statement %prec HELP_ELSE_GET_PRECEDENCE
 	   | IF LPAREN expression RPAREN statement ELSE statement
 	   | WHILE LPAREN expression RPAREN statement 
 	   | PRINTLN LPAREN ID RPAREN SEMICOLON 
 	   | RETURN expression SEMICOLON 
 	   ;
-		
+
+
+
 expression_statement	: SEMICOLON			
 			| expression SEMICOLON 
 			;

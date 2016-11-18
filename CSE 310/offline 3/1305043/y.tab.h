@@ -83,7 +83,8 @@ extern int yydebug;
     STRING = 293,
     MAIN = 294,
     PRINTLN = 295,
-    NOT = 296
+    NOT = 296,
+    HELP_ELSE_GET_PRECEDENCE = 297
   };
 #endif
 /* Tokens.  */
@@ -126,6 +127,7 @@ extern int yydebug;
 #define MAIN 294
 #define PRINTLN 295
 #define NOT 296
+#define HELP_ELSE_GET_PRECEDENCE 297
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

@@ -1,4 +1,4 @@
-if bison -d -y 1305043.y; then
+if bison -d -v -y 1305043.y; then
 	echo 'bison xxx.y DONE'
 	if g++ -w -c -o y.o y.tab.c; then
 		echo 'g++ y.tab.c DONE'
