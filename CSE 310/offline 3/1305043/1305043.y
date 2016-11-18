@@ -14,7 +14,7 @@ extern FILE* yyin;
 SymbolTable *myTable;
 FILE* logFile;
 
-int line_count=1;
+int line_count=0;
 int error_count=0;
 
 %}
@@ -25,7 +25,7 @@ int error_count=0;
 
 %%
 
-Program : INT MAIN LPAREN RPAREN compound_statement {printf("IS IT A ZOMBIE?");}
+Program : INT MAIN LPAREN RPAREN compound_statement 
 	;
 
 

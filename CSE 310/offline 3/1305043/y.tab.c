@@ -78,7 +78,7 @@ extern FILE* yyin;
 SymbolTable *myTable;
 FILE* logFile;
 
-int line_count=1;
+int line_count=0;
 int error_count=0;
 
 
@@ -1386,14 +1386,8 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 2:
-#line 28 "1305043.y" /* yacc.c:1646  */
-    {printf("IS IT A ZOMBIE?");}
-#line 1393 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-
-#line 1397 "y.tab.c" /* yacc.c:1646  */
+      
+#line 1391 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

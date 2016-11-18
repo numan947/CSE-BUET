@@ -1,9 +1,1032 @@
+Line no 000: TOKEN <INT> Lexeme <int> found
+
+
+Line no 000: TOKEN <LPAREN> Lexeme <(> found
+
+
+1 --> <( : LPAREN>
+
+
+Line no 000: TOKEN <RPAREN> Lexeme <)> found
+
+
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+
+
+Line no 000: TOKEN <LCURL> Lexeme <{> found
+
+
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+9 --> <{ : LCURL>
+
+
 Line no 001: TOKEN <INT> Lexeme <int> found
 
 
-Line no 001: TOKEN <ID> Lexeme <main> found
+Line no 001: TOKEN <ID> Lexeme <a> found
+
+
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+9 --> <{ : LCURL>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <LTHIRD> Lexeme <[> found
+
+
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <CONST_INT> Lexeme <2> found
+
+
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <RTHIRD> Lexeme <]> found
+
+
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <COMMA> Lexeme <,> found
+
+
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+5 --> <, : COMMA>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <ID> Lexeme <c> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+5 --> <, : COMMA>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <COMMA> Lexeme <,> found
+<, : COMMA> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+5 --> <, : COMMA>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <ID> Lexeme <i> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+5 --> <, : COMMA>
+6 --> <i : ID>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <COMMA> Lexeme <,> found
+<, : COMMA> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+5 --> <, : COMMA>
+6 --> <i : ID>
+7 --> <[ : LTHIRD>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <ID> Lexeme <j> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+5 --> <, : COMMA>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <FLOAT> Lexeme <float> found
+
+
+Line no 001: TOKEN <ID> Lexeme <d> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
+<; : SEMICOLON> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 002: TOKEN <ID> Lexeme <a> found
+<a : ID> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 002: TOKEN <LTHIRD> Lexeme <[> found
+<[ : LTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 002: TOKEN <CONST_INT> Lexeme <0> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 002: TOKEN <RTHIRD> Lexeme <]> found
+<] : RTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 002: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 002: TOKEN <CONST_INT> Lexeme <1> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 002: TOKEN <SEMICOLON> Lexeme <;> found
+<; : SEMICOLON> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 003: TOKEN <ID> Lexeme <a> found
+<a : ID> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 003: TOKEN <LTHIRD> Lexeme <[> found
+<[ : LTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 003: TOKEN <CONST_INT> Lexeme <1> found
+<1 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 003: TOKEN <RTHIRD> Lexeme <]> found
+<] : RTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 003: TOKEN <ASSIGNOP> Lexeme <=> found
+<= : ASSIGNOP> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+
+
+Line no 003: TOKEN <CONST_INT> Lexeme <5> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 003: TOKEN <SEMICOLON> Lexeme <;> found
+<; : SEMICOLON> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <ID> Lexeme <i> found
+<i : ID> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <ASSIGNOP> Lexeme <=> found
+<= : ASSIGNOP> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <ID> Lexeme <a> found
+<a : ID> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <LTHIRD> Lexeme <[> found
+<[ : LTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <CONST_INT> Lexeme <0> found
+<0 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <RTHIRD> Lexeme <]> found
+<] : RTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <ADDOP> Lexeme <+> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <ID> Lexeme <a> found
+<a : ID> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <LTHIRD> Lexeme <[> found
+<[ : LTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <CONST_INT> Lexeme <1> found
+<1 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <RTHIRD> Lexeme <]> found
+<] : RTHIRD> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 004: TOKEN <SEMICOLON> Lexeme <;> found
+<; : SEMICOLON> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <ID> Lexeme <j> found
+<j : ID> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <ASSIGNOP> Lexeme <=> found
+<= : ASSIGNOP> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <CONST_INT> Lexeme <2> found
+<2 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <MULOP> Lexeme <*> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <CONST_INT> Lexeme <3> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <ADDOP> Lexeme <+> found
+<+ : ADDOP> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <LPAREN> Lexeme <(> found
+<( : LPAREN> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <CONST_INT> Lexeme <5> found
+<5 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <MULOP> Lexeme <%> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <CONST_INT> Lexeme <3> found
+<3 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <RELOP> Lexeme <<> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <CONST_INT> Lexeme <4> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT>
+
+
+Line no 005: TOKEN <LOGICOP> Lexeme <&&> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 005: TOKEN <CONST_INT> Lexeme <8> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 005: TOKEN <RPAREN> Lexeme <)> found
+<) : RPAREN> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 005: TOKEN <LOGICOP> Lexeme <||> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP> <|| : LOGICOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 005: TOKEN <CONST_INT> Lexeme <2> found
+<2 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP> <|| : LOGICOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 005: TOKEN <SEMICOLON> Lexeme <;> found
+<; : SEMICOLON> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP> <|| : LOGICOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 006: TOKEN <RETURN> Lexeme <return> found
+
+
+Line no 006: TOKEN <CONST_INT> Lexeme <0> found
+<0 : CONST_INT> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP> <|| : LOGICOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 006: TOKEN <SEMICOLON> Lexeme <;> found
+<; : SEMICOLON> already exists
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP> <|| : LOGICOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+
+Line no 007: TOKEN <RCURL> Lexeme <}> found
+
+
+0 --> <c : ID>
+1 --> <( : LPAREN> <d : ID>
+2 --> <) : RPAREN> <8 : CONST_INT>
+3 --> <* : MULOP>
+4 --> <+ : ADDOP> <|| : LOGICOP>
+5 --> <, : COMMA> <; : SEMICOLON>
+6 --> <i : ID> << : RELOP>
+7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
+9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+10 --> <1 : CONST_INT>
+11 --> <2 : CONST_INT> <} : RCURL>
+12 --> <3 : CONST_INT>
+13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+14 --> <5 : CONST_INT> <&& : LOGICOP>
 
 
 
 
-TOTAL LINES: 001
+TOTAL LINES: 008
