@@ -714,8 +714,31 @@ extern int error_count;
 string buff;
 int myCount;
 bool checkInsert;
+SymbolInfo dummy;
 
-#line 719 "lex.yy.c"
+
+void printNow(string token,string lexeme,int line_no,bool insert,SymbolInfo info)
+{
+	if(!insert){
+			fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_no,token.c_str(),lexeme.c_str());
+			fprintf(logFile,"\n\n");
+			yylval.helpString=lexeme.c_str();
+	}
+	else{
+		checkInsert=myTable->Insert(info);
+		fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,token.c_str(),lexeme.c_str());
+		if(!checkInsert)fprintf(logFile,"<%s : %s> already exists\n",lexeme.c_str(),token.c_str());
+		fprintf(logFile,"\n\n");
+		myTable->Print(logFile);
+		fprintf(logFile,"\n\n");
+		yylval.helpInfo=&info;
+	}
+
+}
+
+
+
+#line 742 "lex.yy.c"
 
 #define INITIAL 0
 #define mlcomment 1
@@ -936,11 +959,11 @@ YY_DECL
 		}
 
 	{
-#line 60 "1305043.l"
+#line 83 "1305043.l"
 
 
 
-#line 944 "lex.yy.c"
+#line 967 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1000,732 +1023,398 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 63 "1305043.l"
+#line 86 "1305043.l"
 {line_count++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 65 "1305043.l"
+#line 88 "1305043.l"
 {}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 68 "1305043.l"
+#line 91 "1305043.l"
 {
-			
-			//fprintf(tokenFile,"<IF>");
-			fprintf(logFile,"Line no %03d: TOKEN <IF> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("IF",buff,line_count,false,dummy);
 			return IF; 
 		}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 76 "1305043.l"
+#line 97 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <ELSE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-			return ELSE;
-/*			fprintf(tokenFile,"<ELSE>");
-			fprintf(logFile,"Line no %03d: TOKEN <ELSE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");*/
+			buff="";buff+=yytext;
+			printNow("ELSE",buff,line_count,false,dummy);
+			return ELSE; 
 		}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 84 "1305043.l"
+#line 102 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <FOR> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-			return FOR;
-		/*	fprintf(tokenFile,"<FOR>");
-			fprintf(logFile,"Line no %03d: TOKEN <FOR> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+			buff="";buff+=yytext;
+			printNow("FOR",buff,line_count,false,dummy);
+			return FOR; 
+		}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 92 "1305043.l"
-{	fprintf(logFile,"Line no %03d: TOKEN <WHILE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-			return WHILE;
-			/*fprintf(tokenFile,"<WHILE>");
-			fprintf(logFile,"Line no %03d: TOKEN <WHILE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+#line 107 "1305043.l"
+{	
+			buff="";buff+=yytext;
+			printNow("WHILE",buff,line_count,false,dummy);
+			return WHILE; 
+		}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 99 "1305043.l"
+#line 112 "1305043.l"
 {	
-			fprintf(logFile,"Line no %03d: TOKEN <DO> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("DO",buff,line_count,false,dummy);
 			return DO;
-			/*fprintf(tokenFile,"<DO>");
-			fprintf(logFile,"Line no %03d: TOKEN <DO> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");*/
 		}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 107 "1305043.l"
+#line 117 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <BREAK> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("BREAK",buff,line_count,false,dummy);
 			return BREAK;
-			/*fprintf(tokenFile,"<BREAK>");
-			fprintf(logFile,"Line no %03d: TOKEN <BREAK> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 115 "1305043.l"
+#line 122 "1305043.l"
 {
 			
-		/*	fprintf(tokenFile,"<INT>");*/
-			fprintf(logFile,"Line no %03d: TOKEN <INT> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("INT",buff,line_count,false,dummy);
 			return INT;
 		}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 122 "1305043.l"
+#line 128 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <CHAR> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("CHAR",buff,line_count,false,dummy);
 			return CHAR;
-		/*
-			fprintf(tokenFile,"<CHAR>");
-			fprintf(logFile,"Line no %03d: TOKEN <CHAR> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 131 "1305043.l"
+#line 133 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <FLOAT> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("FLOAT",buff,line_count,false,dummy);
 			return FLOAT;
-/*			fprintf(tokenFile,"<FLOAT>");
-			fprintf(logFile,"Line no %03d: TOKEN <FLOAT> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");*/
 		}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 139 "1305043.l"
+#line 138 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <DOUBLE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("DOUBLE",buff,line_count,false,dummy);
 			return DOUBLE;
-			/*
-			fprintf(tokenFile,"<DOUBLE>");
-			fprintf(logFile,"Line no %03d: TOKEN <DOUBLE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 148 "1305043.l"
+#line 143 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <VOID> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("VOID",buff,line_count,false,dummy);
 			return VOID;
-			/*
-			fprintf(tokenFile,"<VOID>");
-			fprintf(logFile,"Line no %03d: TOKEN <VOID> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 157 "1305043.l"
+#line 148 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <RETURN> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("RETURN",buff,line_count,false,dummy);
 			return RETURN;
-			/*
-			fprintf(tokenFile,"<RETURN>");
-			fprintf(logFile,"Line no %03d: TOKEN <RETURN> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 166 "1305043.l"
+#line 153 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <SWITCH> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("SWITCH",buff,line_count,false,dummy);
 			return SWITCH;
-			/*
-			fprintf(tokenFile,"<SWITCH>");
-			fprintf(logFile,"Line no %03d: TOKEN <SWITCH> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 175 "1305043.l"
+#line 158 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <CASE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("CASE",buff,line_count,false,dummy);
 			return CASE;
-			/*
-			fprintf(tokenFile,"<CASE>");
-			fprintf(logFile,"Line no %03d: TOKEN <CASE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 184 "1305043.l"
+#line 163 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <DEFAULT> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("DEFAULT",buff,line_count,false,dummy);
 			return DEFAULT;
-			/*
-			fprintf(tokenFile,"<DEFAULT>");
-			fprintf(logFile,"Line no %03d: TOKEN <DEFAULT> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 193 "1305043.l"
+#line 168 "1305043.l"
 {
-			fprintf(logFile,"Line no %03d: TOKEN <CONTINUE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
+			buff="";buff+=yytext;
+			printNow("CONTINUE",buff,line_count,false,dummy);
 			return CONTINUE;
-			/*
-			fprintf(tokenFile,"<CONTINUE>");
-			fprintf(logFile,"Line no %03d: TOKEN <CONTINUE> Lexeme <%s> found\n",line_count,yytext);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 203 "1305043.l"
+#line 174 "1305043.l"
 {
-
+			buff="";buff+=yytext;
+			printNow("PRINTLN",buff,line_count,false,dummy);
 			return PRINTLN;
-			
 			}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 209 "1305043.l"
+#line 180 "1305043.l"
 {
+			buff="";buff+=yytext;
+			printNow("MAIN",buff,line_count,false,dummy);
 			return MAIN;
 			}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 213 "1305043.l"
+#line 186 "1305043.l"
 {
-				buff="";buff+=yytext;
-				SymbolInfo* info=new SymbolInfo(buff,"NOT");
-				yylval=(YYSTYPE)info;
-				
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <NOT> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : NOT> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
-				return NOT;
+			buff="";buff+=yytext;
+			SymbolInfo* info=new SymbolInfo(buff,"NOT");
+			printNow("NOT",buff,line_count,false,*info);
+			return NOT;
 		}
 	YY_BREAK
 case 22:
-#line 230 "1305043.l"
+#line 195 "1305043.l"
 case 23:
 YY_RULE_SETUP
-#line 231 "1305043.l"
+#line 196 "1305043.l"
 {
-			buff="";buff+=yytext;
-			if(buff=="++"){
-				SymbolInfo* info=new SymbolInfo(buff,"INCOP");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <INCOP> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : INCOP> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-				
-				return INCOP;
+				buff="";buff+=yytext;
+					if(buff=="++"){
+					SymbolInfo* info=new SymbolInfo(buff,"INCOP");
+					printNow("INCOP",buff,line_count,false,*info);
+					return INCOP;
+				}
+				else{
+					SymbolInfo* info=new SymbolInfo(buff,"DECOP");
+					printNow("DECOP",buff,line_count,false,*info);
+				 	return DECOP;
+				 }
 			}
-			else{
-			 	SymbolInfo* info=new SymbolInfo(buff,"DECOP");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <DECOP> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : DECOP> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
-
-			 	return DECOP;
-			 }
-			
-
-
-	/*
-			fprintf(tokenFile,"<INCOP,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <INCOP> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("INCOP");
-			myInfo.setName(yytext);
-			fprintf(logFile,"\n\n");
-*/		}
 	YY_BREAK
 case 24:
-#line 274 "1305043.l"
+#line 213 "1305043.l"
 case 25:
 YY_RULE_SETUP
-#line 275 "1305043.l"
+#line 214 "1305043.l"
 {
 			buff="";buff+=yytext;
-			SymbolInfo *info=new SymbolInfo(buff,"ADDOP");
-			yylval=(YYSTYPE)info;
-
-			checkInsert=myTable->Insert(*info);
-			fprintf(logFile,"Line no %03d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
-			if(!checkInsert)fprintf(logFile,"<%s : ADDOP> already exists\n",yytext);
-			fprintf(logFile,"\n\n");
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-
-
-
+			SymbolInfo* info=new SymbolInfo(buff,"ADDOP");
+			printNow("ADDOP",buff,line_count,false,*info);
 			return ADDOP;
-
-		/*	fprintf(tokenFile,"<ADDOP,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <ADDOP> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("ADDOP");
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : ADDOP> already exists\n",yytext);
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 26:
-#line 301 "1305043.l"
+#line 221 "1305043.l"
 case 27:
-#line 302 "1305043.l"
+#line 222 "1305043.l"
 case 28:
 YY_RULE_SETUP
-#line 302 "1305043.l"
+#line 222 "1305043.l"
 {
 			buff="";buff+=yytext;
-			SymbolInfo *info=new SymbolInfo(buff,"MULOP");
-			yylval=(YYSTYPE)info;
-
-			checkInsert=myTable->Insert(*info);
-			fprintf(logFile,"Line no %03d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
-			if(!checkInsert)fprintf(logFile,"<%s : MULOP> already exists\n",yytext);
-			fprintf(logFile,"\n\n");
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-
-			return MULOP;
-			/*fprintf(tokenFile,"<MULOP,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <MULOP> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("MULOP");
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : MULOP> already exists\n",yytext);
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-		*/}
+			SymbolInfo* info=new SymbolInfo(buff,"MULOP");
+			printNow("MULOP",buff,line_count,false,*info);
+			return ADDOP;
+		}
 	YY_BREAK
 case 29:
-#line 326 "1305043.l"
+#line 230 "1305043.l"
 case 30:
-#line 327 "1305043.l"
+#line 231 "1305043.l"
 case 31:
-#line 328 "1305043.l"
+#line 232 "1305043.l"
 case 32:
-#line 329 "1305043.l"
+#line 233 "1305043.l"
 case 33:
-#line 330 "1305043.l"
+#line 234 "1305043.l"
 case 34:
 YY_RULE_SETUP
-#line 330 "1305043.l"
+#line 234 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"RELOP");
-			yylval=(YYSTYPE)info;
-			
-			checkInsert=myTable->Insert(*info);
-			fprintf(logFile,"Line no %03d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
-			if(!checkInsert)fprintf(logFile,"<%s : RELOP> already exists\n",yytext);
-			fprintf(logFile,"\n\n");
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-			
+			printNow("RELOP",buff,line_count,false,*info);
 			return RELOP;
-		/*	fprintf(tokenFile,"<RELOP,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <RELOP> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("RELOP");
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : RELOP> already exists\n",yytext);
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-*/
 		}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 354 "1305043.l"
+#line 241 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"ASSIGNOP");
-			yylval=(YYSTYPE)info;
-
-			checkInsert=myTable->Insert(*info);
-			fprintf(logFile,"Line no %03d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
-			if(!checkInsert)fprintf(logFile,"<%s : ASSIGNOP> already exists\n",yytext);
-			fprintf(logFile,"\n\n");
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-
+			printNow("ASSIGNOP",buff,line_count,false,*info);
 			return ASSIGNOP;
-			/*fprintf(tokenFile,"<ASSIGNOP,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <ASSIGNOP> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("ASSIGNOP");
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : ASSIGNOP> already exists\n",yytext);
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");*/
 		}
 	YY_BREAK
 case 36:
-#line 378 "1305043.l"
+#line 249 "1305043.l"
 case 37:
 YY_RULE_SETUP
-#line 378 "1305043.l"
+#line 249 "1305043.l"
 {
 			buff="";buff+=yytext;
-			SymbolInfo *info=new SymbolInfo(buff,"LOGICOP");
-			yylval=(YYSTYPE)info;
-
-			checkInsert=myTable->Insert(*info);
-			fprintf(logFile,"Line no %03d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
-			if(!checkInsert)fprintf(logFile,"<%s : LOGICOP> already exists\n",yytext);
-			fprintf(logFile,"\n\n");
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-
+			buff="";buff+=yytext;
+			SymbolInfo* info=new SymbolInfo(buff,"LOGICOP");
+			printNow("LOGICOP",buff,line_count,false,*info);
 			return LOGICOP;
-		/*	fprintf(tokenFile,"<LOGICOP,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <LOGICOP> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("LOGICOP");
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : LOGICOP> already exists\n",yytext);
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 38:
-#line 402 "1305043.l"
+#line 258 "1305043.l"
 case 39:
 YY_RULE_SETUP
-#line 402 "1305043.l"
+#line 258 "1305043.l"
 {
 			buff="";buff+=yytext;
 			if(buff=="("){
-				SymbolInfo *info=new SymbolInfo(buff,"LPAREN");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <LPAREN> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : LPAREN> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
+				SymbolInfo* info=new SymbolInfo(buff,"LPAREN");
+				printNow("LPAREN",buff,line_count,false,*info);
 				return LPAREN;
 			}
 			else{
-				SymbolInfo *info=new SymbolInfo(buff,"RPAREN");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <RPAREN> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : RPAREN> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
+				SymbolInfo* info=new SymbolInfo(buff,"RPAREN");
+				printNow("RPAREN",buff,line_count,false,*info);
 				return RPAREN;	
 			} 
 		}
 	YY_BREAK
 case 40:
-#line 433 "1305043.l"
+#line 273 "1305043.l"
 case 41:
 YY_RULE_SETUP
-#line 433 "1305043.l"
+#line 273 "1305043.l"
 {
 			buff="";buff+=yytext;
 			if(buff=="{"){
 				SymbolInfo* info=new SymbolInfo(buff,"LCURL");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <LCURL> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : LCURL> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
+				printNow("LCURL",buff,line_count,false,*info);
 				return LCURL;
 			}
 			else{
 				SymbolInfo* info=new SymbolInfo(buff,"RCURL");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <RCURL> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : RCURL> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
+				printNow("RCURL",buff,line_count,false,*info);
 				return RCURL;
 			}
-
-			/*
-			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
-			myInfo.setType(buff);
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : %s> already exists\n",yytext,buff.c_str());
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 42:
-#line 474 "1305043.l"
+#line 288 "1305043.l"
 case 43:
 YY_RULE_SETUP
-#line 474 "1305043.l"
+#line 288 "1305043.l"
 {
 			buff="";buff+=yytext;
 			if(buff=="["){
 				SymbolInfo* info=new SymbolInfo(buff,"LTHIRD");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <LTHIRD> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : LTHIRD> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
+				printNow("LTHIRD",buff,line_count,false,*info);
 				return LTHIRD;
 			}
 			else{
 				SymbolInfo* info=new SymbolInfo(buff,"RTHIRD");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <RTHIRD> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : RTHIRD> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
+				printNow("RTHIRD",buff,line_count,false,*info);
 
 				return RTHIRD;
 			}
-			/*
-			fprintf(tokenFile,"<%s,%s>",buff.c_str(),yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,buff.c_str(),yytext);
-			myInfo.setType(buff);
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : %s> already exists\n",yytext,buff.c_str());
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 514 "1305043.l"
+#line 304 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"COMMA");
-			yylval=(YYSTYPE)info;
-
-			checkInsert=myTable->Insert(*info);
-			fprintf(logFile,"Line no %03d: TOKEN <COMMA> Lexeme <%s> found\n",line_count,yytext);
-			if(!checkInsert)fprintf(logFile,"<%s : COMMA> already exists\n",yytext);
-			fprintf(logFile,"\n\n");
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-
+			printNow("COMMA",buff,line_count,false,*info);
 			return COMMA;
-			/*
-			fprintf(tokenFile,"<COMMA,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <COMMA> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("COMMA");
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : COMMA> already exists\n",yytext);
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 538 "1305043.l"
+#line 311 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"SEMICOLON");
-			yylval=(YYSTYPE)info;
-
-			checkInsert=myTable->Insert(*info);
-			fprintf(logFile,"Line no %03d: TOKEN <SEMICOLON> Lexeme <%s> found\n",line_count,yytext);
-			if(!checkInsert)fprintf(logFile,"<%s : SEMICOLON> already exists\n",yytext);
-			fprintf(logFile,"\n\n");
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-
+			printNow("SEMICOLON",buff,line_count,false,*info);
 			return SEMICOLON;
-			/*
-			fprintf(tokenFile,"<SEMICOLON,%s>",yytext);
-			fprintf(logFile,"Line no %03d: TOKEN <SEMICOLON> Lexeme <%s> found\n",line_count,yytext);
-			myInfo.setType("SEMICOLON");
-			myInfo.setName(yytext);
-			checkInsert=myTable->Insert(myInfo);
-			if(!checkInsert)fprintf(logFile,"<%s : SEMICOLON> already exists\n",yytext);
-			myTable->Print(logFile);
-			fprintf(logFile,"\n\n");
-		*/}
+		}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 562 "1305043.l"
+#line 318 "1305043.l"
 {
 				buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"ID");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : ID> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
+				printNow("ID",buff,line_count,true,*info);
 				return ID;
-			/*	fprintf(tokenFile,"<ID,%s>",yytext);
-				fprintf(logFile,"Line no %03d: TOKEN <ID> Lexeme <%s> found\n",line_count,yytext);
-				myInfo.setType("ID");
-				myInfo.setName(yytext);
-				checkInsert=myTable->Insert(myInfo);
-				if(!checkInsert)fprintf(logFile,"<%s : ID> already exists\n",yytext);
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-			*/}
+			}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 587 "1305043.l"
+#line 327 "1305043.l"
 {
 				buff="";buff+=yytext;
-				SymbolInfo*info=new SymbolInfo(buff,"CONST_INT");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <CONST_INT> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : CONST_INT> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
+				SymbolInfo* info=new SymbolInfo(buff,"CONST_INT");
+				printNow("CONST_INT",buff,line_count,true,*info);
 
 				return CONST_INT;
-	/*
-				fprintf(tokenFile,"<CONST_INT,%s>",yytext);
-				fprintf(logFile,"Line no %03d: TOKEN <CONST_INT> Lexeme <%s> found\n",line_count,yytext);
-				myInfo.setType("CONST_INT");
-				myInfo.setName(yytext);
-				checkInsert=myTable->Insert(myInfo);
-				if(!checkInsert)fprintf(logFile,"<%s : CONST_INT> already exists\n",yytext);
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-	*/		}
+			}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 611 "1305043.l"
+#line 335 "1305043.l"
 {
-
 				buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_FLOAT");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : CONST_FLOAT> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
+				printNow("CONST_FLOAT",buff,line_count,true,*info);
 
 				return CONST_FLOAT;
-	/*
-				fprintf(tokenFile,"<CONST_FLOAT,%s>",yytext);
-				fprintf(logFile,"Line no %03d: TOKEN <CONST_FLOAT> Lexeme <%s> found\n",line_count,yytext);
-				myInfo.setType("CONST_FLOAT");
-				myInfo.setName(yytext);
-				checkInsert=myTable->Insert(myInfo);
-				if(!checkInsert)fprintf(logFile,"<%s : CONST_FLOAT> already exists\n",yytext);
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-	*/		}
+			}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 636 "1305043.l"
+#line 343 "1305043.l"
 {
 				buff="";buff+=yytext;
-				SymbolInfo *info=new SymbolInfo(buff,"CONST_CHAR");
-				yylval=(YYSTYPE)info;
-
-				checkInsert=myTable->Insert(*info);
-				fprintf(logFile,"Line no %03d: TOKEN <CONST_CHAR> Lexeme <%s> found\n",line_count,yytext);
-				if(!checkInsert)fprintf(logFile,"<%s : CONST_CHAR> already exists\n",yytext);
-				fprintf(logFile,"\n\n");
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-
+				SymbolInfo* info=new SymbolInfo(buff,"CONST_CHAR");
+				printNow("CONST_CHAR",buff,line_count,true,*info);
 				return CONST_CHAR;
-
-	/*
-				fprintf(tokenFile,"<CONST_CHAR,%s>",yytext);
-				fprintf(logFile,"Line no %03d: TOKEN <CONST_CHAR> Lexeme <%s> found\n",line_count,yytext);
-				myInfo.setType("CONST_CHAR");
-				myInfo.setName(yytext);
-				checkInsert=myTable->Insert(myInfo);
-				if(!checkInsert)fprintf(logFile,"<%s : CONST_CHAR> already exists\n",yytext);
-				myTable->Print(logFile);
-				fprintf(logFile,"\n\n");
-	*/		}
+			}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 663 "1305043.l"
+#line 352 "1305043.l"
 {
 
 				myCount=line_count;
@@ -1738,7 +1427,7 @@ YY_RULE_SETUP
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 671 "1305043.l"
+#line 360 "1305043.l"
 {
 					line_count++;
 					buff+=yytext;
@@ -1746,7 +1435,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 675 "1305043.l"
+#line 364 "1305043.l"
 {
 					buff+=yytext;
 
@@ -1754,7 +1443,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 679 "1305043.l"
+#line 368 "1305043.l"
 {
 					buff+=yytext;
 
@@ -1762,7 +1451,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 683 "1305043.l"
+#line 372 "1305043.l"
 {
 					buff+=yytext;
 					fprintf(logFile,"Line no %03d: TOKEN <COMMENT> Lexeme <%s> found\n",myCount,buff.c_str());
@@ -1771,7 +1460,7 @@ YY_RULE_SETUP
 				}
 	YY_BREAK
 case YY_STATE_EOF(mlcomment):
-#line 689 "1305043.l"
+#line 378 "1305043.l"
 {
 				fprintf(logFile,"Line no %03d: ERROR!! - Undeterminated comment %s\n",myCount,buff.c_str());
 				fprintf(logFile,"\n\n");
@@ -1781,7 +1470,7 @@ case YY_STATE_EOF(mlcomment):
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 697 "1305043.l"
+#line 386 "1305043.l"
 {
 				buff="";
 				char *ch=yytext;
@@ -1794,34 +1483,30 @@ YY_RULE_SETUP
 				}
 				fprintf(logFile,"Line no %03d: TOKEN <COMMENT> Lexeme <%s> found\n",line_count,buff.c_str());
 				fprintf(logFile,"\n\n");
-				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 713 "1305043.l"
+#line 401 "1305043.l"
 {
 				myCount=line_count;
 				buff="";
 				buff+=yytext;
 				BEGIN(mlstring);
-				//insert in symbol table and print symbol table content(only non empty buckets)
 			}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 720 "1305043.l"
+#line 407 "1305043.l"
 {
-	//fprintf(logFile,"Line no. %d: backslash found\n",line_count);
 	BEGIN(helpState);
 
 }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 725 "1305043.l"
+#line 411 "1305043.l"
 {
-	//fprintf(logFile,"Line no. %d: begin from helpState 1\n",line_count);
 	buff+=yytext;
 	BEGIN(mlstring);
 }
@@ -1829,16 +1514,15 @@ YY_RULE_SETUP
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 731 "1305043.l"
+#line 416 "1305043.l"
 {
-		//fprintf(logFile,"Line no. %d: begin from helpState 2\n",line_count);
 		line_count++;
 		BEGIN(mlstring);
 	}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 737 "1305043.l"
+#line 421 "1305043.l"
 {
 		char *ch=yytext;
 		ch++;
@@ -1864,27 +1548,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 759 "1305043.l"
+#line 443 "1305043.l"
 {
 					buff+=yytext;
 					BEGIN(INITIAL);
-
-					SymbolInfo *info=new SymbolInfo(buff,"STRING");
-					yylval=(YYSTYPE)info;
-
-					fprintf(logFile,"Line no %03d: TOKEN <STRING> Lexeme <%s> found\n",line_count,yytext);
-					fprintf(logFile,"\n\n");
+					SymbolInfo* info=new SymbolInfo(buff,"STRING");
+					printNow("STRING",buff,line_count,false,*info);
 					return STRING;
-					// fprintf(tokenFile,"<STRING,%s>",buff.c_str());
-					// fprintf(logFile,"Line no %03d: TOKEN <STRING> Lexeme",myCount);
-					// fprintf(logFile," %s found\n",buff.c_str());
-					// fprintf(tokenFile,"<STRING,%s>",buff.c_str());
-					// fprintf(logFile,"\n\n");
 			}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 775 "1305043.l"
+#line 450 "1305043.l"
 {
 		char *ch=yytext;
 		while(*ch){
@@ -1896,7 +1571,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(mlstring):
-#line 784 "1305043.l"
+#line 459 "1305043.l"
 {
 				char *ch=yytext;
 				while(*ch){
@@ -1915,7 +1590,7 @@ case YY_STATE_EOF(mlstring):
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 799 "1305043.l"
+#line 474 "1305043.l"
 {
 				line_count++;
 				char *ch=yytext;
@@ -1934,7 +1609,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 815 "1305043.l"
+#line 490 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1944,7 +1619,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 823 "1305043.l"
+#line 498 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Ill formed number %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1954,7 +1629,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 830 "1305043.l"
+#line 505 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Too many decimal points %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1964,7 +1639,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 836 "1305043.l"
+#line 511 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Invalid prefix %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1974,7 +1649,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 843 "1305043.l"
+#line 518 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Ill formed charachter error %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1984,7 +1659,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 852 "1305043.l"
+#line 527 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Unrecognized charachter found %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1994,10 +1669,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 862 "1305043.l"
+#line 537 "1305043.l"
 ECHO;
 	YY_BREAK
-#line 2001 "lex.yy.c"
+#line 1676 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(helpState):
 	yyterminate();
@@ -2999,7 +2674,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 862 "1305043.l"
+#line 537 "1305043.l"
 
 
 
@@ -3018,7 +2693,7 @@ int yywrap(void)
 	}
 	
 	FILE *fin=fopen(argv[1],"r");
-	if(fin==NULL){
+	if(fin==dummy){
 		printf("File can't be opened\n");
 		return 0;
 	}

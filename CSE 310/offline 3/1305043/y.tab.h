@@ -76,14 +76,14 @@ extern int yydebug;
     RTHIRD = 286,
     COMMA = 287,
     SEMICOLON = 288,
-    ID = 289,
-    CONST_INT = 290,
-    CONST_FLOAT = 291,
-    CONST_CHAR = 292,
-    STRING = 293,
-    MAIN = 294,
-    PRINTLN = 295,
-    NOT = 296,
+    STRING = 289,
+    MAIN = 290,
+    PRINTLN = 291,
+    NOT = 292,
+    ID = 293,
+    CONST_INT = 294,
+    CONST_FLOAT = 295,
+    CONST_CHAR = 296,
     HELP_ELSE_GET_PRECEDENCE = 297
   };
 #endif
@@ -119,19 +119,30 @@ extern int yydebug;
 #define RTHIRD 286
 #define COMMA 287
 #define SEMICOLON 288
-#define ID 289
-#define CONST_INT 290
-#define CONST_FLOAT 291
-#define CONST_CHAR 292
-#define STRING 293
-#define MAIN 294
-#define PRINTLN 295
-#define NOT 296
+#define STRING 289
+#define MAIN 290
+#define PRINTLN 291
+#define NOT 292
+#define ID 293
+#define CONST_INT 294
+#define CONST_FLOAT 295
+#define CONST_CHAR 296
 #define HELP_ELSE_GET_PRECEDENCE 297
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 54 "1305043.y" /* yacc.c:1909  */
+
+	SymbolInfo* helpInfo;
+	const char* helpString;
+
+#line 143 "y.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

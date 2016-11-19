@@ -1,709 +1,663 @@
-Line no 000: TOKEN <INT> Lexeme <int> found
+LEXER RESPONSE: Line no 000: TOKEN <INT> Lexeme <int> found
 
 
-Line no 000: TOKEN <LPAREN> Lexeme <(> found
+LEXER RESPONSE: Line no 000: TOKEN <MAIN> Lexeme <main> found
 
 
-1 --> <( : LPAREN>
+LEXER RESPONSE: Line no 000: TOKEN <LPAREN> Lexeme <(> found
 
 
-Line no 000: TOKEN <RPAREN> Lexeme <)> found
+LEXER RESPONSE: Line no 000: TOKEN <RPAREN> Lexeme <)> found
 
 
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
+LEXER RESPONSE: Line no 000: TOKEN <LCURL> Lexeme <{> found
 
 
-Line no 000: TOKEN <LCURL> Lexeme <{> found
+LEXER RESPONSE: Line no 001: TOKEN <INT> Lexeme <int> found
 
 
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-9 --> <{ : LCURL>
+PARSER RESPONSE 1 . Matched Rule>>>type_specifier : INT
 
 
-Line no 001: TOKEN <INT> Lexeme <int> found
+
+LEXER RESPONSE: Line no 001: TOKEN <ID> Lexeme <a> found
 
 
-Line no 001: TOKEN <ID> Lexeme <a> found
-
-
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-9 --> <{ : LCURL>
 13 --> <a : ID>
 
 
-Line no 001: TOKEN <LTHIRD> Lexeme <[> found
+LEXER RESPONSE: Line no 001: TOKEN <LTHIRD> Lexeme <[> found
 
 
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL>
-13 --> <a : ID>
+LEXER RESPONSE: Line no 001: TOKEN <CONST_INT> Lexeme <2> found
 
 
-Line no 001: TOKEN <CONST_INT> Lexeme <2> found
-
-
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 001: TOKEN <RTHIRD> Lexeme <]> found
+LEXER RESPONSE: Line no 001: TOKEN <RTHIRD> Lexeme <]> found
 
 
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL> <] : RTHIRD>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
+PARSER RESPONSE 2 . Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD
 
 
-Line no 001: TOKEN <COMMA> Lexeme <,> found
+
+LEXER RESPONSE: Line no 001: TOKEN <COMMA> Lexeme <,> found
 
 
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-5 --> <, : COMMA>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL> <] : RTHIRD>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 001: TOKEN <ID> Lexeme <c> found
+LEXER RESPONSE: Line no 001: TOKEN <ID> Lexeme <c> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-5 --> <, : COMMA>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL> <] : RTHIRD>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 001: TOKEN <COMMA> Lexeme <,> found
-<, : COMMA> already exists
+LEXER RESPONSE: Line no 001: TOKEN <COMMA> Lexeme <,> found
+
+
+PARSER RESPONSE 3 . Matched Rule>>>declaration_list : declaration_list COMMA ID
+
+
+
+LEXER RESPONSE: Line no 001: TOKEN <ID> Lexeme <i> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-5 --> <, : COMMA>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL> <] : RTHIRD>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 001: TOKEN <ID> Lexeme <i> found
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-5 --> <, : COMMA>
 6 --> <i : ID>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL> <] : RTHIRD>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 001: TOKEN <COMMA> Lexeme <,> found
-<, : COMMA> already exists
+LEXER RESPONSE: Line no 001: TOKEN <COMMA> Lexeme <,> found
+
+
+PARSER RESPONSE 4 . Matched Rule>>>declaration_list : declaration_list COMMA ID
+
+
+
+LEXER RESPONSE: Line no 001: TOKEN <ID> Lexeme <j> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-5 --> <, : COMMA>
 6 --> <i : ID>
-7 --> <[ : LTHIRD>
-9 --> <{ : LCURL> <] : RTHIRD>
+7 --> <j : ID>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 001: TOKEN <ID> Lexeme <j> found
+LEXER RESPONSE: Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
+
+
+PARSER RESPONSE 5 . Matched Rule>>>declaration_list : declaration_list COMMA ID
+
+
+
+PARSER RESPONSE 6 . Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON
+
+
+
+LEXER RESPONSE: Line no 001: TOKEN <FLOAT> Lexeme <float> found
+
+
+PARSER RESPONSE 7 . Matched Rule>>>type_specifier : FLOAT
+
+
+
+LEXER RESPONSE: Line no 001: TOKEN <ID> Lexeme <d> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-5 --> <, : COMMA>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD>
+7 --> <j : ID>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
+LEXER RESPONSE: Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
+PARSER RESPONSE 8 . Matched Rule>>>declaration_list : ID
 
 
-Line no 001: TOKEN <FLOAT> Lexeme <float> found
+
+PARSER RESPONSE 9 . Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
 
 
-Line no 001: TOKEN <ID> Lexeme <d> found
 
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
-<; : SEMICOLON> already exists
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 002: TOKEN <ID> Lexeme <a> found
+LEXER RESPONSE: Line no 002: TOKEN <ID> Lexeme <a> found
 <a : ID> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD>
+7 --> <j : ID>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 002: TOKEN <LTHIRD> Lexeme <[> found
-<[ : LTHIRD> already exists
+LEXER RESPONSE: Line no 002: TOKEN <LTHIRD> Lexeme <[> found
+
+
+LEXER RESPONSE: Line no 002: TOKEN <CONST_INT> Lexeme <0> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 002: TOKEN <CONST_INT> Lexeme <0> found
+PARSER RESPONSE 10 . Matched Rule>>>factor : CONST_INT 
+
+
+
+LEXER RESPONSE: Line no 002: TOKEN <RTHIRD> Lexeme <]> found
+
+
+PARSER RESPONSE 11 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 12 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 13 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 14 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 15 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 16 . Matched Rule>>>expression : logic_expression
+
+
+
+PARSER RESPONSE 17 . Matched Rule>>>variable : ID LTHIRD expression RTHIRD 
+
+
+
+LEXER RESPONSE: Line no 002: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
+LEXER RESPONSE: Line no 002: TOKEN <CONST_INT> Lexeme <1> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 002: TOKEN <RTHIRD> Lexeme <]> found
-<] : RTHIRD> already exists
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 002: TOKEN <ASSIGNOP> Lexeme <=> found
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 002: TOKEN <CONST_INT> Lexeme <1> found
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 002: TOKEN <SEMICOLON> Lexeme <;> found
-<; : SEMICOLON> already exists
+PARSER RESPONSE 18 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
+
+LEXER RESPONSE: Line no 002: TOKEN <SEMICOLON> Lexeme <;> found
 
 
-Line no 003: TOKEN <ID> Lexeme <a> found
+PARSER RESPONSE 19 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 20 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 21 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 22 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 23 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 24 . Matched Rule>>>expression : variable ASSIGNOP logic_expression
+
+
+
+PARSER RESPONSE 25 . Matched Rule>>>expression_statement : expression SEMICOLON
+
+
+
+PARSER RESPONSE 26 . Matched Rule>>>statement  : expression_statement
+
+
+
+PARSER RESPONSE 27 . Matched Rule>>>statements : statement
+
+
+
+LEXER RESPONSE: Line no 003: TOKEN <ID> Lexeme <a> found
 <a : ID> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 003: TOKEN <LTHIRD> Lexeme <[> found
-<[ : LTHIRD> already exists
+LEXER RESPONSE: Line no 003: TOKEN <LTHIRD> Lexeme <[> found
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 003: TOKEN <CONST_INT> Lexeme <1> found
+LEXER RESPONSE: Line no 003: TOKEN <CONST_INT> Lexeme <1> found
 <1 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 
 
-Line no 003: TOKEN <RTHIRD> Lexeme <]> found
-<] : RTHIRD> already exists
+PARSER RESPONSE 28 . Matched Rule>>>factor : CONST_INT 
+
+
+
+LEXER RESPONSE: Line no 003: TOKEN <RTHIRD> Lexeme <]> found
+
+
+PARSER RESPONSE 29 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 30 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 31 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 32 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 33 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 34 . Matched Rule>>>expression : logic_expression
+
+
+
+PARSER RESPONSE 35 . Matched Rule>>>variable : ID LTHIRD expression RTHIRD 
+
+
+
+LEXER RESPONSE: Line no 003: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
+LEXER RESPONSE: Line no 003: TOKEN <CONST_INT> Lexeme <5> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 003: TOKEN <ASSIGNOP> Lexeme <=> found
-<= : ASSIGNOP> already exists
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-
-
-Line no 003: TOKEN <CONST_INT> Lexeme <5> found
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 003: TOKEN <SEMICOLON> Lexeme <;> found
-<; : SEMICOLON> already exists
+PARSER RESPONSE 36 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+
+LEXER RESPONSE: Line no 003: TOKEN <SEMICOLON> Lexeme <;> found
 
 
-Line no 004: TOKEN <ID> Lexeme <i> found
+PARSER RESPONSE 37 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 38 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 39 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 40 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 41 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 42 . Matched Rule>>>expression : variable ASSIGNOP logic_expression
+
+
+
+PARSER RESPONSE 43 . Matched Rule>>>expression_statement : expression SEMICOLON
+
+
+
+PARSER RESPONSE 44 . Matched Rule>>>statement  : expression_statement
+
+
+
+PARSER RESPONSE 45 . Matched Rule>>>statements : statements statement
+
+
+
+LEXER RESPONSE: Line no 004: TOKEN <ID> Lexeme <i> found
 <i : ID> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 004: TOKEN <ASSIGNOP> Lexeme <=> found
-<= : ASSIGNOP> already exists
+LEXER RESPONSE: Line no 004: TOKEN <ASSIGNOP> Lexeme <=> found
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+PARSER RESPONSE 46 . Matched Rule>>>variable : ID 
 
 
-Line no 004: TOKEN <ID> Lexeme <a> found
+
+LEXER RESPONSE: Line no 004: TOKEN <ID> Lexeme <a> found
 <a : ID> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 004: TOKEN <LTHIRD> Lexeme <[> found
-<[ : LTHIRD> already exists
+LEXER RESPONSE: Line no 004: TOKEN <LTHIRD> Lexeme <[> found
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
-
-
-Line no 004: TOKEN <CONST_INT> Lexeme <0> found
+LEXER RESPONSE: Line no 004: TOKEN <CONST_INT> Lexeme <0> found
 <0 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 004: TOKEN <RTHIRD> Lexeme <]> found
-<] : RTHIRD> already exists
+PARSER RESPONSE 47 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+
+LEXER RESPONSE: Line no 004: TOKEN <RTHIRD> Lexeme <]> found
 
 
-Line no 004: TOKEN <ADDOP> Lexeme <+> found
+PARSER RESPONSE 48 . Matched Rule>>>unary_expression : factor
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+
+PARSER RESPONSE 49 . Matched Rule>>>term :unary_expression
 
 
-Line no 004: TOKEN <ID> Lexeme <a> found
+
+PARSER RESPONSE 50 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 51 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 52 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 53 . Matched Rule>>>expression : logic_expression
+
+
+
+PARSER RESPONSE 54 . Matched Rule>>>variable : ID LTHIRD expression RTHIRD 
+
+
+
+PARSER RESPONSE 55 . Matched Rule>>>factor : variable 
+
+
+
+LEXER RESPONSE: Line no 004: TOKEN <ADDOP> Lexeme <+> found
+
+
+PARSER RESPONSE 56 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 57 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 58 . Matched Rule>>>simple_expression : term 
+
+
+
+LEXER RESPONSE: Line no 004: TOKEN <ID> Lexeme <a> found
 <a : ID> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 004: TOKEN <LTHIRD> Lexeme <[> found
-<[ : LTHIRD> already exists
+LEXER RESPONSE: Line no 004: TOKEN <LTHIRD> Lexeme <[> found
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
-
-
-Line no 004: TOKEN <CONST_INT> Lexeme <1> found
+LEXER RESPONSE: Line no 004: TOKEN <CONST_INT> Lexeme <1> found
 <1 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 004: TOKEN <RTHIRD> Lexeme <]> found
-<] : RTHIRD> already exists
+PARSER RESPONSE 59 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+
+LEXER RESPONSE: Line no 004: TOKEN <RTHIRD> Lexeme <]> found
 
 
-Line no 004: TOKEN <SEMICOLON> Lexeme <;> found
-<; : SEMICOLON> already exists
+PARSER RESPONSE 60 . Matched Rule>>>unary_expression : factor
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+
+PARSER RESPONSE 61 . Matched Rule>>>term :unary_expression
 
 
-Line no 005: TOKEN <ID> Lexeme <j> found
+
+PARSER RESPONSE 62 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 63 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 64 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 65 . Matched Rule>>>expression : logic_expression
+
+
+
+PARSER RESPONSE 66 . Matched Rule>>>variable : ID LTHIRD expression RTHIRD 
+
+
+
+PARSER RESPONSE 67 . Matched Rule>>>factor : variable 
+
+
+
+LEXER RESPONSE: Line no 004: TOKEN <SEMICOLON> Lexeme <;> found
+
+
+PARSER RESPONSE 68 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 69 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 70 . Matched Rule>>>simple_expression : simple_expression ADDOP term
+
+
+
+PARSER RESPONSE 71 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 72 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 73 . Matched Rule>>>expression : variable ASSIGNOP logic_expression
+
+
+
+PARSER RESPONSE 74 . Matched Rule>>>expression_statement : expression SEMICOLON
+
+
+
+PARSER RESPONSE 75 . Matched Rule>>>statement  : expression_statement
+
+
+
+PARSER RESPONSE 76 . Matched Rule>>>statements : statements statement
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <ID> Lexeme <j> found
 <j : ID> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <ASSIGNOP> Lexeme <=> found
-<= : ASSIGNOP> already exists
+LEXER RESPONSE: Line no 005: TOKEN <ASSIGNOP> Lexeme <=> found
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+PARSER RESPONSE 77 . Matched Rule>>>variable : ID 
 
 
-Line no 005: TOKEN <CONST_INT> Lexeme <2> found
+
+LEXER RESPONSE: Line no 005: TOKEN <CONST_INT> Lexeme <2> found
 <2 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <MULOP> Lexeme <*> found
+PARSER RESPONSE 78 . Matched Rule>>>factor : CONST_INT 
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <MULOP> Lexeme <*> found
+
+
+PARSER RESPONSE 79 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 80 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 81 . Matched Rule>>>simple_expression : term 
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <CONST_INT> Lexeme <3> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
-
-
-Line no 005: TOKEN <CONST_INT> Lexeme <3> found
-
-
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 12 --> <3 : CONST_INT>
@@ -711,59 +665,37 @@ Line no 005: TOKEN <CONST_INT> Lexeme <3> found
 14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <ADDOP> Lexeme <+> found
-<+ : ADDOP> already exists
+PARSER RESPONSE 82 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+
+LEXER RESPONSE: Line no 005: TOKEN <ADDOP> Lexeme <+> found
 
 
-Line no 005: TOKEN <LPAREN> Lexeme <(> found
-<( : LPAREN> already exists
+PARSER RESPONSE 83 . Matched Rule>>>unary_expression : factor
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID>
-14 --> <5 : CONST_INT>
+
+PARSER RESPONSE 84 . Matched Rule>>>term :unary_expression
 
 
-Line no 005: TOKEN <CONST_INT> Lexeme <5> found
+
+PARSER RESPONSE 85 . Matched Rule>>>simple_expression : simple_expression ADDOP term
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <LPAREN> Lexeme <(> found
+
+
+LEXER RESPONSE: Line no 005: TOKEN <CONST_INT> Lexeme <5> found
 <5 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 12 --> <3 : CONST_INT>
@@ -771,260 +703,296 @@ Line no 005: TOKEN <CONST_INT> Lexeme <5> found
 14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <MULOP> Lexeme <%> found
+PARSER RESPONSE 86 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP>
-14 --> <5 : CONST_INT>
+
+LEXER RESPONSE: Line no 005: TOKEN <MULOP> Lexeme <%> found
 
 
-Line no 005: TOKEN <CONST_INT> Lexeme <3> found
+PARSER RESPONSE 87 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 88 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 89 . Matched Rule>>>simple_expression : term 
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <CONST_INT> Lexeme <3> found
 <3 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
+1 --> <d : ID>
 6 --> <i : ID>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP>
+13 --> <a : ID>
 14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <RELOP> Lexeme <<> found
+PARSER RESPONSE 90 . Matched Rule>>>factor : CONST_INT 
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <RELOP> Lexeme <<> found
+
+
+PARSER RESPONSE 91 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 92 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 93 . Matched Rule>>>simple_expression : simple_expression ADDOP term
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <CONST_INT> Lexeme <4> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+1 --> <d : ID>
+6 --> <i : ID>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP>
+13 --> <a : ID> <4 : CONST_INT>
 14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <CONST_INT> Lexeme <4> found
+PARSER RESPONSE 94 . Matched Rule>>>factor : CONST_INT 
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <LOGICOP> Lexeme <&&> found
+
+
+PARSER RESPONSE 95 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 96 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 97 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 98 . Matched Rule>>>rel_expression : simple_expression RELOP simple_expression
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <CONST_INT> Lexeme <8> found
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+1 --> <d : ID>
+2 --> <8 : CONST_INT>
+6 --> <i : ID>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
+13 --> <a : ID> <4 : CONST_INT>
 14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <LOGICOP> Lexeme <&&> found
+PARSER RESPONSE 99 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+LEXER RESPONSE: Line no 005: TOKEN <RPAREN> Lexeme <)> found
 
 
-Line no 005: TOKEN <CONST_INT> Lexeme <8> found
+PARSER RESPONSE 100 . Matched Rule>>>unary_expression : factor
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+PARSER RESPONSE 101 . Matched Rule>>>term :unary_expression
 
 
-Line no 005: TOKEN <RPAREN> Lexeme <)> found
-<) : RPAREN> already exists
+
+PARSER RESPONSE 102 . Matched Rule>>>simple_expression : term 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+PARSER RESPONSE 103 . Matched Rule>>>rel_expression : simple_expression
 
 
-Line no 005: TOKEN <LOGICOP> Lexeme <||> found
+
+PARSER RESPONSE 104 . Matched Rule>>>logic_expression : rel_expression LOGICOP rel_expression
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP> <|| : LOGICOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+PARSER RESPONSE 105 . Matched Rule>>>expression : logic_expression
 
 
-Line no 005: TOKEN <CONST_INT> Lexeme <2> found
+
+PARSER RESPONSE 106 . Matched Rule>>>factor : LPAREN expression RPAREN
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <LOGICOP> Lexeme <||> found
+
+
+PARSER RESPONSE 107 . Matched Rule>>>unary_expression : factor
+
+
+
+PARSER RESPONSE 108 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 109 . Matched Rule>>>simple_expression : simple_expression ADDOP term
+
+
+
+PARSER RESPONSE 110 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+LEXER RESPONSE: Line no 005: TOKEN <CONST_INT> Lexeme <2> found
 <2 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP> <|| : LOGICOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+1 --> <d : ID>
+2 --> <8 : CONST_INT>
+6 --> <i : ID>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+13 --> <a : ID> <4 : CONST_INT>
+14 --> <5 : CONST_INT>
 
 
-Line no 005: TOKEN <SEMICOLON> Lexeme <;> found
-<; : SEMICOLON> already exists
+PARSER RESPONSE 111 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP> <|| : LOGICOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+LEXER RESPONSE: Line no 005: TOKEN <SEMICOLON> Lexeme <;> found
 
 
-Line no 006: TOKEN <RETURN> Lexeme <return> found
+PARSER RESPONSE 112 . Matched Rule>>>unary_expression : factor
 
 
-Line no 006: TOKEN <CONST_INT> Lexeme <0> found
+
+PARSER RESPONSE 113 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 114 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 115 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 116 . Matched Rule>>>logic_expression : rel_expression LOGICOP rel_expression
+
+
+
+PARSER RESPONSE 117 . Matched Rule>>>expression : variable ASSIGNOP logic_expression
+
+
+
+PARSER RESPONSE 118 . Matched Rule>>>expression_statement : expression SEMICOLON
+
+
+
+PARSER RESPONSE 119 . Matched Rule>>>statement  : expression_statement
+
+
+
+PARSER RESPONSE 120 . Matched Rule>>>statements : statements statement
+
+
+
+LEXER RESPONSE: Line no 006: TOKEN <RETURN> Lexeme <return> found
+
+
+LEXER RESPONSE: Line no 006: TOKEN <CONST_INT> Lexeme <0> found
 <0 : CONST_INT> already exists
 
 
 0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP> <|| : LOGICOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
+1 --> <d : ID>
+2 --> <8 : CONST_INT>
+6 --> <i : ID>
+7 --> <j : ID>
+9 --> <0 : CONST_INT>
 10 --> <1 : CONST_INT>
 11 --> <2 : CONST_INT>
 12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+13 --> <a : ID> <4 : CONST_INT>
+14 --> <5 : CONST_INT>
 
 
-Line no 006: TOKEN <SEMICOLON> Lexeme <;> found
-<; : SEMICOLON> already exists
+PARSER RESPONSE 121 . Matched Rule>>>factor : CONST_INT 
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP> <|| : LOGICOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+LEXER RESPONSE: Line no 006: TOKEN <SEMICOLON> Lexeme <;> found
 
 
-Line no 007: TOKEN <RCURL> Lexeme <}> found
+PARSER RESPONSE 122 . Matched Rule>>>unary_expression : factor
 
 
-0 --> <c : ID>
-1 --> <( : LPAREN> <d : ID>
-2 --> <) : RPAREN> <8 : CONST_INT>
-3 --> <* : MULOP>
-4 --> <+ : ADDOP> <|| : LOGICOP>
-5 --> <, : COMMA> <; : SEMICOLON>
-6 --> <i : ID> << : RELOP>
-7 --> <[ : LTHIRD> <j : ID> <= : ASSIGNOP>
-9 --> <{ : LCURL> <] : RTHIRD> <0 : CONST_INT>
-10 --> <1 : CONST_INT>
-11 --> <2 : CONST_INT> <} : RCURL>
-12 --> <3 : CONST_INT>
-13 --> <a : ID> <% : MULOP> <4 : CONST_INT>
-14 --> <5 : CONST_INT> <&& : LOGICOP>
+
+PARSER RESPONSE 123 . Matched Rule>>>term :unary_expression
+
+
+
+PARSER RESPONSE 124 . Matched Rule>>>simple_expression : term 
+
+
+
+PARSER RESPONSE 125 . Matched Rule>>>rel_expression : simple_expression
+
+
+
+PARSER RESPONSE 126 . Matched Rule>>>logic_expression : rel_expression
+
+
+
+PARSER RESPONSE 127 . Matched Rule>>>expression : logic_expression
+
+
+
+PARSER RESPONSE 128 . Matched Rule>>>statement  : RETURN expression SEMICOLON
+
+
+
+PARSER RESPONSE 129 . Matched Rule>>>statements : statements statement
+
+
+
+LEXER RESPONSE: Line no 007: TOKEN <RCURL> Lexeme <}> found
+
+
+PARSER RESPONSE 130 . Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL
+
+
+
+PARSER RESPONSE 131 . Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement
+
 
 
 
