@@ -3,11 +3,11 @@
 %x helpState
 
 %{
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 using namespace std;
-#include"1305043_symbolTable.cpp"
+#include "1305043_symbolTable.cpp"
 
 # include "y.tab.h"
 void yyerror(char*);
@@ -31,17 +31,17 @@ SymbolInfo dummy;
 void printNow(string token,string lexeme,int line_no,bool insert,SymbolInfo info)
 {
 	if(!insert){
-			fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_no,token.c_str(),lexeme.c_str());
-			fprintf(logFile,"\n\n");
+			/*fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_no,token.c_str(),lexeme.c_str());
+			fprintf(logFile,"\n\n");*/
 			yylval.helpString=lexeme.c_str();
 	}
 	else{
-		checkInsert=myTable->Insert(info);
+		/*checkInsert=myTable->Insert(info);
 		fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_count,token.c_str(),lexeme.c_str());
 		if(!checkInsert)fprintf(logFile,"<%s : %s> already exists\n",lexeme.c_str(),token.c_str());
 		fprintf(logFile,"\n\n");
 		myTable->Print(logFile);
-		fprintf(logFile,"\n\n");
+		fprintf(logFile,"\n\n");*/
 		yylval.helpInfo=&info;
 	}
 

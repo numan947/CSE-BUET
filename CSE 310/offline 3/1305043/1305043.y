@@ -5,7 +5,7 @@
 #include<string.h>
 #include <string>
 #include"1305043_symbolTable.cpp"
-#define YYSTYPE double      /* yyparse() stack type */
+      /* yyparse() stack type */
 using namespace std;
 
 
@@ -25,14 +25,19 @@ int match_count=0;
 
 void printNOW(string line)
 {
-	stringstream ss;
-	ss<<(++match_count);
-	line="PARSER RESPONSE "+ss.str()+" . "+line;
 	fprintf(logFile,line.c_str());
 	fprintf(logFile,"\n\n\n\n");
 }
 
 %}
+
+%union {
+	SymbolInfo* helpInfo;
+	const char* helpString;
+}
+
+
+
 
 %start Program
 
@@ -51,43 +56,106 @@ void printNOW(string line)
 %nonassoc HELP_ELSE_GET_PRECEDENCE
 %nonassoc ELSE
 
-%union {
-	SymbolInfo* helpInfo;
-	const char* helpString;
-}
-
 
 
 
 %%
 
-Program : INT MAIN LPAREN RPAREN compound_statement		{printNOW("Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement"); }
+Program : INT MAIN LPAREN RPAREN compound_statement		{
+														printNOW("Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement"); 
+														}
 	;
 
 
-compound_statement : LCURL var_declaration statements RCURL {printNOW("Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL");}
-		   | LCURL statements RCURL {printNOW("Matched Rule>>>compound_statement : LCURL statements RCURL");}
-		   | LCURL RCURL {printNOW("Matched Rule>>>compound_statement : LCURL RCURL");}
+compound_statement : LCURL var_declaration statements RCURL {
+									printNOW("Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL");}
+		   
+
+		   | LCURL statements RCURL {
+		   							printNOW("Matched Rule>>>compound_statement : LCURL statements RCURL");}
+		   
+
+		   | LCURL RCURL {
+		   								printNOW("Matched Rule>>>compound_statement : LCURL RCURL");}
 		   ;
 
 			 
-var_declaration	: type_specifier declaration_list SEMICOLON {printNOW("Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON");}
-		|  var_declaration type_specifier declaration_list SEMICOLON {printNOW("Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON");}
+var_declaration	: type_specifier declaration_list SEMICOLON {
+																printNOW("Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON");
+
+																$2=$1;//??
+															}
+		
+
+
+		|  var_declaration type_specifier declaration_list SEMICOLON {
+																		printNOW("Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON");
+
+																		$3=$2;//OKA??
+
+																	}
 		;
 
-type_specifier	: INT {printNOW("Matched Rule>>>type_specifier : INT");}
-		| FLOAT {printNOW("Matched Rule>>>type_specifier : FLOAT");}
-		| CHAR 	{printNOW("Matched Rule>>>type_specifier : CHAR");}
+type_specifier	: INT {
+							printNOW("Matched Rule>>>type_specifier : INT");
+					}
+		
+
+		| FLOAT {
+					printNOW("Matched Rule>>>type_specifier : FLOAT");
+
+				}
+		
+
+
+		| CHAR 	{
+					printNOW("Matched Rule>>>type_specifier : CHAR");
+				}
 		;
 			
-declaration_list : declaration_list COMMA ID 	{printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID");}
-		 | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD	{printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");}
-		 | ID 	{printNOW("Matched Rule>>>declaration_list : ID");}
-		 | ID LTHIRD CONST_INT RTHIRD {printNOW("Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD");}
+declaration_list : declaration_list COMMA ID 	{
+														printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID");
+														//later?? what to do with ID??
+												}
+		 
+
+		 | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD	{
+		 															printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
+		 															$3->arrayLength=$5->iVal;
+
+		 															//later?? what to do??
+		 														}
+		 
+
+
+		 | ID 	{	
+		 			printNOW("Matched Rule>>>declaration_list : ID");
+		 			//later??
+		 		}
+		 
+
+
+		 | ID LTHIRD CONST_INT RTHIRD {
+		 									printNOW("Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD");
+		 									$1->arrayLength=$3->iVal;
+		 									//later??
+
+		 							}
 		 ;
 
-statements : statement 	{printNOW("Matched Rule>>>statements : statement");}
-	   | statements statement 	{printNOW("Matched Rule>>>statements : statements statement");}
+statements : statement 	{
+							printNOW("Matched Rule>>>statements : statement");
+							//??
+
+						}
+	   
+
+
+	   | statements statement 	{
+	   								printNOW("Matched Rule>>>statements : statements statement");
+	   								//??
+
+	   							}
 	   ;
 
 
@@ -95,58 +163,358 @@ statements : statement 	{printNOW("Matched Rule>>>statements : statement");}
 
 
 
-statement  : expression_statement 	{printNOW("Matched Rule>>>statement  : expression_statement");}
-	   | compound_statement 	{printNOW("Matched Rule>>>statement  : compound_statement");}
-	   | FOR LPAREN expression_statement expression_statement expression RPAREN statement 	{printNOW("Matched Rule>>>statement  : FOR LPAREN expression_statement expression_statement expression RPAREN statement");}
-	   | IF LPAREN expression RPAREN statement %prec HELP_ELSE_GET_PRECEDENCE	{printNOW("Matched Rule>>>statement  : IF LPAREN expression RPAREN statement %prec HELP_ELSE_GET_PRECEDENCE");}
-	   | IF LPAREN expression RPAREN statement ELSE statement 	{printNOW("Matched Rule>>>statement  : IF LPAREN expression RPAREN statement ELSE statement");}
-	   | WHILE LPAREN expression RPAREN statement 	{printNOW("Matched Rule>>>statement  : WHILE LPAREN expression RPAREN statement");}
-	   | PRINTLN LPAREN ID RPAREN SEMICOLON 	{printNOW("Matched Rule>>>statement  : PRINTLN LPAREN ID RPAREN SEMICOLON ");}
-	   | RETURN expression SEMICOLON 	{printNOW("Matched Rule>>>statement  : RETURN expression SEMICOLON");}
+statement  : expression_statement 	{
+										printNOW("Matched Rule>>>statement  : expression_statement");
+										//??
+									}
+	   
+
+	   | compound_statement 	{
+	   								printNOW("Matched Rule>>>statement  : compound_statement");
+	   								//??
+	   							}
+	   
+
+
+	   | FOR LPAREN expression_statement expression_statement expression RPAREN statement 	{
+	   																			
+	   																			printNOW("Matched Rule>>>statement  : FOR LPAREN expression_statement expression_statement expression RPAREN statement");
+
+
+	   																			//LATER??
+
+	   																		}
+	   
+
+
+	   | IF LPAREN expression RPAREN statement %prec HELP_ELSE_GET_PRECEDENCE	{
+	   																				printNOW("Matched Rule>>>statement  : IF LPAREN expression RPAREN statement");
+	   																				
+	   																				//LATER??
+	   																			}
+	   
+
+
+	   | IF LPAREN expression RPAREN statement ELSE statement 	{
+	   																printNOW("Matched Rule>>>statement  : IF LPAREN expression RPAREN statement ELSE statement");
+
+	   																//LATER??
+	   															}
+	   
+
+
+	   | WHILE LPAREN expression RPAREN statement 	{
+	   													printNOW("Matched Rule>>>statement  : WHILE LPAREN expression RPAREN statement");
+
+	   													//LATER??
+
+	   												}
+	   
+
+
+	   | PRINTLN LPAREN ID RPAREN SEMICOLON 	{
+	   												printNOW("Matched Rule>>>statement  : PRINTLN LPAREN ID RPAREN SEMICOLON ");
+
+	   												ostringstream o;
+
+	   												if($3->array==false){
+		   												if($3->getType()=="INT"){
+		   													o<<$3->iVal;
+		   													printNOW(o.str());
+		   												}
+		   												else if($3->getType()=="FLOAT"){
+		   													o<<$3->dVal;
+		   													printNOW(o.str());
+		   												}
+		   												else if($3->getType()=="CHAR"){
+		   													o<<$3->chVal;
+		   													printNOW(o.str());
+		   												}
+	   												}
+	   												else{
+		   												if($3->getType()=="INT"){
+		   													for(int i=0;i<$3->arrayLength;i++)printf("%d ",(int)$3->arrayStorage[i]);
+		   												}
+		   												else if($3->getType()=="FLOAT"){
+		   													for(int i=0;i<$3->arrayLength;i++)printf("%lf ",(double)$3->arrayStorage[i]);
+		   												}
+		   												else if($3->getType()=="CHAR"){
+		   													for(int i=0;i<$3->arrayLength;i++)printf("%c ",(char)$3->arrayStorage[i]);
+		   												}
+	   												}
+
+	   												//later???????what The fuck??
+
+	   											}
+	   
+
+
+	   | RETURN expression SEMICOLON 	{
+	   										printNOW("Matched Rule>>>statement  : RETURN expression SEMICOLON");
+	   										
+
+	   										//Later??
+	   									}
 	   ;
 
 
 
-expression_statement	: SEMICOLON		{printNOW("Matched Rule>>>expression_statement : SEMICOLON");}			
-			| expression SEMICOLON 	{printNOW("Matched Rule>>>expression_statement : expression SEMICOLON");}
+expression_statement	: SEMICOLON		{
+							printNOW("Matched Rule>>>expression_statement : SEMICOLON");
+
+						}			
+			
+
+
+			| expression SEMICOLON 	{
+										printNOW("Matched Rule>>>expression_statement : expression SEMICOLON");
+										//LATER??
+
+									}
 			;
 						
-variable : ID 	{printNOW("Matched Rule>>>variable : ID ");}				
-	 | ID LTHIRD expression RTHIRD  {printNOW("Matched Rule>>>variable : ID LTHIRD expression RTHIRD ");}
+variable : ID 	{
+						printNOW("Matched Rule>>>variable : ID ");
+						//LATER
+						$$=$1;
+
+				}				
+	 
+
+
+	 | ID LTHIRD expression RTHIRD  {
+	 									printNOW("Matched Rule>>>variable : ID LTHIRD expression RTHIRD ");
+	 									$$=$1;
+
+	 									//later
+	 								}
 	 ;
 			
-expression : logic_expression	{printNOW("Matched Rule>>>expression : logic_expression");}
-	   | variable ASSIGNOP logic_expression 	{printNOW("Matched Rule>>>expression : variable ASSIGNOP logic_expression");}
+expression : logic_expression	{
+									printNOW("Matched Rule>>>expression : logic_expression");
+									$$=$1;
+								}
+	   
+
+
+	   | variable ASSIGNOP logic_expression 	{
+	   												printNOW("Matched Rule>>>expression : variable ASSIGNOP logic_expression");
+	   												$$=$1;
+	   												//LATER
+
+	   											}
 	   ;
+
+
+
 			
-logic_expression : rel_expression 	{printNOW("Matched Rule>>>logic_expression : rel_expression");}
-		 | rel_expression LOGICOP rel_expression 	{printNOW("Matched Rule>>>logic_expression : rel_expression LOGICOP rel_expression");}	
+logic_expression : rel_expression 	{
+										printNOW("Matched Rule>>>logic_expression : rel_expression");
+										$$=$1;
+
+									}
+		 
+
+
+		 | rel_expression LOGICOP rel_expression 	{
+		 												printNOW("Matched Rule>>>logic_expression : rel_expression LOGICOP rel_expression");
+		 												$$=$1;
+
+		 												//LATER
+		 											}	
 		 ;
+
+
+
 			
-rel_expression	: simple_expression  {printNOW("Matched Rule>>>rel_expression : simple_expression");}
-		| simple_expression RELOP simple_expression	 {printNOW("Matched Rule>>>rel_expression : simple_expression RELOP simple_expression");}
+rel_expression	: simple_expression  {
+										printNOW("Matched Rule>>>rel_expression : simple_expression");
+										$$=$1;
+
+
+									}
+		
+
+
+		| simple_expression RELOP simple_expression	 {
+
+														printNOW("Matched Rule>>>rel_expression : simple_expression RELOP simple_expression");
+														$$=$1;
+														//later
+
+
+													}
 		;
+
+
+
 				
-simple_expression : term  {printNOW("Matched Rule>>>simple_expression : term ");}
-		  | simple_expression ADDOP term  {printNOW("Matched Rule>>>simple_expression : simple_expression ADDOP term");}
+simple_expression : term  {
+							printNOW("Matched Rule>>>simple_expression : term ");
+							$$=$1;
+						}
+		  
+
+
+		  | simple_expression ADDOP term  {
+		  										printNOW("Matched Rule>>>simple_expression : simple_expression ADDOP term");
+
+		  								//will come later
+
+		  									$$=$1;
+
+		  								}
 		  ;
+
+
+
 					
-term :	unary_expression	{printNOW("Matched Rule>>>term :unary_expression");}
-     |  term MULOP unary_expression		{printNOW("Matched Rule>>>term : term MULOP unary_expression");}
+term :	unary_expression	{
+								printNOW("Matched Rule>>>term :unary_expression");
+								$$=$1;
+
+							}
+     
+
+
+     |  term MULOP unary_expression		{
+     										printNOW("Matched Rule>>>term : term MULOP unary_expression");
+     										if($2=="*"){
+     											if($1->getType()==$3->getType()&&$1->getType()=="INT")$1->iVal*=$3->iVal;
+
+     											else if($1->getType()=="INT"&&$3->getType()=="FLOAT"){
+     												$1->dVal=($1->iVal*$3->dVal);
+     												$1->setType("FLOAT");
+     											}
+     											else if($1->getType()=="FLOAT"&&$3->getType()=="INT")$1->dVal=($1->dVal*$3->iVal);
+     											else $1->dVal*=$3->dVal;
+     										}
+
+     										else if($2=="/"){
+     											if($1->getType()=="FLOAT"||$3->getType()=="FLOAT"){
+     												if($1->getType()=="FLOAT"&&$3->getType()=="FLOAT"){
+     													$1->dVal=$1->dVal/($3->dVal);
+     												}
+     												else if($1->getType()=="FLOAT"){
+     													$1->dVal=$1->dVal/($3->iVal);
+     												}
+     												else{
+     													$1->dVal=$1->iVal/($3->dVal);
+     													$1->setType("FLOAT");
+     												}
+     											}
+
+     										}
+     										else if($2=="%"){
+     											if($1->getType()==$3->getType()&&$1->getType()=="INT"){
+     												$1->iVal=$1->iVal % $3->iVal;
+     											}
+     											//else error??
+     										}
+
+     										$$=$1;
+     							
+
+     									}
      ;
 
-unary_expression : ADDOP unary_expression   {printNOW("Matched Rule>>>unary_expression : ADDOP unary_expression");}
-		 | NOT unary_expression 	{printNOW("Matched Rule>>>unary_expression : NOT unary_expression ");}
-		 | factor {printNOW("Matched Rule>>>unary_expression : factor");}
+
+
+
+
+unary_expression : ADDOP unary_expression   {
+												printNOW("Matched Rule>>>unary_expression : ADDOP unary_expression");
+
+												if($1=="-"){
+													string s=$2->getType();
+
+													if(s=="INT")$2->iVal=-($2->iVal);
+													else if(s=="FLOAT")$2->dVal=-($2->dVal);
+
+												}
+
+												$$=$2;
+											}
+		 
+
+
+		 | NOT unary_expression 	{
+		 								printNOW("Matched Rule>>>unary_expression : NOT unary_expression ");
+		 								string s=$2->getType();
+
+		 								if(s=="INT")$2->iVal=!($2->iVal);
+		 								else if(s=="FLOAT")$2->dVal=!($2->dVal);
+
+		 								$$=$2;
+		 							}
+		 
+
+
+		 | factor {
+		 			printNOW("Matched Rule>>>unary_expression : factor");
+		 			$$=$1;
+		 		}
 		 ;
 	
-factor	: variable 	{printNOW("Matched Rule>>>factor : variable ");}
-	| LPAREN expression RPAREN  {printNOW("Matched Rule>>>factor : LPAREN expression RPAREN");}
-	| CONST_INT 	{printNOW("Matched Rule>>>factor : CONST_INT ");}
-	| CONST_FLOAT	{printNOW("Matched Rule>>>factor : CONST_FLOAT ");}
-	| CONST_CHAR	{printNOW("Matched Rule>>>factor : CONST_CHAR ");}
-	| factor INCOP 	{printNOW("Matched Rule>>>factor : INCOP ");}
-	| factor DECOP	{printNOW("Matched Rule>>>factor : DECOP ");}
+
+
+factor	: variable 	{
+						printNOW("Matched Rule>>>factor : variable ");
+						$$=$1;
+					}
+	
+
+
+	| LPAREN expression RPAREN  {
+									printNOW("Matched Rule>>>factor : LPAREN expression RPAREN");
+									$$=$2;
+								}
+	
+
+
+	| CONST_INT 	{
+						printNOW("Matched Rule>>>factor : CONST_INT ");
+						$$=$1;
+					}
+	
+
+
+	| CONST_FLOAT	{
+						printNOW("Matched Rule>>>factor : CONST_FLOAT ");
+						$$=$1;
+					}
+	
+
+
+	| CONST_CHAR	{
+						printNOW("Matched Rule>>>factor : CONST_CHAR ");
+						$$=$1;
+					}
+	
+
+
+	| factor INCOP 	{
+						printNOW("Matched Rule>>>factor : INCOP ");
+						string s=$$->getType();
+						if(s=="INT")$1->iVal++;
+						else if(s=="FLOAT")$1->dVal++;
+						else if(s=="CHAR")$1->chVal++;
+
+						$$=$1;
+					
+					}
+	
+
+
+	| factor DECOP	{
+						printNOW("Matched Rule>>>factor : DECOP ");
+						
+						string s=$$->getType();
+						if(s=="INT")$1->iVal--;
+						else if(s=="FLOAT")$1->dVal--;
+						else if(s=="CHAR")$1->chVal--;
+
+					}
 	;
 %%
 

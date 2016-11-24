@@ -20,9 +20,19 @@ class SymbolInfo{
 
     string Name;
     string Type;
-    string Value;
 
 public:
+    int iVal;
+    double dVal;
+    float fVal;
+    int arrayLength;
+    string sVal;
+    char chVal;
+    bool array;
+
+    double arrayStorage[100000];// set max array length?
+
+
     SymbolInfo()
     {
         
@@ -41,10 +51,6 @@ public:
     {
         this->Type=type;
     }
-    void setValue(string value)
-    {
-        this->Value=value;
-    }
 
     string getName()
     {
@@ -54,10 +60,9 @@ public:
     {
         return this->Type;
     }
-    string getValue()
-    {
-        return this->Value;
-    } 
+
+
+
 };
 
 
