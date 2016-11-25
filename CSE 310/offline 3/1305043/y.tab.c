@@ -158,26 +158,26 @@ extern int yydebug;
     CONTINUE = 273,
     INCOP = 274,
     DECOP = 275,
-    ADDOP = 276,
-    MULOP = 277,
-    RELOP = 278,
-    ASSIGNOP = 279,
-    LOGICOP = 280,
-    LPAREN = 281,
-    RPAREN = 282,
-    LCURL = 283,
-    RCURL = 284,
-    LTHIRD = 285,
-    RTHIRD = 286,
-    COMMA = 287,
-    SEMICOLON = 288,
-    STRING = 289,
-    MAIN = 290,
-    PRINTLN = 291,
-    NOT = 292,
-    CONST_INT = 293,
-    CONST_FLOAT = 294,
-    CONST_CHAR = 295,
+    MULOP = 276,
+    RELOP = 277,
+    ASSIGNOP = 278,
+    LOGICOP = 279,
+    LPAREN = 280,
+    RPAREN = 281,
+    LCURL = 282,
+    RCURL = 283,
+    LTHIRD = 284,
+    RTHIRD = 285,
+    COMMA = 286,
+    SEMICOLON = 287,
+    STRING = 288,
+    MAIN = 289,
+    PRINTLN = 290,
+    NOT = 291,
+    CONST_INT = 292,
+    CONST_FLOAT = 293,
+    CONST_CHAR = 294,
+    ADDOP = 295,
     ID = 296,
     HELP_ELSE_GET_PRECEDENCE = 297
   };
@@ -201,26 +201,26 @@ extern int yydebug;
 #define CONTINUE 273
 #define INCOP 274
 #define DECOP 275
-#define ADDOP 276
-#define MULOP 277
-#define RELOP 278
-#define ASSIGNOP 279
-#define LOGICOP 280
-#define LPAREN 281
-#define RPAREN 282
-#define LCURL 283
-#define RCURL 284
-#define LTHIRD 285
-#define RTHIRD 286
-#define COMMA 287
-#define SEMICOLON 288
-#define STRING 289
-#define MAIN 290
-#define PRINTLN 291
-#define NOT 292
-#define CONST_INT 293
-#define CONST_FLOAT 294
-#define CONST_CHAR 295
+#define MULOP 276
+#define RELOP 277
+#define ASSIGNOP 278
+#define LOGICOP 279
+#define LPAREN 280
+#define RPAREN 281
+#define LCURL 282
+#define RCURL 283
+#define LTHIRD 284
+#define RTHIRD 285
+#define COMMA 286
+#define SEMICOLON 287
+#define STRING 288
+#define MAIN 289
+#define PRINTLN 290
+#define NOT 291
+#define CONST_INT 292
+#define CONST_FLOAT 293
+#define CONST_CHAR 294
+#define ADDOP 295
 #define ID 296
 #define HELP_ELSE_GET_PRECEDENCE 297
 
@@ -494,7 +494,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   223
+#define YYLAST   198
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  43
@@ -553,11 +553,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    76,    76,    82,    86,    90,    95,   107,   122,   130,
-     140,   149,   182,   215,   247,   283,   291,   303,   309,   316,
-     327,   335,   343,   352,   389,   399,   406,   413,   422,   430,
-     437,   448,   456,   467,   476,   489,   496,   509,   517,   562,
-     578,   590,   598,   605,   612,   619,   626,   633,   646
+       0,    82,    82,    90,    99,   103,   108,   124,   142,   149,
+     159,   171,   204,   238,   270,   309,   317,   329,   335,   342,
+     353,   361,   369,   378,   415,   428,   435,   444,   460,   489,
+     496,   508,   516,   528,   537,   550,   557,   570,   578,   659,
+     677,   692,   709,   716,   723,   730,   737,   744,   759
 };
 #endif
 
@@ -568,10 +568,10 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "IF", "ELSE", "FOR", "WHILE", "DO",
   "BREAK", "INT", "CHAR", "FLOAT", "DOUBLE", "VOID", "RETURN", "SWITCH",
-  "CASE", "DEFAULT", "CONTINUE", "INCOP", "DECOP", "ADDOP", "MULOP",
-  "RELOP", "ASSIGNOP", "LOGICOP", "LPAREN", "RPAREN", "LCURL", "RCURL",
-  "LTHIRD", "RTHIRD", "COMMA", "SEMICOLON", "STRING", "MAIN", "PRINTLN",
-  "NOT", "CONST_INT", "CONST_FLOAT", "CONST_CHAR", "ID",
+  "CASE", "DEFAULT", "CONTINUE", "INCOP", "DECOP", "MULOP", "RELOP",
+  "ASSIGNOP", "LOGICOP", "LPAREN", "RPAREN", "LCURL", "RCURL", "LTHIRD",
+  "RTHIRD", "COMMA", "SEMICOLON", "STRING", "MAIN", "PRINTLN", "NOT",
+  "CONST_INT", "CONST_FLOAT", "CONST_CHAR", "ADDOP", "ID",
   "HELP_ELSE_GET_PRECEDENCE", "$accept", "Program", "compound_statement",
   "var_declaration", "type_specifier", "declaration_list", "statements",
   "statement", "expression_statement", "variable", "expression",
@@ -593,10 +593,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -36
+#define YYPACT_NINF -37
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-36)))
+  (!!((Yystate) == (-37)))
 
 #define YYTABLE_NINF -1
 
@@ -607,17 +607,17 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-      -7,   -23,    18,    -3,   -36,    -8,    -4,    50,   -36,     1,
-       3,     5,   -36,   -36,   -36,   182,   182,   182,   -36,   -36,
-       7,   182,   -36,   -36,   -36,    -9,   -36,    89,     0,   118,
-     -36,   -36,    10,     9,   -36,    20,   -10,    21,   -36,    -5,
-     182,    -1,   182,    24,   -36,   -36,    31,    22,   -36,   182,
-       0,   147,    32,   -25,   -36,   -36,   182,   -36,   182,   182,
-     182,   182,   -36,   -36,    38,    -1,    42,   -36,   -36,    43,
-      41,   -16,   -36,    13,    33,   -36,   -36,   -36,    21,    52,
-     -36,   176,   182,   176,    44,   -36,   -36,    49,    45,    77,
-      55,   -36,   -36,   -36,    46,   176,   176,    54,   -36,   -36,
-     -36
+      -3,   -20,    15,    -7,   -37,    -6,    -8,    50,   -37,    -4,
+      -2,    -1,   -37,   -37,   -37,   157,   157,   -37,   -37,     0,
+     157,   -37,   -37,   -37,   157,     1,   -37,    89,   -10,   106,
+     -37,   -37,     9,     2,   -37,    12,   -13,    16,   -37,    -9,
+     157,    33,   157,     6,     7,     5,   -37,   -37,   -37,   157,
+     -10,   134,    11,   -19,   -37,   -37,   157,   -37,   157,   157,
+     157,   157,   -37,   -37,    21,    33,    22,   -37,   -37,    23,
+      20,   -15,   -37,    14,    35,   -37,   -37,   -37,    17,    16,
+     -37,   151,   157,   151,    30,   -37,   -37,    49,    34,    76,
+      55,   -37,   -37,   -37,    46,   151,   151,    54,   -37,   -37,
+     -37
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -626,13 +626,13 @@ static const yytype_int16 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     0,     0,     0,     1,     0,     0,     0,     2,     0,
-       0,     0,     8,    10,     9,     0,     0,     0,     5,    25,
-       0,     0,    44,    45,    46,    27,    18,     0,     0,     0,
+       0,     0,     8,    10,     9,     0,     0,     5,    25,     0,
+       0,    44,    45,    46,     0,    27,    18,     0,     0,     0,
       15,    17,    42,     0,    29,    31,    33,    35,    37,    41,
-       0,     0,     0,     0,    42,    39,     0,     0,    40,     0,
+       0,     0,     0,     0,     0,     0,    42,    40,    39,     0,
        0,     0,    13,     0,     4,    16,     0,    26,     0,     0,
        0,     0,    47,    48,     0,     0,     0,    24,    43,     0,
-       0,     0,     3,     0,     0,     6,    30,    32,    36,    34,
+       0,     0,     3,     0,     0,     6,    30,    32,    34,    36,
       38,     0,     0,     0,     0,    28,     7,     0,    11,    20,
        0,    22,    23,    14,     0,     0,     0,     0,    21,    19,
       12
@@ -641,8 +641,8 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -36,   -36,    87,   -36,    69,    47,    74,   -29,   -35,   -12,
-     -14,    48,    51,    53,    57,   -11,   -36
+     -37,   -37,    87,   -37,    69,    47,    74,   -29,   -36,   -17,
+     -14,    48,    44,    51,    45,   -16,   -37
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -657,73 +657,67 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      55,    43,     1,    46,    44,    45,    65,    74,    75,    44,
-      48,    59,     3,    60,    62,    63,    74,    86,     4,     6,
-      16,    49,    55,     5,     7,    17,    64,    40,    66,    41,
-      82,    42,    19,    47,    56,    70,    21,    22,    23,    24,
-      25,    52,    57,    61,    44,    58,    44,    44,    44,    44,
-      80,    87,    89,     9,    91,    10,    11,    67,    68,    12,
-      13,    14,    73,    69,    15,    81,    98,    99,    90,    83,
-      84,    16,    85,    59,    88,    94,    17,    92,     7,    18,
-      93,    95,    96,    19,    97,   100,    20,    21,    22,    23,
+      55,    43,    44,    46,    47,    65,     1,    46,    48,    59,
+      62,    63,    74,    75,     3,     4,    74,    86,     5,     7,
+       6,    40,    55,    41,    42,    45,    64,    60,    66,    82,
+      49,    52,    56,    68,    57,    70,    58,    61,    67,    46,
+      73,    46,    46,    46,    46,    80,    69,    81,    83,    84,
+      85,    87,    89,     9,    91,    10,    11,    60,    16,    12,
+      13,    14,    92,    94,    15,    18,    98,    99,    90,    20,
+      21,    22,    23,    24,    25,    16,    88,     7,    17,    93,
+      95,    96,    18,    97,   100,    19,    20,    21,    22,    23,
       24,    25,     9,     8,    10,    11,    50,    71,    12,    13,
-      14,    51,     0,    15,    76,     0,     0,     0,     0,    77,
-      16,     0,     0,    79,     0,    17,    78,     7,     0,     0,
-       0,     9,    19,    10,    11,    20,    21,    22,    23,    24,
-      25,     0,    15,     0,     0,     0,     0,     0,     0,    16,
-       0,     0,     0,     0,    17,     0,     7,    54,     0,     0,
-       9,    19,    10,    11,    20,    21,    22,    23,    24,    25,
-       0,    15,     0,     0,     0,     0,     0,     0,    16,     0,
-       0,     0,     0,    17,     0,     7,    72,     0,     0,     9,
-      19,    10,    11,    20,    21,    22,    23,    24,    25,     0,
-      15,     0,     0,     0,     0,     0,     0,    16,     0,     0,
-       0,     0,    17,    16,     7,     0,     0,     0,    17,    19,
-       0,     0,    20,    21,    22,    23,    24,    25,     0,    21,
-      22,    23,    24,    25
+      14,    51,    77,    15,    76,    79,     0,     0,     0,     9,
+      78,    10,    11,     0,    16,     0,     7,     0,     0,     0,
+      15,    18,     0,     0,    19,    20,    21,    22,    23,    24,
+      25,    16,     0,     7,    54,     0,     0,     9,    18,    10,
+      11,    19,    20,    21,    22,    23,    24,    25,    15,     0,
+       0,     0,     0,     0,     9,     0,    10,    11,     0,    16,
+       0,     7,    72,     0,     0,    15,    18,     0,     0,    19,
+      20,    21,    22,    23,    24,    25,    16,     0,     7,     0,
+       0,     0,    16,    18,     0,     0,    19,    20,    21,    22,
+      23,    24,    25,    20,    21,    22,    23,    24,    25
 };
 
 static const yytype_int8 yycheck[] =
 {
-      29,    15,     9,    17,    16,    16,    41,    32,    33,    21,
-      21,    21,    35,    23,    19,    20,    32,    33,     0,    27,
-      21,    30,    51,    26,    28,    26,    40,    26,    42,    26,
-      65,    26,    33,    26,    24,    49,    37,    38,    39,    40,
-      41,    41,    33,    22,    56,    25,    58,    59,    60,    61,
-      61,    38,    81,     3,    83,     5,     6,    33,    27,     9,
-      10,    11,    30,    41,    14,    27,    95,    96,    82,    27,
-      27,    21,    31,    21,    41,    30,    26,    33,    28,    29,
-      31,     4,    27,    33,    38,    31,    36,    37,    38,    39,
+      29,    15,    16,    20,    20,    41,     9,    24,    24,    22,
+      19,    20,    31,    32,    34,     0,    31,    32,    25,    27,
+      26,    25,    51,    25,    25,    25,    40,    40,    42,    65,
+      29,    41,    23,    26,    32,    49,    24,    21,    32,    56,
+      29,    58,    59,    60,    61,    61,    41,    26,    26,    26,
+      30,    37,    81,     3,    83,     5,     6,    40,    25,     9,
+      10,    11,    32,    29,    14,    32,    95,    96,    82,    36,
+      37,    38,    39,    40,    41,    25,    41,    27,    28,    30,
+       4,    26,    32,    37,    30,    35,    36,    37,    38,    39,
       40,    41,     3,     6,     5,     6,    27,    50,     9,    10,
-      11,    27,    -1,    14,    56,    -1,    -1,    -1,    -1,    58,
-      21,    -1,    -1,    60,    -1,    26,    59,    28,    -1,    -1,
-      -1,     3,    33,     5,     6,    36,    37,    38,    39,    40,
-      41,    -1,    14,    -1,    -1,    -1,    -1,    -1,    -1,    21,
-      -1,    -1,    -1,    -1,    26,    -1,    28,    29,    -1,    -1,
-       3,    33,     5,     6,    36,    37,    38,    39,    40,    41,
-      -1,    14,    -1,    -1,    -1,    -1,    -1,    -1,    21,    -1,
-      -1,    -1,    -1,    26,    -1,    28,    29,    -1,    -1,     3,
-      33,     5,     6,    36,    37,    38,    39,    40,    41,    -1,
-      14,    -1,    -1,    -1,    -1,    -1,    -1,    21,    -1,    -1,
-      -1,    -1,    26,    21,    28,    -1,    -1,    -1,    26,    33,
-      -1,    -1,    36,    37,    38,    39,    40,    41,    -1,    37,
-      38,    39,    40,    41
+      11,    27,    58,    14,    56,    60,    -1,    -1,    -1,     3,
+      59,     5,     6,    -1,    25,    -1,    27,    -1,    -1,    -1,
+      14,    32,    -1,    -1,    35,    36,    37,    38,    39,    40,
+      41,    25,    -1,    27,    28,    -1,    -1,     3,    32,     5,
+       6,    35,    36,    37,    38,    39,    40,    41,    14,    -1,
+      -1,    -1,    -1,    -1,     3,    -1,     5,     6,    -1,    25,
+      -1,    27,    28,    -1,    -1,    14,    32,    -1,    -1,    35,
+      36,    37,    38,    39,    40,    41,    25,    -1,    27,    -1,
+      -1,    -1,    25,    32,    -1,    -1,    35,    36,    37,    38,
+      39,    40,    41,    36,    37,    38,    39,    40,    41
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     9,    44,    35,     0,    26,    27,    28,    45,     3,
-       5,     6,     9,    10,    11,    14,    21,    26,    29,    33,
+       0,     9,    44,    34,     0,    25,    26,    27,    45,     3,
+       5,     6,     9,    10,    11,    14,    25,    28,    32,    35,
       36,    37,    38,    39,    40,    41,    45,    46,    47,    49,
       50,    51,    52,    53,    54,    55,    56,    57,    58,    59,
-      26,    26,    26,    53,    52,    58,    53,    26,    58,    30,
-      47,    49,    41,    48,    29,    50,    24,    33,    25,    21,
-      23,    22,    19,    20,    53,    51,    53,    33,    27,    41,
-      53,    48,    29,    30,    32,    33,    54,    55,    57,    56,
-      58,    27,    51,    27,    27,    31,    33,    38,    41,    50,
-      53,    50,    33,    31,    30,     4,    27,    38,    50,    50,
-      31
+      25,    25,    25,    53,    53,    25,    52,    58,    58,    29,
+      47,    49,    41,    48,    28,    50,    23,    32,    24,    22,
+      40,    21,    19,    20,    53,    51,    53,    32,    26,    41,
+      53,    48,    28,    29,    31,    32,    54,    55,    56,    57,
+      58,    26,    51,    26,    26,    30,    32,    37,    41,    50,
+      53,    50,    32,    30,    29,     4,    26,    37,    50,    50,
+      30
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -1420,36 +1414,43 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 76 "1305043.y" /* yacc.c:1646  */
+#line 82 "1305043.y" /* yacc.c:1646  */
     {
 														printNOW("Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement"); 
+														string s=(yyvsp[0].helpString);
+														(yyval.helpString)=s.c_str();
 														}
-#line 1428 "y.tab.c" /* yacc.c:1646  */
+#line 1424 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 82 "1305043.y" /* yacc.c:1646  */
+#line 90 "1305043.y" /* yacc.c:1646  */
     {
-									printNOW("Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL");}
-#line 1435 "y.tab.c" /* yacc.c:1646  */
+																printNOW("Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL");
+
+																string s=(yyvsp[-2].helpString);
+																(yyval.helpString)=s.c_str();
+
+															}
+#line 1436 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 86 "1305043.y" /* yacc.c:1646  */
+#line 99 "1305043.y" /* yacc.c:1646  */
     {
 		   							printNOW("Matched Rule>>>compound_statement : LCURL statements RCURL");}
-#line 1442 "y.tab.c" /* yacc.c:1646  */
+#line 1443 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 90 "1305043.y" /* yacc.c:1646  */
+#line 103 "1305043.y" /* yacc.c:1646  */
     {
 		   								printNOW("Matched Rule>>>compound_statement : LCURL RCURL");}
-#line 1449 "y.tab.c" /* yacc.c:1646  */
+#line 1450 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 95 "1305043.y" /* yacc.c:1646  */
+#line 108 "1305043.y" /* yacc.c:1646  */
     {
 																printNOW("Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON");
 																cout<<(yyvsp[-2].helpInfo)->getType()<<endl;
@@ -1458,12 +1459,16 @@ yyreduce:
 																	declaredInfo[i]->varType=(yyvsp[-2].helpInfo)->getType();
 																}
 																marker=var_count;
+																
+																string s=(yyvsp[-1].helpString);
+																(yyval.helpString)=s.c_str();
+																
 															}
-#line 1463 "y.tab.c" /* yacc.c:1646  */
+#line 1468 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 107 "1305043.y" /* yacc.c:1646  */
+#line 124 "1305043.y" /* yacc.c:1646  */
     {
 																		printNOW("Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON");
 
@@ -1474,25 +1479,27 @@ yyreduce:
 																			declaredInfo[i]->varType=(yyvsp[-2].helpInfo)->getType();
 																		}
 																		marker=var_count;
+
+																		string s=(yyvsp[-1].helpString);
+																		(yyval.helpString)=s.c_str();
 																		
 
 																	}
-#line 1481 "y.tab.c" /* yacc.c:1646  */
+#line 1489 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 122 "1305043.y" /* yacc.c:1646  */
+#line 142 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("Matched Rule>>>type_specifier : INT");
 							SymbolInfo* s=new SymbolInfo("DUMMY","INT");
 							(yyval.helpInfo)=s; 
-							
 					}
-#line 1492 "y.tab.c" /* yacc.c:1646  */
+#line 1499 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 130 "1305043.y" /* yacc.c:1646  */
+#line 149 "1305043.y" /* yacc.c:1646  */
     {
 					printNOW("Matched Rule>>>type_specifier : FLOAT");
 					
@@ -1500,11 +1507,11 @@ yyreduce:
 					(yyval.helpInfo)=s; 
 					
 				}
-#line 1504 "y.tab.c" /* yacc.c:1646  */
+#line 1511 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 140 "1305043.y" /* yacc.c:1646  */
+#line 159 "1305043.y" /* yacc.c:1646  */
     {
 					printNOW("Matched Rule>>>type_specifier : CHAR");
 
@@ -1512,11 +1519,11 @@ yyreduce:
 					(yyval.helpInfo)=s; 
 
 				}
-#line 1516 "y.tab.c" /* yacc.c:1646  */
+#line 1523 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 149 "1305043.y" /* yacc.c:1646  */
+#line 171 "1305043.y" /* yacc.c:1646  */
     {
 													printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID");
 
@@ -1548,15 +1555,16 @@ yyreduce:
 
 
 												}
-#line 1552 "y.tab.c" /* yacc.c:1646  */
+#line 1559 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 182 "1305043.y" /* yacc.c:1646  */
+#line 204 "1305043.y" /* yacc.c:1646  */
     {
 		 											printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
 		 										
 		 											(yyvsp[-3].idInfo)->arrayLength=(yyvsp[-1].helpInfo)->iVal;
+
 													(yyvsp[-3].idInfo)->array=true;
 
 													string s=""+(yyvsp[-3].idInfo)->getName();
@@ -1583,11 +1591,11 @@ yyreduce:
 													}
 
 		 										}
-#line 1587 "y.tab.c" /* yacc.c:1646  */
+#line 1595 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 215 "1305043.y" /* yacc.c:1646  */
+#line 238 "1305043.y" /* yacc.c:1646  */
     {	
 		 			printNOW("Matched Rule>>>declaration_list : ID");
 					
@@ -1617,18 +1625,18 @@ yyreduce:
 					}
 
 		 		}
-#line 1621 "y.tab.c" /* yacc.c:1646  */
+#line 1629 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 247 "1305043.y" /* yacc.c:1646  */
+#line 270 "1305043.y" /* yacc.c:1646  */
     {
 		 								
 		 								printNOW("Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD");
 
 										(yyvsp[-3].idInfo)->arrayLength=(yyvsp[-1].helpInfo)->iVal;
 										(yyvsp[-3].idInfo)->array=true;
-
+										printf("%d ",(yyvsp[-3].idInfo)->arrayLength);
 										string s=""+(yyvsp[-3].idInfo)->getName();
 
 
@@ -1653,49 +1661,49 @@ yyreduce:
 										}
 		 									
 		 							}
-#line 1657 "y.tab.c" /* yacc.c:1646  */
+#line 1665 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 283 "1305043.y" /* yacc.c:1646  */
+#line 309 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("Matched Rule>>>statements : statement");
 							//??
 
 						}
-#line 1667 "y.tab.c" /* yacc.c:1646  */
+#line 1675 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 291 "1305043.y" /* yacc.c:1646  */
+#line 317 "1305043.y" /* yacc.c:1646  */
     {
 	   								printNOW("Matched Rule>>>statements : statements statement");
 	   								//??
 
 	   							}
-#line 1677 "y.tab.c" /* yacc.c:1646  */
+#line 1685 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 303 "1305043.y" /* yacc.c:1646  */
+#line 329 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("Matched Rule>>>statement  : expression_statement");
 										//??
 									}
-#line 1686 "y.tab.c" /* yacc.c:1646  */
+#line 1694 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 309 "1305043.y" /* yacc.c:1646  */
+#line 335 "1305043.y" /* yacc.c:1646  */
     {
 	   								printNOW("Matched Rule>>>statement  : compound_statement");
 	   								//??
 	   							}
-#line 1695 "y.tab.c" /* yacc.c:1646  */
+#line 1703 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 316 "1305043.y" /* yacc.c:1646  */
+#line 342 "1305043.y" /* yacc.c:1646  */
     {
 	   																			
 	   																			printNOW("Matched Rule>>>statement  : FOR LPAREN expression_statement expression_statement expression RPAREN statement");
@@ -1704,42 +1712,42 @@ yyreduce:
 	   																			//LATER??
 
 	   																		}
-#line 1708 "y.tab.c" /* yacc.c:1646  */
+#line 1716 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 327 "1305043.y" /* yacc.c:1646  */
+#line 353 "1305043.y" /* yacc.c:1646  */
     {
 	   																				printNOW("Matched Rule>>>statement  : IF LPAREN expression RPAREN statement");
 	   																				
 	   																				//LATER??
 	   																			}
-#line 1718 "y.tab.c" /* yacc.c:1646  */
+#line 1726 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 335 "1305043.y" /* yacc.c:1646  */
+#line 361 "1305043.y" /* yacc.c:1646  */
     {
 	   																printNOW("Matched Rule>>>statement  : IF LPAREN expression RPAREN statement ELSE statement");
 
 	   																//LATER??
 	   															}
-#line 1728 "y.tab.c" /* yacc.c:1646  */
+#line 1736 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 343 "1305043.y" /* yacc.c:1646  */
+#line 369 "1305043.y" /* yacc.c:1646  */
     {
 	   													printNOW("Matched Rule>>>statement  : WHILE LPAREN expression RPAREN statement");
 
 	   													//LATER??
 
 	   												}
-#line 1739 "y.tab.c" /* yacc.c:1646  */
+#line 1747 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 352 "1305043.y" /* yacc.c:1646  */
+#line 378 "1305043.y" /* yacc.c:1646  */
     {
 	   												printNOW("Matched Rule>>>statement  : PRINTLN LPAREN ID RPAREN SEMICOLON ");
 
@@ -1774,115 +1782,143 @@ yyreduce:
 	   												//later???????what The fuck??
 
 	   											}
-#line 1778 "y.tab.c" /* yacc.c:1646  */
+#line 1786 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 389 "1305043.y" /* yacc.c:1646  */
+#line 415 "1305043.y" /* yacc.c:1646  */
     {
 	   										printNOW("Matched Rule>>>statement  : RETURN expression SEMICOLON");
 	   										
 
 	   										//Later??
 	   									}
-#line 1789 "y.tab.c" /* yacc.c:1646  */
+#line 1797 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 399 "1305043.y" /* yacc.c:1646  */
+#line 428 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("Matched Rule>>>expression_statement : SEMICOLON");
 
 						}
-#line 1798 "y.tab.c" /* yacc.c:1646  */
+#line 1806 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 406 "1305043.y" /* yacc.c:1646  */
+#line 435 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("Matched Rule>>>expression_statement : expression SEMICOLON");
 										//LATER??
 
 									}
-#line 1808 "y.tab.c" /* yacc.c:1646  */
+#line 1816 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 413 "1305043.y" /* yacc.c:1646  */
+#line 444 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("Matched Rule>>>variable : ID ");
 						//LATER
-						(yyval.helpInfo)=(yyvsp[0].idInfo);
-
+						err=true;
+						for(int i=0;i<var_count;i++){
+							if((yyvsp[0].idInfo)->getName()==declaredInfo[i]->getName()){
+								err=false;
+								break;
+							}
+						}
+						if(err)printNOW("ERROR!! Undeclared variable: "+(yyvsp[0].idInfo)->getName());
+						else (yyval.helpInfo)=(yyvsp[0].idInfo);
 				}
-#line 1819 "y.tab.c" /* yacc.c:1646  */
+#line 1834 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 422 "1305043.y" /* yacc.c:1646  */
+#line 460 "1305043.y" /* yacc.c:1646  */
     {
 	 									printNOW("Matched Rule>>>variable : ID LTHIRD expression RTHIRD ");
-	 									(yyval.helpInfo)=(yyvsp[-3].idInfo);
+										
+										err=true;
 
-	 									//later
+										for(ii=0;ii<var_count;ii++){
+											if(declaredInfo[ii]->array)
+												if((yyvsp[-3].idInfo)->getName()==declaredInfo[ii]->getName()){
+													err=false;
+													break;
+												}
+										}
+
+
+										if(err)printNOW("ERROR!! Undeclared variable: "+(yyvsp[-3].idInfo)->getName());
+
+										else if((yyvsp[-1].helpInfo)->getType()=="CONST_FLOAT"||(yyvsp[-1].helpInfo)->getType()=="FLOAT"){
+															printNOW("ERROR!! array index must be an INT for array: "+(yyvsp[-3].idInfo)->getName());
+													}										
+										
+										else if(declaredInfo[ii]->arrayLength<=(yyvsp[-1].helpInfo)->iVal){
+															printNOW("ERROR! Array index out of bound for array: "+(yyvsp[-3].idInfo)->getName());
+															}
+										else (yyval.helpInfo)=(yyvsp[-3].idInfo);
 	 								}
-#line 1830 "y.tab.c" /* yacc.c:1646  */
+#line 1864 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 430 "1305043.y" /* yacc.c:1646  */
+#line 489 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("Matched Rule>>>expression : logic_expression");
 									(yyval.helpInfo)=(yyvsp[0].helpInfo);
 								}
-#line 1839 "y.tab.c" /* yacc.c:1646  */
+#line 1873 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 437 "1305043.y" /* yacc.c:1646  */
+#line 496 "1305043.y" /* yacc.c:1646  */
     {
 	   												printNOW("Matched Rule>>>expression : variable ASSIGNOP logic_expression");
+	   												(yyvsp[-2].helpInfo)=(yyvsp[0].helpInfo);
 	   												(yyval.helpInfo)=(yyvsp[-2].helpInfo);
 	   												//LATER
 
 	   											}
-#line 1850 "y.tab.c" /* yacc.c:1646  */
+#line 1885 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 448 "1305043.y" /* yacc.c:1646  */
+#line 508 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("Matched Rule>>>logic_expression : rel_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 									}
-#line 1860 "y.tab.c" /* yacc.c:1646  */
+#line 1895 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 456 "1305043.y" /* yacc.c:1646  */
+#line 516 "1305043.y" /* yacc.c:1646  */
     {
 		 												printNOW("Matched Rule>>>logic_expression : rel_expression LOGICOP rel_expression");
-		 												(yyval.helpInfo)=(yyvsp[-2].helpInfo);
+		 												//later
 
-		 												//LATER
+
+		 												(yyval.helpInfo)=(yyvsp[-2].helpInfo);
 		 											}
-#line 1871 "y.tab.c" /* yacc.c:1646  */
+#line 1907 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 467 "1305043.y" /* yacc.c:1646  */
+#line 528 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("Matched Rule>>>rel_expression : simple_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 
 									}
-#line 1882 "y.tab.c" /* yacc.c:1646  */
+#line 1918 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 476 "1305043.y" /* yacc.c:1646  */
+#line 537 "1305043.y" /* yacc.c:1646  */
     {
 
 														printNOW("Matched Rule>>>rel_expression : simple_expression RELOP simple_expression");
@@ -1891,20 +1927,20 @@ yyreduce:
 
 
 													}
-#line 1895 "y.tab.c" /* yacc.c:1646  */
+#line 1931 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 489 "1305043.y" /* yacc.c:1646  */
+#line 550 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("Matched Rule>>>simple_expression : term ");
 							(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						}
-#line 1904 "y.tab.c" /* yacc.c:1646  */
+#line 1940 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 496 "1305043.y" /* yacc.c:1646  */
+#line 557 "1305043.y" /* yacc.c:1646  */
     {
 		  										printNOW("Matched Rule>>>simple_expression : simple_expression ADDOP term");
 
@@ -1913,46 +1949,78 @@ yyreduce:
 		  									(yyval.helpInfo)=(yyvsp[-2].helpInfo);
 
 		  								}
-#line 1917 "y.tab.c" /* yacc.c:1646  */
+#line 1953 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 509 "1305043.y" /* yacc.c:1646  */
+#line 570 "1305043.y" /* yacc.c:1646  */
     {
 								printNOW("Matched Rule>>>term :unary_expression");
 								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 							}
-#line 1927 "y.tab.c" /* yacc.c:1646  */
+#line 1963 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 517 "1305043.y" /* yacc.c:1646  */
+#line 578 "1305043.y" /* yacc.c:1646  */
     {
      										printNOW("Matched Rule>>>term : term MULOP unary_expression");
+     										
      										if((yyvsp[-1].helpString)=="*"){
-     											if((yyvsp[-2].helpInfo)->getType()==(yyvsp[0].helpInfo)->getType()&&(yyvsp[-2].helpInfo)->getType()=="INT")(yyvsp[-2].helpInfo)->iVal*=(yyvsp[0].helpInfo)->iVal;
+     											
+     											if((yyvsp[-2].helpInfo)->getType()==(yyvsp[0].helpInfo)->getType()&&((yyvsp[-2].helpInfo)->getType()=="INT"||(yyvsp[-2].helpInfo)->getType()=="CONST_INT"))(yyvsp[-2].helpInfo)->iVal*=(yyvsp[0].helpInfo)->iVal;
+     											else if(((yyvsp[-2].helpInfo)->getType()=="INT"||(yyvsp[-2].helpInfo)->getType()=="CONST_INT"||(yyvsp[-2].helpInfo)->getType()=="CONST_CHAR"||(yyvsp[-2].helpInfo)->getType()=="CHAR")&&((yyvsp[0].helpInfo)->getType()=="INT"||(yyvsp[0].helpInfo)->getType()=="CONST_INT"||(yyvsp[0].helpInfo)->getType()=="CONST_CHAR"||(yyvsp[0].helpInfo)->getType()=="CHAR")){
+     												
 
-     											else if((yyvsp[-2].helpInfo)->getType()=="INT"&&(yyvsp[0].helpInfo)->getType()=="FLOAT"){
+     												(yyvsp[-2].helpInfo)->iVal*=(yyvsp[0].helpInfo)->iVal;
+     												(yyvsp[-2].helpInfo)->setType("INT");
+     											}
+
+
+
+     											else if(((yyvsp[-2].helpInfo)->getType()=="INT"||(yyvsp[-2].helpInfo)->getType()=="CONST_INT")&&((yyvsp[0].helpInfo)->getType()=="FLOAT"||(yyvsp[0].helpInfo)->getType()=="CONST_FLOAT")){
+     												
+
      												(yyvsp[-2].helpInfo)->dVal=((yyvsp[-2].helpInfo)->iVal*(yyvsp[0].helpInfo)->dVal);
      												(yyvsp[-2].helpInfo)->setType("FLOAT");
      											}
-     											else if((yyvsp[-2].helpInfo)->getType()=="FLOAT"&&(yyvsp[0].helpInfo)->getType()=="INT")(yyvsp[-2].helpInfo)->dVal=((yyvsp[-2].helpInfo)->dVal*(yyvsp[0].helpInfo)->iVal);
-     											else (yyvsp[-2].helpInfo)->dVal*=(yyvsp[0].helpInfo)->dVal;
+     											
+     											else if(((yyvsp[-2].helpInfo)->getType()=="CONST_FLOAT"||(yyvsp[-2].helpInfo)->getType()=="FLOAT")&&((yyvsp[0].helpInfo)->getType()=="CONST_INT"||(yyvsp[0].helpInfo)->getType()=="INT")){
+     												
+
+     												(yyvsp[-2].helpInfo)->dVal=((yyvsp[-2].helpInfo)->dVal*(yyvsp[0].helpInfo)->iVal);
+     												(yyvsp[-2].helpInfo)->setType("FLOAT");
+     											}
+     											
+     											else{
+     												
+
+     												(yyvsp[-2].helpInfo)->dVal*=(yyvsp[0].helpInfo)->dVal;
+     												(yyvsp[-2].helpInfo)->setType("FLOAT");
+     											}
      										}
 
      										else if((yyvsp[-1].helpString)=="/"){
-     											if((yyvsp[-2].helpInfo)->getType()=="FLOAT"||(yyvsp[0].helpInfo)->getType()=="FLOAT"){
-     												if((yyvsp[-2].helpInfo)->getType()=="FLOAT"&&(yyvsp[0].helpInfo)->getType()=="FLOAT"){
+     											if(((yyvsp[-2].helpInfo)->getType()=="FLOAT"||(yyvsp[-2].helpInfo)->getType()=="CONST_FLOAT")||((yyvsp[0].helpInfo)->getType()=="CONST_FLOAT"||(yyvsp[0].helpInfo)->getType()=="FLOAT")){
+     												
+
+     											if(((yyvsp[-2].helpInfo)->getType()=="CONST_FLOAT"||(yyvsp[-2].helpInfo)->getType()=="FLOAT")&&((yyvsp[0].helpInfo)->getType()=="CONST_FLOAT"||(yyvsp[0].helpInfo)->getType()=="FLOAT")){
      													(yyvsp[-2].helpInfo)->dVal=(yyvsp[-2].helpInfo)->dVal/((yyvsp[0].helpInfo)->dVal);
      												}
-     												else if((yyvsp[-2].helpInfo)->getType()=="FLOAT"){
+     												else if((yyvsp[-2].helpInfo)->getType()=="FLOAT"||(yyvsp[-2].helpInfo)->getType()=="CONST_FLOAT"){
      													(yyvsp[-2].helpInfo)->dVal=(yyvsp[-2].helpInfo)->dVal/((yyvsp[0].helpInfo)->iVal);
      												}
      												else{
      													(yyvsp[-2].helpInfo)->dVal=(yyvsp[-2].helpInfo)->iVal/((yyvsp[0].helpInfo)->dVal);
-     													(yyvsp[-2].helpInfo)->setType("FLOAT");
+     													
      												}
+     												(yyvsp[-2].helpInfo)->setType("FLOAT");
+     											}
+     											
+     											else if(((yyvsp[-2].helpInfo)->getType()=="INT"||(yyvsp[-2].helpInfo)->getType()=="CONST_INT")&&((yyvsp[0].helpInfo)->getType()=="CONST_INT"||(yyvsp[0].helpInfo)->getType()=="INT")){
+     												(yyvsp[-2].helpInfo)->iVal=(yyvsp[-2].helpInfo)->iVal/(yyvsp[0].helpInfo)->iVal;
+     												(yyvsp[-2].helpInfo)->setType("INT");
      											}
 
      										}
@@ -1967,126 +2035,139 @@ yyreduce:
      							
 
      									}
-#line 1971 "y.tab.c" /* yacc.c:1646  */
+#line 2039 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 562 "1305043.y" /* yacc.c:1646  */
+#line 659 "1305043.y" /* yacc.c:1646  */
     {
 												printNOW("Matched Rule>>>unary_expression : ADDOP unary_expression");
 
-												if((yyvsp[-1].helpString)=="-"){
-													string s=(yyvsp[0].helpInfo)->getType();
+												printNOW((yyvsp[-1].helpInfo)->getName());
 
-													if(s=="INT")(yyvsp[0].helpInfo)->iVal=-((yyvsp[0].helpInfo)->iVal);
-													else if(s=="FLOAT")(yyvsp[0].helpInfo)->dVal=-((yyvsp[0].helpInfo)->dVal);
+												/*if($1=="-"){
+													string s=$2->getType();
 
-												}
+													if(s=="INT"||s=="CONST_INT")$2->iVal=-($2->iVal);
+													else if(s=="FLOAT"||s=="CONST_FLOAT")$2->dVal=-($2->dVal);
+													else if(s=="CHAR"||s=="CONST_CHAR")printNOW("ERROR!! Unary ADDOP has been done on CHAR: "+$2->getName());
+												}*/
 
 												(yyval.helpInfo)=(yyvsp[0].helpInfo);
 											}
-#line 1989 "y.tab.c" /* yacc.c:1646  */
+#line 2059 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 578 "1305043.y" /* yacc.c:1646  */
+#line 677 "1305043.y" /* yacc.c:1646  */
     {
 		 								printNOW("Matched Rule>>>unary_expression : NOT unary_expression ");
+		 								
+		 								printNOW((yyvsp[-1].helpString));
 		 								string s=(yyvsp[0].helpInfo)->getType();
 
-		 								if(s=="INT")(yyvsp[0].helpInfo)->iVal=!((yyvsp[0].helpInfo)->iVal);
-		 								else if(s=="FLOAT")(yyvsp[0].helpInfo)->dVal=!((yyvsp[0].helpInfo)->dVal);
+		 								if(s=="INT"||s=="CONST_INT")(yyvsp[0].helpInfo)->iVal=!((yyvsp[0].helpInfo)->iVal);
+		 								else if(s=="FLOAT"||s=="CONST_FLOAT")(yyvsp[0].helpInfo)->dVal=!((yyvsp[0].helpInfo)->dVal);
+		 								else if(s=="CHAR"||s=="CONST_CHAR")printNOW("ERROR!! Unary NOT has been done on CHAR: "+(yyvsp[0].helpInfo)->getName());
 
 		 								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 		 							}
-#line 2003 "y.tab.c" /* yacc.c:1646  */
+#line 2076 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 590 "1305043.y" /* yacc.c:1646  */
+#line 692 "1305043.y" /* yacc.c:1646  */
     {
 		 			printNOW("Matched Rule>>>unary_expression : factor");
+		 			printNOW((yyvsp[0].helpInfo)->getName());
 		 			(yyval.helpInfo)=(yyvsp[0].helpInfo);
 		 		}
-#line 2012 "y.tab.c" /* yacc.c:1646  */
+#line 2086 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 598 "1305043.y" /* yacc.c:1646  */
+#line 709 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("Matched Rule>>>factor : variable ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 					}
-#line 2021 "y.tab.c" /* yacc.c:1646  */
+#line 2095 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 605 "1305043.y" /* yacc.c:1646  */
+#line 716 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("Matched Rule>>>factor : LPAREN expression RPAREN");
 									(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 								}
-#line 2030 "y.tab.c" /* yacc.c:1646  */
+#line 2104 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 612 "1305043.y" /* yacc.c:1646  */
+#line 723 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("Matched Rule>>>factor : CONST_INT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 					}
-#line 2039 "y.tab.c" /* yacc.c:1646  */
+#line 2113 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 619 "1305043.y" /* yacc.c:1646  */
+#line 730 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("Matched Rule>>>factor : CONST_FLOAT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 					}
-#line 2048 "y.tab.c" /* yacc.c:1646  */
+#line 2122 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 626 "1305043.y" /* yacc.c:1646  */
+#line 737 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("Matched Rule>>>factor : CONST_CHAR ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 					}
-#line 2057 "y.tab.c" /* yacc.c:1646  */
+#line 2131 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 633 "1305043.y" /* yacc.c:1646  */
+#line 744 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("Matched Rule>>>factor : INCOP ");
-						string s=(yyval.helpInfo)->getType();
+						string s=(yyvsp[-1].helpInfo)->getType();
 						if(s=="INT")(yyvsp[-1].helpInfo)->iVal++;
 						else if(s=="FLOAT")(yyvsp[-1].helpInfo)->dVal++;
 						else if(s=="CHAR")(yyvsp[-1].helpInfo)->chVal++;
-
+						else{
+						//print ERROR
+						}
 						(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 					
 					}
-#line 2072 "y.tab.c" /* yacc.c:1646  */
+#line 2148 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 646 "1305043.y" /* yacc.c:1646  */
+#line 759 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("Matched Rule>>>factor : DECOP ");
 						
-						string s=(yyval.helpInfo)->getType();
+						string s=(yyvsp[-1].helpInfo)->getType();
 						if(s=="INT")(yyvsp[-1].helpInfo)->iVal--;
 						else if(s=="FLOAT")(yyvsp[-1].helpInfo)->dVal--;
 						else if(s=="CHAR")(yyvsp[-1].helpInfo)->chVal--;
+						else{
+							//print ERROR
+						}
+
+						(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 
 					}
-#line 2086 "y.tab.c" /* yacc.c:1646  */
+#line 2167 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2090 "y.tab.c" /* yacc.c:1646  */
+#line 2171 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2314,7 +2395,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 656 "1305043.y" /* yacc.c:1906  */
+#line 774 "1305043.y" /* yacc.c:1906  */
 
 
 main(int argc,char *argv[])

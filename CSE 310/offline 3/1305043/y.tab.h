@@ -63,26 +63,26 @@ extern int yydebug;
     CONTINUE = 273,
     INCOP = 274,
     DECOP = 275,
-    ADDOP = 276,
-    MULOP = 277,
-    RELOP = 278,
-    ASSIGNOP = 279,
-    LOGICOP = 280,
-    LPAREN = 281,
-    RPAREN = 282,
-    LCURL = 283,
-    RCURL = 284,
-    LTHIRD = 285,
-    RTHIRD = 286,
-    COMMA = 287,
-    SEMICOLON = 288,
-    STRING = 289,
-    MAIN = 290,
-    PRINTLN = 291,
-    NOT = 292,
-    CONST_INT = 293,
-    CONST_FLOAT = 294,
-    CONST_CHAR = 295,
+    MULOP = 276,
+    RELOP = 277,
+    ASSIGNOP = 278,
+    LOGICOP = 279,
+    LPAREN = 280,
+    RPAREN = 281,
+    LCURL = 282,
+    RCURL = 283,
+    LTHIRD = 284,
+    RTHIRD = 285,
+    COMMA = 286,
+    SEMICOLON = 287,
+    STRING = 288,
+    MAIN = 289,
+    PRINTLN = 290,
+    NOT = 291,
+    CONST_INT = 292,
+    CONST_FLOAT = 293,
+    CONST_CHAR = 294,
+    ADDOP = 295,
     ID = 296,
     HELP_ELSE_GET_PRECEDENCE = 297
   };
@@ -106,26 +106,26 @@ extern int yydebug;
 #define CONTINUE 273
 #define INCOP 274
 #define DECOP 275
-#define ADDOP 276
-#define MULOP 277
-#define RELOP 278
-#define ASSIGNOP 279
-#define LOGICOP 280
-#define LPAREN 281
-#define RPAREN 282
-#define LCURL 283
-#define RCURL 284
-#define LTHIRD 285
-#define RTHIRD 286
-#define COMMA 287
-#define SEMICOLON 288
-#define STRING 289
-#define MAIN 290
-#define PRINTLN 291
-#define NOT 292
-#define CONST_INT 293
-#define CONST_FLOAT 294
-#define CONST_CHAR 295
+#define MULOP 276
+#define RELOP 277
+#define ASSIGNOP 278
+#define LOGICOP 279
+#define LPAREN 280
+#define RPAREN 281
+#define LCURL 282
+#define RCURL 283
+#define LTHIRD 284
+#define RTHIRD 285
+#define COMMA 286
+#define SEMICOLON 287
+#define STRING 288
+#define MAIN 289
+#define PRINTLN 290
+#define NOT 291
+#define CONST_INT 292
+#define CONST_FLOAT 293
+#define CONST_CHAR 294
+#define ADDOP 295
 #define ID 296
 #define HELP_ELSE_GET_PRECEDENCE 297
 

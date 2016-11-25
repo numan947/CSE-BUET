@@ -1,17 +1,53 @@
+LEXER RESPONSE: Line no 000: TOKEN <INT> Lexeme <int> found
+
+
+LEXER RESPONSE: Line no 000: TOKEN <MAIN> Lexeme <main> found
+
+
+LEXER RESPONSE: Line no 000: TOKEN <LPAREN> Lexeme <(> found
+
+
+LEXER RESPONSE: Line no 000: TOKEN <RPAREN> Lexeme <)> found
+
+
+LEXER RESPONSE: Line no 000: TOKEN <LCURL> Lexeme <{> found
+
+
+LEXER RESPONSE: Line no 001: TOKEN <INT> Lexeme <int> found
+
+
 Matched Rule>>>type_specifier : INT
 
+
+
+LEXER RESPONSE: Line no 001: TOKEN <LTHIRD> Lexeme <[> found
+
+
+LEXER RESPONSE: Line no 001: TOKEN <RTHIRD> Lexeme <]> found
 
 
 Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD
 
 
 
+LEXER RESPONSE: Line no 001: TOKEN <COMMA> Lexeme <,> found
+
+
+LEXER RESPONSE: Line no 001: TOKEN <COMMA> Lexeme <,> found
+
+
 Matched Rule>>>declaration_list : declaration_list COMMA ID
 
 
 
+LEXER RESPONSE: Line no 001: TOKEN <COMMA> Lexeme <,> found
+
+
 Matched Rule>>>declaration_list : declaration_list COMMA ID
 
+
+
+LEXER RESPONSE: Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
 
 
 Matched Rule>>>declaration_list : declaration_list COMMA ID
@@ -22,20 +58,14 @@ Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON
 
 
 
+LEXER RESPONSE: Line no 001: TOKEN <FLOAT> Lexeme <float> found
+
+
 Matched Rule>>>type_specifier : FLOAT
 
 
 
-Matched Rule>>>declaration_list : ID
-
-
-
-Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
-
-
-
-Matched Rule>>>type_specifier : CHAR
-
+LEXER RESPONSE: Line no 001: TOKEN <SEMICOLON> Lexeme <;> found
 
 
 Matched Rule>>>declaration_list : ID
@@ -46,47 +76,56 @@ Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list
 
 
 
+LEXER RESPONSE: Line no 002: TOKEN <CHAR> Lexeme <char> found
+
+
 Matched Rule>>>type_specifier : CHAR
 
+
+
+LEXER RESPONSE: Line no 002: TOKEN <SEMICOLON> Lexeme <;> found
+
+
+Matched Rule>>>declaration_list : ID
+
+
+
+Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+
+
+
+LEXER RESPONSE: Line no 003: TOKEN <CHAR> Lexeme <char> found
+
+
+Matched Rule>>>type_specifier : CHAR
+
+
+
+LEXER RESPONSE: Line no 003: TOKEN <LTHIRD> Lexeme <[> found
+
+
+LEXER RESPONSE: Line no 003: TOKEN <RTHIRD> Lexeme <]> found
 
 
 Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD
 
 
 
+LEXER RESPONSE: Line no 003: TOKEN <SEMICOLON> Lexeme <;> found
+
+
 Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
 
 
 
-Matched Rule>>>factor : CONST_INT 
+LEXER RESPONSE: Line no 004: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
+Matched Rule>>>variable : ID 
 
 
 
-Matched Rule>>>unary_expression : factor
-
-
-
-Matched Rule>>>term :unary_expression
-
-
-
-Matched Rule>>>simple_expression : term 
-
-
-
-Matched Rule>>>rel_expression : simple_expression
-
-
-
-Matched Rule>>>logic_expression : rel_expression
-
-
-
-Matched Rule>>>expression : logic_expression
-
-
-
-Matched Rule>>>variable : ID LTHIRD expression RTHIRD 
+ERROR!! Undeclared variable: fuck
 
 
 
@@ -94,7 +133,14 @@ Matched Rule>>>factor : CONST_INT
 
 
 
+LEXER RESPONSE: Line no 004: TOKEN <SEMICOLON> Lexeme <;> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+50
 
 
 
@@ -130,11 +176,21 @@ Matched Rule>>>statements : statement
 
 
 
+LEXER RESPONSE: Line no 005: TOKEN <LTHIRD> Lexeme <[> found
+
+
 Matched Rule>>>factor : CONST_INT 
 
 
 
+LEXER RESPONSE: Line no 005: TOKEN <RTHIRD> Lexeme <]> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+0
 
 
 
@@ -162,11 +218,29 @@ Matched Rule>>>variable : ID LTHIRD expression RTHIRD
 
 
 
+LEXER RESPONSE: Line no 005: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
 Matched Rule>>>factor : CONST_INT 
 
 
 
+LEXER RESPONSE: Line no 005: TOKEN <SEMICOLON> Lexeme <;> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+1
+
+
+
+Matched Rule>>>unary_expression : ADDOP unary_expression
+
+
+
+-
 
 
 
@@ -202,15 +276,124 @@ Matched Rule>>>statements : statements statement
 
 
 
+LEXER RESPONSE: Line no 006: TOKEN <LTHIRD> Lexeme <[> found
+
+
+Matched Rule>>>factor : CONST_FLOAT 
+
+
+
+LEXER RESPONSE: Line no 006: TOKEN <RTHIRD> Lexeme <]> found
+
+
+Matched Rule>>>unary_expression : factor
+
+
+
+10.5
+
+
+
+Matched Rule>>>term :unary_expression
+
+
+
+Matched Rule>>>simple_expression : term 
+
+
+
+Matched Rule>>>rel_expression : simple_expression
+
+
+
+Matched Rule>>>logic_expression : rel_expression
+
+
+
+Matched Rule>>>expression : logic_expression
+
+
+
+Matched Rule>>>variable : ID LTHIRD expression RTHIRD 
+
+
+
+ERROR!! array index must be an INT for array: a
+
+
+
+LEXER RESPONSE: Line no 006: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
+Matched Rule>>>factor : CONST_INT 
+
+
+
+LEXER RESPONSE: Line no 006: TOKEN <SEMICOLON> Lexeme <;> found
+
+
+Matched Rule>>>unary_expression : factor
+
+
+
+5
+
+
+
+Matched Rule>>>term :unary_expression
+
+
+
+Matched Rule>>>simple_expression : term 
+
+
+
+Matched Rule>>>rel_expression : simple_expression
+
+
+
+Matched Rule>>>logic_expression : rel_expression
+
+
+
+Matched Rule>>>expression : variable ASSIGNOP logic_expression
+
+
+
+Matched Rule>>>expression_statement : expression SEMICOLON
+
+
+
+Matched Rule>>>statement  : expression_statement
+
+
+
+Matched Rule>>>statements : statements statement
+
+
+
+LEXER RESPONSE: Line no 007: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
 Matched Rule>>>variable : ID 
 
 
 
+LEXER RESPONSE: Line no 007: TOKEN <LTHIRD> Lexeme <[> found
+
+
 Matched Rule>>>factor : CONST_INT 
 
 
 
+LEXER RESPONSE: Line no 007: TOKEN <RTHIRD> Lexeme <]> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+0
 
 
 
@@ -246,6 +429,10 @@ Matched Rule>>>unary_expression : factor
 
 
 
+a
+
+
+
 Matched Rule>>>term :unary_expression
 
 
@@ -254,11 +441,21 @@ Matched Rule>>>simple_expression : term
 
 
 
+LEXER RESPONSE: Line no 007: TOKEN <LTHIRD> Lexeme <[> found
+
+
 Matched Rule>>>factor : CONST_INT 
 
 
 
+LEXER RESPONSE: Line no 007: TOKEN <RTHIRD> Lexeme <]> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+1
 
 
 
@@ -290,7 +487,14 @@ Matched Rule>>>factor : variable
 
 
 
+LEXER RESPONSE: Line no 007: TOKEN <SEMICOLON> Lexeme <;> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+a
 
 
 
@@ -326,6 +530,9 @@ Matched Rule>>>statements : statements statement
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <ASSIGNOP> Lexeme <=> found
+
+
 Matched Rule>>>variable : ID 
 
 
@@ -334,7 +541,14 @@ Matched Rule>>>factor : CONST_INT
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <MULOP> Lexeme <*> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+2
 
 
 
@@ -354,6 +568,10 @@ Matched Rule>>>unary_expression : factor
 
 
 
+3
+
+
+
 Matched Rule>>>term :unary_expression
 
 
@@ -362,11 +580,21 @@ Matched Rule>>>simple_expression : simple_expression ADDOP term
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <LPAREN> Lexeme <(> found
+
+
 Matched Rule>>>factor : CONST_INT 
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <MULOP> Lexeme <%> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+5
 
 
 
@@ -382,7 +610,14 @@ Matched Rule>>>factor : CONST_INT
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <RELOP> Lexeme <<> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+3
 
 
 
@@ -398,7 +633,14 @@ Matched Rule>>>factor : CONST_INT
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <LOGICOP> Lexeme <&&> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+4
 
 
 
@@ -418,7 +660,14 @@ Matched Rule>>>factor : CONST_INT
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <RPAREN> Lexeme <)> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+8
 
 
 
@@ -446,7 +695,14 @@ Matched Rule>>>factor : LPAREN expression RPAREN
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <LOGICOP> Lexeme <||> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+5
 
 
 
@@ -466,7 +722,14 @@ Matched Rule>>>factor : CONST_INT
 
 
 
+LEXER RESPONSE: Line no 008: TOKEN <SEMICOLON> Lexeme <;> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+2
 
 
 
@@ -502,11 +765,21 @@ Matched Rule>>>statements : statements statement
 
 
 
+LEXER RESPONSE: Line no 009: TOKEN <RETURN> Lexeme <return> found
+
+
 Matched Rule>>>factor : CONST_INT 
 
 
 
+LEXER RESPONSE: Line no 009: TOKEN <SEMICOLON> Lexeme <;> found
+
+
 Matched Rule>>>unary_expression : factor
+
+
+
+0
 
 
 
@@ -538,6 +811,9 @@ Matched Rule>>>statements : statements statement
 
 
 
+LEXER RESPONSE: Line no 010: TOKEN <RCURL> Lexeme <}> found
+
+
 Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL
 
 
@@ -547,13 +823,13 @@ Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement
 
 
 PRINTING SYMBOL TABLE
-0 --> <c : ID>
-1 --> <d : ID>
-6 --> <i : ID>
-7 --> <j : ID>
-9 --> <asdf : ID>
-13 --> <a : ID>
-14 --> <ch : ID>
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+9 --> <asdf , ID, {, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}>
+13 --> <a , ID, { 0, 0,}>
+14 --> <ch , ID, NULL>
 
 
 PRINTING VARIABLE LIST
@@ -566,4 +842,4 @@ ch ID CHAR
 asdf ID CHAR
 
 
-TOTAL LINES: 010
+TOTAL LINES: 011

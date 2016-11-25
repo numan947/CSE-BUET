@@ -2,8 +2,9 @@ int main(){
 	int a[2],c,i,j ; float d;
 	char ch;
 	char asdf[50];
-	a[0]=1;
-	a[1]=5;
+	fuck=50;
+	a[0]=-1;
+	a[10.5]=5;
 	i= a[0]+a[1];
 	j= 2*3+(5%3 < 4 && 8) || 2 ;
 	return 0;

@@ -31,6 +31,8 @@ public:
     bool array;
     double arrayStorage[100000];// set max array length?
 
+    int line;
+
 
     SymbolInfo()
     {
@@ -40,6 +42,9 @@ public:
     {
         this->Name=Name;
         this->Type=Type;
+        dVal=iVal=-99999;
+
+        chVal=0;arrayLength=0;
     }
 
     void setName(string name)
@@ -225,7 +230,32 @@ public:
         Node *tmp=head;
         while(tmp!=0){
             //cout<<" <"<<tmp->val.getName()<<" : "<<tmp->val.getType()<<">";
-            fprintf(logFile," <%s : %s>",tmp->val.getName().c_str(),tmp->val.getType().c_str());
+            fprintf(logFile," <%s , %s",tmp->val.getName().c_str(),tmp->val.getType().c_str());
+            if(tmp->val.array){
+                fprintf(logFile, ", {" );
+                for(int i=0;i<tmp->val.arrayLength;i++){
+                    if(tmp->val.varType=="INT")fprintf(logFile, " %d,",(int)tmp->val.arrayStorage[i]);
+                    else if(tmp->val.varType=="FLOAT")fprintf(logFile, " %lf,",(double)tmp->val.arrayStorage[i]);
+                    else if(tmp->val.varType=="CHAR"){
+                    char ch=(char)tmp->val.arrayStorage[i];
+                    if(ch>=32)fprintf(logFile, ", %c",ch);
+                    else fprintf(logFile, ", NULL");
+                }
+                }
+                fprintf(logFile, "}>" );
+            }
+            else{
+                char ch=tmp->val.chVal;
+                if(tmp->val.varType=="INT")fprintf(logFile, ", %d",tmp->val.iVal);
+                else if(tmp->val.varType=="FLOAT")fprintf(logFile, ", %lf",tmp->val.dVal);
+                else if(tmp->val.varType=="CHAR"){
+                    if(ch>=32)fprintf(logFile, ", %c",ch);
+                    else fprintf(logFile, ", NULL");
+                }
+                fprintf(logFile, ">");
+            }
+
+
             tmp=tmp->next;
         }
 
