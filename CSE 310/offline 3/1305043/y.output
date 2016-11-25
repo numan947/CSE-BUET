@@ -118,10 +118,10 @@ STRING (289)
 MAIN (290) 1
 PRINTLN (291) 22
 NOT (292) 39
-ID (293) 10 11 12 13 22 26 27
-CONST_INT (294) 11 13 43
-CONST_FLOAT (295) 44
-CONST_CHAR (296) 45
+CONST_INT (293) 11 13 43
+CONST_FLOAT (294) 44
+CONST_CHAR (295) 45
+ID (296) 10 11 12 13 22 26 27
 HELP_ELSE_GET_PRECEDENCE (297)
 
 
@@ -236,10 +236,10 @@ State 7
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     var_declaration       go to state 27
@@ -314,10 +314,10 @@ State 15
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 32
     expression         go to state 43
@@ -336,10 +336,10 @@ State 16
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable          go to state 44
     unary_expression  go to state 45
@@ -353,10 +353,10 @@ State 17
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 32
     expression         go to state 46
@@ -396,10 +396,10 @@ State 21
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable          go to state 44
     unary_expression  go to state 48
@@ -408,33 +408,33 @@ State 21
 
 State 22
 
-   26 variable: ID .
-   27         | ID . LTHIRD expression RTHIRD
-
-    LTHIRD  shift, and go to state 49
-
-    $default  reduce using rule 26 (variable)
-
-
-State 23
-
    43 factor: CONST_INT .
 
     $default  reduce using rule 43 (factor)
 
 
-State 24
+State 23
 
    44 factor: CONST_FLOAT .
 
     $default  reduce using rule 44 (factor)
 
 
-State 25
+State 24
 
    45 factor: CONST_CHAR .
 
     $default  reduce using rule 45 (factor)
+
+
+State 25
+
+   26 variable: ID .
+   27         | ID . LTHIRD expression RTHIRD
+
+    LTHIRD  shift, and go to state 49
+
+    $default  reduce using rule 26 (variable)
 
 
 State 26
@@ -462,10 +462,10 @@ State 27
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     type_specifier        go to state 50
@@ -507,10 +507,10 @@ State 29
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     statement             go to state 55
@@ -622,10 +622,10 @@ State 40
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 32
     expression         go to state 64
@@ -645,10 +645,10 @@ State 41
     LPAREN       shift, and go to state 17
     SEMICOLON    shift, and go to state 19
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     expression_statement  go to state 65
     variable              go to state 32
@@ -668,10 +668,10 @@ State 42
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 32
     expression         go to state 66
@@ -732,10 +732,10 @@ State 49
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 32
     expression         go to state 70
@@ -772,10 +772,10 @@ State 51
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     statement             go to state 55
@@ -831,10 +831,10 @@ State 56
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 44
     logic_expression   go to state 76
@@ -859,10 +859,10 @@ State 58
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 44
     rel_expression     go to state 77
@@ -879,10 +879,10 @@ State 59
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable          go to state 44
     term              go to state 78
@@ -897,10 +897,10 @@ State 60
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 44
     simple_expression  go to state 79
@@ -916,10 +916,10 @@ State 61
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable          go to state 44
     unary_expression  go to state 80
@@ -956,10 +956,10 @@ State 65
     LPAREN       shift, and go to state 17
     SEMICOLON    shift, and go to state 19
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     expression_statement  go to state 82
     variable              go to state 32
@@ -1102,10 +1102,10 @@ State 81
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     statement             go to state 89
@@ -1127,10 +1127,10 @@ State 82
     ADDOP        shift, and go to state 16
     LPAREN       shift, and go to state 17
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     variable           go to state 32
     expression         go to state 90
@@ -1156,10 +1156,10 @@ State 83
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     statement             go to state 91
@@ -1271,10 +1271,10 @@ State 95
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     statement             go to state 98
@@ -1303,10 +1303,10 @@ State 96
     SEMICOLON    shift, and go to state 19
     PRINTLN      shift, and go to state 20
     NOT          shift, and go to state 21
-    ID           shift, and go to state 22
-    CONST_INT    shift, and go to state 23
-    CONST_FLOAT  shift, and go to state 24
-    CONST_CHAR   shift, and go to state 25
+    CONST_INT    shift, and go to state 22
+    CONST_FLOAT  shift, and go to state 23
+    CONST_CHAR   shift, and go to state 24
+    ID           shift, and go to state 25
 
     compound_statement    go to state 26
     statement             go to state 99

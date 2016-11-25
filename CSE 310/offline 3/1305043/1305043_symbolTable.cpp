@@ -22,14 +22,13 @@ class SymbolInfo{
     string Type;
 
 public:
+    
+    string varType;
     int iVal;
     double dVal;
-    float fVal;
     int arrayLength;
-    string sVal;
     char chVal;
     bool array;
-
     double arrayStorage[100000];// set max array length?
 
 
@@ -269,6 +268,18 @@ public:
         length--;
         return DP;
     }
+
+    Node* getNode(string val){
+        Node*tmp=head;
+
+        while(tmp!=0)if(compareString(val,tmp->val.getName()))return tmp;
+        return 0;
+
+
+    }
+
+
+
     /**
      * [returns the length of the linked list]
      * @return [self explanatory]
@@ -290,6 +301,8 @@ public:
         head=tail=0;
         length=0;
     }
+
+
 
 
 };
@@ -381,6 +394,13 @@ public:
                 fprintf(logFile, "\n" );
             }
         }
+    }
+
+    SymbolInfo* getSymbolInfo(string s){
+        unsigned long long hsh=getHash(s);
+        int pos=hsh%rowSize;
+        Node* tmp=table[pos].getNode(s);
+        return &(tmp->val);
     }
 
     ~SymbolTable()

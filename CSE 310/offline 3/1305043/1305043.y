@@ -9,18 +9,26 @@
 using namespace std;
 
 
+extern FILE* yyin;
+SymbolTable *myTable;
+SymbolInfo*declaredInfo[1000];
+FILE* logFile;
+SymbolInfo *spc;
+
+int line_count=0;
+int error_count=0;
+int match_count=0;
+int var_count=0;
+
+bool err;
+int ii;
+
 void yyerror(char *s){
 	printf("%s\n",s);
 }
 
 int yylex(void);
-extern FILE* yyin;
-SymbolTable *myTable;
-FILE* logFile;
 
-int line_count=0;
-int error_count=0;
-int match_count=0;
 
 
 void printNOW(string line)
@@ -32,8 +40,9 @@ void printNOW(string line)
 %}
 
 %union {
+	SymbolInfo* idInfo;
 	SymbolInfo* helpInfo;
-	const char* helpString;
+	char* helpString;
 }
 
 
@@ -45,8 +54,8 @@ void printNOW(string line)
 %token<helpString> IF ELSE FOR WHILE DO BREAK INT CHAR FLOAT DOUBLE VOID RETURN SWITCH CASE DEFAULT CONTINUE INCOP DECOP ADDOP MULOP RELOP ASSIGNOP LOGICOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON STRING MAIN PRINTLN NOT
 
 
-%token<helpInfo>ID CONST_INT CONST_FLOAT CONST_CHAR 
-
+%token<helpInfo>CONST_INT CONST_FLOAT CONST_CHAR 
+%token<idInfo>ID
 
 %type <helpString> Program compound_statement statements statement expression_statement var_declaration type_specifier declaration_list
 
@@ -84,6 +93,8 @@ var_declaration	: type_specifier declaration_list SEMICOLON {
 																printNOW("Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON");
 
 																$2=$1;//??
+
+														
 															}
 		
 
@@ -93,55 +104,168 @@ var_declaration	: type_specifier declaration_list SEMICOLON {
 
 																		$3=$2;//OKA??
 
+																		
+
 																	}
 		;
 
 type_specifier	: INT {
 							printNOW("Matched Rule>>>type_specifier : INT");
+							$$=$1;
+							
 					}
 		
 
 		| FLOAT {
 					printNOW("Matched Rule>>>type_specifier : FLOAT");
-
+					$$=$1;
+					
 				}
 		
 
 
 		| CHAR 	{
 					printNOW("Matched Rule>>>type_specifier : CHAR");
+					$$=$1;
+					
+
+
 				}
 		;
 			
 declaration_list : declaration_list COMMA ID 	{
-														printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID");
-														//later?? what to do with ID??
+													printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID");
+
+													string s=""+$3->getName();
+
+													$3->array=false;
+
+
+													err=false;
+													for(ii=0;ii<var_count;ii++){
+														string s1=""+declaredInfo[ii]->getName();
+
+														if(s1==s){
+															err=true;
+															break;
+														}			
+													}
+													
+
+													if(!err){
+														myTable->Insert(*$3);
+														declaredInfo[var_count++]=myTable->getSymbolInfo(s);
+
+													}
+													else{
+														printNOW("ERROR!! "+s+" re-declared!!");
+													}
+
+
+
 												}
 		 
 
 		 | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD	{
-		 															printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
-		 															$3->arrayLength=$5->iVal;
+		 											printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
+		 										
+		 											$3->arrayLength=$5->iVal;
+													$3->array=true;
 
-		 															//later?? what to do??
-		 														}
+													string s=""+$3->getName();
+
+
+													err=false;
+													for(ii=0;ii<var_count;ii++){
+														string s1=""+declaredInfo[ii]->getName();
+
+														if(s1==s){
+															err=true;
+															break;
+														}			
+													}
+													
+
+													if(!err){
+														myTable->Insert(*$3);
+														declaredInfo[var_count++]=myTable->getSymbolInfo(s);
+
+													}
+													else{
+														printNOW("ERROR!! "+s+" re-declared!!");
+													}
+
+		 										}
 		 
 
 
 		 | ID 	{	
 		 			printNOW("Matched Rule>>>declaration_list : ID");
-		 			//later??
+					
+					string s=""+$1->getName();
+
+					$1->array=false;
+
+
+					err=false;
+					for(ii=0;ii<var_count;ii++){
+						string s1=""+declaredInfo[ii]->getName();
+
+						if(s1==s){
+							err=true;
+							break;
+						}			
+					}
+					
+
+					if(!err){
+						myTable->Insert(*$1);
+						declaredInfo[var_count++]=myTable->getSymbolInfo(s);
+
+					}
+					else{
+						printNOW("ERROR!! "+s+" re-declared!!");
+					}
+
 		 		}
 		 
 
 
-		 | ID LTHIRD CONST_INT RTHIRD {
-		 									printNOW("Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD");
-		 									$1->arrayLength=$3->iVal;
-		 									//later??
+		 |  ID LTHIRD CONST_INT RTHIRD  {
+		 								
+		 								printNOW("Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD");
 
+										$1->arrayLength=$3->iVal;
+										$1->array=true;
+
+										string s=""+$1->getName();
+
+
+										err=false;
+										for(ii=0;ii<var_count;ii++){
+											string s1=""+declaredInfo[ii]->getName();
+
+											if(s1==s){
+												err=true;
+												break;
+											}			
+										}
+										
+
+										if(!err){
+											myTable->Insert(*$1);
+											declaredInfo[var_count++]=myTable->getSymbolInfo(s);
+
+										}
+										else{
+											printNOW("ERROR!! "+s+" re-declared!!");
+										}
+		 									
 		 							}
 		 ;
+
+
+
 
 statements : statement 	{
 							printNOW("Matched Rule>>>statements : statement");
@@ -524,7 +648,7 @@ main(int argc,char *argv[])
 	yyparse();
 	return 0;
 */
-
+	
 
 	if(argc!=2){
 		printf("No input file provided\n");
@@ -539,9 +663,12 @@ main(int argc,char *argv[])
 	
 	logFile= fopen("1305043_log.txt","w");
 	myTable=new SymbolTable(15);
-
 	yyin=fin;
 	yyparse();
+
+	fprintf(logFile,"PRINTING SYMBOL TABLE\n");
+	myTable->Print(logFile);
+
 
 
 

@@ -80,10 +80,10 @@ extern int yydebug;
     MAIN = 290,
     PRINTLN = 291,
     NOT = 292,
-    ID = 293,
-    CONST_INT = 294,
-    CONST_FLOAT = 295,
-    CONST_CHAR = 296,
+    CONST_INT = 293,
+    CONST_FLOAT = 294,
+    CONST_CHAR = 295,
+    ID = 296,
     HELP_ELSE_GET_PRECEDENCE = 297
   };
 #endif
@@ -123,10 +123,10 @@ extern int yydebug;
 #define MAIN 290
 #define PRINTLN 291
 #define NOT 292
-#define ID 293
-#define CONST_INT 294
-#define CONST_FLOAT 295
-#define CONST_CHAR 296
+#define CONST_INT 293
+#define CONST_FLOAT 294
+#define CONST_CHAR 295
+#define ID 296
 #define HELP_ELSE_GET_PRECEDENCE 297
 
 /* Value type.  */
@@ -134,12 +134,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 34 "1305043.y" /* yacc.c:1909  */
+#line 42 "1305043.y" /* yacc.c:1909  */
 
+	SymbolInfo* idInfo;
 	SymbolInfo* helpInfo;
-	const char* helpString;
+	char* helpString;
 
-#line 143 "y.tab.h" /* yacc.c:1909  */
+#line 144 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

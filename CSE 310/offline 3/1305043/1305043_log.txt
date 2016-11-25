@@ -522,6 +522,12 @@ Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement
 
 
 
+PRINTING SYMBOL TABLE
+0 --> <c : ID>
+1 --> <d : ID>
+6 --> <i : ID>
+7 --> <j : ID>
+13 --> <a : ID>
 
 
 TOTAL LINES: 008

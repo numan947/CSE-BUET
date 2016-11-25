@@ -714,10 +714,10 @@ extern int error_count;
 string buff;
 int myCount;
 bool checkInsert;
-SymbolInfo dummy;
+SymbolInfo* dummy;
 
 
-void printNow(string token,string lexeme,int line_no,bool insert,SymbolInfo info)
+void printNow(string token,string lexeme,int line_no,bool insert,SymbolInfo* info)
 {
 	if(!insert){
 			/*fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_no,token.c_str(),lexeme.c_str());
@@ -731,14 +731,15 @@ void printNow(string token,string lexeme,int line_no,bool insert,SymbolInfo info
 		fprintf(logFile,"\n\n");
 		myTable->Print(logFile);
 		fprintf(logFile,"\n\n");*/
-		yylval.helpInfo=&info;
+		if(token=="ID")yylval.idInfo=info;
+		else yylval.helpInfo=info;
 	}
 
 }
 
 
 
-#line 742 "lex.yy.c"
+#line 743 "lex.yy.c"
 
 #define INITIAL 0
 #define mlcomment 1
@@ -959,11 +960,11 @@ YY_DECL
 		}
 
 	{
-#line 83 "1305043.l"
+#line 84 "1305043.l"
 
 
 
-#line 967 "lex.yy.c"
+#line 968 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1023,17 +1024,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 86 "1305043.l"
+#line 87 "1305043.l"
 {line_count++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 88 "1305043.l"
+#line 89 "1305043.l"
 {}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 91 "1305043.l"
+#line 92 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("IF",buff,line_count,false,dummy);
@@ -1042,7 +1043,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 97 "1305043.l"
+#line 98 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("ELSE",buff,line_count,false,dummy);
@@ -1051,7 +1052,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 102 "1305043.l"
+#line 103 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("FOR",buff,line_count,false,dummy);
@@ -1060,7 +1061,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 107 "1305043.l"
+#line 108 "1305043.l"
 {	
 			buff="";buff+=yytext;
 			printNow("WHILE",buff,line_count,false,dummy);
@@ -1069,7 +1070,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 112 "1305043.l"
+#line 113 "1305043.l"
 {	
 			buff="";buff+=yytext;
 			printNow("DO",buff,line_count,false,dummy);
@@ -1078,7 +1079,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 117 "1305043.l"
+#line 118 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("BREAK",buff,line_count,false,dummy);
@@ -1087,7 +1088,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 122 "1305043.l"
+#line 123 "1305043.l"
 {
 			
 			buff="";buff+=yytext;
@@ -1097,7 +1098,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 128 "1305043.l"
+#line 129 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("CHAR",buff,line_count,false,dummy);
@@ -1106,7 +1107,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 133 "1305043.l"
+#line 134 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("FLOAT",buff,line_count,false,dummy);
@@ -1115,7 +1116,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 138 "1305043.l"
+#line 139 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("DOUBLE",buff,line_count,false,dummy);
@@ -1124,7 +1125,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 143 "1305043.l"
+#line 144 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("VOID",buff,line_count,false,dummy);
@@ -1133,7 +1134,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 148 "1305043.l"
+#line 149 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("RETURN",buff,line_count,false,dummy);
@@ -1142,7 +1143,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 153 "1305043.l"
+#line 154 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("SWITCH",buff,line_count,false,dummy);
@@ -1151,7 +1152,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 158 "1305043.l"
+#line 159 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("CASE",buff,line_count,false,dummy);
@@ -1160,7 +1161,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 163 "1305043.l"
+#line 164 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("DEFAULT",buff,line_count,false,dummy);
@@ -1169,7 +1170,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 168 "1305043.l"
+#line 169 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("CONTINUE",buff,line_count,false,dummy);
@@ -1178,7 +1179,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 174 "1305043.l"
+#line 175 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("PRINTLN",buff,line_count,false,dummy);
@@ -1187,7 +1188,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 180 "1305043.l"
+#line 181 "1305043.l"
 {
 			buff="";buff+=yytext;
 			printNow("MAIN",buff,line_count,false,dummy);
@@ -1196,155 +1197,155 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 186 "1305043.l"
+#line 187 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"NOT");
-			printNow("NOT",buff,line_count,false,*info);
+			printNow("NOT",buff,line_count,false,info);
 			return NOT;
 		}
 	YY_BREAK
 case 22:
-#line 195 "1305043.l"
+#line 196 "1305043.l"
 case 23:
 YY_RULE_SETUP
-#line 196 "1305043.l"
+#line 197 "1305043.l"
 {
 				buff="";buff+=yytext;
 					if(buff=="++"){
 					SymbolInfo* info=new SymbolInfo(buff,"INCOP");
-					printNow("INCOP",buff,line_count,false,*info);
+					printNow("INCOP",buff,line_count,false,info);
 					return INCOP;
 				}
 				else{
 					SymbolInfo* info=new SymbolInfo(buff,"DECOP");
-					printNow("DECOP",buff,line_count,false,*info);
+					printNow("DECOP",buff,line_count,false,info);
 				 	return DECOP;
 				 }
 			}
 	YY_BREAK
 case 24:
-#line 213 "1305043.l"
+#line 214 "1305043.l"
 case 25:
 YY_RULE_SETUP
-#line 214 "1305043.l"
+#line 215 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"ADDOP");
-			printNow("ADDOP",buff,line_count,false,*info);
+			printNow("ADDOP",buff,line_count,false,info);
 			return ADDOP;
 		}
 	YY_BREAK
 case 26:
-#line 221 "1305043.l"
-case 27:
 #line 222 "1305043.l"
+case 27:
+#line 223 "1305043.l"
 case 28:
 YY_RULE_SETUP
-#line 222 "1305043.l"
+#line 223 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"MULOP");
-			printNow("MULOP",buff,line_count,false,*info);
+			printNow("MULOP",buff,line_count,false,info);
 			return ADDOP;
 		}
 	YY_BREAK
 case 29:
-#line 230 "1305043.l"
-case 30:
 #line 231 "1305043.l"
-case 31:
+case 30:
 #line 232 "1305043.l"
-case 32:
+case 31:
 #line 233 "1305043.l"
-case 33:
+case 32:
 #line 234 "1305043.l"
+case 33:
+#line 235 "1305043.l"
 case 34:
 YY_RULE_SETUP
-#line 234 "1305043.l"
+#line 235 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"RELOP");
-			printNow("RELOP",buff,line_count,false,*info);
+			printNow("RELOP",buff,line_count,false,info);
 			return RELOP;
 		}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 241 "1305043.l"
+#line 242 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"ASSIGNOP");
-			printNow("ASSIGNOP",buff,line_count,false,*info);
+			printNow("ASSIGNOP",buff,line_count,false,info);
 			return ASSIGNOP;
 		}
 	YY_BREAK
 case 36:
-#line 249 "1305043.l"
+#line 250 "1305043.l"
 case 37:
 YY_RULE_SETUP
-#line 249 "1305043.l"
+#line 250 "1305043.l"
 {
 			buff="";buff+=yytext;
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"LOGICOP");
-			printNow("LOGICOP",buff,line_count,false,*info);
+			printNow("LOGICOP",buff,line_count,false,info);
 			return LOGICOP;
 		}
 	YY_BREAK
 case 38:
-#line 258 "1305043.l"
+#line 259 "1305043.l"
 case 39:
 YY_RULE_SETUP
-#line 258 "1305043.l"
+#line 259 "1305043.l"
 {
 			buff="";buff+=yytext;
 			if(buff=="("){
-				SymbolInfo* info=new SymbolInfo(buff,"LPAREN");
-				printNow("LPAREN",buff,line_count,false,*info);
+				//SymbolInfo* info=new SymbolInfo(buff,"LPAREN");
+				//printNow("LPAREN",buff,line_count,false,info);
 				return LPAREN;
 			}
 			else{
-				SymbolInfo* info=new SymbolInfo(buff,"RPAREN");
-				printNow("RPAREN",buff,line_count,false,*info);
+				//SymbolInfo* info=new SymbolInfo(buff,"RPAREN");
+				//printNow("RPAREN",buff,line_count,false,info);
 				return RPAREN;	
 			} 
 		}
 	YY_BREAK
 case 40:
-#line 273 "1305043.l"
+#line 274 "1305043.l"
 case 41:
 YY_RULE_SETUP
-#line 273 "1305043.l"
+#line 274 "1305043.l"
 {
 			buff="";buff+=yytext;
 			if(buff=="{"){
-				SymbolInfo* info=new SymbolInfo(buff,"LCURL");
-				printNow("LCURL",buff,line_count,false,*info);
+				//SymbolInfo* info=new SymbolInfo(buff,"LCURL");
+				//printNow("LCURL",buff,line_count,false,info);
 				return LCURL;
 			}
 			else{
-				SymbolInfo* info=new SymbolInfo(buff,"RCURL");
-				printNow("RCURL",buff,line_count,false,*info);
+				//SymbolInfo* info=new SymbolInfo(buff,"RCURL");
+				//printNow("RCURL",buff,line_count,false,info);
 				return RCURL;
 			}
 		}
 	YY_BREAK
 case 42:
-#line 288 "1305043.l"
+#line 289 "1305043.l"
 case 43:
 YY_RULE_SETUP
-#line 288 "1305043.l"
+#line 289 "1305043.l"
 {
 			buff="";buff+=yytext;
 			if(buff=="["){
-				SymbolInfo* info=new SymbolInfo(buff,"LTHIRD");
-				printNow("LTHIRD",buff,line_count,false,*info);
+				//SymbolInfo* info=new SymbolInfo(buff,"LTHIRD");
+				//printNow("LTHIRD",buff,line_count,false,info);
 				return LTHIRD;
 			}
 			else{
-				SymbolInfo* info=new SymbolInfo(buff,"RTHIRD");
-				printNow("RTHIRD",buff,line_count,false,*info);
+				//SymbolInfo* info=new SymbolInfo(buff,"RTHIRD");
+				//printNow("RTHIRD",buff,line_count,false,info);
 
 				return RTHIRD;
 			}
@@ -1352,42 +1353,41 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 304 "1305043.l"
+#line 305 "1305043.l"
 {
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"COMMA");
-			printNow("COMMA",buff,line_count,false,*info);
+			printNow("COMMA",buff,line_count,false,info);
 			return COMMA;
 		}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 311 "1305043.l"
+#line 312 "1305043.l"
 {
 			buff="";buff+=yytext;
-			SymbolInfo* info=new SymbolInfo(buff,"SEMICOLON");
-			printNow("SEMICOLON",buff,line_count,false,*info);
+			//SymbolInfo* info=new SymbolInfo(buff,"SEMICOLON");
+			//printNow("SEMICOLON",buff,line_count,false,info);
 			return SEMICOLON;
 		}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 318 "1305043.l"
+#line 319 "1305043.l"
 {
 				buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"ID");
-				printNow("ID",buff,line_count,true,*info);
+				printNow("ID",buff,line_count,true,info);
 				return ID;
 			}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 327 "1305043.l"
+#line 328 "1305043.l"
 {
 				buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_INT");
-				printNow("CONST_INT",buff,line_count,true,*info);
-
+				printNow("CONST_INT",buff,line_count,true,info);
 				return CONST_INT;
 			}
 	YY_BREAK
@@ -1397,7 +1397,7 @@ YY_RULE_SETUP
 {
 				buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_FLOAT");
-				printNow("CONST_FLOAT",buff,line_count,true,*info);
+				printNow("CONST_FLOAT",buff,line_count,true,info);
 
 				return CONST_FLOAT;
 			}
@@ -1408,7 +1408,7 @@ YY_RULE_SETUP
 {
 				buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_CHAR");
-				printNow("CONST_CHAR",buff,line_count,true,*info);
+				printNow("CONST_CHAR",buff,line_count,true,info);
 				return CONST_CHAR;
 			}
 	YY_BREAK
@@ -1553,7 +1553,7 @@ YY_RULE_SETUP
 					buff+=yytext;
 					BEGIN(INITIAL);
 					SymbolInfo* info=new SymbolInfo(buff,"STRING");
-					printNow("STRING",buff,line_count,false,*info);
+					printNow("STRING",buff,line_count,false,info);
 					return STRING;
 			}
 	YY_BREAK
