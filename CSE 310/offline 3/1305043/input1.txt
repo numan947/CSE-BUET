@@ -1,5 +1,7 @@
 int main(){
 	int a[2],c,i,j ; float d;
+	char ch;
+	char asdf[50];
 	a[0]=1;
 	a[1]=5;
 	i= a[0]+a[1];

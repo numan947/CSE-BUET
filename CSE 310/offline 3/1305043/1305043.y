@@ -22,6 +22,9 @@ int var_count=0;
 
 bool err;
 int ii;
+int marker;
+
+
 
 void yyerror(char *s){
 	printf("%s\n",s);
@@ -42,7 +45,7 @@ void printNOW(string line)
 %union {
 	SymbolInfo* idInfo;
 	SymbolInfo* helpInfo;
-	char* helpString;
+	const char* helpString;
 }
 
 
@@ -57,9 +60,9 @@ void printNOW(string line)
 %token<helpInfo>CONST_INT CONST_FLOAT CONST_CHAR 
 %token<idInfo>ID
 
-%type <helpString> Program compound_statement statements statement expression_statement var_declaration type_specifier declaration_list
+%type <helpString> Program compound_statement statements statement expression_statement var_declaration declaration_list
 
-%type <helpInfo> simple_expression rel_expression expression term unary_expression factor variable logic_expression
+%type <helpInfo> simple_expression rel_expression expression term unary_expression factor variable logic_expression type_specifier
 
 
 %nonassoc HELP_ELSE_GET_PRECEDENCE
@@ -91,10 +94,12 @@ compound_statement : LCURL var_declaration statements RCURL {
 			 
 var_declaration	: type_specifier declaration_list SEMICOLON {
 																printNOW("Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON");
+																cout<<$1->getType()<<endl;
 
-																$2=$1;//??
-
-														
+																for(int i=marker;i<var_count;i++){
+																	declaredInfo[i]->varType=$1->getType();
+																}
+																marker=var_count;
 															}
 		
 
@@ -102,8 +107,13 @@ var_declaration	: type_specifier declaration_list SEMICOLON {
 		|  var_declaration type_specifier declaration_list SEMICOLON {
 																		printNOW("Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON");
 
-																		$3=$2;//OKA??
+																		
+																		cout<<$2->getType()<<endl;
 
+																		for(int i=marker;i<var_count;i++){
+																			declaredInfo[i]->varType=$2->getType();
+																		}
+																		marker=var_count;
 																		
 
 																	}
@@ -111,14 +121,17 @@ var_declaration	: type_specifier declaration_list SEMICOLON {
 
 type_specifier	: INT {
 							printNOW("Matched Rule>>>type_specifier : INT");
-							$$=$1;
+							SymbolInfo* s=new SymbolInfo("DUMMY","INT");
+							$$=s; 
 							
 					}
 		
 
 		| FLOAT {
 					printNOW("Matched Rule>>>type_specifier : FLOAT");
-					$$=$1;
+					
+					SymbolInfo* s=new SymbolInfo("DUMMY","FLOAT");
+					$$=s; 
 					
 				}
 		
@@ -126,9 +139,9 @@ type_specifier	: INT {
 
 		| CHAR 	{
 					printNOW("Matched Rule>>>type_specifier : CHAR");
-					$$=$1;
-					
 
+					SymbolInfo* s=new SymbolInfo("DUMMY","CHAR");
+					$$=s; 
 
 				}
 		;
@@ -649,7 +662,7 @@ main(int argc,char *argv[])
 	return 0;
 */
 	
-
+	marker=0;
 	if(argc!=2){
 		printf("No input file provided\n");
 		return 0;
@@ -669,7 +682,11 @@ main(int argc,char *argv[])
 	fprintf(logFile,"PRINTING SYMBOL TABLE\n");
 	myTable->Print(logFile);
 
-
+	
+	fprintf(logFile,"\n\nPRINTING VARIABLE LIST\n");
+	for(int i=0;i<var_count;i++){
+		fprintf(logFile,"%s %s %s\n",declaredInfo[i]->getName().c_str(),declaredInfo[i]->getType().c_str(),declaredInfo[i]->varType.c_str());
+	}
 
 
 	fclose(yyin);

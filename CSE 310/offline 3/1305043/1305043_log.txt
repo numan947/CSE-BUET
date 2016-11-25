@@ -34,6 +34,30 @@ Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list
 
 
 
+Matched Rule>>>type_specifier : CHAR
+
+
+
+Matched Rule>>>declaration_list : ID
+
+
+
+Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+
+
+
+Matched Rule>>>type_specifier : CHAR
+
+
+
+Matched Rule>>>declaration_list : ID LTHIRD CONST_INT RTHIRD
+
+
+
+Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+
+
+
 Matched Rule>>>factor : CONST_INT 
 
 
@@ -527,7 +551,19 @@ PRINTING SYMBOL TABLE
 1 --> <d : ID>
 6 --> <i : ID>
 7 --> <j : ID>
+9 --> <asdf : ID>
 13 --> <a : ID>
+14 --> <ch : ID>
 
 
-TOTAL LINES: 008
+PRINTING VARIABLE LIST
+a ID INT
+c ID INT
+i ID INT
+j ID INT
+d ID FLOAT
+ch ID CHAR
+asdf ID CHAR
+
+
+TOTAL LINES: 010

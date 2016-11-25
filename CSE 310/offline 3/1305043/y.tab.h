@@ -134,11 +134,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 42 "1305043.y" /* yacc.c:1909  */
+#line 45 "1305043.y" /* yacc.c:1909  */
 
 	SymbolInfo* idInfo;
 	SymbolInfo* helpInfo;
-	char* helpString;
+	const char* helpString;
 
 #line 144 "y.tab.h" /* yacc.c:1909  */
 };
