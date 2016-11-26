@@ -470,6 +470,7 @@ variable : ID 	{
 						//FLAG
 						SymbolInfo* target=findInDeclaration($1->getName());
 						if(target==0)printNOW("ERROR!! Undeclared variable: "+$1->getName());
+						else if(target->array==true)target->pIndex=-1;
 						else $$=$1;
 				}				
 	 
@@ -485,7 +486,6 @@ variable : ID 	{
 										
 										if(target==0){
 											printNOW("ERROR!! Undeclared variable: "+$1->getName());
-											yyerror("ERROR!! Undeclared variable");
 										}
 										else if($3->varType!="INT"){
 											printNOW("ERROR!!: ARRAY INDEX MUST BE INT");
@@ -525,7 +525,7 @@ expression : logic_expression	{
 	   												if($3->varType=="")$3=findInDeclaration($3->getName());
 
 	   												if(target==0){
-	   													printNOW("ERROR!! Undeclared variable: "+$1->getName());
+	   													//printNOW("ERROR!! Undeclared variable: "+$1->getName());
 	   												}
 
 
@@ -545,7 +545,7 @@ expression : logic_expression	{
 	   													}
 
 
-	   													else{
+	   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
 															
 	   														if(target->varType=="INT"){
 		   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(int)$3->iVal;
@@ -571,6 +571,12 @@ expression : logic_expression	{
 
 		 													for(int i=0;i<target->arrayLength;i++)fprintf(logFile,"%d ",(int)target->arrayStorage[i]);*/
 
+	   													}
+	   													else{
+	   														if(target->pIndex<0)printNOW("ERROR!! you can't assign a value to an array without any INDEX!!");
+	   														else if(target->pIndex>=target->arrayLength){
+	   															printNOW("ERROR!! Array Index out of bound!!");
+	   														}
 	   													}
 
 	   													$$=target;

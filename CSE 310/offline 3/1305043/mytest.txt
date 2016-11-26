@@ -1,5 +1,5 @@
 int main(){
-	int j,k,w,i;
+	int j,k,w,i,a[10];
 	
 	int x;	
 	
@@ -15,4 +15,9 @@ int main(){
 	
 	}
 	y=2||3<5+6;
+	
+	a=5;
+
+	a[20]=30;
+
 }

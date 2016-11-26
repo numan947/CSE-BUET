@@ -60,6 +60,23 @@ i
 
 
 
+Matched Rule>>>declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
+
+
+
+a
+
+
+
+5 --> <w , ID, -99999>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+8 --> <k , ID, -99999>
+13 --> <a , ID, {, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
+
+
+
+
 Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON
 
 
@@ -80,6 +97,7 @@ x
 6 --> <i , ID, -99999> <x , ID, -99999>
 7 --> <j , ID, -99999>
 8 --> <k , ID, -99999>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -128,6 +146,7 @@ expression : variable ASSIGNOP logic_expression
 6 --> <i , ID, 0> <x , ID, -99999>
 7 --> <j , ID, -99999>
 8 --> <k , ID, -99999>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -256,6 +275,7 @@ expression : variable ASSIGNOP logic_expression
 6 --> <i , ID, 2> <x , ID, -99999>
 7 --> <j , ID, -99999>
 8 --> <k , ID, -99999>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -316,6 +336,7 @@ expression : variable ASSIGNOP logic_expression
 6 --> <i , ID, 2> <x , ID, -99999>
 7 --> <j , ID, 8>
 8 --> <k , ID, -99999>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -444,6 +465,7 @@ expression : variable ASSIGNOP logic_expression
 6 --> <i , ID, 2> <x , ID, -99999>
 7 --> <j , ID, 13>
 8 --> <k , ID, -99999>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -504,6 +526,7 @@ expression : variable ASSIGNOP logic_expression
 6 --> <i , ID, 2> <x , ID, -99999>
 7 --> <j , ID, 13>
 8 --> <k , ID, 10>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -632,6 +655,7 @@ expression : variable ASSIGNOP logic_expression
 6 --> <i , ID, 2> <x , ID, -99999>
 7 --> <j , ID, 13>
 8 --> <k , ID, 16>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -760,7 +784,157 @@ expression : variable ASSIGNOP logic_expression
 
 
 
-ERROR!! Undeclared variable: y
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statements statement
+
+
+
+variable : ID 
+
+
+
+factor : CONST_INT 
+
+
+
+5
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+ERROR!! you can't assign a value to an array without any INDEX!!
+
+
+
+5 --> <w , ID, -99999>
+6 --> <i , ID, 2> <x , ID, -99999>
+7 --> <j , ID, 13>
+8 --> <k , ID, 16>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statements statement
+
+
+
+factor : CONST_INT 
+
+
+
+20
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
+
+
+
+factor : CONST_INT 
+
+
+
+30
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+ERROR!! Array Index out of bound!!
+
+
+
+5 --> <w , ID, -99999>
+6 --> <i , ID, 2> <x , ID, -99999>
+7 --> <j , ID, 13>
+8 --> <k , ID, 16>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
+
 
 
 
@@ -789,6 +963,7 @@ PRINTING SYMBOL TABLE
 6 --> <i , ID, 2> <x , ID, -99999>
 7 --> <j , ID, 13>
 8 --> <k , ID, 16>
+13 --> <a , ID, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}>
 
 
 
@@ -800,7 +975,8 @@ j ID INT
 k ID INT
 w ID INT
 i ID INT
+a ID INT
 x ID INT
 
 
-TOTAL LINES: 018
+TOTAL LINES: 023

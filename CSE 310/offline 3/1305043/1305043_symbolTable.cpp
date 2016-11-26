@@ -241,14 +241,30 @@ public:
             if(tmp->val.array){
                 fprintf(logFile, ", {" );
                 for(int i=0;i<tmp->val.arrayLength;i++){
-                    if(tmp->val.varType=="INT")fprintf(logFile, " %d,",(int)tmp->val.arrayStorage[i]);
-                    else if(tmp->val.varType=="FLOAT")fprintf(logFile, " %lf,",(double)tmp->val.arrayStorage[i]);
-                    else if(tmp->val.varType=="CHAR"){
-                        char ch=(char)tmp->val.arrayStorage[i];
-                        if(ch>=32)fprintf(logFile, ", %c",ch);
-                        else fprintf(logFile, ", NULL");
+                    if(i==0){
+                        if(tmp->val.varType=="INT")fprintf(logFile, " %d",(int)tmp->val.arrayStorage[i]);
+                        else if(tmp->val.varType=="FLOAT")fprintf(logFile, " %lf ",(double)tmp->val.arrayStorage[i]);
+                        else if(tmp->val.varType=="CHAR"){
+                            char ch=(char)tmp->val.arrayStorage[i];
+                            if(ch>=32)fprintf(logFile, " %c",ch);
+                            else fprintf(logFile, " NULL");
+                        }
+                        else if(tmp->val.arrayStorage[i]==-1)fprintf(logFile, ", %d",(int)tmp->val.arrayStorage[i]); 
                     }
-                    else if(tmp->val.arrayStorage[i]==-1)fprintf(logFile, " %d,",(int)tmp->val.arrayStorage[i]);
+                    
+                    else{
+                       
+                        
+
+                        if(tmp->val.varType=="INT")fprintf(logFile, ", %d",(int)tmp->val.arrayStorage[i]);
+                        else if(tmp->val.varType=="FLOAT")fprintf(logFile, ", %lf",(double)tmp->val.arrayStorage[i]);
+                        else if(tmp->val.varType=="CHAR"){
+                            char ch=(char)tmp->val.arrayStorage[i];
+                            if(ch>=32)fprintf(logFile, ", %c",ch);
+                            else fprintf(logFile, ", NULL");
+                        }
+                        else if(tmp->val.arrayStorage[i]==-1)fprintf(logFile, ", %d",(int)tmp->val.arrayStorage[i]);
+                    }
                 }
                 fprintf(logFile, "}>" );
             }
