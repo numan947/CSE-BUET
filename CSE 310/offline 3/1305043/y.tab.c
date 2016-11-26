@@ -1984,7 +1984,7 @@ yyreduce:
 			   														error_count++;
 		   														}
 		   														else if(target->pIndex>=target->arrayLength){
-		   															printNOW("ERROR!! Array Index out of bound!!");
+		   															printError("Array index out of bound for "+target->getName());
 		   															error_count++;
 		   														}
 		   													}
