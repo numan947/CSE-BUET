@@ -10,7 +10,7 @@ if bison -d -v -y 1305043.y; then
 				echo 'g++ lex.yy.c DONE'
 				if g++ -o a.out y.o l.o -lfl -ly; then
 					echo './a.out DONE'
-					./a.out input3.txt
+					./a.out mytest.txt
 				fi
 			fi
 		fi

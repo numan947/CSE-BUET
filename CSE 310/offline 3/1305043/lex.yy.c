@@ -1380,14 +1380,16 @@ YY_RULE_SETUP
 #line 323 "1305043.l"
 {
 				string buff="";buff+=yytext;
+
 				SymbolInfo* info=new SymbolInfo(buff,"ID");
 				printNow("ID",buff,line_count,true,info);
+
 				return ID;
 			}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 332 "1305043.l"
+#line 334 "1305043.l"
 {
 				string buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_INT");
@@ -1403,7 +1405,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 345 "1305043.l"
+#line 347 "1305043.l"
 {
 				string buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_FLOAT");
@@ -1421,7 +1423,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 360 "1305043.l"
+#line 362 "1305043.l"
 {
 				string buff="";buff+=yytext;				
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_CHAR");
@@ -1437,7 +1439,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 375 "1305043.l"
+#line 377 "1305043.l"
 {
 
 				myCount=line_count;
@@ -1450,7 +1452,7 @@ YY_RULE_SETUP
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 383 "1305043.l"
+#line 385 "1305043.l"
 {
 					line_count++;
 					buff1+=yytext;
@@ -1458,7 +1460,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 387 "1305043.l"
+#line 389 "1305043.l"
 {
 					buff1+=yytext;
 
@@ -1466,7 +1468,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 391 "1305043.l"
+#line 393 "1305043.l"
 {
 					buff1+=yytext;
 
@@ -1474,7 +1476,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 395 "1305043.l"
+#line 397 "1305043.l"
 {
 					buff1+=yytext;
 					fprintf(logFile,"Line no %03d: TOKEN <COMMENT> Lexeme <%s> found\n",myCount,buff1.c_str());
@@ -1483,7 +1485,7 @@ YY_RULE_SETUP
 				}
 	YY_BREAK
 case YY_STATE_EOF(mlcomment):
-#line 401 "1305043.l"
+#line 403 "1305043.l"
 {
 				fprintf(logFile,"Line no %03d: ERROR!! - Undeterminated comment %s\n",myCount,buff1.c_str());
 				fprintf(logFile,"\n\n");
@@ -1493,7 +1495,7 @@ case YY_STATE_EOF(mlcomment):
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 409 "1305043.l"
+#line 411 "1305043.l"
 {
 				 buff1="";
 				char *ch=yytext;
@@ -1510,7 +1512,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 424 "1305043.l"
+#line 426 "1305043.l"
 {
 				myCount=line_count;
 				string buff1="";
@@ -1520,7 +1522,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 430 "1305043.l"
+#line 432 "1305043.l"
 {
 	BEGIN(helpState);
 
@@ -1528,7 +1530,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 434 "1305043.l"
+#line 436 "1305043.l"
 {
 	buff1+=yytext;
 	BEGIN(mlstring);
@@ -1537,7 +1539,7 @@ YY_RULE_SETUP
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 439 "1305043.l"
+#line 441 "1305043.l"
 {
 		line_count++;
 		BEGIN(mlstring);
@@ -1545,7 +1547,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 444 "1305043.l"
+#line 446 "1305043.l"
 {
 		char *ch=yytext;
 		ch++;
@@ -1571,7 +1573,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 466 "1305043.l"
+#line 468 "1305043.l"
 {
 					buff1+=yytext;
 					BEGIN(INITIAL);
@@ -1582,7 +1584,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 473 "1305043.l"
+#line 475 "1305043.l"
 {
 		char *ch=yytext;
 		while(*ch){
@@ -1594,7 +1596,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(mlstring):
-#line 482 "1305043.l"
+#line 484 "1305043.l"
 {
 				char *ch=yytext;
 				while(*ch){
@@ -1613,7 +1615,7 @@ case YY_STATE_EOF(mlstring):
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 497 "1305043.l"
+#line 499 "1305043.l"
 {
 				line_count++;
 				char *ch=yytext;
@@ -1632,7 +1634,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 513 "1305043.l"
+#line 515 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Multi charachter constant %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1642,7 +1644,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 521 "1305043.l"
+#line 523 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Ill formed number %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1652,7 +1654,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 528 "1305043.l"
+#line 530 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Too many decimal points %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1662,7 +1664,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 534 "1305043.l"
+#line 536 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Invalid prefix %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1672,7 +1674,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 541 "1305043.l"
+#line 543 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Ill formed charachter error %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1682,7 +1684,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 550 "1305043.l"
+#line 552 "1305043.l"
 {
 				// fprintf(logFile,"Line no %03d: ERROR!! - Unrecognized charachter found %s\n",line_count,yytext);
 				// fprintf(logFile,"\n\n");
@@ -1692,10 +1694,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 560 "1305043.l"
+#line 562 "1305043.l"
 ECHO;
 	YY_BREAK
-#line 1699 "lex.yy.c"
+#line 1701 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(helpState):
 	yyterminate();
@@ -2697,7 +2699,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 560 "1305043.l"
+#line 562 "1305043.l"
 
 
 

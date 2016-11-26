@@ -262,6 +262,7 @@ declaration_list : declaration_list COMMA ID 	{
 					$1->array=false;
 
 
+
 					err=false;
 					for(ii=0;ii<var_count;ii++){
 						string s1=""+declaredInfo[ii]->getName();
@@ -274,12 +275,13 @@ declaration_list : declaration_list COMMA ID 	{
 					
 
 					if(!err){
+
 						myTable->Insert(*$1);
 						declaredInfo[var_count++]=myTable->getSymbolInfo(s);
-						
 						printNOW(s);
 						myTable->Print(logFile);
 						fprintf(logFile,"\n\n\n\n");
+
 					}
 					else{
 						printNOW("ERROR!! "+s+" re-declared!!");

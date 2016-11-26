@@ -312,7 +312,11 @@ public:
     Node* getNode(string val){
         Node*tmp=head;
 
-        while(tmp!=0)if(compareString(val,tmp->val.getName()))return tmp;
+        while(tmp!=0){
+            if(compareString(val,tmp->val.getName()))return tmp;
+            tmp=tmp->next;
+            //cout<<val<<"   "<<tmp->val.getName()<<endl;
+        }
         return 0;
 
 
@@ -388,9 +392,14 @@ public:
     {
         unsigned long long hsh=getHash(symbol.getName());
         int pos=hsh%rowSize;
+
+
+
         Position pp=table[pos].SearchItem(symbol.getName());
+
         if(pp.col!=-1){
             //cout<<"<"<<pp.val.getName()<<","<<pp.val.getType()<<"> "<<"already exists at(row,col) "<<pos<<", "<<pp.col<<endl;
+            
             return false;
         }
         pp=table[pos].InsertLast(symbol);
@@ -439,7 +448,9 @@ public:
     SymbolInfo* getSymbolInfo(string s){
         unsigned long long hsh=getHash(s);
         int pos=hsh%rowSize;
+
         Node* tmp=table[pos].getNode(s);
+
         return &(tmp->val);
     }
 

@@ -322,8 +322,10 @@ QUOTE_ERROR '[^'\n;]*
 
 {IDENTIFIER} {
 				string buff="";buff+=yytext;
+
 				SymbolInfo* info=new SymbolInfo(buff,"ID");
 				printNow("ID",buff,line_count,true,info);
+
 				return ID;
 			}
 			
