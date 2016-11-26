@@ -40,7 +40,9 @@ public:
 
     SymbolInfo()
     {
-        
+        dVal=iVal=-99999;
+        chVal=0;arrayLength=0;
+        array=false;
     }
     SymbolInfo(string Name, string Type)
     {
@@ -242,10 +244,11 @@ public:
                     if(tmp->val.varType=="INT")fprintf(logFile, " %d,",(int)tmp->val.arrayStorage[i]);
                     else if(tmp->val.varType=="FLOAT")fprintf(logFile, " %lf,",(double)tmp->val.arrayStorage[i]);
                     else if(tmp->val.varType=="CHAR"){
-                    char ch=(char)tmp->val.arrayStorage[i];
-                    if(ch>=32)fprintf(logFile, ", %c",ch);
-                    else fprintf(logFile, ", NULL");
-                }
+                        char ch=(char)tmp->val.arrayStorage[i];
+                        if(ch>=32)fprintf(logFile, ", %c",ch);
+                        else fprintf(logFile, ", NULL");
+                    }
+                    else if(tmp->val.arrayStorage[i]==-1)fprintf(logFile, " %d,",(int)tmp->val.arrayStorage[i]);
                 }
                 fprintf(logFile, "}>" );
             }
@@ -257,7 +260,9 @@ public:
                     if(ch>=32)fprintf(logFile, ", %c",ch);
                     else fprintf(logFile, ", NULL");
                 }
+                else if(tmp->val.iVal==-99999&&tmp->val.dVal==-99999&&tmp->val.chVal==0)fprintf(logFile, ", %d",-99999 );
                 fprintf(logFile, ">");
+                
             }
 
 

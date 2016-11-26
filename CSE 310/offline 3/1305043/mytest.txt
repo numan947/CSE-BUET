@@ -1,0 +1,14 @@
+int main(){
+	int i,j,k;
+	for(i=0;i<10;i=i+2){
+
+	}
+
+	for(j=8;j<20;j=j+5){
+
+	}
+
+	for(k=10;k<30;k=k+6){
+	
+	}
+}
