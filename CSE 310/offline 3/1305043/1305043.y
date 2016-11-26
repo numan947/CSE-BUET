@@ -39,7 +39,6 @@ int yylex(void);
 SymbolInfo* findInDeclaration(string name)
 {
 	for(int i=0;i<var_count;i++)if(name==declaredInfo[i]->getName()){
-		cout<<"FINDING NEMO "<<declaredInfo[i]->getName()<<"   "<<declaredInfo[i]->iVal<<endl;
 		return declaredInfo[i];
 	}
 	return 0;
@@ -466,7 +465,7 @@ expression_statement	: SEMICOLON		{
 
 variable : ID 	{
 						printNOW("variable : ID ");
-						//LATER
+						//FLAG
 						SymbolInfo* target=findInDeclaration($1->getName());
 						if(target==0)printNOW("ERROR!! Undeclared variable: "+$1->getName());
 						else $$=$1;
@@ -529,13 +528,6 @@ expression : logic_expression	{
 
 
 	   												else{
-
-	   													printNOW("HELLO SHOOTING STAR!!");
-
-	   													cout<<target->iVal<<"  "<<$3->iVal<<endl;
-
-	   												
-
 
 	   													if(target->array==false){
 
@@ -600,6 +592,9 @@ logic_expression : rel_expression 	{
 
 		 | rel_expression LOGICOP rel_expression 	{
 		 												printNOW("logic_expression : rel_expression LOGICOP rel_expression");
+
+		 												SymbolInfo* res=new SymbolInfo();
+		 												res->varType="INT";
 		 												
 		 												if($1->varType=="")$1=findInDeclaration($1->getName());
 		 												if($3->varType=="")$3=findInDeclaration($3->getName());
@@ -612,30 +607,26 @@ logic_expression : rel_expression 	{
 		 												}
 
 		 												else if($2->getName()=="&&"){
-															if($1->varType=="INT")$1->iVal=($1->iVal&&$3->iVal);
+															if($1->varType=="INT")res->iVal=($1->iVal&&$3->iVal);
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal&&$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal&&$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal&&$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal&&$3->chVal);
 															}
 														}
 														else if($2->getName()=="||"){
-															if($1->varType=="INT")$1->iVal=($1->iVal||$3->iVal);
+															if($1->varType=="INT")res->iVal=($1->iVal||$3->iVal);
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal||$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal||$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal||$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal||$3->chVal);
 															}
 														}
 
 
-		 												$$=$1;
+		 												$$=res;
 		 											}	
 		 ;
 
@@ -650,8 +641,12 @@ rel_expression	: simple_expression  {
 
 
 		| simple_expression RELOP simple_expression	 {
+														//FLAG
 
 														printNOW("rel_expression : simple_expression RELOP simple_expression");
+
+														SymbolInfo* res=new SymbolInfo();
+														res->varType="INT";
 
 
 														if($1->varType==""){
@@ -669,76 +664,65 @@ rel_expression	: simple_expression  {
 														}
 
 														else if($2->getName()=="=="){
-															if($1->varType=="INT")$1->iVal=($1->iVal==$3->iVal);
+															if($1->varType=="INT"){
+																res->iVal=($1->iVal==$3->iVal);
+															}
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal==$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal==$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal==$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal==$3->chVal);
 															}
 														}
 														else if($2->getName()=="!="){
-															if($1->varType=="INT")$1->iVal=($1->iVal!=$3->iVal);
+															if($1->varType=="INT"){
+																res->iVal=($1->iVal!=$3->iVal);
+															}
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal!=$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal!=$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal!=$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal!=$3->chVal);
 															}
 														}
 														else if($2->getName()=="<"){
-															if($1->varType=="INT")$1->iVal=($1->iVal<$3->iVal);
+															if($1->varType=="INT")res->iVal=($1->iVal<$3->iVal);
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal<$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal<$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal<$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal<$3->chVal);
 															}
 														}
 														else if($2->getName()=="<="){
-															if($1->varType=="INT")$1->iVal=($1->iVal<=$3->iVal);
+															if($1->varType=="INT")res->iVal=($1->iVal<=$3->iVal);
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal<=$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal<=$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal<=$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal<=$3->chVal);
 															}
 														}
 														else if($2->getName()==">"){
-															if($1->varType=="INT")$1->iVal=($1->iVal>$3->iVal);
+															if($1->varType=="INT")res->iVal=($1->iVal>$3->iVal);
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal>$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal>$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal>$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal>$3->chVal);
 															}
 														}
 														else if($2->getName()==">="){
-															if($1->varType=="INT")$1->iVal=($1->iVal>=$3->iVal);
+															if($1->varType=="INT")res->iVal=($1->iVal>=$3->iVal);
 															else if($1->varType=="FLOAT"){
-																$1->iVal=($1->dVal>=$3->dVal);
-																$1->varType="INT";
+																res->iVal=($1->dVal>=$3->dVal);
 															}
 															else if($1->varType=="CHAR"){
-																$1->iVal=($1->chVal>=$3->chVal);
-																$1->varType="INT";
+																res->iVal=($1->chVal>=$3->chVal);
 															}
 														}
 
-														$$=$1;
-														//later
-
-
+														$$=res;
 													}
 		;
 
@@ -758,13 +742,13 @@ simple_expression : term  {
 		  									
 
 		  									if($1->varType==""){
-		  											cout<<"GO FIND NEMO "<<$1->getName()<<endl;
+		  											//cout<<"GO FIND NEMO "<<$1->getName()<<endl;
 		  											$1=findInDeclaration($1->getName());
 
-		  											cout<<$1->iVal<<endl;
+		  											//cout<<$1->iVal<<endl;
 		  										}
 		  									if($3->varType==""){
-		  											cout<<"GO FIND NEMO "<<$3->getName()<<endl;
+		  											//cout<<"GO FIND NEMO "<<$3->getName()<<endl;
 		  											$3=findInDeclaration($3->getName());
 
 		  										}
@@ -780,7 +764,7 @@ simple_expression : term  {
  											printNOW("HELLO SHOOTING STAR!!");
 
 
- 											cout<<"ADDOP  "<<$1->iVal<<"  "<<$3->iVal<<endl;
+ 											//cout<<"ADDOP  "<<$1->iVal<<"  "<<$3->iVal<<endl;
 
 
  											if($2->getName()=="+"){
@@ -964,6 +948,7 @@ unary_expression : ADDOP unary_expression   {
 
 
 factor	: variable 	{
+						//FLAG
 						printNOW("factor : variable ");
 
 						if($1->array){

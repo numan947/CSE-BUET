@@ -103,7 +103,6 @@ int yylex(void);
 SymbolInfo* findInDeclaration(string name)
 {
 	for(int i=0;i<var_count;i++)if(name==declaredInfo[i]->getName()){
-		cout<<"FINDING NEMO "<<declaredInfo[i]->getName()<<"   "<<declaredInfo[i]->iVal<<endl;
 		return declaredInfo[i];
 	}
 	return 0;
@@ -118,7 +117,7 @@ void printNOW(string line)
 }
 
 
-#line 122 "y.tab.c" /* yacc.c:339  */
+#line 121 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -242,13 +241,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 58 "1305043.y" /* yacc.c:355  */
+#line 57 "1305043.y" /* yacc.c:355  */
 
 	SymbolInfo* idInfo;
 	SymbolInfo* helpInfo;
 	const char* helpString;
 
-#line 252 "y.tab.c" /* yacc.c:355  */
+#line 251 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -265,7 +264,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 269 "y.tab.c" /* yacc.c:358  */
+#line 268 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -566,11 +565,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    96,    96,   104,   113,   117,   122,   137,   155,   161,
-     168,   178,   216,   258,   295,   341,   348,   360,   366,   373,
-     384,   392,   400,   406,   442,   452,   459,   467,   477,   512,
-     519,   593,   601,   645,   652,   748,   755,   831,   839,   912,
-     931,   950,   966,   983,   990,   998,  1006,  1014,  1029
+       0,    95,    95,   103,   112,   116,   121,   136,   154,   160,
+     167,   177,   215,   257,   294,   340,   347,   359,   365,   372,
+     383,   391,   399,   405,   441,   451,   458,   466,   476,   511,
+     518,   585,   593,   636,   643,   732,   739,   815,   823,   896,
+     915,   934,   950,   968,   975,   983,   991,   999,  1014
 };
 #endif
 
@@ -1427,17 +1426,17 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 96 "1305043.y" /* yacc.c:1646  */
+#line 95 "1305043.y" /* yacc.c:1646  */
     {
 														printNOW("Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement"); 
 														string s=(yyvsp[0].helpString);
 														(yyval.helpString)=s.c_str();
 														}
-#line 1437 "y.tab.c" /* yacc.c:1646  */
+#line 1436 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 104 "1305043.y" /* yacc.c:1646  */
+#line 103 "1305043.y" /* yacc.c:1646  */
     {
 																printNOW("Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL");
 
@@ -1445,25 +1444,25 @@ yyreduce:
 																(yyval.helpString)=s.c_str();
 
 															}
-#line 1449 "y.tab.c" /* yacc.c:1646  */
+#line 1448 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 113 "1305043.y" /* yacc.c:1646  */
+#line 112 "1305043.y" /* yacc.c:1646  */
     {
 		   							printNOW("Matched Rule>>>compound_statement : LCURL statements RCURL");}
-#line 1456 "y.tab.c" /* yacc.c:1646  */
+#line 1455 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 117 "1305043.y" /* yacc.c:1646  */
+#line 116 "1305043.y" /* yacc.c:1646  */
     {
 		   								printNOW("Matched Rule>>>compound_statement : LCURL RCURL");}
-#line 1463 "y.tab.c" /* yacc.c:1646  */
+#line 1462 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 122 "1305043.y" /* yacc.c:1646  */
+#line 121 "1305043.y" /* yacc.c:1646  */
     {
 																printNOW("Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON");
 
@@ -1476,11 +1475,11 @@ yyreduce:
 																marker=var_count;
 																
 															}
-#line 1480 "y.tab.c" /* yacc.c:1646  */
+#line 1479 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 137 "1305043.y" /* yacc.c:1646  */
+#line 136 "1305043.y" /* yacc.c:1646  */
     {
 																		printNOW("Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON");
 
@@ -1497,39 +1496,39 @@ yyreduce:
 																		
 
 																	}
-#line 1501 "y.tab.c" /* yacc.c:1646  */
+#line 1500 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 155 "1305043.y" /* yacc.c:1646  */
+#line 154 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("Matched Rule>>>type_specifier : INT");
 							(yyval.helpString)="INT";
 					}
-#line 1510 "y.tab.c" /* yacc.c:1646  */
+#line 1509 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 161 "1305043.y" /* yacc.c:1646  */
+#line 160 "1305043.y" /* yacc.c:1646  */
     {
 					printNOW("Matched Rule>>>type_specifier : FLOAT");
 					(yyval.helpString)="FLOAT";
 				}
-#line 1519 "y.tab.c" /* yacc.c:1646  */
+#line 1518 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 168 "1305043.y" /* yacc.c:1646  */
+#line 167 "1305043.y" /* yacc.c:1646  */
     {
 					printNOW("Matched Rule>>>type_specifier : CHAR");
 
 					(yyval.helpString)="CHAR";
 				}
-#line 1529 "y.tab.c" /* yacc.c:1646  */
+#line 1528 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 178 "1305043.y" /* yacc.c:1646  */
+#line 177 "1305043.y" /* yacc.c:1646  */
     {
 													printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID");
 
@@ -1566,11 +1565,11 @@ yyreduce:
 
 
 												}
-#line 1570 "y.tab.c" /* yacc.c:1646  */
+#line 1569 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 216 "1305043.y" /* yacc.c:1646  */
+#line 215 "1305043.y" /* yacc.c:1646  */
     {
 		 											printNOW("Matched Rule>>>declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
 		 										
@@ -1610,11 +1609,11 @@ yyreduce:
 													
 
 		 										}
-#line 1614 "y.tab.c" /* yacc.c:1646  */
+#line 1613 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 258 "1305043.y" /* yacc.c:1646  */
+#line 257 "1305043.y" /* yacc.c:1646  */
     {	
 		 			printNOW("declaration_list : ID");
 					
@@ -1649,11 +1648,11 @@ yyreduce:
 					
 
 		 		}
-#line 1653 "y.tab.c" /* yacc.c:1646  */
+#line 1652 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 295 "1305043.y" /* yacc.c:1646  */
+#line 294 "1305043.y" /* yacc.c:1646  */
     {
 		 								
 		 								printNOW("declaration_list : ID LTHIRD CONST_INT RTHIRD");
@@ -1692,48 +1691,48 @@ yyreduce:
 										
 		 									
 		 							}
-#line 1696 "y.tab.c" /* yacc.c:1646  */
+#line 1695 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 341 "1305043.y" /* yacc.c:1646  */
+#line 340 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("statements : statement");
 
 						}
-#line 1705 "y.tab.c" /* yacc.c:1646  */
+#line 1704 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 348 "1305043.y" /* yacc.c:1646  */
+#line 347 "1305043.y" /* yacc.c:1646  */
     {
 	   								printNOW("statements : statements statement");
 	   								//??
 
 	   							}
-#line 1715 "y.tab.c" /* yacc.c:1646  */
+#line 1714 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 360 "1305043.y" /* yacc.c:1646  */
+#line 359 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("statement  : expression_statement");
 										//??
 									}
-#line 1724 "y.tab.c" /* yacc.c:1646  */
+#line 1723 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 366 "1305043.y" /* yacc.c:1646  */
+#line 365 "1305043.y" /* yacc.c:1646  */
     {
 	   								printNOW("statement  : compound_statement");
 	   								//??
 	   							}
-#line 1733 "y.tab.c" /* yacc.c:1646  */
+#line 1732 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 373 "1305043.y" /* yacc.c:1646  */
+#line 372 "1305043.y" /* yacc.c:1646  */
     {
 	   																			
 	   																			printNOW("statement  : FOR LPAREN expression_statement expression_statement expression RPAREN statement");
@@ -1742,39 +1741,39 @@ yyreduce:
 	   																			//LATER??
 
 	   																		}
-#line 1746 "y.tab.c" /* yacc.c:1646  */
+#line 1745 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 384 "1305043.y" /* yacc.c:1646  */
+#line 383 "1305043.y" /* yacc.c:1646  */
     {
 	   																				printNOW("statement  : IF LPAREN expression RPAREN statement");
 	   																				
 	   																				//LATER??
 	   																			}
-#line 1756 "y.tab.c" /* yacc.c:1646  */
+#line 1755 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 392 "1305043.y" /* yacc.c:1646  */
+#line 391 "1305043.y" /* yacc.c:1646  */
     {
 	   																printNOW("statement  : IF LPAREN expression RPAREN statement ELSE statement");
 
 	   																//LATER??
 	   															}
-#line 1766 "y.tab.c" /* yacc.c:1646  */
+#line 1765 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 400 "1305043.y" /* yacc.c:1646  */
+#line 399 "1305043.y" /* yacc.c:1646  */
     {
 	   													printNOW("statement  : WHILE LPAREN expression RPAREN statement");
 	   												}
-#line 1774 "y.tab.c" /* yacc.c:1646  */
+#line 1773 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 406 "1305043.y" /* yacc.c:1646  */
+#line 405 "1305043.y" /* yacc.c:1646  */
     {
 	   												printNOW("statement  : PRINTLN LPAREN ID RPAREN SEMICOLON ");
 
@@ -1808,49 +1807,49 @@ yyreduce:
 		   												}
 	   												}
 	   											}
-#line 1812 "y.tab.c" /* yacc.c:1646  */
+#line 1811 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 442 "1305043.y" /* yacc.c:1646  */
+#line 441 "1305043.y" /* yacc.c:1646  */
     {
 	   										printNOW("statement  : RETURN expression SEMICOLON");
 	   									}
-#line 1820 "y.tab.c" /* yacc.c:1646  */
+#line 1819 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 452 "1305043.y" /* yacc.c:1646  */
+#line 451 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("expression_statement : SEMICOLON");
 
 						}
-#line 1829 "y.tab.c" /* yacc.c:1646  */
+#line 1828 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 459 "1305043.y" /* yacc.c:1646  */
+#line 458 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("expression_statement : expression SEMICOLON");
 
 									}
-#line 1838 "y.tab.c" /* yacc.c:1646  */
+#line 1837 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 467 "1305043.y" /* yacc.c:1646  */
+#line 466 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("variable : ID ");
-						//LATER
+						//FLAG
 						SymbolInfo* target=findInDeclaration((yyvsp[0].idInfo)->getName());
 						if(target==0)printNOW("ERROR!! Undeclared variable: "+(yyvsp[0].idInfo)->getName());
 						else (yyval.helpInfo)=(yyvsp[0].idInfo);
 				}
-#line 1850 "y.tab.c" /* yacc.c:1646  */
+#line 1849 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 477 "1305043.y" /* yacc.c:1646  */
+#line 476 "1305043.y" /* yacc.c:1646  */
     {
 	 									printNOW("variable : ID LTHIRD expression RTHIRD ");
 										
@@ -1879,20 +1878,20 @@ yyreduce:
 										}
 
 	 								}
-#line 1883 "y.tab.c" /* yacc.c:1646  */
+#line 1882 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 512 "1305043.y" /* yacc.c:1646  */
+#line 511 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("expression : logic_expression");
 									(yyval.helpInfo)=(yyvsp[0].helpInfo);
 								}
-#line 1892 "y.tab.c" /* yacc.c:1646  */
+#line 1891 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 519 "1305043.y" /* yacc.c:1646  */
+#line 518 "1305043.y" /* yacc.c:1646  */
     {
 	   												printNOW("expression : variable ASSIGNOP logic_expression");
 
@@ -1906,13 +1905,6 @@ yyreduce:
 
 
 	   												else{
-
-	   													printNOW("HELLO SHOOTING STAR!!");
-
-	   													cout<<target->iVal<<"  "<<(yyvsp[0].helpInfo)->iVal<<endl;
-
-	   												
-
 
 	   													if(target->array==false){
 
@@ -1962,23 +1954,26 @@ yyreduce:
 	   												}
 
 	   											}
-#line 1966 "y.tab.c" /* yacc.c:1646  */
+#line 1958 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 593 "1305043.y" /* yacc.c:1646  */
+#line 585 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("logic_expression : rel_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 									}
-#line 1976 "y.tab.c" /* yacc.c:1646  */
+#line 1968 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 601 "1305043.y" /* yacc.c:1646  */
+#line 593 "1305043.y" /* yacc.c:1646  */
     {
 		 												printNOW("logic_expression : rel_expression LOGICOP rel_expression");
+
+		 												SymbolInfo* res=new SymbolInfo();
+		 												res->varType="INT";
 		 												
 		 												if((yyvsp[-2].helpInfo)->varType=="")(yyvsp[-2].helpInfo)=findInDeclaration((yyvsp[-2].helpInfo)->getName());
 		 												if((yyvsp[0].helpInfo)->varType=="")(yyvsp[0].helpInfo)=findInDeclaration((yyvsp[0].helpInfo)->getName());
@@ -1991,48 +1986,48 @@ yyreduce:
 		 												}
 
 		 												else if((yyvsp[-1].helpInfo)->getName()=="&&"){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal&&(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT")res->iVal=((yyvsp[-2].helpInfo)->iVal&&(yyvsp[0].helpInfo)->iVal);
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal&&(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal&&(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal&&(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal&&(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 														else if((yyvsp[-1].helpInfo)->getName()=="||"){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal||(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT")res->iVal=((yyvsp[-2].helpInfo)->iVal||(yyvsp[0].helpInfo)->iVal);
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal||(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal||(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal||(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal||(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 
 
-		 												(yyval.helpInfo)=(yyvsp[-2].helpInfo);
+		 												(yyval.helpInfo)=res;
 		 											}
-#line 2020 "y.tab.c" /* yacc.c:1646  */
+#line 2011 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 645 "1305043.y" /* yacc.c:1646  */
+#line 636 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("rel_expression : simple_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
 									}
-#line 2029 "y.tab.c" /* yacc.c:1646  */
+#line 2020 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 652 "1305043.y" /* yacc.c:1646  */
+#line 643 "1305043.y" /* yacc.c:1646  */
     {
+														//FLAG
 
 														printNOW("rel_expression : simple_expression RELOP simple_expression");
+
+														SymbolInfo* res=new SymbolInfo();
+														res->varType="INT";
 
 
 														if((yyvsp[-2].helpInfo)->varType==""){
@@ -2050,104 +2045,93 @@ yyreduce:
 														}
 
 														else if((yyvsp[-1].helpInfo)->getName()=="=="){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal==(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT"){
+																res->iVal=((yyvsp[-2].helpInfo)->iVal==(yyvsp[0].helpInfo)->iVal);
+															}
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal==(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal==(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal==(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal==(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 														else if((yyvsp[-1].helpInfo)->getName()=="!="){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal!=(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT"){
+																res->iVal=((yyvsp[-2].helpInfo)->iVal!=(yyvsp[0].helpInfo)->iVal);
+															}
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal!=(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal!=(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal!=(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal!=(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 														else if((yyvsp[-1].helpInfo)->getName()=="<"){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal<(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT")res->iVal=((yyvsp[-2].helpInfo)->iVal<(yyvsp[0].helpInfo)->iVal);
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal<(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal<(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal<(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal<(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 														else if((yyvsp[-1].helpInfo)->getName()=="<="){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal<=(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT")res->iVal=((yyvsp[-2].helpInfo)->iVal<=(yyvsp[0].helpInfo)->iVal);
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal<=(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal<=(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal<=(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal<=(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 														else if((yyvsp[-1].helpInfo)->getName()==">"){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal>(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT")res->iVal=((yyvsp[-2].helpInfo)->iVal>(yyvsp[0].helpInfo)->iVal);
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal>(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal>(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal>(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal>(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 														else if((yyvsp[-1].helpInfo)->getName()==">="){
-															if((yyvsp[-2].helpInfo)->varType=="INT")(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->iVal>=(yyvsp[0].helpInfo)->iVal);
+															if((yyvsp[-2].helpInfo)->varType=="INT")res->iVal=((yyvsp[-2].helpInfo)->iVal>=(yyvsp[0].helpInfo)->iVal);
 															else if((yyvsp[-2].helpInfo)->varType=="FLOAT"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->dVal>=(yyvsp[0].helpInfo)->dVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->dVal>=(yyvsp[0].helpInfo)->dVal);
 															}
 															else if((yyvsp[-2].helpInfo)->varType=="CHAR"){
-																(yyvsp[-2].helpInfo)->iVal=((yyvsp[-2].helpInfo)->chVal>=(yyvsp[0].helpInfo)->chVal);
-																(yyvsp[-2].helpInfo)->varType="INT";
+																res->iVal=((yyvsp[-2].helpInfo)->chVal>=(yyvsp[0].helpInfo)->chVal);
 															}
 														}
 
-														(yyval.helpInfo)=(yyvsp[-2].helpInfo);
-														//later
-
-
+														(yyval.helpInfo)=res;
 													}
-#line 2125 "y.tab.c" /* yacc.c:1646  */
+#line 2109 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 748 "1305043.y" /* yacc.c:1646  */
+#line 732 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("simple_expression : term ");
 							(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						}
-#line 2134 "y.tab.c" /* yacc.c:1646  */
+#line 2118 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 755 "1305043.y" /* yacc.c:1646  */
+#line 739 "1305043.y" /* yacc.c:1646  */
     {
 		  									printNOW("simple_expression : simple_expression ADDOP term");
 
 		  									
 
 		  									if((yyvsp[-2].helpInfo)->varType==""){
-		  											cout<<"GO FIND NEMO "<<(yyvsp[-2].helpInfo)->getName()<<endl;
+		  											//cout<<"GO FIND NEMO "<<$1->getName()<<endl;
 		  											(yyvsp[-2].helpInfo)=findInDeclaration((yyvsp[-2].helpInfo)->getName());
 
-		  											cout<<(yyvsp[-2].helpInfo)->iVal<<endl;
+		  											//cout<<$1->iVal<<endl;
 		  										}
 		  									if((yyvsp[0].helpInfo)->varType==""){
-		  											cout<<"GO FIND NEMO "<<(yyvsp[0].helpInfo)->getName()<<endl;
+		  											//cout<<"GO FIND NEMO "<<$3->getName()<<endl;
 		  											(yyvsp[0].helpInfo)=findInDeclaration((yyvsp[0].helpInfo)->getName());
 
 		  										}
@@ -2163,7 +2147,7 @@ yyreduce:
  											printNOW("HELLO SHOOTING STAR!!");
 
 
- 											cout<<"ADDOP  "<<(yyvsp[-2].helpInfo)->iVal<<"  "<<(yyvsp[0].helpInfo)->iVal<<endl;
+ 											//cout<<"ADDOP  "<<$1->iVal<<"  "<<$3->iVal<<endl;
 
 
  											if((yyvsp[-1].helpInfo)->getName()=="+"){
@@ -2206,21 +2190,21 @@ yyreduce:
 
 		  								
 		  								}
-#line 2210 "y.tab.c" /* yacc.c:1646  */
+#line 2194 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 831 "1305043.y" /* yacc.c:1646  */
+#line 815 "1305043.y" /* yacc.c:1646  */
     {
 								printNOW("term :unary_expression");
 								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 							}
-#line 2220 "y.tab.c" /* yacc.c:1646  */
+#line 2204 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 839 "1305043.y" /* yacc.c:1646  */
+#line 823 "1305043.y" /* yacc.c:1646  */
     {
      										printNOW("term : term MULOP unary_expression");
 
@@ -2284,11 +2268,11 @@ yyreduce:
      										  
 
      									}
-#line 2288 "y.tab.c" /* yacc.c:1646  */
+#line 2272 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 912 "1305043.y" /* yacc.c:1646  */
+#line 896 "1305043.y" /* yacc.c:1646  */
     {
 												printNOW("unary_expression : ADDOP unary_expression");
 
@@ -2305,11 +2289,11 @@ yyreduce:
 
 												(yyval.helpInfo)=(yyvsp[0].helpInfo);
 											}
-#line 2309 "y.tab.c" /* yacc.c:1646  */
+#line 2293 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 931 "1305043.y" /* yacc.c:1646  */
+#line 915 "1305043.y" /* yacc.c:1646  */
     {
 		 								printNOW("unary_expression : NOT unary_expression ");
 		 								
@@ -2326,21 +2310,22 @@ yyreduce:
 
 		 								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 		 							}
-#line 2330 "y.tab.c" /* yacc.c:1646  */
+#line 2314 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 950 "1305043.y" /* yacc.c:1646  */
+#line 934 "1305043.y" /* yacc.c:1646  */
     {
 		 			printNOW("unary_expression : factor");
 		 			(yyval.helpInfo)=(yyvsp[0].helpInfo);
 		 		}
-#line 2339 "y.tab.c" /* yacc.c:1646  */
+#line 2323 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 966 "1305043.y" /* yacc.c:1646  */
+#line 950 "1305043.y" /* yacc.c:1646  */
     {
+						//FLAG
 						printNOW("factor : variable ");
 
 						if((yyvsp[0].helpInfo)->array){
@@ -2354,50 +2339,50 @@ yyreduce:
 						}
 						else (yyval.helpInfo)=(yyvsp[0].helpInfo);
 					}
-#line 2358 "y.tab.c" /* yacc.c:1646  */
+#line 2343 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 983 "1305043.y" /* yacc.c:1646  */
+#line 968 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("factor : LPAREN expression RPAREN");
 									(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 								}
-#line 2367 "y.tab.c" /* yacc.c:1646  */
+#line 2352 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 990 "1305043.y" /* yacc.c:1646  */
+#line 975 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_INT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						printNOW((yyvsp[0].helpInfo)->getName());
 					}
-#line 2377 "y.tab.c" /* yacc.c:1646  */
+#line 2362 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 998 "1305043.y" /* yacc.c:1646  */
+#line 983 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_FLOAT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						printNOW((yyvsp[0].helpInfo)->getName());
 					}
-#line 2387 "y.tab.c" /* yacc.c:1646  */
+#line 2372 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 1006 "1305043.y" /* yacc.c:1646  */
+#line 991 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_CHAR ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						printNOW((yyvsp[0].helpInfo)->getName());
 					}
-#line 2397 "y.tab.c" /* yacc.c:1646  */
+#line 2382 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 1014 "1305043.y" /* yacc.c:1646  */
+#line 999 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : INCOP ");
 						string s=(yyvsp[-1].helpInfo)->varType;
@@ -2410,11 +2395,11 @@ yyreduce:
 						(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 					
 					}
-#line 2414 "y.tab.c" /* yacc.c:1646  */
+#line 2399 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 1029 "1305043.y" /* yacc.c:1646  */
+#line 1014 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : DECOP ");
 						
@@ -2429,11 +2414,11 @@ yyreduce:
 						(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 
 					}
-#line 2433 "y.tab.c" /* yacc.c:1646  */
+#line 2418 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2437 "y.tab.c" /* yacc.c:1646  */
+#line 2422 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2661,7 +2646,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1044 "1305043.y" /* yacc.c:1906  */
+#line 1029 "1305043.y" /* yacc.c:1906  */
 
 
 main(int argc,char *argv[])

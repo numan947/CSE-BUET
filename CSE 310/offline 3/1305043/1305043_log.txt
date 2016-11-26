@@ -2,7 +2,34 @@ Matched Rule>>>type_specifier : INT
 
 
 
-declaration_list : ID
+declaration_list : ID LTHIRD CONST_INT RTHIRD
+
+
+
+a
+
+
+
+13 --> <a , ID, { -1, -1,}>
+
+
+
+
+Matched Rule>>>declaration_list : declaration_list COMMA ID
+
+
+
+c
+
+
+
+0 --> <c , ID, -99999>
+13 --> <a , ID, { -1, -1,}>
+
+
+
+
+Matched Rule>>>declaration_list : declaration_list COMMA ID
 
 
 
@@ -10,7 +37,9 @@ i
 
 
 
+0 --> <c , ID, -99999>
 6 --> <i , ID, -99999>
+13 --> <a , ID, { -1, -1,}>
 
 
 
@@ -23,28 +52,218 @@ j
 
 
 
+0 --> <c , ID, -99999>
 6 --> <i , ID, -99999>
 7 --> <j , ID, -99999>
-
-
-
-
-Matched Rule>>>declaration_list : declaration_list COMMA ID
-
-
-
-k
-
-
-
-6 --> <i , ID, -99999>
-7 --> <j , ID, -99999>
-8 --> <k , ID, -99999>
+13 --> <a , ID, { -1, -1,}>
 
 
 
 
 Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON
+
+
+
+Matched Rule>>>type_specifier : FLOAT
+
+
+
+declaration_list : ID
+
+
+
+d
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { -1, -1,}>
+
+
+
+
+Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+
+
+
+factor : CONST_INT 
+
+
+
+0
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
+
+
+
+factor : CONST_INT 
+
+
+
+1
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 1, -1,}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statement
+
+
+
+factor : CONST_INT 
+
+
+
+1
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
+
+
+
+factor : CONST_INT 
+
+
+
+5
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 1, 5,}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statements statement
 
 
 
@@ -84,78 +303,16 @@ expression : variable ASSIGNOP logic_expression
 
 
 
-HELLO SHOOTING STAR!!
-
-
-
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
 6 --> <i , ID, 0>
 7 --> <j , ID, -99999>
-8 --> <k , ID, -99999>
+13 --> <a , ID, { 1, 5,}>
 
 
 
 
 expression_statement : expression SEMICOLON
-
-
-
-variable : ID 
-
-
-
-factor : variable 
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-factor : CONST_INT 
-
-
-
-10
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-rel_expression : simple_expression RELOP simple_expression
-
-
-
-logic_expression : rel_expression
-
-
-
-expression : logic_expression
-
-
-
-expression_statement : expression SEMICOLON
-
-
-
-variable : ID 
 
 
 
@@ -195,6 +352,66 @@ term :unary_expression
 
 
 
+simple_expression : term 
+
+
+
+rel_expression : simple_expression RELOP simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+variable : ID 
+
+
+
+variable : ID 
+
+
+
+factor : variable 
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+factor : CONST_INT 
+
+
+
+1
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
 simple_expression : simple_expression ADDOP term
 
 
@@ -215,34 +432,100 @@ expression : variable ASSIGNOP logic_expression
 
 
 
-HELLO SHOOTING STAR!!
-
-
-
-6 --> <i , ID, 3>
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 1>
 7 --> <j , ID, -99999>
-8 --> <k , ID, -99999>
+13 --> <a , ID, { 1, 5,}>
 
-
-
-
-Matched Rule>>>compound_statement : LCURL RCURL
-
-
-
-statement  : compound_statement
-
-
-
-statement  : FOR LPAREN expression_statement expression_statement expression RPAREN statement
-
-
-
-statements : statement
 
 
 
 variable : ID 
+
+
+
+factor : variable 
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+factor : CONST_INT 
+
+
+
+0
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression RELOP simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+factor : CONST_INT 
+
+
+
+0
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
 
 
 
@@ -278,13 +561,11 @@ expression : variable ASSIGNOP logic_expression
 
 
 
-HELLO SHOOTING STAR!!
-
-
-
-6 --> <i , ID, 3>
-7 --> <j , ID, 8>
-8 --> <k , ID, -99999>
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 1>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 8, 5,}>
 
 
 
@@ -293,23 +574,7 @@ expression_statement : expression SEMICOLON
 
 
 
-variable : ID 
-
-
-
-factor : variable 
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
+statement  : expression_statement
 
 
 
@@ -317,7 +582,7 @@ factor : CONST_INT
 
 
 
-20
+1
 
 
 
@@ -333,7 +598,7 @@ simple_expression : term
 
 
 
-rel_expression : simple_expression RELOP simple_expression
+rel_expression : simple_expression
 
 
 
@@ -345,19 +610,15 @@ expression : logic_expression
 
 
 
-expression_statement : expression SEMICOLON
+variable : ID LTHIRD expression RTHIRD 
 
 
 
-variable : ID 
+factor : CONST_INT 
 
 
 
-variable : ID 
-
-
-
-factor : variable 
+7
 
 
 
@@ -370,30 +631,6 @@ term :unary_expression
 
 
 simple_expression : term 
-
-
-
-factor : CONST_INT 
-
-
-
-5
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : simple_expression ADDOP term
-
-
-
-HELLO SHOOTING STAR!!
 
 
 
@@ -409,18 +646,32 @@ expression : variable ASSIGNOP logic_expression
 
 
 
-HELLO SHOOTING STAR!!
-
-
-
-6 --> <i , ID, 3>
-7 --> <j , ID, 6>
-8 --> <k , ID, -99999>
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 1>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 8, 7,}>
 
 
 
 
-Matched Rule>>>compound_statement : LCURL RCURL
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statement  : IF LPAREN expression RPAREN statement ELSE statement
+
+
+
+statements : statement
+
+
+
+Matched Rule>>>compound_statement : LCURL statements RCURL
 
 
 
@@ -436,15 +687,11 @@ statements : statements statement
 
 
 
-variable : ID 
-
-
-
 factor : CONST_INT 
 
 
 
-10
+0
 
 
 
@@ -461,73 +708,6 @@ simple_expression : term
 
 
 rel_expression : simple_expression
-
-
-
-logic_expression : rel_expression
-
-
-
-expression : variable ASSIGNOP logic_expression
-
-
-
-HELLO SHOOTING STAR!!
-
-
-
-6 --> <i , ID, 3>
-7 --> <j , ID, 6>
-8 --> <k , ID, 10>
-
-
-
-
-expression_statement : expression SEMICOLON
-
-
-
-variable : ID 
-
-
-
-factor : variable 
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-factor : CONST_INT 
-
-
-
-30
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-rel_expression : simple_expression RELOP simple_expression
 
 
 
@@ -539,90 +719,7 @@ expression : logic_expression
 
 
 
-expression_statement : expression SEMICOLON
-
-
-
-variable : ID 
-
-
-
-variable : ID 
-
-
-
-factor : variable 
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-factor : CONST_INT 
-
-
-
-6
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : simple_expression ADDOP term
-
-
-
-HELLO SHOOTING STAR!!
-
-
-
-rel_expression : simple_expression
-
-
-
-logic_expression : rel_expression
-
-
-
-expression : variable ASSIGNOP logic_expression
-
-
-
-HELLO SHOOTING STAR!!
-
-
-
-6 --> <i , ID, 3>
-7 --> <j , ID, 6>
-8 --> <k , ID, 7>
-
-
-
-
-Matched Rule>>>compound_statement : LCURL RCURL
-
-
-
-statement  : compound_statement
-
-
-
-statement  : FOR LPAREN expression_statement expression_statement expression RPAREN statement
+statement  : RETURN expression SEMICOLON
 
 
 
@@ -639,9 +736,11 @@ Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement
 
 
 PRINTING SYMBOL TABLE
-6 --> <i , ID, 3>
-7 --> <j , ID, 6>
-8 --> <k , ID, 7>
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 1>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 8, 7,}>
 
 
 
@@ -649,9 +748,11 @@ PRINTING SYMBOL TABLE
 
 
 PRINTING VARIABLE LIST
+a ID INT
+c ID INT
 i ID INT
 j ID INT
-k ID INT
+d ID FLOAT
 
 
-TOTAL LINES: 013
+TOTAL LINES: 012
