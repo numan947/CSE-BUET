@@ -36,6 +36,7 @@ public:
 
 
     int line;
+    bool isvariable;
 
 
     SymbolInfo()
@@ -43,6 +44,7 @@ public:
         dVal=iVal=-99999;
         chVal=0;arrayLength=0;
         array=false;
+        isvariable=false;
     }
     SymbolInfo(string Name, string Type)
     {

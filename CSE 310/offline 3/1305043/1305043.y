@@ -15,7 +15,7 @@ SymbolInfo*declaredInfo[1000];
 FILE* logFile;
 SymbolInfo *spc;
 
-int line_count=0;
+int line_count=1;
 int error_count=0;
 int match_count=0;
 int var_count=0;
@@ -25,6 +25,12 @@ int ii;
 int marker;
 
 
+void printError(string s)
+{
+	
+	fprintf(logFile,"Error at line no: %d--%s\n\n\n\n",line_count,s.c_str());
+
+}
 
 
 void yyerror(char *s){
@@ -202,7 +208,8 @@ declaration_list : declaration_list COMMA ID 	{
 														fprintf(logFile,"\n\n\n\n");
 													}
 													else{
-														printNOW("ERROR!! "+s+" re-declared!!");
+														printError("multiple declarations for "+s);
+														error_count++;
 													}
 
 
@@ -245,7 +252,11 @@ declaration_list : declaration_list COMMA ID 	{
 														fprintf(logFile,"\n\n\n\n");
 													}
 													else{
-														printNOW("ERROR!! "+s+" re-declared!!");
+														stringstream ss;
+														ss<<$3->line;
+
+														printError("multiple declarations for "+s);
+														error_count++;
 													}
 
 													
@@ -283,8 +294,9 @@ declaration_list : declaration_list COMMA ID 	{
 						fprintf(logFile,"\n\n\n\n");
 
 					}
-					else{
-						printNOW("ERROR!! "+s+" re-declared!!");
+						else{
+									printError("multiple declarations for "+s);
+									error_count++;
 					}
 
 					
@@ -325,7 +337,8 @@ declaration_list : declaration_list COMMA ID 	{
 											fprintf(logFile,"\n\n\n\n");
 										}
 										else{
-											printNOW("ERROR!! "+s+" re-declared!!");
+											printError("multiple declarations for "+s);
+														error_count++;
 										}
 
 										
@@ -468,15 +481,28 @@ expression_statement	: SEMICOLON		{
 variable : ID 	{
 						printNOW("variable : ID ");
 						//FLAG
+						
+
 						SymbolInfo* target=findInDeclaration($1->getName());
-						if(target==0)printNOW("ERROR!! Undeclared variable: "+$1->getName());
-						else if(target->array==true)target->pIndex=-1;
-						else $$=$1;
+						if(target==0){
+							printError("undeclared variable "+$1->getName());
+							error_count++;
+							$$=new SymbolInfo();//dummy??
+							$$->varType="DUMMY";
+
+						}
+						else if(target->array==true){
+							target->pIndex=-1;
+							$$=target;
+							}
+
+						else $$=target;
 				}				
 	 
 
 
 	 | ID LTHIRD expression RTHIRD  {
+	 									//cout<<$1->getName()<<endl;
 	 									printNOW("variable : ID LTHIRD expression RTHIRD ");
 										
 										SymbolInfo* target=findInDeclaration($1->getName());
@@ -485,21 +511,20 @@ variable : ID 	{
 
 										
 										if(target==0){
-											printNOW("ERROR!! Undeclared variable: "+$1->getName());
+											printError("undeclared variable "+$1->getName());
+											error_count++;
+											$$=new SymbolInfo();//dummy??
+											$$->varType="DUMMY";
 										}
 										else if($3->varType!="INT"){
-											printNOW("ERROR!!: ARRAY INDEX MUST BE INT");
-											yyerror("ERROR!!: ARRAY INDEX MUST BE INT");
+											printError("Index for array "+$1->getName()+" is not INT");
+											error_count++;
+											$$=new SymbolInfo();//dummy??									
 										}
 										
 										else{
 											$$=target;
 											$$->pIndex=$3->iVal;
-
-											/*printNOW($$->getName());
-											stringstream o;
- 											o<<$$->pIndex;
- 											printNOW(o.str());*/
 										}
 
 	 								}
@@ -520,6 +545,12 @@ expression : logic_expression	{
 	   | variable ASSIGNOP logic_expression 	{
 	   												printNOW("expression : variable ASSIGNOP logic_expression");
 
+
+	   												if($1->varType=="DUMMY")$$=$1;
+	   												else if($3->varType=="DUMMY")$$=$3;
+
+	   												else{
+
 	   												SymbolInfo* target=findInDeclaration($1->getName());
 
 	   												if($3->varType=="")$3=findInDeclaration($3->getName());
@@ -531,65 +562,66 @@ expression : logic_expression	{
 
 	   												else{
 
-	   													if(target->array==false){
+		   													if(target->array==false){
 
-	   														if(target->varType=="INT"&&$3->varType=="INT")target->iVal=$3->iVal;
-	   														else if(target->varType=="FLOAT"&&$3->varType=="FLOAT")target->dVal=$3->dVal;
-	   														else if(target->varType=="CHAR"&&$3->varType=="CHAR")target->chVal=$3->chVal;
-	   														else printNOW("TYPE MISMATCH");
-
-				   											/*stringstream o;
-		 													if(target->varType=="INT")o<<target->iVal;
-		 													else if(target->varType=="FLOAT")o<<target->dVal;
-		 													printNOW(o.str());*/
-	   													}
-
-
-	   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
-															
-	   														if(target->varType=="INT"){
-		   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(int)$3->iVal;
-		   														else if($3->varType=="FLOAT")target->arrayStorage[target->pIndex]=(int)$3->dVal;
-		   														else if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(int)$3->chVal;
-		   													}
-		   													else if(target->varType=="FLOAT"){
-		   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(double)$3->iVal;
-		   														else if($3->varType=="FLOAT")target->arrayStorage[target->pIndex]=(double)$3->dVal;
-		   														else if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(double)$3->chVal;
-		   													}
-		   													else if(target->varType=="CHAR"){
-		   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(char)$3->iVal;
-		   														else if($3->varType=="FLOAT")target->arrayStorage[target->pIndex]=(char)$3->dVal;
-		   														else if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(char)$3->chVal;
+		   														if(target->varType=="INT"&&$3->varType=="INT")target->iVal=$3->iVal;
+		   														else if(target->varType=="FLOAT"&&$3->varType=="FLOAT")target->dVal=$3->dVal;
+		   														else if(target->varType=="CHAR"&&$3->varType=="CHAR")target->chVal=$3->chVal;
+		   														else if(target->varType=="FLOAT"){
+		   															if($3->varType=="INT")target->dVal=$3->iVal;
+		   															else if($3->varType=="CHAR")target->dVal=$3->chVal;
+		   														}
+		   														else {
+		   															printError("Type Mismatch");
+			   														error_count++;
+		   														}
 		   													}
 
-		   													/*stringstream o;
-		 													if(target->varType=="INT")o<<(int)target->arrayStorage[target->pIndex];
-		 													else if(target->varType=="FLOAT")o<<(double)target->arrayStorage[target->pIndex];
-		 													printNOW(o.str());
 
+		   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
+																
+		   														if(target->varType=="INT"){
+			   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(int)$3->iVal;
+			   														else{
+			   															printError("Type Mismatch");
+			   															error_count++;
+			   														}
+			   													}
+			   													else if(target->varType=="FLOAT"){
+			   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(double)$3->iVal;
+			   														else if($3->varType=="FLOAT")target->arrayStorage[target->pIndex]=(double)$3->dVal;
+			   														else if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(double)$3->chVal;
+			   													}
+			   													else if(target->varType=="CHAR"){
+			   														if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(char)$3->chVal;
+			   														else {
+			   															printError("Type Mismatch");
+			   															error_count++;
+			   														}
+			   													}
 
-		 													for(int i=0;i<target->arrayLength;i++)fprintf(logFile,"%d ",(int)target->arrayStorage[i]);*/
+		   													}
+		   													else{
+		   														if(target->pIndex<0){
+		   															printError("Type Mismatch");
+			   														error_count++;
+		   														}
+		   														else if(target->pIndex>=target->arrayLength){
+		   															printNOW("ERROR!! Array Index out of bound!!");
+		   															error_count++;
+		   														}
+		   													}
 
-	   													}
-	   													else{
-	   														if(target->pIndex<0)printNOW("ERROR!! you can't assign a value to an array without any INDEX!!");
-	   														else if(target->pIndex>=target->arrayLength){
-	   															printNOW("ERROR!! Array Index out of bound!!");
-	   														}
-	   													}
-
-	   													$$=target;
-	   													myTable->Print(logFile);
-	   													fprintf(logFile,"\n\n\n\n");
+		   													$$=target;
+		   													myTable->Print(logFile);
+		   													fprintf(logFile,"\n\n\n\n");
+		   												}
 	   												}
 
 	   											}
 	   ;
 
 
-
-			
 logic_expression : rel_expression 	{
 										printNOW("logic_expression : rel_expression");
 										$$=$1;
@@ -601,41 +633,44 @@ logic_expression : rel_expression 	{
 		 | rel_expression LOGICOP rel_expression 	{
 		 												printNOW("logic_expression : rel_expression LOGICOP rel_expression");
 
-		 												SymbolInfo* res=new SymbolInfo();
-		 												res->varType="INT";
-		 												
-		 												if($1->varType=="")$1=findInDeclaration($1->getName());
-		 												if($3->varType=="")$3=findInDeclaration($3->getName());
+
+		 												if($1->varType=="DUMMY")$$=$1;
+														
+														else if($3->varType=="DUMMY")$$=$3;
+														
+														else{
+
+			 												SymbolInfo* res=new SymbolInfo();
+			 												res->varType="INT";
+			 												
+			 												if($1->varType=="")$1=findInDeclaration($1->getName());
+			 												if($3->varType=="")$3=findInDeclaration($3->getName());
 
 
 
-		 												if($1->varType!=$3->varType){
-		 													printNOW("ERROR!! Type MISMATCH");
-		 													yyerror("ERROR!! Type MISMATCH");
-		 												}
-
-		 												else if($2->getName()=="&&"){
-															if($1->varType=="INT")res->iVal=($1->iVal&&$3->iVal);
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal&&$3->dVal);
+			 												if($1->array||$3->array){
+																printError("Logic operations on arrays");
+																error_count++;
 															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal&&$3->chVal);
-															}
-														}
-														else if($2->getName()=="||"){
-															if($1->varType=="INT")res->iVal=($1->iVal||$3->iVal);
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal||$3->dVal);
-															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal||$3->chVal);
-															}
-														}
+															else{
+																float a,b;
+																if($1->varType=="INT")a=(double)$1->iVal;
+																if($1->varType=="FLOAT")a=$1->dVal;
+																if($1->varType=="CHAR")a=(double)$1->chVal;
+																if($3->varType=="INT")b=(double)$3->iVal;
+																if($3->varType=="FLOAT")b=$3->dVal;
+																if($3->varType=="CHAR")b=(double)$3->iVal;
 
-
-		 												$$=res;
-		 											}	
+																if($2->getName()=="&&"){
+																	res->iVal=(a&&b);
+																}
+																else if($2->getName()=="||"){
+																	res->iVal=(a||b);
+																}
+																$$=res;
+															}		 	
+														}										
+													}	
 		 ;
 
 
@@ -653,86 +688,59 @@ rel_expression	: simple_expression  {
 
 														printNOW("rel_expression : simple_expression RELOP simple_expression");
 
-														SymbolInfo* res=new SymbolInfo();
-														res->varType="INT";
+														if($1->varType=="DUMMY")$$=$1;
+														else if($3->varType=="DUMMY")$$=$3;
+														else{
+
+															SymbolInfo* res=new SymbolInfo();
+															res->varType="INT";
 
 
-														if($1->varType==""){
-															$1=findInDeclaration($1->getName());
-														}
-														
-														if($3->varType==""){
-															$3=findInDeclaration($3->getName());
-														}
+															if($1->varType==""){
+																$1=findInDeclaration($1->getName());
+															}
+															
+															if($3->varType==""){
+																$3=findInDeclaration($3->getName());
+															}
 
 
-														if(($1->varType!=$3->varType)||($1->array&& (!$3->array))||(!$1->array&& ($3->array))){
-															printNOW("ERROR!: Type mismatch!!");
-															yyerror("ERROR!: Type mismatch!!");
-														}
+															if($1->array||$3->array){
+																printNOW("RELOP operations on arrays");
+															}
+															else{
+																float a,b;
+																if($1->varType=="INT")a=(double)$1->iVal;
+																if($1->varType=="FLOAT")a=$1->dVal;
+																if($1->varType=="CHAR")a=(double)$1->chVal;
+																if($3->varType=="INT")b=(double)$3->iVal;
+																if($3->varType=="FLOAT")b=$3->dVal;
+																if($3->varType=="CHAR")b=(double)$3->iVal;
 
-														else if($2->getName()=="=="){
-															if($1->varType=="INT"){
-																res->iVal=($1->iVal==$3->iVal);
-															}
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal==$3->dVal);
-															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal==$3->chVal);
-															}
-														}
-														else if($2->getName()=="!="){
-															if($1->varType=="INT"){
-																res->iVal=($1->iVal!=$3->iVal);
-															}
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal!=$3->dVal);
-															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal!=$3->chVal);
-															}
-														}
-														else if($2->getName()=="<"){
-															if($1->varType=="INT")res->iVal=($1->iVal<$3->iVal);
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal<$3->dVal);
-															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal<$3->chVal);
+																if($2->getName()=="=="){
+																	res->iVal=(a==b);
+																}
+																else if($2->getName()=="!="){
+																	res->iVal=(a!=b);
+																}
+																else if($2->getName()=="<"){
+																	res->iVal=(a<b);
+																}
+																else if($2->getName()=="<="){
+																	res->iVal=(a<=b);
+																}
+																else if($2->getName()==">"){
+																	res->iVal=(a>b);
+																}
+																else if($2->getName()==">="){
+																	res->iVal=(a>=b);
+																}
+																$$=res;
 															}
 														}
-														else if($2->getName()=="<="){
-															if($1->varType=="INT")res->iVal=($1->iVal<=$3->iVal);
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal<=$3->dVal);
-															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal<=$3->chVal);
-															}
-														}
-														else if($2->getName()==">"){
-															if($1->varType=="INT")res->iVal=($1->iVal>$3->iVal);
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal>$3->dVal);
-															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal>$3->chVal);
-															}
-														}
-														else if($2->getName()==">="){
-															if($1->varType=="INT")res->iVal=($1->iVal>=$3->iVal);
-															else if($1->varType=="FLOAT"){
-																res->iVal=($1->dVal>=$3->dVal);
-															}
-															else if($1->varType=="CHAR"){
-																res->iVal=($1->chVal>=$3->chVal);
-															}
-														}
-
-														$$=res;
 													}
 		;
+
 
 
 
@@ -745,73 +753,81 @@ simple_expression : term  {
 
 
 		  | simple_expression ADDOP term  {
+
 		  									printNOW("simple_expression : simple_expression ADDOP term");
 
-		  									
+		  									if($3->varType=="DUMMY")$$=$3;
 
-		  									if($1->varType==""){
-		  											//cout<<"GO FIND NEMO "<<$1->getName()<<endl;
-		  											$1=findInDeclaration($1->getName());
+		  									else{
+			  									
+			  									SymbolInfo* res=new SymbolInfo();
+			  									
 
-		  											//cout<<$1->iVal<<endl;
-		  										}
-		  									if($3->varType==""){
-		  											//cout<<"GO FIND NEMO "<<$3->getName()<<endl;
-		  											$3=findInDeclaration($3->getName());
+			  									if($1->varType==""){
+			  											//cout<<"GO FIND NEMO "<<$1->getName()<<endl;
+			  											$1=findInDeclaration($1->getName());
 
-		  										}
-		  									
+			  											//cout<<$1->iVal<<endl;
+			  										}
+			  									if($3->varType==""){
+			  											//cout<<"GO FIND NEMO "<<$3->getName()<<endl;
+			  											$3=findInDeclaration($3->getName());
 
-
- 											if($1->varType=="CHAR"||$3->varType=="CHAR"){
- 														printNOW("CAN'T use ADDOP on CHARS");
- 														yyerror("ERROR!! CAN'T use ADDOP on CHARS");
- 											}
-
- 											
- 											printNOW("HELLO SHOOTING STAR!!");
+			  										}
+			  									
 
 
- 											//cout<<"ADDOP  "<<$1->iVal<<"  "<<$3->iVal<<endl;
-
-
- 											if($2->getName()=="+"){
-
-	 											if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
-	 												
-	 												if($1->varType=="FLOAT"&&$3->varType=="FLOAT"){
-	 														$1->dVal+=$3->dVal;
+	 											if($1->varType=="CHAR"||$3->varType=="CHAR"){
+	 													printError("Add operation on CHAR");
+	 													error_count++;
 	 														
-	 													}
-	 												
-	 												else if($1->varType=="FLOAT"){
-	 													
-	 														$1->dVal+=$3->iVal;
-	 													}
-	 												
-	 												else {
-	 														$1->dVal=($1->iVal+$3->dVal);
-	 														$1->varType="FLOAT";
-	 													}
-	 												}
-	 											else{
-	 													$1->iVal+=$3->iVal;
-	 												}
- 											}
- 											else if($2->getName()=="-"){
+	 											}
 
-	 											if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
-	 												if($1->varType=="FLOAT"&&$3->varType=="FLOAT")$1->dVal-=$3->dVal;
-	 												else if($1->varType=="FLOAT")$1->dVal-=$3->iVal;
-	 												else {
-	 														$1->dVal=($1->iVal-$3->dVal);
-	 														$1->varType="FLOAT";
-	 													}
-	 												}
-	 											else $1->iVal-=$3->iVal;
- 											}
+	 											if($1->array||$3->array){
+	 												printError("Add operation on arrays");
+	 												error_count++;
+	 											}
+	 											
 
-		  									$$=$1;
+
+	 											if($2->getName()=="+"){
+
+		 											if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
+		 												
+		 												if($1->varType=="FLOAT"&&$3->varType=="FLOAT"){
+		 														$1->dVal+=$3->dVal;
+		 														
+		 													}
+		 												
+		 												else if($1->varType=="FLOAT"){
+		 													
+		 														$1->dVal+=$3->iVal;
+		 													}
+		 												
+		 												else {
+		 														$1->dVal=($1->iVal+$3->dVal);
+		 														$1->varType="FLOAT";
+		 													}
+		 												}
+		 											else{
+		 													$1->iVal+=$3->iVal;
+		 												}
+	 											}
+	 											else if($2->getName()=="-"){
+
+		 											if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
+		 												if($1->varType=="FLOAT"&&$3->varType=="FLOAT")$1->dVal-=$3->dVal;
+		 												else if($1->varType=="FLOAT")$1->dVal-=$3->iVal;
+		 												else {
+		 														$1->dVal=($1->iVal-$3->dVal);
+		 														$1->varType="FLOAT";
+		 													}
+		 												}
+		 											else $1->iVal-=$3->iVal;
+	 											}
+
+			  									$$=$1;
+		  									}
 
 		  								
 		  								}
@@ -831,65 +847,71 @@ term :	unary_expression	{
      |  term MULOP unary_expression		{
      										printNOW("term : term MULOP unary_expression");
 
-     										
-     										if($1->varType=="")$1=findInDeclaration($1->getName());
-     										if($3->varType=="")$3=findInDeclaration($3->getName());
+     										if($3->varType=="DUMMY")$$=$3;
 
 
 
-     										if($2->getName()=="*"){
-     											if($1->varType=="CHAR"||$3->varType=="CHAR")printNOW("CAN'T MULTIPLY CHARS");
-     											
+     										else{
+	     										if($1->varType=="")$1=findInDeclaration($1->getName());
+	     										if($3->varType=="")$3=findInDeclaration($3->getName());
 
-     											else if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
-     												if($1->varType=="FLOAT"&&$3->varType=="FLOAT")$1->dVal*=$3->dVal;
-     												else if($1->varType=="FLOAT")$1->dVal*=$3->iVal;
-     												else {
-     														$1->dVal=($1->iVal*$3->dVal);
-     														$1->varType="FLOAT";
-     													}
-     											}
-     											else $1->iVal*=$3->iVal;
-     											$$=$1;
+
+
+	     										if($2->getName()=="*"){
+	     											if($1->varType=="CHAR"||$3->varType=="CHAR"){
+	     												printError("Multiplication operation on CHARs");
+	     												error_count++;
+	     											}
+
+	     											else if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
+	     												if($1->varType=="FLOAT"&&$3->varType=="FLOAT")$1->dVal*=$3->dVal;
+	     												else if($1->varType=="FLOAT")$1->dVal*=$3->iVal;
+	     												else {
+	     														$1->dVal=($1->iVal*$3->dVal);
+	     														$1->varType="FLOAT";
+	     													}
+	     											}
+	     											else $1->iVal*=$3->iVal;
+	     											$$=$1;
+	     										}
+
+
+												else if($2->getName()=="/"){
+	     											if($1->varType=="CHAR"||$3->varType=="CHAR"){
+	     												printError("Division operations of CHARs");
+	     												error_count++;
+	     												}
+	     											
+	     											else if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
+	     												
+	     												if($1->varType=="FLOAT"&&$3->varType=="FLOAT")$1->dVal/=$3->dVal;
+	     												
+	     												else if($1->varType=="FLOAT")$1->dVal/=(double)$3->iVal;
+	     												
+	     												else {
+	     														$1->dVal=((double)$1->iVal/$3->dVal);
+	     														$1->varType="FLOAT";
+	     													}
+	     											}
+
+	     											else $1->iVal/=$3->iVal;
+	     											$$=$1;
+	     										}  
+
+
+
+	     										else if($2->getName()=="%"){
+	     											if($1->varType=="CHAR"||$3->varType=="CHAR"||$1->varType=="FLOAT"||$3->varType=="FLOAT"){
+	     												printError("Non integer operands on MODULUS");
+	     												error_count++;
+	     												$1->iVal=-99999;
+	     											}
+	     											
+	     											else $1->iVal%=$3->iVal;
+	     											$$=$1;
+	     										} 
      										}
-
-
-											else if($2->getName()=="/"){
-     											if($1->varType=="CHAR"||$3->varType=="CHAR")printNOW("CAN'T DIVIDE CHARS");
-     											
-     											else if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
-     												
-     												if($1->varType=="FLOAT"&&$3->varType=="FLOAT")$1->dVal/=$3->dVal;
-     												
-     												else if($1->varType=="FLOAT")$1->dVal/=(double)$3->iVal;
-     												
-     												else {
-     														$1->dVal=((double)$1->iVal/$3->dVal);
-     														$1->varType="FLOAT";
-     													}
-     											}
-
-     											else $1->iVal/=$3->iVal;
-     											$$=$1;
-     										}  
-
-
-
-     										else if($2->getName()=="%"){
-     											if($1->varType=="CHAR"||$3->varType=="CHAR")printNOW("CAN'T MOD CHARS");
-     											
-     											else if($1->varType=="FLOAT"||$3->varType=="FLOAT"){
-     												printNOW("CAN'T MOD FLOATS");
-     												$1->iVal=-99999;
-     											}
-
-     											else $1->iVal%=$3->iVal;
-     											$$=$1;
-     										} 
-
-
-     										  
-
+  
      									}
      ;
 
@@ -904,18 +926,25 @@ term :	unary_expression	{
 unary_expression : ADDOP unary_expression   {
 												printNOW("unary_expression : ADDOP unary_expression");
 
-												if($2->varType=="")$2=findInDeclaration($2->getName());
+												if($2->varType=="DUMMY")$$=$2;
+
+												else{
+													if($2->varType=="")$2=findInDeclaration($2->getName());
 
 
-												if($1->getName()=="-"){
-													string s=$2->varType;
+													if($1->getName()=="-"){
+														string s=$2->varType;
 
-													if(s=="INT")$2->iVal=-($2->iVal);
-													else if(s=="FLOAT")$2->dVal=-($2->dVal);
-													else if(s=="CHAR")printNOW("ERROR!! Unary "+$1->getName()+" has been done on CHAR: "+$2->getName());
+														if(s=="INT")$2->iVal=-($2->iVal);
+														else if(s=="FLOAT")$2->dVal=-($2->dVal);
+														else if(s=="CHAR"){
+															printError("Can't use UNARYOP on CHARs");
+															error_count++;
+														}
+													}
+
+													$$=$2;
 												}
-
-												$$=$2;
 											}
 		 
 
@@ -923,18 +952,26 @@ unary_expression : ADDOP unary_expression   {
 		 | NOT unary_expression 	{
 		 								printNOW("unary_expression : NOT unary_expression ");
 		 								
-		 								string s=$2->varType;
-		 								
-		 								if(s==""){
-		 									$2=findInDeclaration($2->getName());
-		 									s=$2->varType;
+		 								if($2->varType=="DUMMY")$$=$2;
+
+		 								else{
+			 								
+			 								
+			 								string s=$2->varType;
+			 								
+			 								if(s==""){
+			 									$2=findInDeclaration($2->getName());
+			 									s=$2->varType;
+			 								}
+
+			 								if(s=="INT")$2->iVal=!($2->iVal);
+			 								else if(s=="FLOAT")$2->dVal=!($2->dVal);
+			 								else if(s=="CHAR"){
+															printError("Can't use UNARYOP on CHARs");
+															error_count++;
+														}
+			 								$$=$2;
 		 								}
-
-		 								if(s=="INT")$2->iVal=!($2->iVal);
-		 								else if(s=="FLOAT")$2->dVal=!($2->dVal);
-		 								else if(s=="CHAR")printNOW("ERROR!! Unary NOT has been done on CHAR: "+$2->getName());
-
-		 								$$=$2;
 		 							}
 		 
 
@@ -956,19 +993,29 @@ unary_expression : ADDOP unary_expression   {
 
 
 factor	: variable 	{
-						//FLAG
-						printNOW("factor : variable ");
+						//so that the acutal value of the variable remain unchanged
 
-						if($1->array){
+						printNOW("factor : variable ");
+						
+						if($1->varType=="DUMMY")$$=$1;
+
+						else{
 							SymbolInfo* real=findInDeclaration($1->getName());
 							SymbolInfo* ret=new SymbolInfo(real->getName(),real->getType());
 							ret->varType=real->varType;
-							if(real->varType=="INT")ret->iVal=(int)real->arrayStorage[real->pIndex];
-							else if(real->varType=="FLOAT")ret->dVal=(double)real->arrayStorage[real->pIndex];
-							else if(real->varType=="CHAR")ret->chVal=(char)real->arrayStorage[real->pIndex];
-							$$=ret;
+							if($1->array){	
+								if(real->varType=="INT")ret->iVal=(int)real->arrayStorage[real->pIndex];
+								else if(real->varType=="FLOAT")ret->dVal=(double)real->arrayStorage[real->pIndex];
+								else if(real->varType=="CHAR")ret->chVal=(char)real->arrayStorage[real->pIndex];
+								$$=ret;
+							}
+							else{
+								if(real->varType=="INT")ret->iVal=real->iVal;
+								else if(real->varType=="FLOAT")ret->dVal=real->dVal;
+								else if(real->varType=="CHAR")ret->chVal=real->chVal;
+								$$=ret;
+							}
 						}
-						else $$=$1;
 					}
 	
 
@@ -1010,9 +1057,6 @@ factor	: variable 	{
 						if(s=="INT")$1->iVal++;
 						else if(s=="FLOAT")$1->dVal++;
 						else if(s=="CHAR")$1->chVal++;
-						else{
-						//print ERROR
-						}
 						$$=$1;
 					
 					}
@@ -1026,10 +1070,6 @@ factor	: variable 	{
 						if(s=="INT")$1->iVal--;
 						else if(s=="FLOAT")$1->dVal--;
 						else if(s=="CHAR")$1->chVal--;
-						else{
-							//print ERROR
-						}
-
 						$$=$1;
 
 					}
@@ -1073,6 +1113,7 @@ main(int argc,char *argv[])
 
 	fclose(yyin);
 	fprintf(logFile,"\n\nTOTAL LINES: %03d\n",line_count);
+	fprintf(logFile,"\n\nTOTAL ERRORS: %3d\n",error_count);
 	fclose(logFile);
 
 	return 0;

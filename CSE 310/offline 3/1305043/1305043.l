@@ -45,6 +45,7 @@ void printNow(string token,string lexeme,int line_no,bool s,SymbolInfo* info)
 		fprintf(logFile,"\n\n");*/
 		//SymbolInfo* mm=new SymbolInfo(lexeme,token);
 		//cout<<token<<"  "<<lexeme<<endl;
+		info->line=line_no;
 		if(token=="ID")yylval.idInfo=info;
 		else yylval.helpInfo=info;
 		//cout<<yylval.helpInfo->getType()<<"  "<<yylval.helpInfo->getName()<<endl;
