@@ -30,9 +30,9 @@ SymbolInfo* dummy;
 
 void printNow(string token,string lexeme,int line_no,bool s,SymbolInfo* info)
 {
-	if(s){
-			fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_no,token.c_str(),lexeme.c_str());
-			fprintf(logFile,"\n\n");
+	if(!s){
+			//fprintf(logFile,"LEXER RESPONSE: Line no %03d: TOKEN <%s> Lexeme <%s> found\n",line_no,token.c_str(),lexeme.c_str());
+			//fprintf(logFile,"\n\n");
 			yylval.helpString=lexeme.c_str();
 
 	}
@@ -43,8 +43,11 @@ void printNow(string token,string lexeme,int line_no,bool s,SymbolInfo* info)
 		fprintf(logFile,"\n\n");
 		myTable->Print(logFile);
 		fprintf(logFile,"\n\n");*/
+		//SymbolInfo* mm=new SymbolInfo(lexeme,token);
+		//cout<<token<<"  "<<lexeme<<endl;
 		if(token=="ID")yylval.idInfo=info;
 		else yylval.helpInfo=info;
+		//cout<<yylval.helpInfo->getType()<<"  "<<yylval.helpInfo->getName()<<endl;
 	}
 
 }
@@ -188,7 +191,7 @@ QUOTE_ERROR '[^'\n;]*
 "!"		{
 			string buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"NOT");
-			printNow("NOT",buff,line_count,false,info);
+			printNow("NOT",buff,line_count,true,info);
 			return NOT;
 		}
 
@@ -199,12 +202,12 @@ QUOTE_ERROR '[^'\n;]*
 				string buff="";buff+=yytext;
 					if(buff=="++"){
 					SymbolInfo* info=new SymbolInfo(buff,"INCOP");
-					printNow("INCOP",buff,line_count,false,info);
+					printNow("INCOP",buff,line_count,true,info);
 					return INCOP;
 				}
 				else{
 					SymbolInfo* info=new SymbolInfo(buff,"DECOP");
-					printNow("DECOP",buff,line_count,false,info);
+					printNow("DECOP",buff,line_count,true,info);
 				 	return DECOP;
 				 }
 			}
@@ -216,7 +219,7 @@ QUOTE_ERROR '[^'\n;]*
 "-"		{
 			string buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"ADDOP");
-			printNow("ADDOP",buff,line_count,false,info);
+			printNow("ADDOP",buff,line_count,true,info);
 			return ADDOP;
 		}
 "*"		|
@@ -224,8 +227,8 @@ QUOTE_ERROR '[^'\n;]*
 "%"		{
 			string buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"MULOP");
-			printNow("MULOP",buff,line_count,false,info);
-			return ADDOP;
+			printNow("MULOP",buff,line_count,true,info);
+			return MULOP;
 		}
 
 "<"		|
@@ -236,14 +239,14 @@ QUOTE_ERROR '[^'\n;]*
 "!="	{
 			string buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"RELOP");
-			printNow("RELOP",buff,line_count,false,info);
+			printNow("RELOP",buff,line_count,true,info);
 			return RELOP;
 		}
 
 "="		{
 			string buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"ASSIGNOP");
-			printNow("ASSIGNOP",buff,line_count,false,info);
+			printNow("ASSIGNOP",buff,line_count,true,info);
 			return ASSIGNOP;
 		}
 
@@ -252,7 +255,7 @@ QUOTE_ERROR '[^'\n;]*
 			string buff="";buff+=yytext;
 			buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"LOGICOP");
-			printNow("LOGICOP",buff,line_count,false,info);
+			printNow("LOGICOP",buff,line_count,true,info);
 			return LOGICOP;
 		}
 
@@ -261,12 +264,12 @@ QUOTE_ERROR '[^'\n;]*
 			string buff="";buff+=yytext;
 			if(buff=="("){
 				SymbolInfo* info=new SymbolInfo(buff,"LPAREN");
-				printNow("LPAREN",buff,line_count,false,info);
+				printNow("LPAREN",buff,line_count,true,info);
 				return LPAREN;
 			}
 			else{
 				SymbolInfo* info=new SymbolInfo(buff,"RPAREN");
-				printNow("RPAREN",buff,line_count,false,info);
+				printNow("RPAREN",buff,line_count,true,info);
 				return RPAREN;	
 			} 
 		}
@@ -276,12 +279,12 @@ QUOTE_ERROR '[^'\n;]*
 			 string buff="";buff+=yytext;
 			if(buff=="{"){
 				SymbolInfo* info=new SymbolInfo(buff,"LCURL");
-				printNow("LCURL",buff,line_count,false,info);
+				printNow("LCURL",buff,line_count,true,info);
 				return LCURL;
 			}
 			else{
 				SymbolInfo* info=new SymbolInfo(buff,"RCURL");
-				printNow("RCURL",buff,line_count,false,info);
+				printNow("RCURL",buff,line_count,true,info);
 				return RCURL;
 			}
 		}
@@ -291,12 +294,12 @@ QUOTE_ERROR '[^'\n;]*
 			string buff="";buff+=yytext;
 			if(buff=="["){
 				SymbolInfo* info=new SymbolInfo(buff,"LTHIRD");
-				printNow("LTHIRD",buff,line_count,false,info);
+				printNow("LTHIRD",buff,line_count,true,info);
 				return LTHIRD;
 			}
 			else{
 				SymbolInfo* info=new SymbolInfo(buff,"RTHIRD");
-				printNow("RTHIRD",buff,line_count,false,info);
+				printNow("RTHIRD",buff,line_count,true,info);
 
 				return RTHIRD;
 			}
@@ -306,14 +309,14 @@ QUOTE_ERROR '[^'\n;]*
 ","		{
 			string buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"COMMA");
-			printNow("COMMA",buff,line_count,false,info);
+			printNow("COMMA",buff,line_count,true,info);
 			return COMMA;
 		}
 
 ";"		{
 			string buff="";buff+=yytext;
 			SymbolInfo* info=new SymbolInfo(buff,"SEMICOLON");
-			printNow("SEMICOLON",buff,line_count,false,info);
+			printNow("SEMICOLON",buff,line_count,true,info);
 			return SEMICOLON;
 		}
 
@@ -330,6 +333,8 @@ QUOTE_ERROR '[^'\n;]*
 				string buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_INT");
 
+				info->varType="INT";
+
 				istringstream is(buff);
 				is>>info->iVal;
 
@@ -340,6 +345,8 @@ QUOTE_ERROR '[^'\n;]*
 {FLOAT_LIT} {
 				string buff="";buff+=yytext;
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_FLOAT");
+
+				info->varType="FLOAT";
 
 				istringstream is(buff);
 				is>>info->dVal;
@@ -354,6 +361,7 @@ QUOTE_ERROR '[^'\n;]*
 				string buff="";buff+=yytext;				
 				SymbolInfo* info=new SymbolInfo(buff,"CONST_CHAR");
 				
+				info->varType="CHAR";
 
 				istringstream is(buff);
 				is>>info->chVal;
@@ -459,7 +467,7 @@ QUOTE_ERROR '[^'\n;]*
 					buff1+=yytext;
 					BEGIN(INITIAL);
 					SymbolInfo* info=new SymbolInfo(buff1,"STRING");
-					printNow("STRING",buff1,line_count,false,info);
+					printNow("STRING",buff1,line_count,true,info);
 					return STRING;
 			}
 <mlstring>[^\"\n] {

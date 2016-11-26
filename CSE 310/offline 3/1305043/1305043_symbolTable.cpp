@@ -28,8 +28,12 @@ public:
     double dVal;
     int arrayLength;
     char chVal;
+    
+
     bool array;
     double arrayStorage[100000];// set max array length?
+    int pIndex;
+
 
     int line;
 
@@ -45,6 +49,7 @@ public:
         dVal=iVal=-99999;
 
         chVal=0;arrayLength=0;
+        array=false;
     }
 
     void setName(string name)

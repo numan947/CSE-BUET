@@ -61,28 +61,28 @@ extern int yydebug;
     CASE = 271,
     DEFAULT = 272,
     CONTINUE = 273,
-    INCOP = 274,
-    DECOP = 275,
-    MULOP = 276,
-    RELOP = 277,
-    ASSIGNOP = 278,
-    LOGICOP = 279,
-    LPAREN = 280,
-    RPAREN = 281,
-    LCURL = 282,
-    RCURL = 283,
-    LTHIRD = 284,
-    RTHIRD = 285,
-    COMMA = 286,
-    SEMICOLON = 287,
-    STRING = 288,
-    MAIN = 289,
-    PRINTLN = 290,
-    NOT = 291,
-    CONST_INT = 292,
-    CONST_FLOAT = 293,
-    CONST_CHAR = 294,
-    ADDOP = 295,
+    MAIN = 274,
+    PRINTLN = 275,
+    CONST_INT = 276,
+    CONST_FLOAT = 277,
+    CONST_CHAR = 278,
+    ADDOP = 279,
+    INCOP = 280,
+    DECOP = 281,
+    MULOP = 282,
+    RELOP = 283,
+    ASSIGNOP = 284,
+    LOGICOP = 285,
+    LPAREN = 286,
+    RPAREN = 287,
+    LCURL = 288,
+    RCURL = 289,
+    LTHIRD = 290,
+    RTHIRD = 291,
+    COMMA = 292,
+    SEMICOLON = 293,
+    STRING = 294,
+    NOT = 295,
     ID = 296,
     HELP_ELSE_GET_PRECEDENCE = 297
   };
@@ -104,28 +104,28 @@ extern int yydebug;
 #define CASE 271
 #define DEFAULT 272
 #define CONTINUE 273
-#define INCOP 274
-#define DECOP 275
-#define MULOP 276
-#define RELOP 277
-#define ASSIGNOP 278
-#define LOGICOP 279
-#define LPAREN 280
-#define RPAREN 281
-#define LCURL 282
-#define RCURL 283
-#define LTHIRD 284
-#define RTHIRD 285
-#define COMMA 286
-#define SEMICOLON 287
-#define STRING 288
-#define MAIN 289
-#define PRINTLN 290
-#define NOT 291
-#define CONST_INT 292
-#define CONST_FLOAT 293
-#define CONST_CHAR 294
-#define ADDOP 295
+#define MAIN 274
+#define PRINTLN 275
+#define CONST_INT 276
+#define CONST_FLOAT 277
+#define CONST_CHAR 278
+#define ADDOP 279
+#define INCOP 280
+#define DECOP 281
+#define MULOP 282
+#define RELOP 283
+#define ASSIGNOP 284
+#define LOGICOP 285
+#define LPAREN 286
+#define RPAREN 287
+#define LCURL 288
+#define RCURL 289
+#define LTHIRD 290
+#define RTHIRD 291
+#define COMMA 292
+#define SEMICOLON 293
+#define STRING 294
+#define NOT 295
 #define ID 296
 #define HELP_ELSE_GET_PRECEDENCE 297
 
@@ -134,7 +134,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 45 "1305043.y" /* yacc.c:1909  */
+#line 55 "1305043.y" /* yacc.c:1909  */
 
 	SymbolInfo* idInfo;
 	SymbolInfo* helpInfo;
