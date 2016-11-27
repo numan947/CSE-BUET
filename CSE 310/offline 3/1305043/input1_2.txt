@@ -1,13 +1,8 @@
 int main(){
 	int a[2],c,i,j ; float d;
-	i=k;
-	j=9;
-	j++;
 	a[0]=1;
 	a[1]=5;
-	a[p]=10;
 	i= a[0]+a[1];
-	i++;
 	j= 2*3+(5%3 < 4 && 8) || 2 ;
 	return 0;
 }

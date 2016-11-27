@@ -852,6 +852,7 @@ term :	unary_expression	{
 
 
      										else{
+
 	     										if($1->varType=="")$1=findInDeclaration($1->getName());
 	     										if($3->varType=="")$3=findInDeclaration($3->getName());
 
@@ -1053,11 +1054,27 @@ factor	: variable 	{
 
 	| factor INCOP 	{
 						printNOW("factor : INCOP ");
-						string s=$1->varType;
-						if(s=="INT")$1->iVal++;
-						else if(s=="FLOAT")$1->dVal++;
-						else if(s=="CHAR")$1->chVal++;
-						$$=$1;
+						if($$->varType=="DUMMY")$$=$1;
+
+						else{
+							bool print=true;
+
+							SymbolInfo* original=findInDeclaration($1->getName());
+							if(original==0){
+								original=$1;
+								print=false;
+							}
+							
+							string s=original->varType;
+							if(s=="INT")original->iVal++;
+							else if(s=="FLOAT")original->dVal++;
+							else if(s=="CHAR")original->chVal++;
+							$$=original;
+							if(print){
+								myTable->Print(logFile);
+								fprintf(logFile,"\n\n\n\n");
+							}
+						}
 					
 					}
 	
@@ -1066,11 +1083,29 @@ factor	: variable 	{
 	| factor DECOP	{
 						printNOW("factor : DECOP ");
 						
-						string s=$1->varType;
-						if(s=="INT")$1->iVal--;
-						else if(s=="FLOAT")$1->dVal--;
-						else if(s=="CHAR")$1->chVal--;
-						$$=$1;
+						if($$->varType=="DUMMY")$$=$1;
+
+						else{
+
+							bool print=true;
+
+							SymbolInfo* original=findInDeclaration($1->getName());
+							if(original==0){
+								original=$1;
+								print=false;
+							}
+							
+							string s=original->varType;
+							if(s=="INT")original->iVal--;
+							else if(s=="FLOAT")original->dVal--;
+							else if(s=="CHAR")original->chVal--;
+							$$=original;
+
+							if(print){
+								myTable->Print(logFile);
+								fprintf(logFile,"\n\n\n\n");
+							}
+						}
 
 					}
 	;

@@ -574,8 +574,8 @@ static const yytype_uint16 yyrline[] =
        0,   101,   101,   109,   118,   122,   127,   142,   160,   166,
      173,   183,   222,   268,   308,   355,   362,   374,   380,   387,
      398,   406,   414,   420,   456,   466,   473,   481,   504,   538,
-     545,   625,   633,   679,   686,   748,   755,   839,   847,   926,
-     952,   979,   995,  1023,  1030,  1038,  1046,  1054,  1066
+     545,   625,   633,   679,   686,   748,   755,   839,   847,   927,
+     953,   980,   996,  1024,  1031,  1039,  1047,  1055,  1083
 };
 #endif
 
@@ -2238,6 +2238,7 @@ yyreduce:
 
 
      										else{
+
 	     										if((yyvsp[-2].helpInfo)->varType=="")(yyvsp[-2].helpInfo)=findInDeclaration((yyvsp[-2].helpInfo)->getName());
 	     										if((yyvsp[0].helpInfo)->varType=="")(yyvsp[0].helpInfo)=findInDeclaration((yyvsp[0].helpInfo)->getName());
 
@@ -2299,11 +2300,11 @@ yyreduce:
      										}
   
      									}
-#line 2303 "y.tab.c" /* yacc.c:1646  */
+#line 2304 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 926 "1305043.y" /* yacc.c:1646  */
+#line 927 "1305043.y" /* yacc.c:1646  */
     {
 												printNOW("unary_expression : ADDOP unary_expression");
 
@@ -2327,11 +2328,11 @@ yyreduce:
 													(yyval.helpInfo)=(yyvsp[0].helpInfo);
 												}
 											}
-#line 2331 "y.tab.c" /* yacc.c:1646  */
+#line 2332 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 952 "1305043.y" /* yacc.c:1646  */
+#line 953 "1305043.y" /* yacc.c:1646  */
     {
 		 								printNOW("unary_expression : NOT unary_expression ");
 		 								
@@ -2356,20 +2357,20 @@ yyreduce:
 			 								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 		 								}
 		 							}
-#line 2360 "y.tab.c" /* yacc.c:1646  */
+#line 2361 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 979 "1305043.y" /* yacc.c:1646  */
+#line 980 "1305043.y" /* yacc.c:1646  */
     {
 		 			printNOW("unary_expression : factor");
 		 			(yyval.helpInfo)=(yyvsp[0].helpInfo);
 		 		}
-#line 2369 "y.tab.c" /* yacc.c:1646  */
+#line 2370 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 995 "1305043.y" /* yacc.c:1646  */
+#line 996 "1305043.y" /* yacc.c:1646  */
     {
 						//so that the acutal value of the variable remain unchanged
 
@@ -2395,79 +2396,113 @@ yyreduce:
 							}
 						}
 					}
-#line 2399 "y.tab.c" /* yacc.c:1646  */
+#line 2400 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 1023 "1305043.y" /* yacc.c:1646  */
+#line 1024 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("factor : LPAREN expression RPAREN");
 									(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 								}
-#line 2408 "y.tab.c" /* yacc.c:1646  */
+#line 2409 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 1030 "1305043.y" /* yacc.c:1646  */
+#line 1031 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_INT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						printNOW((yyvsp[0].helpInfo)->getName());
 					}
-#line 2418 "y.tab.c" /* yacc.c:1646  */
+#line 2419 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 1038 "1305043.y" /* yacc.c:1646  */
+#line 1039 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_FLOAT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						printNOW((yyvsp[0].helpInfo)->getName());
 					}
-#line 2428 "y.tab.c" /* yacc.c:1646  */
+#line 2429 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 1046 "1305043.y" /* yacc.c:1646  */
+#line 1047 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_CHAR ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
 						printNOW((yyvsp[0].helpInfo)->getName());
 					}
-#line 2438 "y.tab.c" /* yacc.c:1646  */
+#line 2439 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 1054 "1305043.y" /* yacc.c:1646  */
+#line 1055 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : INCOP ");
-						string s=(yyvsp[-1].helpInfo)->varType;
-						if(s=="INT")(yyvsp[-1].helpInfo)->iVal++;
-						else if(s=="FLOAT")(yyvsp[-1].helpInfo)->dVal++;
-						else if(s=="CHAR")(yyvsp[-1].helpInfo)->chVal++;
-						(yyval.helpInfo)=(yyvsp[-1].helpInfo);
+						if((yyval.helpInfo)->varType=="DUMMY")(yyval.helpInfo)=(yyvsp[-1].helpInfo);
+
+						else{
+							bool print=true;
+
+							SymbolInfo* original=findInDeclaration((yyvsp[-1].helpInfo)->getName());
+							if(original==0){
+								original=(yyvsp[-1].helpInfo);
+								print=false;
+							}
+							
+							string s=original->varType;
+							if(s=="INT")original->iVal++;
+							else if(s=="FLOAT")original->dVal++;
+							else if(s=="CHAR")original->chVal++;
+							(yyval.helpInfo)=original;
+							if(print){
+								myTable->Print(logFile);
+								fprintf(logFile,"\n\n\n\n");
+							}
+						}
 					
 					}
-#line 2452 "y.tab.c" /* yacc.c:1646  */
+#line 2469 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 1066 "1305043.y" /* yacc.c:1646  */
+#line 1083 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : DECOP ");
 						
-						string s=(yyvsp[-1].helpInfo)->varType;
-						if(s=="INT")(yyvsp[-1].helpInfo)->iVal--;
-						else if(s=="FLOAT")(yyvsp[-1].helpInfo)->dVal--;
-						else if(s=="CHAR")(yyvsp[-1].helpInfo)->chVal--;
-						(yyval.helpInfo)=(yyvsp[-1].helpInfo);
+						if((yyval.helpInfo)->varType=="DUMMY")(yyval.helpInfo)=(yyvsp[-1].helpInfo);
+
+						else{
+
+							bool print=true;
+
+							SymbolInfo* original=findInDeclaration((yyvsp[-1].helpInfo)->getName());
+							if(original==0){
+								original=(yyvsp[-1].helpInfo);
+								print=false;
+							}
+							
+							string s=original->varType;
+							if(s=="INT")original->iVal--;
+							else if(s=="FLOAT")original->dVal--;
+							else if(s=="CHAR")original->chVal--;
+							(yyval.helpInfo)=original;
+
+							if(print){
+								myTable->Print(logFile);
+								fprintf(logFile,"\n\n\n\n");
+							}
+						}
 
 					}
-#line 2467 "y.tab.c" /* yacc.c:1646  */
+#line 2502 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2471 "y.tab.c" /* yacc.c:1646  */
+#line 2506 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2695,7 +2730,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1077 "1305043.y" /* yacc.c:1906  */
+#line 1112 "1305043.y" /* yacc.c:1906  */
 
 
 main(int argc,char *argv[])
