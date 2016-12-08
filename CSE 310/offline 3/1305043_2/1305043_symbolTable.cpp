@@ -34,6 +34,7 @@ public:
     bool array;
     double arrayStorage[100000];// set max array length?
     int pIndex;
+	string expIndex;
 
 
     int line;

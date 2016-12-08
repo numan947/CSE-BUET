@@ -271,11 +271,11 @@ variable : ID
 
 
 
-factor : CONST_INT 
+variable : ID 
 
 
 
-0
+factor : variable 
 
 
 
@@ -284,6 +284,22 @@ unary_expression : factor
 
 
 term :unary_expression
+
+
+
+factor : CONST_INT 
+
+
+
+9
+
+
+
+unary_expression : factor
+
+
+
+term : term MULOP unary_expression
 
 
 
@@ -389,8 +405,213 @@ expression : variable ASSIGNOP logic_expression
 
 0 --> <c , ID, -99999>
 1 --> <d , ID, -99999.000000>
-6 --> <i , ID, 6>
+6 --> <i , ID, 5>
 7 --> <j , ID, -99999>
+13 --> <a , ID, { 1, 5}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statements statement
+
+
+
+variable : ID 
+
+
+
+factor : CONST_INT 
+
+
+
+2
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+factor : CONST_INT 
+
+
+
+3
+
+
+
+unary_expression : factor
+
+
+
+term : term MULOP unary_expression
+
+
+
+simple_expression : term 
+
+
+
+factor : CONST_INT 
+
+
+
+5
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+factor : CONST_INT 
+
+
+
+3
+
+
+
+unary_expression : factor
+
+
+
+term : term MULOP unary_expression
+
+
+
+simple_expression : term 
+
+
+
+factor : CONST_INT 
+
+
+
+4
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression RELOP simple_expression
+
+
+
+factor : CONST_INT 
+
+
+
+8
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression LOGICOP rel_expression
+
+
+
+expression : logic_expression
+
+
+
+factor : LPAREN expression RPAREN
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : simple_expression ADDOP term
+
+
+
+rel_expression : simple_expression
+
+
+
+factor : CONST_INT 
+
+
+
+2
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression LOGICOP rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 5>
+7 --> <j , ID, 1>
 13 --> <a , ID, { 1, 5}>
 
 
@@ -459,8 +680,8 @@ Program : INT MAIN LPAREN RPAREN compound_statement
 PRINTING SYMBOL TABLE
 0 --> <c , ID, -99999>
 1 --> <d , ID, -99999.000000>
-6 --> <i , ID, 6>
-7 --> <j , ID, -99999>
+6 --> <i , ID, 5>
+7 --> <j , ID, 1>
 13 --> <a , ID, { 1, 5}>
 
 
@@ -476,7 +697,7 @@ j ID INT
 d ID FLOAT
 
 
-TOTAL LINES: 008
+TOTAL LINES: 009
 
 
 TOTAL ERRORS:   0

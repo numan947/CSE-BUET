@@ -140,7 +140,14 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 
 														ofstream fout;
 														fout.open("1305043_code.asm");
+
+														fout<<"TITLE PROGRAM:numan947\n";
+														fout<<".model small\n.stack 100h\n";
+
+
 														fout<<$$->code;
+
+														fout<<"\nmain endp\nend main\n";
 														fout.close();
 
 
@@ -153,8 +160,18 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 compound_statement : LCURL var_declaration statements RCURL {
 																printNOW("compound_statement : LCURL var_declaration statements RCURL");
 
-																$$=$3;
-																$$->code=$2->code+$3->code;
+																$$=new SymbolInfo("COPY","COPY");
+																$$->code="\n.data\n\n";
+
+																$$->code+=$2->code;
+																for(int i=0;i<temp_count;i++){
+																	tl.str("");
+																	tl<<i;
+																	$$->code+="t"+tl.str()+" dw ?\n";
+																}
+
+																$$->code+="\n.code\n\nmain proc\n\nmov ax ,@data\nmov ds ,ax\n";
+																$$->code+=$3->code;
 
 																codetracker<<$$->code;
 															}
@@ -544,7 +561,7 @@ statement  : expression_statement 	{
 	   																				string label=newLabel();
 	   																				$$->code+="mov ax, "+$3->getName()+"\n";
 	   																				$$->code+="cmp ax, 1\n";
-	   																				$$->code+="jne "+label;
+	   																				$$->code+="jne "+label+"\n";
 	   																				$$->code+=$5->code;
 	   																				$$->code+=label+":\n";
 
@@ -566,10 +583,10 @@ statement  : expression_statement 	{
 	   																$$=$3;
 	   																$$->code+="mov ax, "+$3->getName()+"\n";
 	   																$$->code+="cmp ax, 1\n";
-	   																$$->code+="jne "+l1+"\n";
+	   																$$->code+="jl "+l1+"\n";
 	   																$$->code+=$5->code;
 	   																$$->code+="jump "+l2+"\n";
-	   																$$->code+=l1+":\n"+$7->code+"\n";
+	   																$$->code+=l1+":\n"+$7->code;
 	   																$$->code+=l2+":\n";
 
 	   																codetracker<<$$->code;
@@ -713,8 +730,12 @@ variable : ID 	{
 										}
 										
 										else{
+											printf("<%d>\n",$3->iVal);
+											printf("<%s>\n",$3->getName().c_str());
 											$$=target;
 											$$->pIndex=$3->iVal;
+											$$->code=$3->code;
+											$$->expIndex=$3->getName();
 										}
 
 
@@ -810,7 +831,7 @@ expression : logic_expression	{
 
 			   													tl.str("");
 			   													
-			   													tl<<target->pIndex;
+			   													tl<<target->expIndex;
 
 			   													for(int i=0;i<2;i++){
 			   														$$->code+="add di, "+tl.str()+"\n";
@@ -903,9 +924,9 @@ logic_expression : rel_expression 	{
 
 
 																	$$->code+="cmp "+$1->getName()+",1\n";
-																	$$->code+="jne "+l1;
+																	$$->code+="jne "+l1+"\n";
 																	$$->code+="cmp "+$3->getName()+",1\n";
-																	$$->code+="jne "+l1;
+																	$$->code+="jne "+l1+"\n";
 
 																	$$->code+="mov "+tmp+", 1\n";
 																	$$->code+="jmp "+l2+"\n";
@@ -918,15 +939,15 @@ logic_expression : rel_expression 	{
 
 
 																	$$->code+="cmp "+$1->getName()+",1\n";
-																	$$->code+="je "+l1;
+																	$$->code+="je "+l1+"\n";
 																	$$->code+="cmp "+$3->getName()+",1\n";
-																	$$->code+="je "+l1;
+																	$$->code+="je "+l1+"\n";
 
 																	$$->code+="mov "+tmp+", 0\n";
 																	$$->code+="jmp "+l2+"\n";
 																	$$->code+=l1+":\nmov "+tmp+", 1\n";
 																	$$->code+=l2+":\n";
-																}
+																} 
 
 																$$->setName(tmp);
 																
@@ -1129,7 +1150,7 @@ simple_expression : term  {
 		 											if(ok){
 		 												//code-asm
 		 												$$->code+="mov ax, "+$1->getName()+"\n";
-		 												$$->code+="add ax, "+$3->getName();+"\n";
+		 												$$->code+="add ax, "+$3->getName()+"\n";
 		 												$$->code+="mov "+tmp+", ax\n";
 
 		 												$$->setName(tmp);
@@ -1431,13 +1452,18 @@ factor	: variable 	{
 								else if(real->varType=="FLOAT")ret->dVal=(double)real->arrayStorage[real->pIndex];
 								else if(real->varType=="CHAR")ret->chVal=(char)real->arrayStorage[real->pIndex];
 								$$=ret;
+								$$->code+=real->code;
+
+								//printf("<<%s>>\n",$$->getName().c_str());
 
 								
 								//asm-code
+
+								//printf("HELLOW WORLD %s\n ",$1->getName().c_str());
 								$$->code+="lea di, "+$1->getName()+"\n";
 
 								tl.str("");
-								tl<<$1->pIndex;
+								tl<<$1->expIndex;
 
 
 								for(int i=0;i<2;i++){
