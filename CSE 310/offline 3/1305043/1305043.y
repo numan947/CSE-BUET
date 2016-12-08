@@ -34,7 +34,7 @@ void printError(string s)
 
 
 void yyerror(char *s){
-	printf("%s\n",s);
+	printf("Error at line %d:  %s\n",line_count,s);
 }
 
 int yylex(void);
@@ -67,6 +67,7 @@ void printNOW(string line)
 }
 
 
+%error-verbose
 
 
 %start Program
