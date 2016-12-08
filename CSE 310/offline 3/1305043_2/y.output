@@ -75,8 +75,8 @@ Grammar
    43       | CONST_INT
    44       | CONST_FLOAT
    45       | CONST_CHAR
-   46       | factor INCOP
-   47       | factor DECOP
+   46       | variable INCOP
+   47       | variable DECOP
 
 
 Terminals, with rules where they appear
@@ -146,7 +146,7 @@ statement (50)
 expression_statement (51)
     on left: 24 25, on right: 16 18
 variable (52)
-    on left: 26 27, on right: 29 41
+    on left: 26 27, on right: 29 41 46 47
 expression (53)
     on left: 28 29, on right: 18 19 20 21 23 25 27 42
 logic_expression (54)
@@ -160,7 +160,7 @@ term (57)
 unary_expression (58)
     on left: 38 39 40, on right: 36 37 38 39
 factor (59)
-    on left: 41 42 43 44 45 46 47, on right: 40 46 47
+    on left: 41 42 43 44 45 46 47, on right: 40
 
 
 State 0
@@ -543,8 +543,12 @@ State 32
 
    29 expression: variable . ASSIGNOP logic_expression
    41 factor: variable .
+   46       | variable . INCOP
+   47       | variable . DECOP
 
-    ASSIGNOP  shift, and go to state 56
+    INCOP     shift, and go to state 56
+    DECOP     shift, and go to state 57
+    ASSIGNOP  shift, and go to state 58
 
     $default  reduce using rule 41 (factor)
 
@@ -553,7 +557,7 @@ State 33
 
    25 expression_statement: expression . SEMICOLON
 
-    SEMICOLON  shift, and go to state 57
+    SEMICOLON  shift, and go to state 59
 
 
 State 34
@@ -568,7 +572,7 @@ State 35
    30 logic_expression: rel_expression .
    31                 | rel_expression . LOGICOP rel_expression
 
-    LOGICOP  shift, and go to state 58
+    LOGICOP  shift, and go to state 60
 
     $default  reduce using rule 30 (logic_expression)
 
@@ -579,8 +583,8 @@ State 36
    33               | simple_expression . RELOP simple_expression
    35 simple_expression: simple_expression . ADDOP term
 
-    ADDOP  shift, and go to state 59
-    RELOP  shift, and go to state 60
+    ADDOP  shift, and go to state 61
+    RELOP  shift, and go to state 62
 
     $default  reduce using rule 32 (rel_expression)
 
@@ -590,7 +594,7 @@ State 37
    34 simple_expression: term .
    37 term: term . MULOP unary_expression
 
-    MULOP  shift, and go to state 61
+    MULOP  shift, and go to state 63
 
     $default  reduce using rule 34 (simple_expression)
 
@@ -605,11 +609,6 @@ State 38
 State 39
 
    40 unary_expression: factor .
-   46 factor: factor . INCOP
-   47       | factor . DECOP
-
-    INCOP  shift, and go to state 62
-    DECOP  shift, and go to state 63
 
     $default  reduce using rule 40 (unary_expression)
 
@@ -700,6 +699,11 @@ State 44
 State 45
 
    41 factor: variable .
+   46       | variable . INCOP
+   47       | variable . DECOP
+
+    INCOP  shift, and go to state 56
+    DECOP  shift, and go to state 57
 
     $default  reduce using rule 41 (factor)
 
@@ -826,6 +830,20 @@ State 55
 
 State 56
 
+   46 factor: variable INCOP .
+
+    $default  reduce using rule 46 (factor)
+
+
+State 57
+
+   47 factor: variable DECOP .
+
+    $default  reduce using rule 47 (factor)
+
+
+State 58
+
    29 expression: variable ASSIGNOP . logic_expression
 
     CONST_INT    shift, and go to state 17
@@ -845,14 +863,14 @@ State 56
     factor             go to state 39
 
 
-State 57
+State 59
 
    25 expression_statement: expression SEMICOLON .
 
     $default  reduce using rule 25 (expression_statement)
 
 
-State 58
+State 60
 
    31 logic_expression: rel_expression LOGICOP . rel_expression
 
@@ -872,7 +890,7 @@ State 58
     factor             go to state 39
 
 
-State 59
+State 61
 
    35 simple_expression: simple_expression ADDOP . term
 
@@ -890,7 +908,7 @@ State 59
     factor            go to state 39
 
 
-State 60
+State 62
 
    33 rel_expression: simple_expression RELOP . simple_expression
 
@@ -909,7 +927,7 @@ State 60
     factor             go to state 39
 
 
-State 61
+State 63
 
    37 term: term MULOP . unary_expression
 
@@ -924,20 +942,6 @@ State 61
     variable          go to state 45
     unary_expression  go to state 80
     factor            go to state 39
-
-
-State 62
-
-   46 factor: factor INCOP .
-
-    $default  reduce using rule 46 (factor)
-
-
-State 63
-
-   47 factor: factor DECOP .
-
-    $default  reduce using rule 47 (factor)
 
 
 State 64
@@ -1065,7 +1069,7 @@ State 78
    35 simple_expression: simple_expression ADDOP term .
    37 term: term . MULOP unary_expression
 
-    MULOP  shift, and go to state 61
+    MULOP  shift, and go to state 63
 
     $default  reduce using rule 35 (simple_expression)
 
@@ -1075,7 +1079,7 @@ State 79
    33 rel_expression: simple_expression RELOP simple_expression .
    35 simple_expression: simple_expression . ADDOP term
 
-    ADDOP  shift, and go to state 59
+    ADDOP  shift, and go to state 61
 
     $default  reduce using rule 33 (rel_expression)
 

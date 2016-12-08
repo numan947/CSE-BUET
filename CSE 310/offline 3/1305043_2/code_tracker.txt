@@ -1,0 +1,451 @@
+type_specifier : INT
+declaration_list : ID LTHIRD CONST_INT RTHIRD
+a
+a dw ? ,?
+declaration_list : declaration_list COMMA ID
+c
+a dw ? ,?
+c dw ?
+declaration_list : declaration_list COMMA ID
+i
+a dw ? ,?
+c dw ?
+i dw ?
+declaration_list : declaration_list COMMA ID
+j
+a dw ? ,?
+c dw ?
+i dw ?
+j dw ?
+var_declaration : type_specifier declaration_list SEMICOLON
+a dw ? ,?
+c dw ?
+i dw ?
+j dw ?
+type_specifier : FLOAT
+declaration_list : ID
+d
+d dw ?
+var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+a dw ? ,?
+c dw ?
+i dw ?
+j dw ?
+d dw ?
+factor : CONST_INT 
+0
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : CONST_INT 
+1
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : variable ASSIGNOP logic_expression
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+expression_statement : expression SEMICOLON
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+statement  : expression_statement
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+statements : statement
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+factor : CONST_INT 
+1
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : CONST_INT 
+5
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : variable ASSIGNOP logic_expression
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+expression_statement : expression SEMICOLON
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+statement  : expression_statement
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+statements : statements statement
+SPC11: 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+
+SPC22: 
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+variable : ID 
+factor : CONST_INT 
+0
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : variable 
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+unary_expression : factor
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+term :unary_expression
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+simple_expression : term 
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+factor : CONST_INT 
+1
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : variable 
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+unary_expression : factor
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+term :unary_expression
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+simple_expression : simple_expression ADDOP term
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+rel_expression : simple_expression
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+logic_expression : rel_expression
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+expression : variable ASSIGNOP logic_expression
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+expression_statement : expression SEMICOLON
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+statement  : expression_statement
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+statements : statements statement
+SPC11: 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+
+SPC22: 
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+factor : CONST_INT 
+0
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+statement  : RETURN expression SEMICOLON
+mov ah, 4ch
+int 21h
+statements : statements statement
+SPC11: 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+mov ah, 4ch
+int 21h
+
+SPC22: 
+mov ah, 4ch
+int 21h
+
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+mov ah, 4ch
+int 21h
+compound_statement : LCURL var_declaration statements RCURL
+a dw ? ,?
+c dw ?
+i dw ?
+j dw ?
+d dw ?
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+mov ah, 4ch
+int 21h
+Program : INT MAIN LPAREN RPAREN compound_statement
+a dw ? ,?
+c dw ?
+i dw ?
+j dw ?
+d dw ?
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov t0, [di]
+lea di, a
+add di, 1
+add di, 1
+mov t1, [di]
+mov ax, t0
+add ax, t1mov t2, ax
+mov ax, t2
+mov i, ax
+mov ah, 4ch
+int 21h

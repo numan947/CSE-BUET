@@ -23,6 +23,9 @@ int temp_count=0;
 
 
 stringstream tl;
+ofstream codetracker;
+
+
 
 string newLabel()
 {
@@ -84,6 +87,7 @@ void printNOW(string line)
 {
 	fprintf(logFile,"%s",line.c_str());
 	fprintf(logFile,"\n\n\n\n");
+	codetracker<<line<<"\n";
 }
 
 %}
@@ -139,6 +143,9 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 														fout<<$$->code;
 														fout.close();
 
+
+														codetracker<<$$->code;
+
 														}
 	;
 
@@ -149,18 +156,25 @@ compound_statement : LCURL var_declaration statements RCURL {
 																$$=$3;
 																$$->code=$2->code+$3->code;
 
+																codetracker<<$$->code;
 															}
 		   
 
 		   | LCURL statements RCURL {
 		   							printNOW("compound_statement : LCURL statements RCURL");
 		   							$$=$2;
+
+
+		   							codetracker<<$$->code;
 		   						}
 		   
 
 		   | LCURL RCURL {
 		   					printNOW("compound_statement : LCURL RCURL");
-		   					$$=new SymbolInfo("compound_statement","DUMMY");		
+		   					$$=new SymbolInfo("compound_statement","DUMMY");
+		   					
+
+		   					codetracker<<$$->code;		
 
 		   				}
 		   ;
@@ -177,6 +191,8 @@ var_declaration	: type_specifier declaration_list SEMICOLON {
 
 																$$=$2;
 																
+
+																codetracker<<$$->code;
 															}
 		
 
@@ -196,6 +212,8 @@ var_declaration	: type_specifier declaration_list SEMICOLON {
 
 																		$$=$1;
 																		$$->code+=$3->code;
+
+																		codetracker<<$$->code;
 
 																	}
 		;
@@ -226,7 +244,9 @@ type_specifier	: INT {
 declaration_list : declaration_list COMMA ID 	{
 													printNOW("declaration_list : declaration_list COMMA ID");
 
-													//todo code;$$=$1;
+													//todo code;
+
+													$$=$1;
 
 													string s=""+$3->getName();
 
@@ -251,6 +271,12 @@ declaration_list : declaration_list COMMA ID 	{
 														printNOW(s);
 														myTable->Print(logFile);
 														fprintf(logFile,"\n\n\n\n");
+
+														string retCode=s+" dw "+"?\n";
+
+														//concat the code to print
+														$$->code+=retCode;
+
 													}
 													else{
 														printError("multiple declarations for "+s);
@@ -258,7 +284,7 @@ declaration_list : declaration_list COMMA ID 	{
 													}
 
 
-
+													codetracker<<$$->code;
 
 
 												}
@@ -297,6 +323,22 @@ declaration_list : declaration_list COMMA ID 	{
 														printNOW(s);
 														myTable->Print(logFile);
 														fprintf(logFile,"\n\n\n\n");
+
+
+														//code
+														string retCode=s+" dw "+"?";
+
+														for(int a=0;a<declaredInfo[var_count-1]->arrayLength-1;a++){
+															retCode+=" ,?";												
+														}
+														retCode+="\n";
+
+														//concat the code to print
+														$$->code+=retCode;
+
+
+
+
 													}
 													else{
 														stringstream ss;
@@ -306,6 +348,7 @@ declaration_list : declaration_list COMMA ID 	{
 														error_count++;
 													}
 
+													codetracker<<$$->code;
 													
 
 		 										}
@@ -342,12 +385,12 @@ declaration_list : declaration_list COMMA ID 	{
 
 
 						//code
-						declaredInfo[var_count-1]->code=s+" dw "+"?\n";
+						string retCode=s+" dw "+"?\n";
 
-						//copy the info 
-						SymbolInfo copy=*declaredInfo[var_count-1];
-
-						$$=&copy;
+						//copy the code from SymbolInfo
+						$$=new SymbolInfo("COPY","COPY");
+						$$->code= retCode;
+						
 
 
 					}
@@ -356,12 +399,16 @@ declaration_list : declaration_list COMMA ID 	{
 							error_count++;
 
 							//code
-							SymbolInfo copy=new SymbolInfo("ERROR","ERROR");
-							copy->code="Error at "+line_count+"\n";
-							$$=&copy;
+							SymbolInfo *copy=new SymbolInfo("ERROR","ERROR");
+
+							tl.str("");
+							tl<<line_count;
+
+							copy->code="Error at "+tl.str()+"\n";
+							$$=copy;
 						}
 
-					
+						codetracker<<$$->code;
 
 		 		}
 		 
@@ -402,29 +449,33 @@ declaration_list : declaration_list COMMA ID 	{
 
 
 											//code
-											declaredInfo[var_count-1]->code=s+" dw "+"?";
+											string retCode=s+" dw "+"?";
 
-											for(int a=0;a<declaredInfo[var_count-1]->arrayLength-1;i++){
-												declaredInfo[var_count-1]->code+=" ,?";												
+											for(int a=0;a<declaredInfo[var_count-1]->arrayLength-1;a++){
+												retCode+=" ,?";												
 											}
-											declaredInfo[var_count-1]->code+="\n";
+											retCode+="\n";
 											
-											//copy the info 
-											SymbolInfo copy=*declaredInfo[var_count-1];
-
-											$$=&copy;
+											//copy the code for printing :)
+											$$=new SymbolInfo("COPY","COPY");
+											$$->code=retCode;
 
 
 										}
 										else{
 											printError("multiple declarations for "+s);
 											error_count++;
-											SymbolInfo copy=new SymbolInfo("ERROR","ERROR");
-											copy->code="Error at "+line_count+"\n";
-											$$=&copy;
+											SymbolInfo *copy=new SymbolInfo("ERROR","ERROR");
+											
+											tl.str("");
+											tl<<line_count;
+
+											copy->code="Error at "+tl.str()+"\n";
+											$$=copy;
 										}
+									codetracker<<$$->code;
 		 									
-		 							}
+		 				}
 		 ;
 
 
@@ -436,6 +487,7 @@ declaration_list : declaration_list COMMA ID 	{
 statements : statement 	{
 							printNOW("statements : statement");
 							$$=$1;
+							codetracker<<$$->code;
 
 						}
 	   
@@ -445,6 +497,11 @@ statements : statement 	{
 	   								printNOW("statements : statements statement");
 	   								$$=$1;
 	   								$$->code+=$2->code;
+
+	   								codetracker<<"SPC11: \n"<<$1->code<<"\n";
+	   								codetracker<<"SPC22: \n"<<$2->code<<"\n";
+
+	   								codetracker<<$$->code;
 	   							}
 	   ;
 
@@ -456,12 +513,14 @@ statements : statement 	{
 statement  : expression_statement 	{
 										printNOW("statement  : expression_statement");
 										$$=$1;
+										codetracker<<$$->code;
 									}
 	   
 
 	   | compound_statement 	{
 	   								printNOW("statement  : compound_statement");
 	   								$$=$1;
+	   								codetracker<<$$->code;
 	   							}
 	   
 
@@ -483,11 +542,14 @@ statement  : expression_statement 	{
 	   																				$$=$3;
 
 	   																				string label=newLabel();
-	   																				$$->code+="mov ax, "+$3->getSymbol()+"\n";
+	   																				$$->code+="mov ax, "+$3->getName()+"\n";
 	   																				$$->code+="cmp ax, 1\n";
 	   																				$$->code+="jne "+label;
 	   																				$$->code+=$5->code;
 	   																				$$->code+=label+":\n";
+
+
+	   																				codetracker<<$$->code;
 
 	   																			}
 	   
@@ -497,6 +559,20 @@ statement  : expression_statement 	{
 	   																printNOW("statement  : IF LPAREN expression RPAREN statement ELSE statement");
 
 	   																//todo code
+
+	   																string l1=newLabel();
+	   																string l2=newLabel();
+
+	   																$$=$3;
+	   																$$->code+="mov ax, "+$3->getName()+"\n";
+	   																$$->code+="cmp ax, 1\n";
+	   																$$->code+="jne "+l1+"\n";
+	   																$$->code+=$5->code;
+	   																$$->code+="jump "+l2+"\n";
+	   																$$->code+=l1+":\n"+$7->code+"\n";
+	   																$$->code+=l2+":\n";
+
+	   																codetracker<<$$->code;
 	   															}
 	   
 
@@ -550,7 +626,13 @@ statement  : expression_statement 	{
 
 	   | RETURN expression SEMICOLON 	{
 	   										printNOW("statement  : RETURN expression SEMICOLON");
-	   										//todo code
+	   										
+	   										//asm-code
+
+	   										$$=$2;
+	   										$$->code+="mov ah, 4ch\nint 21h\n";
+
+	   										codetracker<<$$->code;
 
 	   									}
 	   ;
@@ -564,6 +646,8 @@ expression_statement	: SEMICOLON		{
 							printNOW("expression_statement : SEMICOLON");
 							$$=new SymbolInfo(";","SEMICOLON");
 							$$->code="";
+
+							codetracker<<$$->code;
 						}			
 			
 
@@ -572,10 +656,13 @@ expression_statement	: SEMICOLON		{
 										printNOW("expression_statement : expression SEMICOLON");
 
 										$$=$1;
+
+										codetracker<<$$->code;
 									
 									}
 			;
 			
+
 
 
 variable : ID 	{
@@ -597,6 +684,9 @@ variable : ID 	{
 							}
 
 						else $$=target;
+
+
+						codetracker<<$$->code;
 				}				
 	 
 
@@ -627,6 +717,9 @@ variable : ID 	{
 											$$->pIndex=$3->iVal;
 										}
 
+
+										codetracker<<$$->code;
+
 	 								}
 	 ;
 			
@@ -634,10 +727,11 @@ variable : ID 	{
 
 
 
-
 expression : logic_expression	{
 									printNOW("expression : logic_expression");
 									$$=$1;
+
+									codetracker<<$$->code;
 								}
 	   
 
@@ -656,8 +750,16 @@ expression : logic_expression	{
 
 	   												if($3->varType=="")$3=findInDeclaration($3->getName());
 
+
+	   												//code-asm
+	   												$$=new SymbolInfo("COPY","COPY");
+	   												$$->code=$3->code+target->code;
+	   												$$->code+="mov ax, "+$3->getName()+"\n";
+
+
+
 	   												if(target==0){
-	   													//printNOW("ERROR!! Undeclared variable: "+$1->getName());
+	   													//check for error later :/ 
 	   												}
 
 
@@ -676,10 +778,12 @@ expression : logic_expression	{
 		   															printError("Type Mismatch");
 			   														error_count++;
 		   														}
+		   														$$->code+="mov "+target->getName()+", ax\n";
 		   													}
 
 
 		   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
+
 																
 		   														if(target->varType=="INT"){
 			   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(int)$3->iVal;
@@ -701,6 +805,21 @@ expression : logic_expression	{
 			   														}
 			   													}
 
+
+			   													$$->code+="lea di, "+target->getName()+"\n";
+
+			   													tl.str("");
+			   													
+			   													tl<<target->pIndex;
+
+			   													for(int i=0;i<2;i++){
+			   														$$->code+="add di, "+tl.str()+"\n";
+			   													}
+			   													$$->code+="mov [di], ax\n";
+
+			   													$$->pIndex=-1;
+
+
 		   													}
 		   													else{
 		   														if(target->pIndex<0){
@@ -713,11 +832,13 @@ expression : logic_expression	{
 		   														}
 		   													}
 
-		   													$$=target;
+		   													
 		   													myTable->Print(logFile);
 		   													fprintf(logFile,"\n\n\n\n");
 		   												}
 	   												}
+
+	   												codetracker<<$$->code;
 
 	   											}
 	   ;
@@ -726,6 +847,8 @@ expression : logic_expression	{
 logic_expression : rel_expression 	{
 										printNOW("logic_expression : rel_expression");
 										$$=$1;
+
+										codetracker<<$$->code;
 
 									}
 		 
@@ -748,10 +871,16 @@ logic_expression : rel_expression 	{
 			 												if($1->varType=="")$1=findInDeclaration($1->getName());
 			 												if($3->varType=="")$3=findInDeclaration($3->getName());
 
-			 												$$=res;
-			 												$$->code=$1->code+$3->code;
-			 												string tmp=newTemp();
+			 												//code-asm
 			 												bool ok=true;
+															$$=res;
+															$$->code=$1->code+$3->code;
+															
+
+															string tmp=newTemp();
+															string l1=newLabel();
+															string l2=newLabel();
+
 
 
 
@@ -771,14 +900,41 @@ logic_expression : rel_expression 	{
 
 																if($2->getName()=="&&"){
 																	res->iVal=(a&&b);
-																	$$->code+="cmp "+$1->getName()+",1";
+
+
+																	$$->code+="cmp "+$1->getName()+",1\n";
+																	$$->code+="jne "+l1;
+																	$$->code+="cmp "+$3->getName()+",1\n";
+																	$$->code+="jne "+l1;
+
+																	$$->code+="mov "+tmp+", 1\n";
+																	$$->code+="jmp "+l2+"\n";
+																	
+																	$$->code+=l1+":\nmov "+tmp+", 0\n";
+																	$$->code+=l2+":\n";
 																}
 																else if($2->getName()=="||"){
 																	res->iVal=(a||b);
+
+
+																	$$->code+="cmp "+$1->getName()+",1\n";
+																	$$->code+="je "+l1;
+																	$$->code+="cmp "+$3->getName()+",1\n";
+																	$$->code+="je "+l1;
+
+																	$$->code+="mov "+tmp+", 0\n";
+																	$$->code+="jmp "+l2+"\n";
+																	$$->code+=l1+":\nmov "+tmp+", 1\n";
+																	$$->code+=l2+":\n";
 																}
+
+																$$->setName(tmp);
 																
 															}		 	
-														}										
+														}		
+
+
+														codetracker<<$$->code;								
 													}	
 		 ;
 
@@ -788,6 +944,8 @@ logic_expression : rel_expression 	{
 rel_expression	: simple_expression  {
 										printNOW("rel_expression : simple_expression");
 										$$=$1;
+
+										codetracker<<$$->code;
 									}
 		
 
@@ -880,6 +1038,8 @@ rel_expression	: simple_expression  {
 																
 															}
 														}
+
+														codetracker<<$$->code;
 													}
 		;
 
@@ -890,6 +1050,7 @@ rel_expression	: simple_expression  {
 simple_expression : term  {
 							printNOW("simple_expression : term ");
 							$$=$1;
+							codetracker<<$$->code;
 						}
 		  
 
@@ -919,7 +1080,7 @@ simple_expression : term  {
 
 			  										}
 
-
+			  									//code-asm
 			  									$$=$1;
 			  									$$->code+=$3->code;
 
@@ -1005,7 +1166,7 @@ simple_expression : term  {
 			  									
 		  									}
 
-		  								
+		  								codetracker<<$$->code;
 		  								}
 		  ;
 
@@ -1015,6 +1176,7 @@ simple_expression : term  {
 term :	unary_expression	{
 								printNOW("term :unary_expression");
 								$$=$1;
+								codetracker<<$$->code;
 
 							}
      
@@ -1137,6 +1299,7 @@ term :	unary_expression	{
 	     											
 	     										} 
      										}
+     										codetracker<<$$->code;
   
      									}
      ;
@@ -1177,13 +1340,15 @@ unary_expression : ADDOP unary_expression   {
 													string tmp=newTemp();
 					 								$$->code="mov ax, "+$2->getName()+"\n";
 					 								$$->code+="neg ax\n";
-					 								$$->code+="mov "+tmp+", ax";
+					 								$$->code+="mov "+tmp+", ax\n";
 
 					 								$$->setName(tmp);
 
 
 
 												}
+
+												codetracker<<$$->code;
 											}
 		 
 
@@ -1218,11 +1383,13 @@ unary_expression : ADDOP unary_expression   {
 			 								string tmp=newTemp();
 			 								$$->code="mov ax, "+$2->getName()+"\n";
 			 								$$->code+="not ax\n";
-			 								$$->code+="mov "+tmp+", ax";
+			 								$$->code+="mov "+tmp+", ax\n";
 
 			 								$$->setName(tmp);
 
 		 								}
+
+		 								codetracker<<$$->code;
 		 							}
 		 
 
@@ -1230,6 +1397,8 @@ unary_expression : ADDOP unary_expression   {
 		 | factor {
 		 			printNOW("unary_expression : factor");
 		 			$$=$1;
+
+		 			codetracker<<$$->code;
 		 		}
 		 ;
 	
@@ -1255,6 +1424,8 @@ factor	: variable 	{
 							SymbolInfo* real=findInDeclaration($1->getName());
 							SymbolInfo* ret=new SymbolInfo(real->getName(),real->getType());
 							ret->varType=real->varType;
+							
+
 							if($1->array){	
 								if(real->varType=="INT")ret->iVal=(int)real->arrayStorage[real->pIndex];
 								else if(real->varType=="FLOAT")ret->dVal=(double)real->arrayStorage[real->pIndex];
@@ -1264,13 +1435,18 @@ factor	: variable 	{
 								
 								//asm-code
 								$$->code+="lea di, "+$1->getName()+"\n";
+
+								tl.str("");
+								tl<<$1->pIndex;
+
+
 								for(int i=0;i<2;i++){
-									$$->code+="add di, "+$1->pIndex+"\n";
+									$$->code+="add di, "+tl.str()+"\n";
 								}
 
 								string tmp=newTemp();
 
-								$$->code+="mov "+tmp+", [di]";
+								$$->code+="mov "+tmp+", [di]\n";
 								$$->setName(tmp);
 								$$->pIndex=0;
 
@@ -1288,6 +1464,8 @@ factor	: variable 	{
 
 							}
 						}
+
+						codetracker<<$$->code;
 					}
 	
 
@@ -1295,6 +1473,8 @@ factor	: variable 	{
 	| LPAREN expression RPAREN  {
 									printNOW("factor : LPAREN expression RPAREN");
 									$$=$2;
+
+									codetracker<<$$->code;
 								}
 	
 
@@ -1303,6 +1483,8 @@ factor	: variable 	{
 						printNOW("factor : CONST_INT ");
 						$$=$1;
 						printNOW($1->getName());
+
+						codetracker<<$$->code;
 					}
 	
 
@@ -1311,6 +1493,8 @@ factor	: variable 	{
 						printNOW("factor : CONST_FLOAT ");
 						$$=$1;
 						printNOW($1->getName());
+
+						codetracker<<$$->code;
 					}
 	
 
@@ -1319,12 +1503,14 @@ factor	: variable 	{
 						printNOW("factor : CONST_CHAR ");
 						$$=$1;
 						printNOW($1->getName());
+
+						codetracker<<$$->code;
 					}
 	
 
 
 	| variable INCOP 	{
-						printNOW("variable : INCOP ");
+						printNOW("factor	: INCOP variable  ");
 						//todo code
 						if($$->varType=="DUMMY")$$=$1;
 
@@ -1349,15 +1535,18 @@ factor	: variable 	{
 
 								//asm-code
 								original->code+="inc "+original->getName()+"\n";
+
 							}
 						}
+
+						codetracker<<$$->code;
 					
 					}
 	
 
 
 	| variable DECOP	{
-						printNOW("variable : DECOP ");
+						printNOW("factor	: DECOP variable  ");
 						
 						
 
@@ -1390,6 +1579,8 @@ factor	: variable 	{
 							}
 						}
 
+						codetracker<<$$->code;
+
 					}
 	;
 %%
@@ -1412,6 +1603,7 @@ main(int argc,char *argv[])
 		printf("File can't be opened\n");
 		return 0;
 	}
+	codetracker.open("code_tracker.txt");
 	
 	logFile= fopen("1305043_log.txt","w");
 	myTable=new SymbolTable(15);

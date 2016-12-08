@@ -1,4 +1,4 @@
-Matched Rule>>>type_specifier : INT
+type_specifier : INT
 
 
 
@@ -15,7 +15,7 @@ a
 
 
 
-Matched Rule>>>declaration_list : declaration_list COMMA ID
+declaration_list : declaration_list COMMA ID
 
 
 
@@ -29,7 +29,7 @@ c
 
 
 
-Matched Rule>>>declaration_list : declaration_list COMMA ID
+declaration_list : declaration_list COMMA ID
 
 
 
@@ -44,7 +44,7 @@ i
 
 
 
-Matched Rule>>>declaration_list : declaration_list COMMA ID
+declaration_list : declaration_list COMMA ID
 
 
 
@@ -60,11 +60,11 @@ j
 
 
 
-Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON
+var_declaration : type_specifier declaration_list SEMICOLON
 
 
 
-Matched Rule>>>type_specifier : FLOAT
+type_specifier : FLOAT
 
 
 
@@ -85,7 +85,7 @@ d
 
 
 
-Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+var_declaration : var_declaration type_specifier declaration_list SEMICOLON
 
 
 
@@ -408,211 +408,6 @@ statements : statements statement
 
 
 
-variable : ID 
-
-
-
-factor : CONST_INT 
-
-
-
-2
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-factor : CONST_INT 
-
-
-
-3
-
-
-
-unary_expression : factor
-
-
-
-term : term MULOP unary_expression
-
-
-
-simple_expression : term 
-
-
-
-factor : CONST_INT 
-
-
-
-5
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-factor : CONST_INT 
-
-
-
-3
-
-
-
-unary_expression : factor
-
-
-
-term : term MULOP unary_expression
-
-
-
-simple_expression : term 
-
-
-
-factor : CONST_INT 
-
-
-
-4
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-rel_expression : simple_expression RELOP simple_expression
-
-
-
-factor : CONST_INT 
-
-
-
-8
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-rel_expression : simple_expression
-
-
-
-logic_expression : rel_expression LOGICOP rel_expression
-
-
-
-expression : logic_expression
-
-
-
-factor : LPAREN expression RPAREN
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : simple_expression ADDOP term
-
-
-
-rel_expression : simple_expression
-
-
-
-factor : CONST_INT 
-
-
-
-2
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-rel_expression : simple_expression
-
-
-
-logic_expression : rel_expression LOGICOP rel_expression
-
-
-
-expression : variable ASSIGNOP logic_expression
-
-
-
-0 --> <c , ID, -99999>
-1 --> <d , ID, -99999.000000>
-6 --> <i , ID, 6>
-7 --> <j , ID, 1>
-13 --> <a , ID, { 1, 5}>
-
-
-
-
-expression_statement : expression SEMICOLON
-
-
-
-statement  : expression_statement
-
-
-
-statements : statements statement
-
-
-
 factor : CONST_INT 
 
 
@@ -653,11 +448,11 @@ statements : statements statement
 
 
 
-Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL
+compound_statement : LCURL var_declaration statements RCURL
 
 
 
-Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement
+Program : INT MAIN LPAREN RPAREN compound_statement
 
 
 
@@ -665,7 +460,7 @@ PRINTING SYMBOL TABLE
 0 --> <c , ID, -99999>
 1 --> <d , ID, -99999.000000>
 6 --> <i , ID, 6>
-7 --> <j , ID, 1>
+7 --> <j , ID, -99999>
 13 --> <a , ID, { 1, 5}>
 
 
@@ -681,7 +476,7 @@ j ID INT
 d ID FLOAT
 
 
-TOTAL LINES: 009
+TOTAL LINES: 008
 
 
 TOTAL ERRORS:   0
