@@ -1,0 +1,687 @@
+Matched Rule>>>type_specifier : INT
+
+
+
+declaration_list : ID LTHIRD CONST_INT RTHIRD
+
+
+
+a
+
+
+
+13 --> <a , ID, {, -1, -1}>
+
+
+
+
+Matched Rule>>>declaration_list : declaration_list COMMA ID
+
+
+
+c
+
+
+
+0 --> <c , ID, -99999>
+13 --> <a , ID, {, -1, -1}>
+
+
+
+
+Matched Rule>>>declaration_list : declaration_list COMMA ID
+
+
+
+i
+
+
+
+0 --> <c , ID, -99999>
+6 --> <i , ID, -99999>
+13 --> <a , ID, {, -1, -1}>
+
+
+
+
+Matched Rule>>>declaration_list : declaration_list COMMA ID
+
+
+
+j
+
+
+
+0 --> <c , ID, -99999>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+13 --> <a , ID, {, -1, -1}>
+
+
+
+
+Matched Rule>>>var_declaration : type_specifier declaration_list SEMICOLON
+
+
+
+Matched Rule>>>type_specifier : FLOAT
+
+
+
+declaration_list : ID
+
+
+
+d
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { -1, -1}>
+
+
+
+
+Matched Rule>>>var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+
+
+
+factor : CONST_INT 
+
+
+
+0
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
+
+
+
+factor : CONST_INT 
+
+
+
+1
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 1, -1}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statement
+
+
+
+factor : CONST_INT 
+
+
+
+1
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
+
+
+
+factor : CONST_INT 
+
+
+
+5
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, -99999>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 1, 5}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statements statement
+
+
+
+variable : ID 
+
+
+
+factor : CONST_INT 
+
+
+
+0
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
+
+
+
+factor : variable 
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+factor : CONST_INT 
+
+
+
+1
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+variable : ID LTHIRD expression RTHIRD 
+
+
+
+factor : variable 
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : simple_expression ADDOP term
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 6>
+7 --> <j , ID, -99999>
+13 --> <a , ID, { 1, 5}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statements statement
+
+
+
+variable : ID 
+
+
+
+factor : CONST_INT 
+
+
+
+2
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+factor : CONST_INT 
+
+
+
+3
+
+
+
+unary_expression : factor
+
+
+
+term : term MULOP unary_expression
+
+
+
+simple_expression : term 
+
+
+
+factor : CONST_INT 
+
+
+
+5
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+factor : CONST_INT 
+
+
+
+3
+
+
+
+unary_expression : factor
+
+
+
+term : term MULOP unary_expression
+
+
+
+simple_expression : term 
+
+
+
+factor : CONST_INT 
+
+
+
+4
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression RELOP simple_expression
+
+
+
+factor : CONST_INT 
+
+
+
+8
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression LOGICOP rel_expression
+
+
+
+expression : logic_expression
+
+
+
+factor : LPAREN expression RPAREN
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : simple_expression ADDOP term
+
+
+
+rel_expression : simple_expression
+
+
+
+factor : CONST_INT 
+
+
+
+2
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression LOGICOP rel_expression
+
+
+
+expression : variable ASSIGNOP logic_expression
+
+
+
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 6>
+7 --> <j , ID, 1>
+13 --> <a , ID, { 1, 5}>
+
+
+
+
+expression_statement : expression SEMICOLON
+
+
+
+statement  : expression_statement
+
+
+
+statements : statements statement
+
+
+
+factor : CONST_INT 
+
+
+
+0
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+statement  : RETURN expression SEMICOLON
+
+
+
+statements : statements statement
+
+
+
+Matched Rule>>>compound_statement : LCURL var_declaration statements RCURL
+
+
+
+Matched Rule>>>Program : INT MAIN LPAREN RPAREN compound_statement
+
+
+
+PRINTING SYMBOL TABLE
+0 --> <c , ID, -99999>
+1 --> <d , ID, -99999.000000>
+6 --> <i , ID, 6>
+7 --> <j , ID, 1>
+13 --> <a , ID, { 1, 5}>
+
+
+
+
+
+
+PRINTING VARIABLE LIST
+a ID INT
+c ID INT
+i ID INT
+j ID INT
+d ID FLOAT
+
+
+TOTAL LINES: 009
+
+
+TOTAL ERRORS:   0
