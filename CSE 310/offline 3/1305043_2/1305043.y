@@ -601,8 +601,8 @@ statement  : expression_statement 	{
 	   																			$$->code=$3->code;
 	   																			$$->code+=l1+":\n";
 	   																			$$->code+=$4->code;
-	   																			$$->code+="cmp "+$4->getName()+", 1\n";
-	   																			$$->code+="jl "+l2+"\n";
+	   																			$$->code+="cmp "+$4->getName()+", 0\n";
+	   																			$$->code+="je "+l2+"\n";
 	   																			$$->code+=$7->code+$5->code;
 	   																			$$->code+="jmp "+l1+"\n"+l2+":\n";
 
@@ -617,8 +617,8 @@ statement  : expression_statement 	{
 
 	   																				string label=newLabel();
 	   																				$$->code+="mov ax, "+$3->getName()+"\n";
-	   																				$$->code+="cmp ax, 1\n";
-	   																				$$->code+="jl "+label+"\n";
+	   																				$$->code+="cmp ax, 0\n";
+	   																				$$->code+="je "+label+"\n";
 	   																				$$->code+=$5->code;
 	   																				$$->code+=label+":\n";
 
@@ -639,8 +639,8 @@ statement  : expression_statement 	{
 
 	   																$$=$3;
 	   																$$->code+="mov ax, "+$3->getName()+"\n";
-	   																$$->code+="cmp ax, 1\n";
-	   																$$->code+="jl "+l1+"\n";
+	   																$$->code+="cmp ax, 0\n";
+	   																$$->code+="je "+l1+"\n";
 	   																$$->code+=$5->code;
 	   																$$->code+="jmp "+l2+"\n";
 	   																$$->code+=l1+":\n"+$7->code;
@@ -663,8 +663,8 @@ statement  : expression_statement 	{
 
 
 														$$->code+=l1+":\n";
-														$$->code+="cmp "+$3->getName()+", 1\n";
-														$$->code+="jl "+l2+"\n";
+														$$->code+="cmp "+$3->getName()+", 0\n";
+														$$->code+="je "+l2+"\n";
 														$$->code+=$5->code+$3->code;
 														$$->code+="jmp "+l1+"\n"+l2+":\n";
 
