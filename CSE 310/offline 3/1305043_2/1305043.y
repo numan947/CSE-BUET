@@ -9,6 +9,49 @@
 using namespace std;
 
 
+string outdec="OUTDEC PROC\n\
+;INPUT AX\n\
+PUSH AX\n\
+PUSH BX\n\
+PUSH CX\n\
+PUSH DX\n\
+OR AX,AX\n\
+JGE @END_IF1\n\
+PUSH AX\n\
+MOV DL,'-'\n\
+MOV AH,2\n\
+INT 21H\n\
+POP AX\n\
+NEG AX\n\
+\n\
+@END_IF1:\n\
+XOR CX,CX\n\
+MOV BX,10D\n\
+\n\
+@REPEAT1:\n\
+XOR DX,DX\n\
+DIV BX\n\
+PUSH DX\n\
+INC CX\n\
+OR AX,AX\n\
+JNE @REPEAT1\n\
+\n\
+MOV AH,2\n\
+\n\
+@PRINT_LOOP:\n\
+\n\
+POP DX\n\
+OR DL,30H\n\
+INT 21H\n\
+LOOP @PRINT_LOOP\n\
+\n\
+POP DX\n\
+POP CX\n\
+POP BX\n\
+POP AX\n\
+RET\n\
+OUTDEC ENDP\n";
+
 extern FILE* yyin;
 SymbolTable *myTable;
 SymbolInfo*declaredInfo[1000];
@@ -147,7 +190,8 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 
 														fout<<$$->code;
 
-														fout<<"\nmain endp\nend main\n";
+														fout<<"\nmain endp\n\n";
+														fout<<outdec<<"\nend main";
 														fout.close();
 
 
@@ -548,6 +592,19 @@ statement  : expression_statement 	{
 
 
 	   																			//todo code
+	   																			$$=new SymbolInfo("COPY","COPY");
+	   																			$$->varType="COPY";
+
+	   																			string l1=newLabel();
+	   																			string l2=newLabel();
+
+	   																			$$->code=$3->code;
+	   																			$$->code+=l1+":\n";
+	   																			$$->code+=$4->code;
+	   																			$$->code+="cmp "+$4->getName()+", 1\n";
+	   																			$$->code+="jl "+l2+"\n";
+	   																			$$->code+=$7->code+$5->code;
+	   																			$$->code+="jmp "+l1+"\n"+l2+":\n";
 
 	   																		}
 	   
@@ -561,7 +618,7 @@ statement  : expression_statement 	{
 	   																				string label=newLabel();
 	   																				$$->code+="mov ax, "+$3->getName()+"\n";
 	   																				$$->code+="cmp ax, 1\n";
-	   																				$$->code+="jne "+label+"\n";
+	   																				$$->code+="jl "+label+"\n";
 	   																				$$->code+=$5->code;
 	   																				$$->code+=label+":\n";
 
@@ -585,7 +642,7 @@ statement  : expression_statement 	{
 	   																$$->code+="cmp ax, 1\n";
 	   																$$->code+="jl "+l1+"\n";
 	   																$$->code+=$5->code;
-	   																$$->code+="jump "+l2+"\n";
+	   																$$->code+="jmp "+l2+"\n";
 	   																$$->code+=l1+":\n"+$7->code;
 	   																$$->code+=l2+":\n";
 
@@ -598,6 +655,19 @@ statement  : expression_statement 	{
 	   													printNOW("statement  : WHILE LPAREN expression RPAREN statement");
 
 	   													//todo code
+	   													$$=new SymbolInfo("COPY","COPY");
+														$$->varType="COPY";
+
+														string l1=newLabel();
+														string l2=newLabel();
+
+
+														$$->code+=l1+":\n";
+														$$->code+="cmp "+$3->getName()+", 1\n";
+														$$->code+="jl "+l2+"\n";
+														$$->code+=$5->code+$3->code;
+														$$->code+="jmp "+l1+"\n"+l2+":\n";
+
 
 	   												}
 	   
@@ -608,35 +678,39 @@ statement  : expression_statement 	{
 
 	   												//todo code
 
-	   												if($3->varType=="")$3=findInDeclaration($3->getName());
+	   												SymbolInfo *original;
 
-	   												ostringstream o;
+	   												if($3->varType=="")original=findInDeclaration($3->getName());
+	   												if(original!=0){
+	   													original->pIndex=$3->pIndex;
+	   													original->expIndex=$3->expIndex;
+	   												}
 
-	   												if($3->array==false){
-		   												if($3->getType()=="INT"){
-		   													o<<$3->iVal;
-		   													printNOW(o.str());
-		   												}
-		   												else if($3->getType()=="FLOAT"){
-		   													o<<$3->dVal;
-		   													printNOW(o.str());
-		   												}
-		   												else if($3->getType()=="CHAR"){
-		   													o<<$3->chVal;
-		   													printNOW(o.str());
-		   												}
+	   												$$=new SymbolInfo("COPY","COPY");
+	   												$$->code="";
+
+	   												cout<<original->arrayLength<<endl;
+
+
+	   												if(original->array){
+	   													for(int i=0;i<original->arrayLength;i++){
+
+	   														tl.str("");tl<<i;
+	   														$$->code+="lea di, "+$3->getName()+"\n";
+	   														$$->code+="add di, "+tl.str()+"\n";
+	   														$$->code+="add di, "+tl.str()+"\n";
+	   														$$->code+="mov ax, [di]\n";
+	   														$$->code+="call outdec\n";
+
+	   													}
 	   												}
 	   												else{
-		   												if($3->getType()=="INT"){
-		   													for(int i=0;i<$3->arrayLength;i++)printf("%d ",(int)$3->arrayStorage[i]);
-		   												}
-		   												else if($3->getType()=="FLOAT"){
-		   													for(int i=0;i<$3->arrayLength;i++)printf("%lf ",(double)$3->arrayStorage[i]);
-		   												}
-		   												else if($3->getType()=="CHAR"){
-		   													for(int i=0;i<$3->arrayLength;i++)printf("%c ",(char)$3->arrayStorage[i]);
-		   												}
+	   													$$->code+="mov ax, "+$3->getName()+"\n";
+	   													$$->code+="call outdec\n";
 	   												}
+
+
+
 	   											}
 	   
 
@@ -803,7 +877,7 @@ expression : logic_expression	{
 		   												}
 
 		   												//code-asm
-		   												$$=new SymbolInfo("COPY","COPY");
+		   												$$=new SymbolInfo($1->getName(),"COPY");
 		   												$$->code=$3->code+target->code;
 		   												$$->code+="mov ax, "+$3->getName()+"\n";
 
