@@ -33,47 +33,15 @@ var_declaration : type_specifier declaration_list SEMICOLON
 
 
 
-factor : CONST_INT 
-
-
-
-1
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-simple_expression : term 
-
-
-
-rel_expression : simple_expression
-
-
-
-logic_expression : rel_expression
-
-
-
-expression : logic_expression
-
-
-
-variable : ID LTHIRD expression RTHIRD 
-
-
-
 variable : ID 
 
 
 
-factor : variable 
+factor : CONST_INT 
+
+
+
+5
 
 
 
@@ -82,70 +50,6 @@ unary_expression : factor
 
 
 term :unary_expression
-
-
-
-factor : CONST_INT 
-
-
-
-1
-
-
-
-unary_expression : factor
-
-
-
-term :unary_expression
-
-
-
-factor : CONST_INT 
-
-
-
-2
-
-
-
-unary_expression : factor
-
-
-
-term : term MULOP unary_expression
-
-
-
-simple_expression : term 
-
-
-
-rel_expression : simple_expression
-
-
-
-logic_expression : rel_expression
-
-
-
-expression : logic_expression
-
-
-
-variable : ID LTHIRD expression RTHIRD 
-
-
-
-factor : variable 
-
-
-
-unary_expression : factor
-
-
-
-term : term MULOP unary_expression
 
 
 
@@ -165,8 +69,8 @@ expression : variable ASSIGNOP logic_expression
 
 
 
-6 --> <i , ID, -99999>
-13 --> <a , ID, { -1, 99999, -1}>
+6 --> <i , ID, 5>
+13 --> <a , ID, { -1, -1, -1}>
 
 
 
@@ -191,6 +95,46 @@ statements : statements statement
 
 
 
+factor : CONST_INT 
+
+
+
+0
+
+
+
+unary_expression : factor
+
+
+
+term :unary_expression
+
+
+
+simple_expression : term 
+
+
+
+rel_expression : simple_expression
+
+
+
+logic_expression : rel_expression
+
+
+
+expression : logic_expression
+
+
+
+statement  : RETURN expression SEMICOLON
+
+
+
+statements : statements statement
+
+
+
 compound_statement : LCURL var_declaration statements RCURL
 
 
@@ -200,8 +144,8 @@ Program : INT MAIN LPAREN RPAREN compound_statement
 
 
 PRINTING SYMBOL TABLE
-6 --> <i , ID, -99999>
-13 --> <a , ID, { -1, 99999, -1}>
+6 --> <i , ID, 5>
+13 --> <a , ID, { -1, -1, -1}>
 
 
 

@@ -1525,8 +1525,8 @@ yyreduce:
 
 														fout<<(yyval.helpInfo)->code;
 
-														fout<<"\nmain endp\n\n";
-														fout<<outdec<<"\nend main";
+														fout<<"\nmain endp\n\nend main";
+														
 														fout.close();
 
 
@@ -1551,7 +1551,7 @@ yyreduce:
 																	(yyval.helpInfo)->code+="t"+tl.str()+" dw ?\n";
 																}
 
-																(yyval.helpInfo)->code+="\n.code\n\nmain proc\n\nmov ax ,@data\nmov ds ,ax\n";
+																(yyval.helpInfo)->code+="\n.code\n\n"+outdec+"\nmain proc\n\nmov ax ,@data\nmov ds ,ax\n";
 																(yyval.helpInfo)->code+=(yyvsp[-1].helpInfo)->code;
 
 																codetracker<<(yyval.helpInfo)->code;

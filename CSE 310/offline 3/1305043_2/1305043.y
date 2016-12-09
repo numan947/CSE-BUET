@@ -190,8 +190,8 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 
 														fout<<$$->code;
 
-														fout<<"\nmain endp\n\n";
-														fout<<outdec<<"\nend main";
+														fout<<"\nmain endp\n\nend main";
+														
 														fout.close();
 
 
@@ -214,7 +214,7 @@ compound_statement : LCURL var_declaration statements RCURL {
 																	$$->code+="t"+tl.str()+" dw ?\n";
 																}
 
-																$$->code+="\n.code\n\nmain proc\n\nmov ax ,@data\nmov ds ,ax\n";
+																$$->code+="\n.code\n\n"+outdec+"\nmain proc\n\nmov ax ,@data\nmov ds ,ax\n";
 																$$->code+=$3->code;
 
 																codetracker<<$$->code;

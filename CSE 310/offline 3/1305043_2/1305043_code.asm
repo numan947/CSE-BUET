@@ -6,50 +6,8 @@ TITLE PROGRAM:numan947
 
 a dw ? ,? ,?
 i dw ?
-t0 dw ?
-t1 dw ?
-t2 dw ?
 
 .code
-
-main proc
-
-mov ax ,@data
-mov ds ,ax
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
-lea di, a
-add di, 0
-add di, 0
-mov ax, [di]
-call outdec
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-lea di, a
-add di, 2
-add di, 2
-mov ax, [di]
-call outdec
-
-main endp
 
 OUTDEC PROC
 ;INPUT AX
@@ -93,5 +51,18 @@ POP BX
 POP AX
 RET
 OUTDEC ENDP
+
+main proc
+
+mov ax ,@data
+mov ds ,ax
+mov ax, 5
+mov i, ax
+mov ax, i
+call outdec
+mov ah, 4ch
+int 21h
+
+main endp
 
 end main

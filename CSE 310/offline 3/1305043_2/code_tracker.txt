@@ -9,379 +9,196 @@ i dw ?
 var_declaration : type_specifier declaration_list SEMICOLON
 a dw ? ,? ,?
 i dw ?
-factor : CONST_INT 
-1
-unary_expression : factor
-term :unary_expression
-simple_expression : term 
-rel_expression : simple_expression
-logic_expression : rel_expression
-expression : logic_expression
-variable : ID LTHIRD expression RTHIRD 
 variable : ID 
-factor : variable 
+factor : CONST_INT 
+5
 unary_expression : factor
 term :unary_expression
-factor : CONST_INT 
-1
-unary_expression : factor
-term :unary_expression
-factor : CONST_INT 
-2
-unary_expression : factor
-term : term MULOP unary_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
 simple_expression : term 
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
 rel_expression : simple_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
 logic_expression : rel_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-expression : logic_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-variable : ID LTHIRD expression RTHIRD 
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-factor : variable 
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-unary_expression : factor
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-term : term MULOP unary_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-simple_expression : term 
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-rel_expression : simple_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-logic_expression : rel_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
 expression : variable ASSIGNOP logic_expression
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
+mov ax, 5
+mov i, ax
 expression_statement : expression SEMICOLON
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
+mov ax, 5
+mov i, ax
 statement  : expression_statement
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
+mov ax, 5
+mov i, ax
 statements : statement
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
-mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
+mov ax, 5
+mov i, ax
 statement  : PRINTLN LPAREN ID RPAREN SEMICOLON 
 statements : statements statement
 SPC11: 
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
+mov ax, 5
+mov i, ax
 mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
-lea di, a
-add di, 0
-add di, 0
-mov ax, [di]
-call outdec
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-lea di, a
-add di, 2
-add di, 2
-mov ax, [di]
 call outdec
 
 SPC22: 
-lea di, a
-add di, 0
-add di, 0
-mov ax, [di]
-call outdec
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-lea di, a
-add di, 2
-add di, 2
-mov ax, [di]
+mov ax, i
 call outdec
 
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
+mov ax, 5
+mov i, ax
 mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
-lea di, a
-add di, 0
-add di, 0
-mov ax, [di]
 call outdec
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
+factor : CONST_INT 
+0
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+statement  : RETURN expression SEMICOLON
+mov ah, 4ch
+int 21h
+statements : statements statement
+SPC11: 
+mov ax, 5
+mov i, ax
+mov ax, i
 call outdec
-lea di, a
-add di, 2
-add di, 2
-mov ax, [di]
+mov ah, 4ch
+int 21h
+
+SPC22: 
+mov ah, 4ch
+int 21h
+
+mov ax, 5
+mov i, ax
+mov ax, i
 call outdec
+mov ah, 4ch
+int 21h
 compound_statement : LCURL var_declaration statements RCURL
 
 .data
 
 a dw ? ,? ,?
 i dw ?
-t0 dw ?
-t1 dw ?
-t2 dw ?
 
 .code
+
+OUTDEC PROC
+;INPUT AX
+PUSH AX
+PUSH BX
+PUSH CX
+PUSH DX
+OR AX,AX
+JGE @END_IF1
+PUSH AX
+MOV DL,'-'
+MOV AH,2
+INT 21H
+POP AX
+NEG AX
+
+@END_IF1:
+XOR CX,CX
+MOV BX,10D
+
+@REPEAT1:
+XOR DX,DX
+DIV BX
+PUSH DX
+INC CX
+OR AX,AX
+JNE @REPEAT1
+
+MOV AH,2
+
+@PRINT_LOOP:
+
+POP DX
+OR DL,30H
+INT 21H
+LOOP @PRINT_LOOP
+
+POP DX
+POP CX
+POP BX
+POP AX
+RET
+OUTDEC ENDP
 
 main proc
 
 mov ax ,@data
 mov ds ,ax
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
+mov ax, 5
+mov i, ax
 mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
-lea di, a
-add di, 0
-add di, 0
-mov ax, [di]
 call outdec
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-lea di, a
-add di, 2
-add di, 2
-mov ax, [di]
-call outdec
+mov ah, 4ch
+int 21h
 Program : INT MAIN LPAREN RPAREN compound_statement
 
 .data
 
 a dw ? ,? ,?
 i dw ?
-t0 dw ?
-t1 dw ?
-t2 dw ?
 
 .code
+
+OUTDEC PROC
+;INPUT AX
+PUSH AX
+PUSH BX
+PUSH CX
+PUSH DX
+OR AX,AX
+JGE @END_IF1
+PUSH AX
+MOV DL,'-'
+MOV AH,2
+INT 21H
+POP AX
+NEG AX
+
+@END_IF1:
+XOR CX,CX
+MOV BX,10D
+
+@REPEAT1:
+XOR DX,DX
+DIV BX
+PUSH DX
+INC CX
+OR AX,AX
+JNE @REPEAT1
+
+MOV AH,2
+
+@PRINT_LOOP:
+
+POP DX
+OR DL,30H
+INT 21H
+LOOP @PRINT_LOOP
+
+POP DX
+POP CX
+POP BX
+POP AX
+RET
+OUTDEC ENDP
 
 main proc
 
 mov ax ,@data
 mov ds ,ax
-mov ax, 1
-mov bx, 2
-mul bx
-mov t0, ax
-lea di, a
-add di, t0
-add di, t0
-mov t1, [di]
+mov ax, 5
+mov i, ax
 mov ax, i
-mov bx, t1
-mul bx
-mov t2, ax
-mov ax, t2
-lea di, a
-add di, 1
-add di, 1
-mov [di], ax
-lea di, a
-add di, 0
-add di, 0
-mov ax, [di]
 call outdec
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-lea di, a
-add di, 2
-add di, 2
-mov ax, [di]
-call outdec
+mov ah, 4ch
+int 21h
 a
 
 i
