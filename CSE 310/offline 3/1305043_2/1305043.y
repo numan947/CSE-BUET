@@ -744,8 +744,8 @@ variable : ID 	{
 										
 										else{
 
-											//printf("<%d>\n",$3->iVal);
-											//printf("<%s>\n",$3->getName().c_str());
+											printf("<%d>\n",$3->iVal);
+											printf("<%s>\n",$3->getName().c_str());
 
 											SymbolInfo* fun=new SymbolInfo();
 
@@ -781,112 +781,114 @@ expression : logic_expression	{
 	   | variable ASSIGNOP logic_expression 	{
 	   												printNOW("expression : variable ASSIGNOP logic_expression");
 
+	   												
+
 	   												//todo code
 
 	   												if($1->varType=="DUMMY")$$=$1;
+	   												
 	   												else if($3->varType=="DUMMY")$$=$3;
 
-	   												else{
-
-	   												SymbolInfo* target=findInDeclaration($1->getName());
-
-	   												if($3->varType=="")$3=findInDeclaration($3->getName());
-
-	   												if($1->getType()=="COPY"){
-	   													target->expIndex=$1->expIndex;
-	   													target->pIndex=$1->pIndex;
-	   												}
-
-	   												//code-asm
-	   												$$=new SymbolInfo("COPY","COPY");
-	   												$$->code=$3->code+target->code;
-	   												$$->code+="mov ax, "+$3->getName()+"\n";
-
-
-
-
-
-	   												if(target==0){
-	   													//check for error later :/ 
-	   												}
-
+	   												
 
 	   												else{
 
-		   													if(target->array==false){
+		   												SymbolInfo* target=findInDeclaration($1->getName());
 
-		   														if(target->varType=="INT"&&$3->varType=="INT")target->iVal=$3->iVal;
-		   														else if(target->varType=="FLOAT"&&$3->varType=="FLOAT")target->dVal=$3->dVal;
-		   														else if(target->varType=="CHAR"&&$3->varType=="CHAR")target->chVal=$3->chVal;
-		   														else if(target->varType=="FLOAT"){
-		   															if($3->varType=="INT")target->dVal=$3->iVal;
-		   															else if($3->varType=="CHAR")target->dVal=$3->chVal;
-		   														}
-		   														else {
-		   															printError("Type Mismatch");
-			   														error_count++;
-		   														}
-		   														$$->code+="mov "+target->getName()+", ax\n";
-		   													}
+		   												if($3->varType=="")$3=findInDeclaration($3->getName());
+
+		   												if($1->getType()=="COPY"){
+		   													target->expIndex=$1->expIndex;
+		   													target->pIndex=$1->pIndex;
+		   												}
+
+		   												//code-asm
+		   												$$=new SymbolInfo("COPY","COPY");
+		   												$$->code=$3->code+target->code;
+		   												$$->code+="mov ax, "+$3->getName()+"\n";
 
 
-		   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
+		   												if(target==0){
+		   													//check for error later :/ 
+		   												}
 
-																
-		   														if(target->varType=="INT"){
-			   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(int)$3->iVal;
-			   														else{
-			   															printError("Type Mismatch");
-			   															error_count++;
+
+		   												else{
+
+			   													if(target->array==false){
+
+			   														if(target->varType=="INT"&&$3->varType=="INT")target->iVal=$3->iVal;
+			   														else if(target->varType=="FLOAT"&&$3->varType=="FLOAT")target->dVal=$3->dVal;
+			   														else if(target->varType=="CHAR"&&$3->varType=="CHAR")target->chVal=$3->chVal;
+			   														else if(target->varType=="FLOAT"){
+			   															if($3->varType=="INT")target->dVal=$3->iVal;
+			   															else if($3->varType=="CHAR")target->dVal=$3->chVal;
 			   														}
-			   													}
-			   													else if(target->varType=="FLOAT"){
-			   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(double)$3->iVal;
-			   														else if($3->varType=="FLOAT")target->arrayStorage[target->pIndex]=(double)$3->dVal;
-			   														else if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(double)$3->chVal;
-			   													}
-			   													else if(target->varType=="CHAR"){
-			   														if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(char)$3->chVal;
 			   														else {
 			   															printError("Type Mismatch");
+				   														error_count++;
+			   														}
+			   														$$->code+="mov "+target->getName()+", ax\n";
+			   													}
+
+
+			   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
+
+																	
+			   														if(target->varType=="INT"){
+				   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(int)$3->iVal;
+				   														else{
+				   															printError("Type Mismatch");
+				   															error_count++;
+				   														}
+				   													}
+				   													else if(target->varType=="FLOAT"){
+				   														if($3->varType=="INT")target->arrayStorage[target->pIndex]=(double)$3->iVal;
+				   														else if($3->varType=="FLOAT")target->arrayStorage[target->pIndex]=(double)$3->dVal;
+				   														else if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(double)$3->chVal;
+				   													}
+				   													else if(target->varType=="CHAR"){
+				   														if($3->varType=="CHAR")target->arrayStorage[target->pIndex]=(char)$3->chVal;
+				   														else {
+				   															printError("Type Mismatch");
+				   															error_count++;
+				   														}
+				   													}
+
+
+				   													$$->code+="lea di, "+target->getName()+"\n";
+
+				   													tl.str("");
+				   													
+				   													tl<<target->expIndex;
+
+				   													for(int i=0;i<2;i++){
+				   														$$->code+="add di, "+tl.str()+"\n";
+				   													}
+				   													$$->code+="mov [di], ax\n";
+
+				   													$$->pIndex=-1;
+
+
+			   													}
+			   													else{
+			   														if(target->pIndex<0){
+			   															printError("Type Mismatch");
+				   														error_count++;
+			   														}
+			   														else if(target->pIndex>=target->arrayLength){
+			   															printError("Array index out of bound for "+target->getName());
 			   															error_count++;
 			   														}
 			   													}
 
-
-			   													$$->code+="lea di, "+target->getName()+"\n";
-
-			   													tl.str("");
 			   													
-			   													tl<<target->expIndex;
-
-			   													for(int i=0;i<2;i++){
-			   														$$->code+="add di, "+tl.str()+"\n";
-			   													}
-			   													$$->code+="mov [di], ax\n";
-
-			   													$$->pIndex=-1;
-
-
-		   													}
-		   													else{
-		   														if(target->pIndex<0){
-		   															printError("Type Mismatch");
-			   														error_count++;
-		   														}
-		   														else if(target->pIndex>=target->arrayLength){
-		   															printError("Array index out of bound for "+target->getName());
-		   															error_count++;
-		   														}
-		   													}
-
-		   													
-		   													myTable->Print(logFile);
-		   													fprintf(logFile,"\n\n\n\n");
+			   													myTable->Print(logFile);
+			   													fprintf(logFile,"\n\n\n\n");
+			   												}
 		   												}
-	   												}
 
-	   												codetracker<<$$->code;
+		   												codetracker<<$$->code;
 
 	   											}
 	   ;
@@ -1474,6 +1476,10 @@ factor	: variable 	{
 							SymbolInfo* real=findInDeclaration($1->getName());
 							SymbolInfo* ret=new SymbolInfo(real->getName(),real->getType());
 							ret->varType=real->varType;
+
+							
+							real->pIndex=$1->pIndex;
+							real->expIndex=$1->expIndex;
 							
 
 							if($1->array){	
@@ -1568,7 +1574,7 @@ factor	: variable 	{
 
 
 	| variable INCOP 	{
-						printNOW("factor	: INCOP variable  ");
+						printNOW("factor : INCOP variable ");
 						//todo code
 						if($$->varType=="DUMMY")$$=$1;
 
@@ -1581,19 +1587,48 @@ factor	: variable 	{
 								original->varType="DUMMY";
 								print=false;
 							}
-							
-							string s=original->varType;
-							if(s=="INT")original->iVal++;
-							else if(s=="FLOAT")original->dVal++;
-							else if(s=="CHAR")original->chVal++;
-							$$=original;
+
+							else if($1->array){
+								original->expIndex=$1->expIndex;
+								original->pIndex=$1->pIndex;
+
+								string s=original->varType;
+								if(s=="INT")original->arrayStorage[original->pIndex]++;
+								else if(s=="FLOAT")original->arrayStorage[original->pIndex]++;
+								else if(s=="CHAR")original->arrayStorage[original->pIndex]++;
+								
+
+								
+								$$=new SymbolInfo();
+								*($$)=*original;
+								$$->setType("COPY");
+
+
+								//asm-code
+								$$->code="lea di, "+original->getName()+"\n";
+								for(int i=0;i<2;i++)$$->code+="add di, "+original->expIndex+"\n";
+								$$->code+="inc [di]\n";
+							}
+							else{
+
+
+								string s=original->varType;
+								if(s=="INT")original->iVal++;
+								else if(s=="FLOAT")original->dVal++;
+								else if(s=="CHAR")original->chVal++;
+
+								$$=new SymbolInfo();
+								(*$$)=*original;
+								$$->setType("COPY");
+
+
+								//asm-code
+								$$->code="inc "+original->getName()+"\n";
+							}
+
 							if(print){
 								myTable->Print(logFile);
 								fprintf(logFile,"\n\n\n\n");
-
-								//asm-code
-								original->code+="inc "+original->getName()+"\n";
-
 							}
 						}
 
@@ -1604,14 +1639,13 @@ factor	: variable 	{
 
 
 	| variable DECOP	{
-						printNOW("factor	: DECOP variable  ");
-						
+						printNOW("factor : DECOP variable ");
 						
 
+						//todo code
 						if($$->varType=="DUMMY")$$=$1;
 
 						else{
-
 							bool print=true;
 
 							SymbolInfo* original=findInDeclaration($1->getName());
@@ -1620,35 +1654,60 @@ factor	: variable 	{
 								original->varType="DUMMY";
 								print=false;
 							}
-							
-							string s=original->varType;
-							if(s=="INT")original->iVal--;
-							else if(s=="FLOAT")original->dVal--;
-							else if(s=="CHAR")original->chVal--;
-							$$=original;
+
+							else if($1->array){
+								original->expIndex=$1->expIndex;
+								original->pIndex=$1->pIndex;
+
+								string s=original->varType;
+								if(s=="INT")original->arrayStorage[original->pIndex]--;
+								else if(s=="FLOAT")original->arrayStorage[original->pIndex]--;
+								else if(s=="CHAR")original->arrayStorage[original->pIndex]--;
+								
+
+								
+								$$=new SymbolInfo();
+								*($$)=*original;
+								$$->setType("COPY");
+
+
+								//asm-code
+								$$->code="lea di, "+original->getName()+"\n";
+								for(int i=0;i<2;i++)$$->code+="add di, "+original->expIndex+"\n";
+								$$->code+="dec [di]\n";
+							}
+							else{
+
+
+								string s=original->varType;
+								if(s=="INT")original->iVal--;
+								else if(s=="FLOAT")original->dVal--;
+								else if(s=="CHAR")original->chVal--;
+
+								$$=new SymbolInfo();
+								(*$$)=*original;
+								$$->setType("COPY");
+
+
+								//asm-code
+								$$->code="dec "+original->getName()+"\n";
+							}
 
 							if(print){
 								myTable->Print(logFile);
 								fprintf(logFile,"\n\n\n\n");
-
-								//asm-code
-								original->code+="dec "+original->getName()+"\n";
-
 							}
 						}
 
 						codetracker<<$$->code;
-
+					
 					}
 	;
 %%
 
 main(int argc,char *argv[])
 {
-/*	//yydebug=1;
-	yyparse();
-	return 0;
-*/
+
 	
 	marker=0;
 	if(argc!=2){

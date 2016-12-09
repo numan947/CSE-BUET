@@ -606,8 +606,8 @@ static const yytype_uint16 yyrline[] =
        0,   133,   133,   160,   180,   189,   200,   217,   238,   244,
      251,   261,   310,   375,   434,   504,   513,   530,   537,   545,
      556,   575,   597,   606,   644,   662,   672,   685,   722,   772,
-     781,   895,   905,   992,  1001,  1098,  1106,  1224,  1233,  1363,
-    1404,  1445,  1463,  1531,  1540,  1550,  1560,  1570,  1606
+     781,   897,   907,   994,  1003,  1100,  1108,  1226,  1235,  1365,
+    1406,  1447,  1465,  1537,  1546,  1556,  1566,  1576,  1641
 };
 #endif
 
@@ -2120,8 +2120,8 @@ yyreduce:
 										
 										else{
 
-											//printf("<%d>\n",$3->iVal);
-											//printf("<%s>\n",$3->getName().c_str());
+											printf("<%d>\n",(yyvsp[-1].helpInfo)->iVal);
+											printf("<%s>\n",(yyvsp[-1].helpInfo)->getName().c_str());
 
 											SymbolInfo* fun=new SymbolInfo();
 
@@ -2158,119 +2158,121 @@ yyreduce:
     {
 	   												printNOW("expression : variable ASSIGNOP logic_expression");
 
+	   												
+
 	   												//todo code
 
 	   												if((yyvsp[-2].helpInfo)->varType=="DUMMY")(yyval.helpInfo)=(yyvsp[-2].helpInfo);
+	   												
 	   												else if((yyvsp[0].helpInfo)->varType=="DUMMY")(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
-	   												else{
-
-	   												SymbolInfo* target=findInDeclaration((yyvsp[-2].helpInfo)->getName());
-
-	   												if((yyvsp[0].helpInfo)->varType=="")(yyvsp[0].helpInfo)=findInDeclaration((yyvsp[0].helpInfo)->getName());
-
-	   												if((yyvsp[-2].helpInfo)->getType()=="COPY"){
-	   													target->expIndex=(yyvsp[-2].helpInfo)->expIndex;
-	   													target->pIndex=(yyvsp[-2].helpInfo)->pIndex;
-	   												}
-
-	   												//code-asm
-	   												(yyval.helpInfo)=new SymbolInfo("COPY","COPY");
-	   												(yyval.helpInfo)->code=(yyvsp[0].helpInfo)->code+target->code;
-	   												(yyval.helpInfo)->code+="mov ax, "+(yyvsp[0].helpInfo)->getName()+"\n";
-
-
-
-
-
-	   												if(target==0){
-	   													//check for error later :/ 
-	   												}
-
+	   												
 
 	   												else{
 
-		   													if(target->array==false){
+		   												SymbolInfo* target=findInDeclaration((yyvsp[-2].helpInfo)->getName());
 
-		   														if(target->varType=="INT"&&(yyvsp[0].helpInfo)->varType=="INT")target->iVal=(yyvsp[0].helpInfo)->iVal;
-		   														else if(target->varType=="FLOAT"&&(yyvsp[0].helpInfo)->varType=="FLOAT")target->dVal=(yyvsp[0].helpInfo)->dVal;
-		   														else if(target->varType=="CHAR"&&(yyvsp[0].helpInfo)->varType=="CHAR")target->chVal=(yyvsp[0].helpInfo)->chVal;
-		   														else if(target->varType=="FLOAT"){
-		   															if((yyvsp[0].helpInfo)->varType=="INT")target->dVal=(yyvsp[0].helpInfo)->iVal;
-		   															else if((yyvsp[0].helpInfo)->varType=="CHAR")target->dVal=(yyvsp[0].helpInfo)->chVal;
-		   														}
-		   														else {
-		   															printError("Type Mismatch");
-			   														error_count++;
-		   														}
-		   														(yyval.helpInfo)->code+="mov "+target->getName()+", ax\n";
-		   													}
+		   												if((yyvsp[0].helpInfo)->varType=="")(yyvsp[0].helpInfo)=findInDeclaration((yyvsp[0].helpInfo)->getName());
+
+		   												if((yyvsp[-2].helpInfo)->getType()=="COPY"){
+		   													target->expIndex=(yyvsp[-2].helpInfo)->expIndex;
+		   													target->pIndex=(yyvsp[-2].helpInfo)->pIndex;
+		   												}
+
+		   												//code-asm
+		   												(yyval.helpInfo)=new SymbolInfo("COPY","COPY");
+		   												(yyval.helpInfo)->code=(yyvsp[0].helpInfo)->code+target->code;
+		   												(yyval.helpInfo)->code+="mov ax, "+(yyvsp[0].helpInfo)->getName()+"\n";
 
 
-		   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
+		   												if(target==0){
+		   													//check for error later :/ 
+		   												}
 
-																
-		   														if(target->varType=="INT"){
-			   														if((yyvsp[0].helpInfo)->varType=="INT")target->arrayStorage[target->pIndex]=(int)(yyvsp[0].helpInfo)->iVal;
-			   														else{
-			   															printError("Type Mismatch");
-			   															error_count++;
+
+		   												else{
+
+			   													if(target->array==false){
+
+			   														if(target->varType=="INT"&&(yyvsp[0].helpInfo)->varType=="INT")target->iVal=(yyvsp[0].helpInfo)->iVal;
+			   														else if(target->varType=="FLOAT"&&(yyvsp[0].helpInfo)->varType=="FLOAT")target->dVal=(yyvsp[0].helpInfo)->dVal;
+			   														else if(target->varType=="CHAR"&&(yyvsp[0].helpInfo)->varType=="CHAR")target->chVal=(yyvsp[0].helpInfo)->chVal;
+			   														else if(target->varType=="FLOAT"){
+			   															if((yyvsp[0].helpInfo)->varType=="INT")target->dVal=(yyvsp[0].helpInfo)->iVal;
+			   															else if((yyvsp[0].helpInfo)->varType=="CHAR")target->dVal=(yyvsp[0].helpInfo)->chVal;
 			   														}
-			   													}
-			   													else if(target->varType=="FLOAT"){
-			   														if((yyvsp[0].helpInfo)->varType=="INT")target->arrayStorage[target->pIndex]=(double)(yyvsp[0].helpInfo)->iVal;
-			   														else if((yyvsp[0].helpInfo)->varType=="FLOAT")target->arrayStorage[target->pIndex]=(double)(yyvsp[0].helpInfo)->dVal;
-			   														else if((yyvsp[0].helpInfo)->varType=="CHAR")target->arrayStorage[target->pIndex]=(double)(yyvsp[0].helpInfo)->chVal;
-			   													}
-			   													else if(target->varType=="CHAR"){
-			   														if((yyvsp[0].helpInfo)->varType=="CHAR")target->arrayStorage[target->pIndex]=(char)(yyvsp[0].helpInfo)->chVal;
 			   														else {
 			   															printError("Type Mismatch");
+				   														error_count++;
+			   														}
+			   														(yyval.helpInfo)->code+="mov "+target->getName()+", ax\n";
+			   													}
+
+
+			   													else if(target->pIndex>-1 && target->pIndex<target->arrayLength){
+
+																	
+			   														if(target->varType=="INT"){
+				   														if((yyvsp[0].helpInfo)->varType=="INT")target->arrayStorage[target->pIndex]=(int)(yyvsp[0].helpInfo)->iVal;
+				   														else{
+				   															printError("Type Mismatch");
+				   															error_count++;
+				   														}
+				   													}
+				   													else if(target->varType=="FLOAT"){
+				   														if((yyvsp[0].helpInfo)->varType=="INT")target->arrayStorage[target->pIndex]=(double)(yyvsp[0].helpInfo)->iVal;
+				   														else if((yyvsp[0].helpInfo)->varType=="FLOAT")target->arrayStorage[target->pIndex]=(double)(yyvsp[0].helpInfo)->dVal;
+				   														else if((yyvsp[0].helpInfo)->varType=="CHAR")target->arrayStorage[target->pIndex]=(double)(yyvsp[0].helpInfo)->chVal;
+				   													}
+				   													else if(target->varType=="CHAR"){
+				   														if((yyvsp[0].helpInfo)->varType=="CHAR")target->arrayStorage[target->pIndex]=(char)(yyvsp[0].helpInfo)->chVal;
+				   														else {
+				   															printError("Type Mismatch");
+				   															error_count++;
+				   														}
+				   													}
+
+
+				   													(yyval.helpInfo)->code+="lea di, "+target->getName()+"\n";
+
+				   													tl.str("");
+				   													
+				   													tl<<target->expIndex;
+
+				   													for(int i=0;i<2;i++){
+				   														(yyval.helpInfo)->code+="add di, "+tl.str()+"\n";
+				   													}
+				   													(yyval.helpInfo)->code+="mov [di], ax\n";
+
+				   													(yyval.helpInfo)->pIndex=-1;
+
+
+			   													}
+			   													else{
+			   														if(target->pIndex<0){
+			   															printError("Type Mismatch");
+				   														error_count++;
+			   														}
+			   														else if(target->pIndex>=target->arrayLength){
+			   															printError("Array index out of bound for "+target->getName());
 			   															error_count++;
 			   														}
 			   													}
 
-
-			   													(yyval.helpInfo)->code+="lea di, "+target->getName()+"\n";
-
-			   													tl.str("");
 			   													
-			   													tl<<target->expIndex;
-
-			   													for(int i=0;i<2;i++){
-			   														(yyval.helpInfo)->code+="add di, "+tl.str()+"\n";
-			   													}
-			   													(yyval.helpInfo)->code+="mov [di], ax\n";
-
-			   													(yyval.helpInfo)->pIndex=-1;
-
-
-		   													}
-		   													else{
-		   														if(target->pIndex<0){
-		   															printError("Type Mismatch");
-			   														error_count++;
-		   														}
-		   														else if(target->pIndex>=target->arrayLength){
-		   															printError("Array index out of bound for "+target->getName());
-		   															error_count++;
-		   														}
-		   													}
-
-		   													
-		   													myTable->Print(logFile);
-		   													fprintf(logFile,"\n\n\n\n");
+			   													myTable->Print(logFile);
+			   													fprintf(logFile,"\n\n\n\n");
+			   												}
 		   												}
-	   												}
 
-	   												codetracker<<(yyval.helpInfo)->code;
+		   												codetracker<<(yyval.helpInfo)->code;
 
 	   											}
-#line 2270 "y.tab.c" /* yacc.c:1646  */
+#line 2272 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 895 "1305043.y" /* yacc.c:1646  */
+#line 897 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("logic_expression : rel_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -2278,11 +2280,11 @@ yyreduce:
 										codetracker<<(yyval.helpInfo)->code;
 
 									}
-#line 2282 "y.tab.c" /* yacc.c:1646  */
+#line 2284 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 905 "1305043.y" /* yacc.c:1646  */
+#line 907 "1305043.y" /* yacc.c:1646  */
     {
 		 												printNOW("logic_expression : rel_expression LOGICOP rel_expression");
 
@@ -2365,22 +2367,22 @@ yyreduce:
 
 														codetracker<<(yyval.helpInfo)->code;								
 													}
-#line 2369 "y.tab.c" /* yacc.c:1646  */
+#line 2371 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 992 "1305043.y" /* yacc.c:1646  */
+#line 994 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("rel_expression : simple_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 										codetracker<<(yyval.helpInfo)->code;
 									}
-#line 2380 "y.tab.c" /* yacc.c:1646  */
+#line 2382 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 1001 "1305043.y" /* yacc.c:1646  */
+#line 1003 "1305043.y" /* yacc.c:1646  */
     {
 														//FLAG
 
@@ -2472,21 +2474,21 @@ yyreduce:
 
 														codetracker<<(yyval.helpInfo)->code;
 													}
-#line 2476 "y.tab.c" /* yacc.c:1646  */
+#line 2478 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 1098 "1305043.y" /* yacc.c:1646  */
+#line 1100 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("simple_expression : term ");
 							(yyval.helpInfo)=(yyvsp[0].helpInfo);
 							codetracker<<(yyval.helpInfo)->code;
 						}
-#line 2486 "y.tab.c" /* yacc.c:1646  */
+#line 2488 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 1106 "1305043.y" /* yacc.c:1646  */
+#line 1108 "1305043.y" /* yacc.c:1646  */
     {
 
 		  									printNOW("simple_expression : simple_expression ADDOP term");
@@ -2600,22 +2602,22 @@ yyreduce:
 
 		  								codetracker<<(yyval.helpInfo)->code;
 		  								}
-#line 2604 "y.tab.c" /* yacc.c:1646  */
+#line 2606 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 1224 "1305043.y" /* yacc.c:1646  */
+#line 1226 "1305043.y" /* yacc.c:1646  */
     {
 								printNOW("term :unary_expression");
 								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 								codetracker<<(yyval.helpInfo)->code;
 
 							}
-#line 2615 "y.tab.c" /* yacc.c:1646  */
+#line 2617 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 1233 "1305043.y" /* yacc.c:1646  */
+#line 1235 "1305043.y" /* yacc.c:1646  */
     {
      										printNOW("term : term MULOP unary_expression");
 
@@ -2736,11 +2738,11 @@ yyreduce:
      										codetracker<<(yyval.helpInfo)->code;
   
      									}
-#line 2740 "y.tab.c" /* yacc.c:1646  */
+#line 2742 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 1363 "1305043.y" /* yacc.c:1646  */
+#line 1365 "1305043.y" /* yacc.c:1646  */
     {
 												printNOW("unary_expression : ADDOP unary_expression");
 
@@ -2779,11 +2781,11 @@ yyreduce:
 
 												codetracker<<(yyval.helpInfo)->code;
 											}
-#line 2783 "y.tab.c" /* yacc.c:1646  */
+#line 2785 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 1404 "1305043.y" /* yacc.c:1646  */
+#line 1406 "1305043.y" /* yacc.c:1646  */
     {
 		 								printNOW("unary_expression : NOT unary_expression ");
 		 								
@@ -2822,22 +2824,22 @@ yyreduce:
 
 		 								codetracker<<(yyval.helpInfo)->code;
 		 							}
-#line 2826 "y.tab.c" /* yacc.c:1646  */
+#line 2828 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 1445 "1305043.y" /* yacc.c:1646  */
+#line 1447 "1305043.y" /* yacc.c:1646  */
     {
 		 			printNOW("unary_expression : factor");
 		 			(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 		 			codetracker<<(yyval.helpInfo)->code;
 		 		}
-#line 2837 "y.tab.c" /* yacc.c:1646  */
+#line 2839 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 1463 "1305043.y" /* yacc.c:1646  */
+#line 1465 "1305043.y" /* yacc.c:1646  */
     {
 
 						printNOW("factor : variable ");
@@ -2852,6 +2854,10 @@ yyreduce:
 							SymbolInfo* real=findInDeclaration((yyvsp[0].helpInfo)->getName());
 							SymbolInfo* ret=new SymbolInfo(real->getName(),real->getType());
 							ret->varType=real->varType;
+
+							
+							real->pIndex=(yyvsp[0].helpInfo)->pIndex;
+							real->expIndex=(yyvsp[0].helpInfo)->expIndex;
 							
 
 							if((yyvsp[0].helpInfo)->array){	
@@ -2903,22 +2909,22 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 2907 "y.tab.c" /* yacc.c:1646  */
+#line 2913 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 1531 "1305043.y" /* yacc.c:1646  */
+#line 1537 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("factor : LPAREN expression RPAREN");
 									(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 
 									codetracker<<(yyval.helpInfo)->code;
 								}
-#line 2918 "y.tab.c" /* yacc.c:1646  */
+#line 2924 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 1540 "1305043.y" /* yacc.c:1646  */
+#line 1546 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_INT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -2926,11 +2932,11 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 2930 "y.tab.c" /* yacc.c:1646  */
+#line 2936 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 1550 "1305043.y" /* yacc.c:1646  */
+#line 1556 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_FLOAT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -2938,11 +2944,11 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 2942 "y.tab.c" /* yacc.c:1646  */
+#line 2948 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 1560 "1305043.y" /* yacc.c:1646  */
+#line 1566 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_CHAR ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -2950,13 +2956,13 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 2954 "y.tab.c" /* yacc.c:1646  */
+#line 2960 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 1570 "1305043.y" /* yacc.c:1646  */
+#line 1576 "1305043.y" /* yacc.c:1646  */
     {
-						printNOW("factor	: INCOP variable  ");
+						printNOW("factor : INCOP variable ");
 						//todo code
 						if((yyval.helpInfo)->varType=="DUMMY")(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 
@@ -2969,39 +2975,67 @@ yyreduce:
 								original->varType="DUMMY";
 								print=false;
 							}
-							
-							string s=original->varType;
-							if(s=="INT")original->iVal++;
-							else if(s=="FLOAT")original->dVal++;
-							else if(s=="CHAR")original->chVal++;
-							(yyval.helpInfo)=original;
+
+							else if((yyvsp[-1].helpInfo)->array){
+								original->expIndex=(yyvsp[-1].helpInfo)->expIndex;
+								original->pIndex=(yyvsp[-1].helpInfo)->pIndex;
+
+								string s=original->varType;
+								if(s=="INT")original->arrayStorage[original->pIndex]++;
+								else if(s=="FLOAT")original->arrayStorage[original->pIndex]++;
+								else if(s=="CHAR")original->arrayStorage[original->pIndex]++;
+								
+
+								
+								(yyval.helpInfo)=new SymbolInfo();
+								*((yyval.helpInfo))=*original;
+								(yyval.helpInfo)->setType("COPY");
+
+
+								//asm-code
+								(yyval.helpInfo)->code="lea di, "+original->getName()+"\n";
+								for(int i=0;i<2;i++)(yyval.helpInfo)->code+="add di, "+original->expIndex+"\n";
+								(yyval.helpInfo)->code+="inc [di]\n";
+							}
+							else{
+
+
+								string s=original->varType;
+								if(s=="INT")original->iVal++;
+								else if(s=="FLOAT")original->dVal++;
+								else if(s=="CHAR")original->chVal++;
+
+								(yyval.helpInfo)=new SymbolInfo();
+								(*(yyval.helpInfo))=*original;
+								(yyval.helpInfo)->setType("COPY");
+
+
+								//asm-code
+								(yyval.helpInfo)->code="inc "+original->getName()+"\n";
+							}
+
 							if(print){
 								myTable->Print(logFile);
 								fprintf(logFile,"\n\n\n\n");
-
-								//asm-code
-								original->code+="inc "+original->getName()+"\n";
-
 							}
 						}
 
 						codetracker<<(yyval.helpInfo)->code;
 					
 					}
-#line 2992 "y.tab.c" /* yacc.c:1646  */
+#line 3027 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 1606 "1305043.y" /* yacc.c:1646  */
+#line 1641 "1305043.y" /* yacc.c:1646  */
     {
-						printNOW("factor	: DECOP variable  ");
-						
+						printNOW("factor : DECOP variable ");
 						
 
+						//todo code
 						if((yyval.helpInfo)->varType=="DUMMY")(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 
 						else{
-
 							bool print=true;
 
 							SymbolInfo* original=findInDeclaration((yyvsp[-1].helpInfo)->getName());
@@ -3010,31 +3044,59 @@ yyreduce:
 								original->varType="DUMMY";
 								print=false;
 							}
-							
-							string s=original->varType;
-							if(s=="INT")original->iVal--;
-							else if(s=="FLOAT")original->dVal--;
-							else if(s=="CHAR")original->chVal--;
-							(yyval.helpInfo)=original;
+
+							else if((yyvsp[-1].helpInfo)->array){
+								original->expIndex=(yyvsp[-1].helpInfo)->expIndex;
+								original->pIndex=(yyvsp[-1].helpInfo)->pIndex;
+
+								string s=original->varType;
+								if(s=="INT")original->arrayStorage[original->pIndex]--;
+								else if(s=="FLOAT")original->arrayStorage[original->pIndex]--;
+								else if(s=="CHAR")original->arrayStorage[original->pIndex]--;
+								
+
+								
+								(yyval.helpInfo)=new SymbolInfo();
+								*((yyval.helpInfo))=*original;
+								(yyval.helpInfo)->setType("COPY");
+
+
+								//asm-code
+								(yyval.helpInfo)->code="lea di, "+original->getName()+"\n";
+								for(int i=0;i<2;i++)(yyval.helpInfo)->code+="add di, "+original->expIndex+"\n";
+								(yyval.helpInfo)->code+="dec [di]\n";
+							}
+							else{
+
+
+								string s=original->varType;
+								if(s=="INT")original->iVal--;
+								else if(s=="FLOAT")original->dVal--;
+								else if(s=="CHAR")original->chVal--;
+
+								(yyval.helpInfo)=new SymbolInfo();
+								(*(yyval.helpInfo))=*original;
+								(yyval.helpInfo)->setType("COPY");
+
+
+								//asm-code
+								(yyval.helpInfo)->code="dec "+original->getName()+"\n";
+							}
 
 							if(print){
 								myTable->Print(logFile);
 								fprintf(logFile,"\n\n\n\n");
-
-								//asm-code
-								original->code+="dec "+original->getName()+"\n";
-
 							}
 						}
 
 						codetracker<<(yyval.helpInfo)->code;
-
+					
 					}
-#line 3034 "y.tab.c" /* yacc.c:1646  */
+#line 3096 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 3038 "y.tab.c" /* yacc.c:1646  */
+#line 3100 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3262,15 +3324,12 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1644 "1305043.y" /* yacc.c:1906  */
+#line 1706 "1305043.y" /* yacc.c:1906  */
 
 
 main(int argc,char *argv[])
 {
-/*	//yydebug=1;
-	yyparse();
-	return 0;
-*/
+
 	
 	marker=0;
 	if(argc!=2){
