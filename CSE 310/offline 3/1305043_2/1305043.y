@@ -688,19 +688,30 @@ variable : ID 	{
 						
 
 						SymbolInfo* target=findInDeclaration($1->getName());
+						
+
 						if(target==0){
 							printError("undeclared variable "+$1->getName());
 							error_count++;
-							$$=new SymbolInfo();//dummy??
+							$$=new SymbolInfo();
 							$$->varType="DUMMY";
 
 						}
 						else if(target->array==true){
-							target->pIndex=-1;
-							$$=target;
-							}
+							SymbolInfo* fun=new SymbolInfo();
+							*fun=*target;
+							fun->setType("COPY");
+							$$=fun;
+							$$->pIndex=-1;
+						}
 
-						else $$=target;
+						else {
+							SymbolInfo* fun=new SymbolInfo();
+							*fun=*target;
+							fun->setType("COPY");
+							$$=fun;
+
+						}
 
 
 						codetracker<<$$->code;
@@ -709,7 +720,7 @@ variable : ID 	{
 
 
 	 | ID LTHIRD expression RTHIRD  {
-	 									//cout<<$1->getName()<<endl;
+	 									
 	 									printNOW("variable : ID LTHIRD expression RTHIRD ");
 										
 										SymbolInfo* target=findInDeclaration($1->getName());
@@ -720,19 +731,29 @@ variable : ID 	{
 										if(target==0){
 											printError("undeclared variable "+$1->getName());
 											error_count++;
-											$$=new SymbolInfo();//dummy??
+											$$=new SymbolInfo();
 											$$->varType="DUMMY";
 										}
+
 										else if($3->varType!="INT"){
 											printError("Index for array "+$1->getName()+" is not INT");
 											error_count++;
-											$$=new SymbolInfo();//dummy??									
+											$$=new SymbolInfo("DUMMY","DUMMY");
+											$$->varType="DUMMY";								
 										}
 										
 										else{
-											printf("<%d>\n",$3->iVal);
-											printf("<%s>\n",$3->getName().c_str());
-											$$=target;
+
+											//printf("<%d>\n",$3->iVal);
+											//printf("<%s>\n",$3->getName().c_str());
+
+											SymbolInfo* fun=new SymbolInfo();
+
+											*fun=*target;
+											fun->setType("COPY");
+
+											$$=fun;
+
 											$$->pIndex=$3->iVal;
 											$$->code=$3->code;
 											$$->expIndex=$3->getName();
@@ -771,11 +792,17 @@ expression : logic_expression	{
 
 	   												if($3->varType=="")$3=findInDeclaration($3->getName());
 
+	   												if($1->getType()=="COPY"){
+	   													target->expIndex=$1->expIndex;
+	   													target->pIndex=$1->pIndex;
+	   												}
 
 	   												//code-asm
 	   												$$=new SymbolInfo("COPY","COPY");
 	   												$$->code=$3->code+target->code;
 	   												$$->code+="mov ax, "+$3->getName()+"\n";
+
+
 
 
 
@@ -886,7 +913,7 @@ logic_expression : rel_expression 	{
 														
 														else{
 
-			 												SymbolInfo* res=new SymbolInfo();
+			 												SymbolInfo* res=new SymbolInfo("COPY","COPY");
 			 												res->varType="INT";
 			 												
 			 												if($1->varType=="")$1=findInDeclaration($1->getName());
@@ -982,7 +1009,7 @@ rel_expression	: simple_expression  {
 														else if($3->varType=="DUMMY")$$=$3;
 														else{
 
-															SymbolInfo* res=new SymbolInfo();
+															SymbolInfo* res=new SymbolInfo("COPY","COPY");
 															res->varType="INT";
 
 
@@ -1086,7 +1113,7 @@ simple_expression : term  {
 
 		  									else{
 			  									
-			  									SymbolInfo* res=new SymbolInfo();
+			  									SymbolInfo* res=new SymbolInfo("COPY","COPY");
 			  									
 
 			  									if($1->varType==""){
@@ -1442,6 +1469,8 @@ factor	: variable 	{
 						if($1->varType=="DUMMY")$$=$1;
 
 						else{
+
+
 							SymbolInfo* real=findInDeclaration($1->getName());
 							SymbolInfo* ret=new SymbolInfo(real->getName(),real->getType());
 							ret->varType=real->varType;
@@ -1451,13 +1480,16 @@ factor	: variable 	{
 								if(real->varType=="INT")ret->iVal=(int)real->arrayStorage[real->pIndex];
 								else if(real->varType=="FLOAT")ret->dVal=(double)real->arrayStorage[real->pIndex];
 								else if(real->varType=="CHAR")ret->chVal=(char)real->arrayStorage[real->pIndex];
-								$$=ret;
-								$$->code+=real->code;
-
+								
 								//printf("<<%s>>\n",$$->getName().c_str());
 
 								
 								//asm-code
+								
+								$$=ret;
+								$$->code=$1->code;
+
+								
 
 								//printf("HELLOW WORLD %s\n ",$1->getName().c_str());
 								$$->code+="lea di, "+$1->getName()+"\n";
@@ -1644,6 +1676,10 @@ main(int argc,char *argv[])
 	fprintf(logFile,"\n\nPRINTING VARIABLE LIST\n");
 	for(int i=0;i<var_count;i++){
 		fprintf(logFile,"%s %s %s\n",declaredInfo[i]->getName().c_str(),declaredInfo[i]->getType().c_str(),declaredInfo[i]->varType.c_str());
+	}
+
+	for(int i=0;i<var_count;i++){
+		codetracker<<declaredInfo[i]->getName()<<"\n"<<declaredInfo[i]->code<<endl;
 	}
 
 

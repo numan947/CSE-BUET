@@ -182,11 +182,13 @@ statement 	: 	expression_statement {
 					cout << "\nstatement : FOR LPAREN expression_statement expression_statement expression RPAREN statement\n";
 					
 					/*
-						$1's code at first, which is already done by assigning $$=$1
+						$3's code at first, which is already done by assigning $$=$3
 						create two labels and append one of them in $$->code
 						compare $4's symbol with 1
 						if not equal jump to 2nd label
 						append $7's code
+						append $5;s code
+						jump to label1
 						append second label in the code
 					*/
 					
