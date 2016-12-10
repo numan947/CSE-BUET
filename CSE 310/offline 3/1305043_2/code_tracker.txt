@@ -1,15 +1,86 @@
 type_specifier : INT
 declaration_list : ID LTHIRD CONST_INT RTHIRD
 a
-a dw ? ,? ,?
+a dw ? ,?
+declaration_list : declaration_list COMMA ID
+c
+a dw ? ,?
+c dw ?
 declaration_list : declaration_list COMMA ID
 i
-a dw ? ,? ,?
+a dw ? ,?
+c dw ?
 i dw ?
+declaration_list : declaration_list COMMA ID
+j
+a dw ? ,?
+c dw ?
+i dw ?
+j dw ?
 var_declaration : type_specifier declaration_list SEMICOLON
-a dw ? ,? ,?
+a dw ? ,?
+c dw ?
 i dw ?
-variable : ID 
+j dw ?
+type_specifier : FLOAT
+declaration_list : ID
+d
+d dw ?
+var_declaration : var_declaration type_specifier declaration_list SEMICOLON
+a dw ? ,?
+c dw ?
+i dw ?
+j dw ?
+d dw ?
+factor : CONST_INT 
+0
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : CONST_INT 
+1
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : variable ASSIGNOP logic_expression
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+expression_statement : expression SEMICOLON
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+statement  : expression_statement
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+statements : statement
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+factor : CONST_INT 
+1
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
 factor : CONST_INT 
 5
 unary_expression : factor
@@ -19,32 +90,1036 @@ rel_expression : simple_expression
 logic_expression : rel_expression
 expression : variable ASSIGNOP logic_expression
 mov ax, 5
-mov i, ax
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
 expression_statement : expression SEMICOLON
 mov ax, 5
-mov i, ax
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
 statement  : expression_statement
 mov ax, 5
-mov i, ax
-statements : statement
-mov ax, 5
-mov i, ax
-statement  : PRINTLN LPAREN ID RPAREN SEMICOLON 
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
 statements : statements statement
 SPC11: 
-mov ax, 5
-mov i, ax
-mov ax, i
-call outdec
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
 
 SPC22: 
-mov ax, i
-call outdec
-
 mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+variable : ID 
+factor : CONST_INT 
+0
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : variable 
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+unary_expression : factor
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+term :unary_expression
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+simple_expression : term 
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+factor : CONST_INT 
+1
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : variable 
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+unary_expression : factor
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+term :unary_expression
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+simple_expression : simple_expression ADDOP term
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+rel_expression : simple_expression
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+logic_expression : rel_expression
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+expression : variable ASSIGNOP logic_expression
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
 mov i, ax
-mov ax, i
-call outdec
+expression_statement : expression SEMICOLON
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+statement  : expression_statement
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+statements : statements statement
+SPC11: 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+
+SPC22: 
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+variable : ID 
+factor : CONST_INT 
+2
+unary_expression : factor
+term :unary_expression
+factor : CONST_INT 
+3
+unary_expression : factor
+term : term MULOP unary_expression
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+simple_expression : term 
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+factor : CONST_INT 
+5
+unary_expression : factor
+term :unary_expression
+factor : CONST_INT 
+3
+unary_expression : factor
+term : term MULOP unary_expression
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+simple_expression : term 
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+factor : CONST_INT 
+4
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression RELOP simple_expression
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+factor : CONST_INT 
+8
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression LOGICOP rel_expression
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+expression : logic_expression
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+factor : LPAREN expression RPAREN
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+unary_expression : factor
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+term :unary_expression
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+simple_expression : simple_expression ADDOP term
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+rel_expression : simple_expression
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+factor : CONST_INT 
+2
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression LOGICOP rel_expression
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+expression : variable ASSIGNOP logic_expression
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+expression_statement : expression SEMICOLON
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+statement  : expression_statement
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+statements : statements statement
+SPC11: 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+
+SPC22: 
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+factor : CONST_INT 
+0
+unary_expression : factor
+term :unary_expression
+simple_expression : term 
+rel_expression : simple_expression
+logic_expression : rel_expression
+expression : logic_expression
+variable : ID LTHIRD expression RTHIRD 
+factor : INCOP variable 
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+unary_expression : factor
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+term :unary_expression
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+simple_expression : term 
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+rel_expression : simple_expression
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+logic_expression : rel_expression
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+expression : logic_expression
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+expression_statement : expression SEMICOLON
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+statement  : expression_statement
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+statements : statements statement
+SPC11: 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+
+SPC22: 
+lea di, a
+add di, 0
+add di, 0
+inc [di]
+
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
+mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
+mov i, ax
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+lea di, a
+add di, 0
+add di, 0
+inc [di]
 factor : CONST_INT 
 0
 unary_expression : factor
@@ -58,148 +1133,366 @@ mov ah, 4ch
 int 21h
 statements : statements statement
 SPC11: 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
 mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
 mov i, ax
-mov ax, i
-call outdec
-mov ah, 4ch
-int 21h
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+lea di, a
+add di, 0
+add di, 0
+inc [di]
 
 SPC22: 
 mov ah, 4ch
 int 21h
 
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
 mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
 mov i, ax
-mov ax, i
-call outdec
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+lea di, a
+add di, 0
+add di, 0
+inc [di]
 mov ah, 4ch
 int 21h
 compound_statement : LCURL var_declaration statements RCURL
 
 .data
 
-a dw ? ,? ,?
+a dw ? ,?
+c dw ?
 i dw ?
+j dw ?
+d dw ?
+t0 dw ?
+t1 dw ?
+t2 dw ?
+t3 dw ?
+t4 dw ?
+t5 dw ?
+t6 dw ?
+t7 dw ?
+t8 dw ?
 
 .code
-
-OUTDEC PROC
-;INPUT AX
-PUSH AX
-PUSH BX
-PUSH CX
-PUSH DX
-OR AX,AX
-JGE @END_IF1
-PUSH AX
-MOV DL,'-'
-MOV AH,2
-INT 21H
-POP AX
-NEG AX
-
-@END_IF1:
-XOR CX,CX
-MOV BX,10D
-
-@REPEAT1:
-XOR DX,DX
-DIV BX
-PUSH DX
-INC CX
-OR AX,AX
-JNE @REPEAT1
-
-MOV AH,2
-
-@PRINT_LOOP:
-
-POP DX
-OR DL,30H
-INT 21H
-LOOP @PRINT_LOOP
-
-POP DX
-POP CX
-POP BX
-POP AX
-RET
-OUTDEC ENDP
 
 main proc
 
 mov ax ,@data
 mov ds ,ax
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
 mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
 mov i, ax
-mov ax, i
-call outdec
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+lea di, a
+add di, 0
+add di, 0
+inc [di]
 mov ah, 4ch
 int 21h
 Program : INT MAIN LPAREN RPAREN compound_statement
 
 .data
 
-a dw ? ,? ,?
+a dw ? ,?
+c dw ?
 i dw ?
+j dw ?
+d dw ?
+t0 dw ?
+t1 dw ?
+t2 dw ?
+t3 dw ?
+t4 dw ?
+t5 dw ?
+t6 dw ?
+t7 dw ?
+t8 dw ?
 
 .code
-
-OUTDEC PROC
-;INPUT AX
-PUSH AX
-PUSH BX
-PUSH CX
-PUSH DX
-OR AX,AX
-JGE @END_IF1
-PUSH AX
-MOV DL,'-'
-MOV AH,2
-INT 21H
-POP AX
-NEG AX
-
-@END_IF1:
-XOR CX,CX
-MOV BX,10D
-
-@REPEAT1:
-XOR DX,DX
-DIV BX
-PUSH DX
-INC CX
-OR AX,AX
-JNE @REPEAT1
-
-MOV AH,2
-
-@PRINT_LOOP:
-
-POP DX
-OR DL,30H
-INT 21H
-LOOP @PRINT_LOOP
-
-POP DX
-POP CX
-POP BX
-POP AX
-RET
-OUTDEC ENDP
 
 main proc
 
 mov ax ,@data
 mov ds ,ax
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
 mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
 mov i, ax
-mov ax, i
-call outdec
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+lea di, a
+add di, 0
+add di, 0
+inc [di]
 mov ah, 4ch
 int 21h
 a
 
+c
+
 i
+
+j
+
+d
 

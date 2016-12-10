@@ -65,6 +65,12 @@ int label_count=0;
 int temp_count=0;
 
 
+bool err;
+int ii;
+int marker;
+bool print_outdec;
+
+
 stringstream tl;
 ofstream codetracker;
 
@@ -90,13 +96,6 @@ string newTemp()
 	return tmp;
 }
 
-
-
-
-
-bool err;
-int ii;
-int marker;
 
 
 void printError(string s)
@@ -182,17 +181,20 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 														$$=$5;
 
 														ofstream fout;
-														fout.open("1305043_code.asm");
-
-														fout<<"TITLE PROGRAM:numan947\n";
-														fout<<".model small\n.stack 100h\n";
-
-
-														fout<<$$->code;
-
-														fout<<"\nmain endp\n\nend main";
 														
-														fout.close();
+														if(!error_count){
+															fout.open("1305043_code.asm");
+
+															fout<<"TITLE PROGRAM:numan947\n";
+															fout<<".model small\n.stack 100h\n";
+
+
+															fout<<$$->code;
+
+															fout<<"\nmain endp\n\nend main";
+														
+															fout.close();
+														}
 
 
 														codetracker<<$$->code;
@@ -214,7 +216,9 @@ compound_statement : LCURL var_declaration statements RCURL {
 																	$$->code+="t"+tl.str()+" dw ?\n";
 																}
 
-																$$->code+="\n.code\n\n"+outdec+"\nmain proc\n\nmov ax ,@data\nmov ds ,ax\n";
+																$$->code+="\n.code\n\n";
+																if(print_outdec)$$->code+=outdec+"\n";
+																$$->code+="main proc\n\nmov ax ,@data\nmov ds ,ax\n";
 																$$->code+=$3->code;
 
 																codetracker<<$$->code;
@@ -557,10 +561,12 @@ statements : statement 	{
 	   | statements statement 	{
 	   								printNOW("statements : statements statement");
 	   								$$=$1;
-	   								$$->code+=$2->code;
+	   								
 
 	   								codetracker<<"SPC11: \n"<<$1->code<<"\n";
 	   								codetracker<<"SPC22: \n"<<$2->code<<"\n";
+
+	   								$$->code+=$2->code;
 
 	   								codetracker<<$$->code;
 	   							}
@@ -663,7 +669,8 @@ statement  : expression_statement 	{
 
 
 														$$->code+=l1+":\n";
-														$$->code+="cmp "+$3->getName()+", 0\n";
+														$$->code+="mov ax, "+$3->getName()+"\n";
+														$$->code+="cmp ax, 0\n";
 														$$->code+="je "+l2+"\n";
 														$$->code+=$5->code+$3->code;
 														$$->code+="jmp "+l1+"\n"+l2+":\n";
@@ -708,6 +715,7 @@ statement  : expression_statement 	{
 	   													$$->code+="mov ax, "+$3->getName()+"\n";
 	   													$$->code+="call outdec\n";
 	   												}
+	   												print_outdec=true;
 
 
 
@@ -1025,10 +1033,12 @@ logic_expression : rel_expression 	{
 																if($2->getName()=="&&"){
 																	res->iVal=(a&&b);
 
-
-																	$$->code+="cmp "+$1->getName()+",1\n";
+																	$$->code+="mov ax, "+$1->getName()+"\n";
+																	$$->code+="cmp ax, 1\n";
 																	$$->code+="jne "+l1+"\n";
-																	$$->code+="cmp "+$3->getName()+",1\n";
+
+																	$$->code+="mov ax, "+$3->getName()+"\n";
+																	$$->code+="cmp ax, 1\n";
 																	$$->code+="jne "+l1+"\n";
 
 																	$$->code+="mov "+tmp+", 1\n";
@@ -1040,10 +1050,12 @@ logic_expression : rel_expression 	{
 																else if($2->getName()=="||"){
 																	res->iVal=(a||b);
 
-
-																	$$->code+="cmp "+$1->getName()+",1\n";
+																	$$->code+="mov ax, "+$1->getName()+"\n";
+																	$$->code+="cmp ax, 1\n";
 																	$$->code+="je "+l1+"\n";
-																	$$->code+="cmp "+$3->getName()+",1\n";
+
+																	$$->code+="mov ax, "+$3->getName()+"\n";
+																	$$->code+="cmp ax, 1\n";
 																	$$->code+="je "+l1+"\n";
 
 																	$$->code+="mov "+tmp+", 0\n";
@@ -1584,7 +1596,8 @@ factor	: variable 	{
 
 								string tmp=newTemp();
 
-								$$->code+="mov "+tmp+", [di]\n";
+								$$->code+="mov ax, [di]\n";
+								$$->code+="mov "+tmp+", ax\n";
 								$$->setName(tmp);
 								$$->pIndex=0;
 
@@ -1784,6 +1797,7 @@ main(int argc,char *argv[])
 
 	
 	marker=0;
+	print_outdec=false;
 	if(argc!=2){
 		printf("No input file provided\n");
 		return 0;

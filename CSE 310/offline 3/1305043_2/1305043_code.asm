@@ -4,62 +4,100 @@ TITLE PROGRAM:numan947
 
 .data
 
-a dw ? ,? ,?
+a dw ? ,?
+c dw ?
 i dw ?
+j dw ?
+d dw ?
+t0 dw ?
+t1 dw ?
+t2 dw ?
+t3 dw ?
+t4 dw ?
+t5 dw ?
+t6 dw ?
+t7 dw ?
+t8 dw ?
 
 .code
-
-OUTDEC PROC
-;INPUT AX
-PUSH AX
-PUSH BX
-PUSH CX
-PUSH DX
-OR AX,AX
-JGE @END_IF1
-PUSH AX
-MOV DL,'-'
-MOV AH,2
-INT 21H
-POP AX
-NEG AX
-
-@END_IF1:
-XOR CX,CX
-MOV BX,10D
-
-@REPEAT1:
-XOR DX,DX
-DIV BX
-PUSH DX
-INC CX
-OR AX,AX
-JNE @REPEAT1
-
-MOV AH,2
-
-@PRINT_LOOP:
-
-POP DX
-OR DL,30H
-INT 21H
-LOOP @PRINT_LOOP
-
-POP DX
-POP CX
-POP BX
-POP AX
-RET
-OUTDEC ENDP
 
 main proc
 
 mov ax ,@data
 mov ds ,ax
+mov ax, 1
+lea di, a
+add di, 0
+add di, 0
+mov [di], ax
 mov ax, 5
+lea di, a
+add di, 1
+add di, 1
+mov [di], ax
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+mov t0, ax
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+mov t1, ax
+mov ax, t0
+add ax, t1
+mov t2, ax
+mov ax, t2
 mov i, ax
-mov ax, i
-call outdec
+mov ax, 2
+mov bx, 3
+mul bx
+mov t3, ax
+mov ax, 5
+mov bx, 3
+xor dx, dx
+div bx
+mov t4, dx
+mov ax, t4
+cmp ax, 4
+jl L0
+mov t5, 0
+jmp L1
+L0:
+mov t5, 1
+L1:
+mov ax, t5
+cmp ax, 1
+jne L2
+mov ax, 8
+cmp ax, 1
+jne L2
+mov t6, 1
+jmp L3
+L2:
+mov t6, 0
+L3:
+mov ax, t3
+add ax, t6
+mov t7, ax
+mov ax, t7
+cmp ax, 1
+je L4
+mov ax, 2
+cmp ax, 1
+je L4
+mov t8, 0
+jmp L5
+L4:
+mov t8, 1
+L5:
+mov ax, t8
+mov j, ax
+lea di, a
+add di, 0
+add di, 0
+inc [di]
 mov ah, 4ch
 int 21h
 
