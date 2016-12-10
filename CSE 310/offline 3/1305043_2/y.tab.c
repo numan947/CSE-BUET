@@ -116,6 +116,14 @@ POP AX\n\
 RET\n\
 OUTDEC ENDP\n";
 
+string newline="mov ah,2\n\
+mov dl,0ah\n\
+int 21h\n\
+mov dl,0dh\n\
+int 21h\n";
+
+
+
 extern FILE* yyin;
 SymbolTable *myTable;
 SymbolInfo*declaredInfo[1000];
@@ -197,7 +205,7 @@ void printNOW(string line)
 }
 
 
-#line 201 "y.tab.c" /* yacc.c:339  */
+#line 209 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -321,13 +329,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 137 "1305043.y" /* yacc.c:355  */
+#line 145 "1305043.y" /* yacc.c:355  */
 
 	SymbolInfo* idInfo;
 	SymbolInfo* helpInfo;
 	const char* helpString;
 
-#line 331 "y.tab.c" /* yacc.c:355  */
+#line 339 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -344,7 +352,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 348 "y.tab.c" /* yacc.c:358  */
+#line 356 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -645,11 +653,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   175,   175,   266,   288,   297,   308,   325,   346,   352,
-     359,   369,   418,   483,   542,   612,   621,   640,   647,   655,
-     679,   698,   720,   743,   786,   804,   814,   827,   864,   914,
-     923,  1039,  1049,  1140,  1149,  1246,  1254,  1372,  1381,  1511,
-    1552,  1593,  1611,  1684,  1693,  1703,  1713,  1723,  1788
+       0,   183,   183,   274,   296,   305,   316,   333,   354,   360,
+     367,   377,   426,   491,   550,   620,   629,   648,   655,   663,
+     687,   706,   728,   751,   795,   813,   823,   836,   873,   923,
+     932,  1048,  1058,  1149,  1158,  1255,  1263,  1381,  1390,  1520,
+    1561,  1602,  1620,  1693,  1702,  1712,  1722,  1732,  1797
 };
 #endif
 
@@ -1506,7 +1514,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 175 "1305043.y" /* yacc.c:1646  */
+#line 183 "1305043.y" /* yacc.c:1646  */
     {
 														printNOW("Program : INT MAIN LPAREN RPAREN compound_statement"); 
 
@@ -1595,11 +1603,11 @@ yyreduce:
 														codetracker<<(yyval.helpInfo)->code;
 
 														}
-#line 1599 "y.tab.c" /* yacc.c:1646  */
+#line 1607 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 266 "1305043.y" /* yacc.c:1646  */
+#line 274 "1305043.y" /* yacc.c:1646  */
     {
 																printNOW("compound_statement : LCURL var_declaration statements RCURL");
 
@@ -1620,11 +1628,11 @@ yyreduce:
 
 																codetracker<<(yyval.helpInfo)->code;
 															}
-#line 1624 "y.tab.c" /* yacc.c:1646  */
+#line 1632 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 288 "1305043.y" /* yacc.c:1646  */
+#line 296 "1305043.y" /* yacc.c:1646  */
     {
 		   							printNOW("compound_statement : LCURL statements RCURL");
 		   							(yyval.helpInfo)=(yyvsp[-1].helpInfo);
@@ -1632,11 +1640,11 @@ yyreduce:
 
 		   							codetracker<<(yyval.helpInfo)->code;
 		   						}
-#line 1636 "y.tab.c" /* yacc.c:1646  */
+#line 1644 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 297 "1305043.y" /* yacc.c:1646  */
+#line 305 "1305043.y" /* yacc.c:1646  */
     {
 		   					printNOW("compound_statement : LCURL RCURL");
 		   					(yyval.helpInfo)=new SymbolInfo("compound_statement","DUMMY");
@@ -1645,11 +1653,11 @@ yyreduce:
 		   					codetracker<<(yyval.helpInfo)->code;		
 
 		   				}
-#line 1649 "y.tab.c" /* yacc.c:1646  */
+#line 1657 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 308 "1305043.y" /* yacc.c:1646  */
+#line 316 "1305043.y" /* yacc.c:1646  */
     {
 																printNOW("var_declaration : type_specifier declaration_list SEMICOLON");
 
@@ -1664,11 +1672,11 @@ yyreduce:
 
 																codetracker<<(yyval.helpInfo)->code;
 															}
-#line 1668 "y.tab.c" /* yacc.c:1646  */
+#line 1676 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 325 "1305043.y" /* yacc.c:1646  */
+#line 333 "1305043.y" /* yacc.c:1646  */
     {
 																		printNOW("var_declaration : var_declaration type_specifier declaration_list SEMICOLON");
 
@@ -1688,39 +1696,39 @@ yyreduce:
 																		codetracker<<(yyval.helpInfo)->code;
 
 																	}
-#line 1692 "y.tab.c" /* yacc.c:1646  */
+#line 1700 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 346 "1305043.y" /* yacc.c:1646  */
+#line 354 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("type_specifier : INT");
 							(yyval.helpString)="INT";
 					}
-#line 1701 "y.tab.c" /* yacc.c:1646  */
+#line 1709 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 352 "1305043.y" /* yacc.c:1646  */
+#line 360 "1305043.y" /* yacc.c:1646  */
     {
 					printNOW("type_specifier : FLOAT");
 					(yyval.helpString)="FLOAT";
 				}
-#line 1710 "y.tab.c" /* yacc.c:1646  */
+#line 1718 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 359 "1305043.y" /* yacc.c:1646  */
+#line 367 "1305043.y" /* yacc.c:1646  */
     {
 					printNOW("type_specifier : CHAR");
 
 					(yyval.helpString)="CHAR";
 				}
-#line 1720 "y.tab.c" /* yacc.c:1646  */
+#line 1728 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 369 "1305043.y" /* yacc.c:1646  */
+#line 377 "1305043.y" /* yacc.c:1646  */
     {
 													printNOW("declaration_list : declaration_list COMMA ID");
 
@@ -1768,11 +1776,11 @@ yyreduce:
 
 
 												}
-#line 1772 "y.tab.c" /* yacc.c:1646  */
+#line 1780 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 418 "1305043.y" /* yacc.c:1646  */
+#line 426 "1305043.y" /* yacc.c:1646  */
     {
 		 											printNOW("declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
 		 											
@@ -1835,11 +1843,11 @@ yyreduce:
 													
 
 		 										}
-#line 1839 "y.tab.c" /* yacc.c:1646  */
+#line 1847 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 483 "1305043.y" /* yacc.c:1646  */
+#line 491 "1305043.y" /* yacc.c:1646  */
     {	
 		 			printNOW("declaration_list : ID");
 					
@@ -1896,11 +1904,11 @@ yyreduce:
 						codetracker<<(yyval.helpInfo)->code;
 
 		 		}
-#line 1900 "y.tab.c" /* yacc.c:1646  */
+#line 1908 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 542 "1305043.y" /* yacc.c:1646  */
+#line 550 "1305043.y" /* yacc.c:1646  */
     {
 		 								
 		 								printNOW("declaration_list : ID LTHIRD CONST_INT RTHIRD");
@@ -1963,22 +1971,22 @@ yyreduce:
 									codetracker<<(yyval.helpInfo)->code;
 		 									
 		 				}
-#line 1967 "y.tab.c" /* yacc.c:1646  */
+#line 1975 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 612 "1305043.y" /* yacc.c:1646  */
+#line 620 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("statements : statement");
 							(yyval.helpInfo)=(yyvsp[0].helpInfo);
 							codetracker<<(yyval.helpInfo)->code;
 
 						}
-#line 1978 "y.tab.c" /* yacc.c:1646  */
+#line 1986 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 621 "1305043.y" /* yacc.c:1646  */
+#line 629 "1305043.y" /* yacc.c:1646  */
     {
 	   								printNOW("statements : statements statement");
 	   								(yyval.helpInfo)=(yyvsp[-1].helpInfo);
@@ -1991,31 +1999,31 @@ yyreduce:
 
 	   								codetracker<<(yyval.helpInfo)->code;
 	   							}
-#line 1995 "y.tab.c" /* yacc.c:1646  */
+#line 2003 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 640 "1305043.y" /* yacc.c:1646  */
+#line 648 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("statement  : expression_statement");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
 										codetracker<<(yyval.helpInfo)->code;
 									}
-#line 2005 "y.tab.c" /* yacc.c:1646  */
+#line 2013 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 647 "1305043.y" /* yacc.c:1646  */
+#line 655 "1305043.y" /* yacc.c:1646  */
     {
 	   								printNOW("statement  : compound_statement");
 	   								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 	   								codetracker<<(yyval.helpInfo)->code;
 	   							}
-#line 2015 "y.tab.c" /* yacc.c:1646  */
+#line 2023 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 655 "1305043.y" /* yacc.c:1646  */
+#line 663 "1305043.y" /* yacc.c:1646  */
     {
 	   																			
 	   																			printNOW("statement  : FOR LPAREN expression_statement expression_statement expression RPAREN statement");
@@ -2037,11 +2045,11 @@ yyreduce:
 	   																			(yyval.helpInfo)->code+="jmp "+l1+"\n"+l2+":\n";
 
 	   																		}
-#line 2041 "y.tab.c" /* yacc.c:1646  */
+#line 2049 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 679 "1305043.y" /* yacc.c:1646  */
+#line 687 "1305043.y" /* yacc.c:1646  */
     {
 	   																				printNOW("statement  : IF LPAREN expression RPAREN statement");
 	   																				
@@ -2058,11 +2066,11 @@ yyreduce:
 	   																				codetracker<<(yyval.helpInfo)->code;
 
 	   																			}
-#line 2062 "y.tab.c" /* yacc.c:1646  */
+#line 2070 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 698 "1305043.y" /* yacc.c:1646  */
+#line 706 "1305043.y" /* yacc.c:1646  */
     {
 	   																printNOW("statement  : IF LPAREN expression RPAREN statement ELSE statement");
 
@@ -2082,11 +2090,11 @@ yyreduce:
 
 	   																codetracker<<(yyval.helpInfo)->code;
 	   															}
-#line 2086 "y.tab.c" /* yacc.c:1646  */
+#line 2094 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 720 "1305043.y" /* yacc.c:1646  */
+#line 728 "1305043.y" /* yacc.c:1646  */
     {
 	   													printNOW("statement  : WHILE LPAREN expression RPAREN statement");
 
@@ -2107,11 +2115,11 @@ yyreduce:
 
 
 	   												}
-#line 2111 "y.tab.c" /* yacc.c:1646  */
+#line 2119 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 743 "1305043.y" /* yacc.c:1646  */
+#line 751 "1305043.y" /* yacc.c:1646  */
     {
 	   												printNOW("statement  : PRINTLN LPAREN ID RPAREN SEMICOLON ");
 
@@ -2128,7 +2136,7 @@ yyreduce:
 	   												(yyval.helpInfo)=new SymbolInfo("COPY","COPY");
 	   												(yyval.helpInfo)->code="";
 
-	   												cout<<original->arrayLength<<endl;
+	   												//cout<<original->arrayLength<<endl;
 
 
 	   												if(original->array){
@@ -2140,6 +2148,7 @@ yyreduce:
 	   														(yyval.helpInfo)->code+="add di, "+tl.str()+"\n";
 	   														(yyval.helpInfo)->code+="mov ax, [di]\n";
 	   														(yyval.helpInfo)->code+="call outdec\n";
+	   														(yyval.helpInfo)->code+=newline;
 
 	   													}
 	   												}
@@ -2152,11 +2161,11 @@ yyreduce:
 
 
 	   											}
-#line 2156 "y.tab.c" /* yacc.c:1646  */
+#line 2165 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 786 "1305043.y" /* yacc.c:1646  */
+#line 795 "1305043.y" /* yacc.c:1646  */
     {
 	   										printNOW("statement  : RETURN expression SEMICOLON");
 	   										
@@ -2168,11 +2177,11 @@ yyreduce:
 	   										codetracker<<(yyval.helpInfo)->code;
 
 	   									}
-#line 2172 "y.tab.c" /* yacc.c:1646  */
+#line 2181 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 804 "1305043.y" /* yacc.c:1646  */
+#line 813 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("expression_statement : SEMICOLON");
 							(yyval.helpInfo)=new SymbolInfo(";","SEMICOLON");
@@ -2180,11 +2189,11 @@ yyreduce:
 
 							codetracker<<(yyval.helpInfo)->code;
 						}
-#line 2184 "y.tab.c" /* yacc.c:1646  */
+#line 2193 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 814 "1305043.y" /* yacc.c:1646  */
+#line 823 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("expression_statement : expression SEMICOLON");
 
@@ -2193,11 +2202,11 @@ yyreduce:
 										codetracker<<(yyval.helpInfo)->code;
 									
 									}
-#line 2197 "y.tab.c" /* yacc.c:1646  */
+#line 2206 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 827 "1305043.y" /* yacc.c:1646  */
+#line 836 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("variable : ID ");
 						//FLAG
@@ -2232,11 +2241,11 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 				}
-#line 2236 "y.tab.c" /* yacc.c:1646  */
+#line 2245 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 864 "1305043.y" /* yacc.c:1646  */
+#line 873 "1305043.y" /* yacc.c:1646  */
     {
 	 									
 	 									printNOW("variable : ID LTHIRD expression RTHIRD ");
@@ -2281,22 +2290,22 @@ yyreduce:
 										codetracker<<(yyval.helpInfo)->code;
 
 	 								}
-#line 2285 "y.tab.c" /* yacc.c:1646  */
+#line 2294 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 914 "1305043.y" /* yacc.c:1646  */
+#line 923 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("expression : logic_expression");
 									(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 									codetracker<<(yyval.helpInfo)->code;
 								}
-#line 2296 "y.tab.c" /* yacc.c:1646  */
+#line 2305 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 923 "1305043.y" /* yacc.c:1646  */
+#line 932 "1305043.y" /* yacc.c:1646  */
     {
 	   												printNOW("expression : variable ASSIGNOP logic_expression");
 
@@ -2410,11 +2419,11 @@ yyreduce:
 		   												codetracker<<(yyval.helpInfo)->code;
 
 	   											}
-#line 2414 "y.tab.c" /* yacc.c:1646  */
+#line 2423 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 1039 "1305043.y" /* yacc.c:1646  */
+#line 1048 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("logic_expression : rel_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -2422,11 +2431,11 @@ yyreduce:
 										codetracker<<(yyval.helpInfo)->code;
 
 									}
-#line 2426 "y.tab.c" /* yacc.c:1646  */
+#line 2435 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 1049 "1305043.y" /* yacc.c:1646  */
+#line 1058 "1305043.y" /* yacc.c:1646  */
     {
 		 												printNOW("logic_expression : rel_expression LOGICOP rel_expression");
 
@@ -2513,22 +2522,22 @@ yyreduce:
 
 														codetracker<<(yyval.helpInfo)->code;								
 													}
-#line 2517 "y.tab.c" /* yacc.c:1646  */
+#line 2526 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 1140 "1305043.y" /* yacc.c:1646  */
+#line 1149 "1305043.y" /* yacc.c:1646  */
     {
 										printNOW("rel_expression : simple_expression");
 										(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 										codetracker<<(yyval.helpInfo)->code;
 									}
-#line 2528 "y.tab.c" /* yacc.c:1646  */
+#line 2537 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 1149 "1305043.y" /* yacc.c:1646  */
+#line 1158 "1305043.y" /* yacc.c:1646  */
     {
 														//FLAG
 
@@ -2620,21 +2629,21 @@ yyreduce:
 
 														codetracker<<(yyval.helpInfo)->code;
 													}
-#line 2624 "y.tab.c" /* yacc.c:1646  */
+#line 2633 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 1246 "1305043.y" /* yacc.c:1646  */
+#line 1255 "1305043.y" /* yacc.c:1646  */
     {
 							printNOW("simple_expression : term ");
 							(yyval.helpInfo)=(yyvsp[0].helpInfo);
 							codetracker<<(yyval.helpInfo)->code;
 						}
-#line 2634 "y.tab.c" /* yacc.c:1646  */
+#line 2643 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 1254 "1305043.y" /* yacc.c:1646  */
+#line 1263 "1305043.y" /* yacc.c:1646  */
     {
 
 		  									printNOW("simple_expression : simple_expression ADDOP term");
@@ -2748,22 +2757,22 @@ yyreduce:
 
 		  								codetracker<<(yyval.helpInfo)->code;
 		  								}
-#line 2752 "y.tab.c" /* yacc.c:1646  */
+#line 2761 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 1372 "1305043.y" /* yacc.c:1646  */
+#line 1381 "1305043.y" /* yacc.c:1646  */
     {
 								printNOW("term :unary_expression");
 								(yyval.helpInfo)=(yyvsp[0].helpInfo);
 								codetracker<<(yyval.helpInfo)->code;
 
 							}
-#line 2763 "y.tab.c" /* yacc.c:1646  */
+#line 2772 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 1381 "1305043.y" /* yacc.c:1646  */
+#line 1390 "1305043.y" /* yacc.c:1646  */
     {
      										printNOW("term : term MULOP unary_expression");
 
@@ -2884,11 +2893,11 @@ yyreduce:
      										codetracker<<(yyval.helpInfo)->code;
   
      									}
-#line 2888 "y.tab.c" /* yacc.c:1646  */
+#line 2897 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 1511 "1305043.y" /* yacc.c:1646  */
+#line 1520 "1305043.y" /* yacc.c:1646  */
     {
 												printNOW("unary_expression : ADDOP unary_expression");
 
@@ -2927,11 +2936,11 @@ yyreduce:
 
 												codetracker<<(yyval.helpInfo)->code;
 											}
-#line 2931 "y.tab.c" /* yacc.c:1646  */
+#line 2940 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 1552 "1305043.y" /* yacc.c:1646  */
+#line 1561 "1305043.y" /* yacc.c:1646  */
     {
 		 								printNOW("unary_expression : NOT unary_expression ");
 		 								
@@ -2970,22 +2979,22 @@ yyreduce:
 
 		 								codetracker<<(yyval.helpInfo)->code;
 		 							}
-#line 2974 "y.tab.c" /* yacc.c:1646  */
+#line 2983 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 1593 "1305043.y" /* yacc.c:1646  */
+#line 1602 "1305043.y" /* yacc.c:1646  */
     {
 		 			printNOW("unary_expression : factor");
 		 			(yyval.helpInfo)=(yyvsp[0].helpInfo);
 
 		 			codetracker<<(yyval.helpInfo)->code;
 		 		}
-#line 2985 "y.tab.c" /* yacc.c:1646  */
+#line 2994 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 1611 "1305043.y" /* yacc.c:1646  */
+#line 1620 "1305043.y" /* yacc.c:1646  */
     {
 
 						printNOW("factor : variable ");
@@ -3056,22 +3065,22 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 3060 "y.tab.c" /* yacc.c:1646  */
+#line 3069 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 1684 "1305043.y" /* yacc.c:1646  */
+#line 1693 "1305043.y" /* yacc.c:1646  */
     {
 									printNOW("factor : LPAREN expression RPAREN");
 									(yyval.helpInfo)=(yyvsp[-1].helpInfo);
 
 									codetracker<<(yyval.helpInfo)->code;
 								}
-#line 3071 "y.tab.c" /* yacc.c:1646  */
+#line 3080 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 1693 "1305043.y" /* yacc.c:1646  */
+#line 1702 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_INT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -3079,11 +3088,11 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 3083 "y.tab.c" /* yacc.c:1646  */
+#line 3092 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 1703 "1305043.y" /* yacc.c:1646  */
+#line 1712 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_FLOAT ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -3091,11 +3100,11 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 3095 "y.tab.c" /* yacc.c:1646  */
+#line 3104 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 1713 "1305043.y" /* yacc.c:1646  */
+#line 1722 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : CONST_CHAR ");
 						(yyval.helpInfo)=(yyvsp[0].helpInfo);
@@ -3103,11 +3112,11 @@ yyreduce:
 
 						codetracker<<(yyval.helpInfo)->code;
 					}
-#line 3107 "y.tab.c" /* yacc.c:1646  */
+#line 3116 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 1723 "1305043.y" /* yacc.c:1646  */
+#line 1732 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : INCOP variable ");
 						//todo code
@@ -3170,11 +3179,11 @@ yyreduce:
 						codetracker<<(yyval.helpInfo)->code;
 					
 					}
-#line 3174 "y.tab.c" /* yacc.c:1646  */
+#line 3183 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 1788 "1305043.y" /* yacc.c:1646  */
+#line 1797 "1305043.y" /* yacc.c:1646  */
     {
 						printNOW("factor : DECOP variable ");
 						
@@ -3239,11 +3248,11 @@ yyreduce:
 						codetracker<<(yyval.helpInfo)->code;
 					
 					}
-#line 3243 "y.tab.c" /* yacc.c:1646  */
+#line 3252 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 3247 "y.tab.c" /* yacc.c:1646  */
+#line 3256 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3471,7 +3480,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1853 "1305043.y" /* yacc.c:1906  */
+#line 1862 "1305043.y" /* yacc.c:1906  */
 
 
 main(int argc,char *argv[])

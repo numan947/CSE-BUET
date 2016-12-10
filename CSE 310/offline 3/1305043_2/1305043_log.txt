@@ -683,6 +683,14 @@ statements : statements statement
 
 
 
+statement  : PRINTLN LPAREN ID RPAREN SEMICOLON 
+
+
+
+statements : statements statement
+
+
+
 factor : CONST_INT 
 
 
@@ -751,7 +759,7 @@ j ID INT
 d ID FLOAT
 
 
-TOTAL LINES: 013
+TOTAL LINES: 014
 
 
 TOTAL ERRORS:   0

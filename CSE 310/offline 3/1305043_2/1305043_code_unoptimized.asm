@@ -15,6 +15,49 @@ t2 dw ?
 
 .code
 
+OUTDEC PROC
+;INPUT AX
+PUSH AX
+PUSH BX
+PUSH CX
+PUSH DX
+OR AX,AX
+JGE @END_IF1
+PUSH AX
+MOV DL,'-'
+MOV AH,2
+INT 21H
+POP AX
+NEG AX
+
+@END_IF1:
+XOR CX,CX
+MOV BX,10D
+
+@REPEAT1:
+XOR DX,DX
+DIV BX
+PUSH DX
+INC CX
+OR AX,AX
+JNE @REPEAT1
+
+MOV AH,2
+
+@PRINT_LOOP:
+
+POP DX
+OR DL,30H
+INT 21H
+LOOP @PRINT_LOOP
+
+POP DX
+POP CX
+POP BX
+POP AX
+RET
+OUTDEC ENDP
+
 main proc
 
 mov ax ,@data
@@ -73,6 +116,26 @@ mov ax, t1
 mov i, ax
 jmp L6
 L7:
+lea di, a
+add di, 0
+add di, 0
+mov ax, [di]
+call outdec
+mov ah,2
+mov dl,0ah
+int 21h
+mov dl,0dh
+int 21h
+lea di, a
+add di, 1
+add di, 1
+mov ax, [di]
+call outdec
+mov ah,2
+mov dl,0ah
+int 21h
+mov dl,0dh
+int 21h
 mov ah, 4ch
 int 21h
 

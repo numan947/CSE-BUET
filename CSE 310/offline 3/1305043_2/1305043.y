@@ -52,6 +52,14 @@ POP AX\n\
 RET\n\
 OUTDEC ENDP\n";
 
+string newline="mov ah,2\n\
+mov dl,0ah\n\
+int 21h\n\
+mov dl,0dh\n\
+int 21h\n";
+
+
+
 extern FILE* yyin;
 SymbolTable *myTable;
 SymbolInfo*declaredInfo[1000];
@@ -756,7 +764,7 @@ statement  : expression_statement 	{
 	   												$$=new SymbolInfo("COPY","COPY");
 	   												$$->code="";
 
-	   												cout<<original->arrayLength<<endl;
+	   												//cout<<original->arrayLength<<endl;
 
 
 	   												if(original->array){
@@ -768,6 +776,7 @@ statement  : expression_statement 	{
 	   														$$->code+="add di, "+tl.str()+"\n";
 	   														$$->code+="mov ax, [di]\n";
 	   														$$->code+="call outdec\n";
+	   														$$->code+=newline;
 
 	   													}
 	   												}

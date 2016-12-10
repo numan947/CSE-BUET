@@ -8,5 +8,6 @@ int main(){
 		else
 			a[1]=7;
 	}
+	println(a);
 	return 0;
 }
