@@ -180,20 +180,73 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 
 														$$=$5;
 
-														ofstream fout;
+														ofstream fout1;
+														ofstream fout2;
 														
 														if(!error_count){
-															fout.open("1305043_code.asm");
-
-															fout<<"TITLE PROGRAM:numan947\n";
-															fout<<".model small\n.stack 100h\n";
+															fout1.open("1305043_code_unoptimized.asm");
+															fout2.open("1305043_code_optimized.asm");
 
 
-															fout<<$$->code;
+															//unoptimized print
+															fout1<<"TITLE PROGRAM:numan947\n";
+															fout1<<".model small\n.stack 100h\n";
+															
+															fout1<<$$->code;
 
-															fout<<"\nmain endp\n\nend main";
+															fout1<<"\nmain endp\n\nend main";
+															
+															fout1.close();
+
+															
+															string raw=$$->code;
+															Tokenizer t;
+															vector<string>tokens=t.generateToken(raw,"\n");
+
+															bool dlt[tokens.size()];
+															for(int i=0;i<tokens.size();i++)dlt[i]=false;
+
+															string s1=tokens[0];
+															raw="";
+															
+
+															for(int i=1;i<tokens.size();i++){
+																
+																string s2=tokens[i];
+																vector<string>ss1=t.generateToken(s1," ,");
+																vector<string>ss2=t.generateToken(s2," ,");
+
+																if(ss1.size()!=ss2.size()){
+																	s1=s2;
+																	continue;
+																}
+																
+																else if(ss1[0]=="mov"&&ss2[0]=="mov"){
+																	if(ss1[1]==ss2[2]&&ss1[2]==ss2[1]){
+																		dlt[i]=true;
+																	}
+																}
+
+																else if(ss2[0]=="add"&&ss2[2]=="0"){
+																	dlt[i]=true;
+																}
+																s1=s2;
+															}
+
+															for(int  i=0;i<tokens.size();i++)
+																if(!dlt[i])raw+=tokens[i]+"\n";
+
+															//cout<<raw<<endl;
+
+															fout2<<"TITLE PROGRAM:numan947\n";
+															fout2<<".model small\n.stack 100h\n";
+
+
+															fout2<<raw;
+
+															fout2<<"\nmain endp\n\nend main";
 														
-															fout.close();
+															fout2.close();
 														}
 
 
@@ -826,8 +879,8 @@ variable : ID 	{
 										
 										else{
 
-											printf("<%d>\n",$3->iVal);
-											printf("<%s>\n",$3->getName().c_str());
+											//printf("<%d>\n",$3->iVal);
+											//printf("<%s>\n",$3->getName().c_str());
 
 											SymbolInfo* fun=new SymbolInfo();
 
