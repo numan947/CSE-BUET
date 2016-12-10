@@ -183,10 +183,12 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 														ofstream fout1;
 														ofstream fout2;
 														
-														if(!error_count){
-															fout1.open("1305043_code_unoptimized.asm");
-															fout2.open("1305043_code_optimized.asm");
+														fout1.open("1305043_code_unoptimized.asm");
+														fout2.open("1305043_code_optimized.asm");
 
+														
+														if(!error_count){
+															
 
 															//unoptimized print
 															fout1<<"TITLE PROGRAM:numan947\n";
@@ -247,6 +249,11 @@ Program : INT MAIN LPAREN RPAREN compound_statement		{
 															fout2<<"\nmain endp\n\nend main";
 														
 															fout2.close();
+														}
+														else{
+															fout1.close();
+															fout2.close();
+
 														}
 
 
