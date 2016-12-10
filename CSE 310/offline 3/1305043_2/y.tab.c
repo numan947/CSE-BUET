@@ -1544,7 +1544,7 @@ yyreduce:
 															string s1=tokens[0];
 															raw="";
 															
-
+															//optimization part
 															for(int i=1;i<tokens.size();i++){
 																
 																string s2=tokens[i];
