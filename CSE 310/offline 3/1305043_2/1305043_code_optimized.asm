@@ -100,23 +100,24 @@ mov i, ax
 jmp L6
 L7:
 lea di, a
+mov bx, 2
+mov cx, 0
+L8:
+cmp bx, 0
+je L9
+add di, cx
+add di, cx
 mov ax, [di]
 call outdec
+dec bx
+inc cx
 mov ah,2
 mov dl,0ah
 int 21h
 mov dl,0dh
 int 21h
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-mov ah,2
-mov dl,0ah
-int 21h
-mov dl,0dh
-int 21h
+jmp L8
+L9:
 mov ah, 4ch
 int 21h
 

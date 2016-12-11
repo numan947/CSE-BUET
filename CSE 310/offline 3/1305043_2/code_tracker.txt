@@ -598,25 +598,24 @@ L7:
 
 SPC22: 
 lea di, a
-add di, 0
-add di, 0
+mov bx, 2
+mov cx, 0
+L8:
+cmp bx, 0
+je L9
+add di, cx
+add di, cx
 mov ax, [di]
 call outdec
+dec bx
+inc cx
 mov ah,2
 mov dl,0ah
 int 21h
 mov dl,0dh
 int 21h
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-mov ah,2
-mov dl,0ah
-int 21h
-mov dl,0dh
-int 21h
+jmp L8
+L9:
 
 mov ax, 1
 lea di, a
@@ -673,25 +672,24 @@ mov i, ax
 jmp L6
 L7:
 lea di, a
-add di, 0
-add di, 0
+mov bx, 2
+mov cx, 0
+L8:
+cmp bx, 0
+je L9
+add di, cx
+add di, cx
 mov ax, [di]
 call outdec
+dec bx
+inc cx
 mov ah,2
 mov dl,0ah
 int 21h
 mov dl,0dh
 int 21h
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-mov ah,2
-mov dl,0ah
-int 21h
-mov dl,0dh
-int 21h
+jmp L8
+L9:
 factor : CONST_INT 
 0
 unary_expression : factor
@@ -760,25 +758,24 @@ mov i, ax
 jmp L6
 L7:
 lea di, a
-add di, 0
-add di, 0
+mov bx, 2
+mov cx, 0
+L8:
+cmp bx, 0
+je L9
+add di, cx
+add di, cx
 mov ax, [di]
 call outdec
+dec bx
+inc cx
 mov ah,2
 mov dl,0ah
 int 21h
 mov dl,0dh
 int 21h
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-mov ah,2
-mov dl,0ah
-int 21h
-mov dl,0dh
-int 21h
+jmp L8
+L9:
 
 SPC22: 
 mov ah, 4ch
@@ -839,25 +836,24 @@ mov i, ax
 jmp L6
 L7:
 lea di, a
-add di, 0
-add di, 0
+mov bx, 2
+mov cx, 0
+L8:
+cmp bx, 0
+je L9
+add di, cx
+add di, cx
 mov ax, [di]
 call outdec
+dec bx
+inc cx
 mov ah,2
 mov dl,0ah
 int 21h
 mov dl,0dh
 int 21h
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-mov ah,2
-mov dl,0ah
-int 21h
-mov dl,0dh
-int 21h
+jmp L8
+L9:
 mov ah, 4ch
 int 21h
 compound_statement : LCURL var_declaration statements RCURL
@@ -977,25 +973,24 @@ mov i, ax
 jmp L6
 L7:
 lea di, a
-add di, 0
-add di, 0
+mov bx, 2
+mov cx, 0
+L8:
+cmp bx, 0
+je L9
+add di, cx
+add di, cx
 mov ax, [di]
 call outdec
+dec bx
+inc cx
 mov ah,2
 mov dl,0ah
 int 21h
 mov dl,0dh
 int 21h
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-mov ah,2
-mov dl,0ah
-int 21h
-mov dl,0dh
-int 21h
+jmp L8
+L9:
 mov ah, 4ch
 int 21h
 Program : INT MAIN LPAREN RPAREN compound_statement
@@ -1115,25 +1110,24 @@ mov i, ax
 jmp L6
 L7:
 lea di, a
-add di, 0
-add di, 0
+mov bx, 2
+mov cx, 0
+L8:
+cmp bx, 0
+je L9
+add di, cx
+add di, cx
 mov ax, [di]
 call outdec
+dec bx
+inc cx
 mov ah,2
 mov dl,0ah
 int 21h
 mov dl,0dh
 int 21h
-lea di, a
-add di, 1
-add di, 1
-mov ax, [di]
-call outdec
-mov ah,2
-mov dl,0ah
-int 21h
-mov dl,0dh
-int 21h
+jmp L8
+L9:
 mov ah, 4ch
 int 21h
 a
