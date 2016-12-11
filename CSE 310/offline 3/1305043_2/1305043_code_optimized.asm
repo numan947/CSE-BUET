@@ -101,16 +101,14 @@ jmp L6
 L7:
 lea di, a
 mov bx, 2
-mov cx, 0
 L8:
 cmp bx, 0
 je L9
-add di, cx
-add di, cx
 mov ax, [di]
 call outdec
 dec bx
-inc cx
+inc di
+inc di
 mov ah,2
 mov dl,0ah
 int 21h

@@ -779,15 +779,13 @@ statement  : expression_statement 	{
 	   													$$->code+="lea di, "+$3->getName()+"\n";
 	   													tl.str("");tl<<(original->arrayLength);
 	   													$$->code+="mov bx, "+tl.str()+"\n";
-	   													$$->code+="mov cx, 0\n";
 	   													$$->code+=l1+":\n";
 	   													$$->code+="cmp bx, 0\n";
 	   													$$->code+="je "+l2+"\n";
-	   													$$->code+="add di, cx\nadd di, cx\n";
 	   													$$->code+="mov ax, [di]\n";
 	   													$$->code+="call outdec\n";
 	   													$$->code+="dec bx\n";
-	   													$$->code+="inc cx\n";
+	   													$$->code+="inc di\ninc di\n";
 	   													$$->code+=newline;
 	   													$$->code+="jmp "+l1+"\n";
 	   													$$->code+=l2+":\n";
