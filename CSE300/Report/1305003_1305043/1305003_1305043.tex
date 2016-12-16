@@ -1,4 +1,4 @@
-\documentclass{report}
+\documentclass[pstricks,10pt]{report}
 \usepackage{hyperref,xcolor,color,titlesec} 
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -13,12 +13,15 @@
 \usepackage{upgreek}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{pstricks-add}
+
 
 \titleformat{\chapter}{\normalfont\huge}{\thechapter.}{20pt}{\huge\it} %format chapter/section header styles
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%SOME FORMATTING MAY NOT WORK IF pdflatex full IS NOT AVAILABLE%%%%%%
+%%%COMPILE WITH xelatex instead of pdflatex as latexdraw has been used%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -198,20 +201,104 @@ Normal images are generally of true color. These images are $24$-bits. So there 
 \label{fig:CC}
 \end{figure}
 
-
+\newpage
 \subsection{Histogram Based Image Retrieval}
-$PICTURE\: from\: tikz$\\
-\\
-First the global/local color histograms for each of the database images are calculated and stored. Then the query image is processed and global/local histogram for the query image is computed. Then using Euclidean distance metrics like //$refer to some equtaiton \#\#1$ the similarities of between the query image and the database images are calculated. A fixed threshold value is taken into account to identify the relevant images.\\
+
+\begin{figure}
+
+
+\psscalebox{1.0 1.0} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-3.5)(11.0,3.5)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](3.5,3.5)(0.0,1.5)
+\rput[bl](0.0,2.5){Compute GCH/}
+\rput[bl](0.0,2.0){LCH of DB images}
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](12.0,3.5)(7.5,1.5)
+\rput[bl](7.5,2.5){Compute GCH/LCH}
+\rput[bl](7.5,2.0){of the query image}
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](11.0,-1.0)(7.5,-3.0)
+\rput[bl](7.5,-1.5){Compare images}
+\rput[bl](7.5,-2.0){using euclidean}
+\rput[bl](7.5,-2.5){metric}
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](3.5,-1.5)(0.5,-3.5)
+\rput[bl](0.5,-2.0){Retrive images}
+\rput[bl](0.5,-2.5){using fixed}
+\rput[bl](0.5,-3.0){threshold value}
+\psline[linecolor=black, linewidth=0.04](3.5,2.5)(7.5,2.5)(7.0,3.0)(7.5,2.5)(7.0,2.0)(7.0,2.0)
+\psline[linecolor=black, linewidth=0.04](9.0,1.5)(9.0,-1.0)(8.5,-0.5)(9.0,-1.0)(9.5,-0.5)(9.5,-0.5)
+\psline[linecolor=black, linewidth=0.04](7.5,-2.0)(3.5,-2.0)(4.0,-2.5)(3.5,-2.0)(4.0,-1.5)(3.5,-2.0)
+\end{pspicture}
+}
+\caption{Image retrieval by using histogram}
+\label{fig:88}
+\end{figure}
+
+
+In diagram \ref{fig:88} the process of using histogram to retrieve image has been shown. First the global/local color histograms for each of the database images are calculated and stored. Then the query image is processed and global/local histogram for the query image is computed. Then using Euclidean distance metrics like Equation \ref{eq:7}, the similarities of between the query image and the database images are calculated. A fixed threshold value is taken into account to identify the relevant images.\\
 \\
 \subsection{Color Moment Based Image Retrieval}
-$PICTURE\: of\: tikz$\\
-\\
-The visual features of an image is extracted using the //equationss…. Color moments are also computed using the histogram computed in the previous process. These are calculated for database’s images and stored. Then query image’s mean, standard deviation are calculated. After that these are compared with the same types in the database image. A threshold value is fixed which depends on the difference between mean and standard deviation of query image and database images. The relevant images are ranked using it.\\
+\begin{figure}
+
+\psscalebox{1.0 1.0} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-3.607071)(12.4,3.607071)
+\rput[bl](0.4,2.807071){Extract the visual features}
+\rput[bl](0.4,2.4070709){using the equations}
+\rput[bl](7.6,2.807071){Calculate related values for}
+\rput[bl](7.6,2.4070709){DB's images}
+\rput[bl](7.6,0.0070709228){Calculate related values for}
+\rput[bl](7.6,-0.39292908){query images}
+\rput[bl](0.4,-0.39292908){Compare the values of query}
+\rput[bl](0.4,-0.79292905){images with those of DB's images}
+\rput[bl](4.4,-3.192929){Rank and retrive the relevant images}
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](4.8,3.607071)(0.0,1.6070709)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](12.0,3.607071)(7.2,1.6070709)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](5.6,0.40707093)(0.0,-1.5929291)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](12.4,0.8070709)(7.2,-1.5929291)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](10.8,-2.7929292)(4.0,-3.5929291)
+\psline[linecolor=black, linewidth=0.04](4.8,2.4070709)(7.2,2.4070709)(6.8,2.807071)(7.2,2.4070709)(6.8,2.007071)(6.8,2.007071)
+\psline[linecolor=black, linewidth=0.04](9.6,1.6070709)(9.6,0.8070709)(9.2,1.207071)(9.6,0.8070709)(10.0,1.207071)(9.6,0.8070709)
+\psline[linecolor=black, linewidth=0.04](7.2,-0.39292908)(5.6,-0.39292908)(6.0,-0.79292905)(5.6,-0.39292908)(6.0,0.0070709228)(5.6,-0.39292908)
+\psline[linecolor=black, linewidth=0.04](2.0,-1.5929291)(2.0,-3.192929)(4.0,-3.192929)(3.6,-2.7929292)(4.0,-3.192929)(3.6,-3.5929291)(4.0,-3.192929)
+\end{pspicture}
+}
+\caption{Image retrieval using color moments}
+\label{fig:77}
+\end{figure}
+
+Color moments based image retrival has been briefed in diagram \ref{fig:77}. The visual features of an image is extracted using the equations \ref{eq:1},\ref{eq:2} and \ref{eq:3}. Color moments are also computed using the histogram computed in the previous process (using equations \ref{eq:5} and \ref{eq:6}). These are calculated for database’s images and stored. Then query image’s mean, standard deviation are calculated. After that these are compared with the same types in the database image. A threshold value is fixed which depends on the difference between mean and standard deviation of query image and database images. The relevant images are ranked using it.\\
 \subsection{Color Coherent Vector Based Image Retrieval}
-$PICTURE\: of\: tikz$\\
-\\
-First for all the images in the database, the pixels in the images are categorized as coherent or incoherent by computing connected component. Then we use a  color coherent vector to represent this classification for each of the colors. We replace the  pixel values with the average value in a small neighborhood. As a result the image is slightly blurred. This can be done using gaussian filter. We descretize the color space so that only R,G and B colors are present in the image. Then color coherent vector is computed for the database images and query images. We retrieve the relevant images by comparing the similarity between query vector and database’s image vectors.\\
+\begin{figure}[!h]
+\psscalebox{1.0 1.0} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-3.6)(12.8,3.6)
+\rput[bl](0.4,2.8){Categorize images' pixels}
+\rput[bl](0.4,2.4){as coherent or incoherent}
+\rput[bl](7.6,2.8){Use CCV to represent the }
+\rput[bl](7.6,2.4){coherent and incoherent pixels}
+\rput[bl](7.6,2.0){for each color}
+\rput[bl](7.6,0.0){Compute DB's images CCV}
+\rput[bl](7.6,-0.4){and query image's CCV}
+\rput[bl](0.8,0.0){Compare the CCVs of}
+\rput[bl](0.8,-0.4){DB images and query images}
+\rput[bl](4.8,-2.8){Retrive relevant images}
+\rput[bl](4.8,-3.2){based on a fixed threshold}
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](4.8,3.6)(0.0,1.6)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](12.8,3.6)(6.8,1.6)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](5.6,0.4)(0.4,-0.8)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](12.0,0.8)(7.2,-0.8)
+\psframe[linecolor=black, linewidth=0.04, dimen=outer](9.2,-2.0)(4.4,-3.6)
+\psline[linecolor=black, linewidth=0.04](4.8,2.8)(6.8,2.8)(6.4,3.2)(6.8,2.8)(6.4,2.4)(6.4,2.4)
+\psline[linecolor=black, linewidth=0.04](9.6,1.6)(9.6,0.8)(9.2,0.8)(9.6,0.8)(9.2,1.2)(9.6,0.8)(10.0,1.2)(9.6,0.8)(9.6,0.8)
+\psline[linecolor=black, linewidth=0.04](7.2,0.0)(5.6,0.0)(6.0,-0.4)(5.6,0.0)(6.0,0.4)(5.6,0.0)
+\psline[linecolor=black, linewidth=0.04](2.4,-0.8)(2.4,-2.8)(4.4,-2.8)(4.0,-2.4)(4.4,-2.8)(4.0,-3.2)(4.4,-2.8)
+\end{pspicture}
+}
+\caption{Image retrieval by using CCV}
+\label{fig:66}
+\end{figure}
+
+The image retrieval process using CCV is shown in the diagram \ref{fig:66}. First for all the images in the database, the pixels in the images are categorized as coherent or incoherent by computing connected component. Then we use a  color coherent vector to represent this classification for each of the colors. We replace the  pixel values with the average value in a small neighborhood. As a result the image is slightly blurred. This can be done using gaussian filter. We descretize the color space so that only R,G and B colors are present in the image. Then color coherent vector is computed for the database images and query images. We retrieve the relevant images by comparing the similarity between query vector and database’s image vectors.\\
 \\
 We used combination of different color features and retrieving images based on it.\\
 
