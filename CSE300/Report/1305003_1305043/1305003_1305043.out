@@ -1,0 +1,13 @@
+\BOOKMARK [1][-]{section.0.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.0.2}{Motivation}{}% 2
+\BOOKMARK [1][-]{section.0.3}{Core Ideas}{}% 3
+\BOOKMARK [2][-]{subsection.0.3.1}{Color Moments}{section.0.3}% 4
+\BOOKMARK [2][-]{subsection.0.3.2}{Color Histogram}{section.0.3}% 5
+\BOOKMARK [2][-]{subsection.0.3.3}{Color Coherent Vector}{section.0.3}% 6
+\BOOKMARK [1][-]{section.0.4}{Things To Evaluate}{}% 7
+\BOOKMARK [1][-]{section.0.5}{Evaluation Process}{}% 8
+\BOOKMARK [2][-]{subsection.0.5.1}{Histogram Based Image Retrieval}{section.0.5}% 9
+\BOOKMARK [2][-]{subsection.0.5.2}{Color Moment Based Image Retrieval}{section.0.5}% 10
+\BOOKMARK [2][-]{subsection.0.5.3}{Color Coherent Vector Based Image Retrieval}{section.0.5}% 11
+\BOOKMARK [1][-]{section.0.6}{Results}{}% 12
+\BOOKMARK [1][-]{section.0.7}{Conclusion}{}% 13
