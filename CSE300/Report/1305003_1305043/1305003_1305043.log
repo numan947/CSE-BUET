@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/Debian) (preloaded format=xelatex 2016.9.9)  16 DEC 2016 19:44
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/Debian) (preloaded format=xelatex 2016.9.9)  16 DEC 2016 22:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -277,7 +277,7 @@ Package graphics Info: Driver file: xetex.def on input line 95.
 \Gin@req@height=\dimen121
 \Gin@req@width=\dimen122
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 11.
+Package hyperref Info: Option `colorlinks' set `false' on input line 11.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyphenat/hyphenat.sty
 Package: hyphenat 2009/09/02 v2.3c hyphenation utilities
@@ -565,6 +565,18 @@ e 20.
 (/usr/share/texlive/texmf-dist/tex/latex/pstricks-add/pstricks-add.cfg
 File: pstricks-add.cfg 2005/01/10 v0.1 addtional user stuff (hv)
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen193
+)
+(/usr/share/texlive/texmf-dist/tex/latex/cite/cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+)
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
+Package: lipsum 2014/07/27 v1.3 150 paragraphs of Lorem Ipsum dummy text
+\c@lips@count=\count159
+)
 
 LaTeX Warning: Unused global option(s):
     [pstricks].
@@ -572,24 +584,24 @@ LaTeX Warning: Unused global option(s):
 (./1305003_1305043.aux)
 \openout1 = `1305003_1305043.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
 \AtBeginShipoutBox=\box34
-Package hyperref Info: Link coloring ON on input line 28.
+Package hyperref Info: Link coloring OFF on input line 37.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -597,11 +609,11 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count159
+\c@section@level=\count160
 )
-LaTeX Info: Redefining \ref on input line 28.
-LaTeX Info: Redefining \pageref on input line 28.
-LaTeX Info: Redefining \nameref on input line 28.
+LaTeX Info: Redefining \ref on input line 37.
+LaTeX Info: Redefining \pageref on input line 37.
+LaTeX Info: Redefining \nameref on input line 37.
 
 (./1305003_1305043.out) (./1305003_1305043.out)
 \@outlinefile=\write3
@@ -609,20 +621,29 @@ LaTeX Info: Redefining \nameref on input line 28.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Try loading font information for U+msa on input line 39.
 
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 39.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
 File: se-ascii-print.def 2011/12/02 v1.10 stringenc: Printable ASCII characters
 
 )
-Missing character: There is no “ in font cmr10!
-Missing character: There is no ” in font cmr10!
+Missing character: There is no “ in font cmbx10!
+Missing character: There is no ” in font cmbx10!
 
-Underfull \hbox (badness 10000) in paragraph at lines 32--47
+Underfull \hbox (badness 10000) in paragraph at lines 47--58
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 32--47
+Underfull \hbox (badness 10000) in paragraph at lines 47--58
 
  []
 
@@ -630,93 +651,86 @@ Missing character: There is no ’ in font cmr10!
 Missing character: There is no ’ in font cmr10!
 Missing character: There is no ’ in font cmr10!
 
-Underfull \hbox (badness 10000) in paragraph at lines 49--52
+Overfull \hbox (15.24976pt too wide) in paragraph at lines 60--63
+\OT1/cmr/m/n/10 not in-de-pen-dent. Rather they de-pend on \OT1/cmr/bx/n/10 an-
+no-ta-tion qual-ity and com-plete-ness\OT1/cmr/m/n/10 .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--63
 
  []
 
 
-Overfull \hbox (4.83406pt too wide) in paragraph at lines 49--52
+Overfull \hbox (4.83406pt too wide) in paragraph at lines 60--63
 \OT1/cmr/m/n/10 ge-o-graph-i-cal in-for-ma-tion and re-mote sens-ing sys-tems, 
 med-i-cal di-ag-no-sis, mil-i-tary,
- []
-
-Missing character: There is no ’ in font cmr10!
-
-Underfull \hbox (badness 10000) in paragraph at lines 54--57
-
  []
 
 [1
 
 ]
+Missing character: There is no ’ in font cmr10!
+
+Overfull \hbox (6.66573pt too wide) in paragraph at lines 65--68
+\OT1/cmr/bx/n/10 CBIR \OT1/cmr/m/n/10 sys-tems man-ages im-ages by au-to-mat-i-
+cally \OT1/cmr/bx/n/10 in-dex-ing \OT1/cmr/m/n/10 them by sum-ma-riz-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 65--68
+
+ []
+
 File: rgb_ss.png Graphic file (type QTm)
- <use  "rgb_ss.png" >
-Overfull \hbox (17.25105pt too wide) in paragraph at lines 62--63
+<use  "rgb_ss.png" >
+Overfull \hbox (17.25105pt too wide) in paragraph at lines 73--74
  [][] 
  []
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 65.
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 65.
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
 File: rgb_sp.png Graphic file (type QTm)
-
 <use  "rgb_sp.png" >
-Overfull \hbox (17.25105pt too wide) in paragraph at lines 68--69
+Overfull \hbox (17.25105pt too wide) in paragraph at lines 79--80
  [][] 
  []
 
 Missing character: There is no ’ in font cmr10!
-
-Underfull \hbox (badness 10000) in paragraph at lines 79--84
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 79--84
-
- []
-
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 90--95
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 90--95
 
  []
 
 Missing character: There is no ’ in font cmr10!
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--100
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 97--100
+Underfull \hbox (badness 10000) in paragraph at lines 105--106
 
  []
 
 File: hist_example.png Graphic file (type QTm)
-<use  "hist_example.png" >
-Underfull \hbox (badness 10000) in paragraph at lines 107--110
-
- []
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 112--117
+<use  "hist_example.png" > [3]
+Underfull \hbox (badness 10000) in paragraph at lines 113--116
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 112--117
+Underfull \hbox (badness 10000) in paragraph at lines 118--123
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--123
+
+ []
+
+[4]
 Missing character: There is no ’ in font cmr10!
 
-Underfull \hbox (badness 10000) in paragraph at lines 122--127
+Underfull \hbox (badness 10000) in paragraph at lines 128--133
 
  []
 
@@ -732,113 +746,115 @@ File: connected.jpg Graphic file (type QTm)
  <use  "connected.jpg" >
 Missing character: There is no ’ in font cmr10!
 
-Underfull \hbox (badness 10000) in paragraph at lines 133--158
+Underfull \hbox (badness 10000) in paragraph at lines 139--164
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 133--158
+Underfull \hbox (badness 10000) in paragraph at lines 139--164
 
  []
 
 
-Overfull \hbox (3.51897pt too wide) in paragraph at lines 133--158
+Overfull \hbox (3.51897pt too wide) in paragraph at lines 139--164
 \OT1/cmr/m/n/10 Our co-her-ence mea-sure clas-si-fies pix-els as ei-ther co-her
 -ent or in-co-her-ent. Co-her-ent
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 133--158
+Underfull \hbox (badness 10000) in paragraph at lines 139--164
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 133--158
+Underfull \hbox (badness 10000) in paragraph at lines 139--164
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 133--158
+Underfull \hbox (badness 10000) in paragraph at lines 139--164
 
  []
 
 
-Overfull \hbox (1.38022pt too wide) in paragraph at lines 133--158
+Overfull \hbox (1.38022pt too wide) in paragraph at lines 139--164
 \OT1/cmr/m/n/10 The con-nected com-po-nent can be com-puted in lin-ear time. Wh
 en it is com-pleted,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 133--158
-
- []
-
-[4] [5]
-Underfull \hbox (badness 10000) in paragraph at lines 167--183
+Underfull \hbox (badness 10000) in paragraph at lines 139--164
 
  []
 
 
-Overfull \hbox (4.80618pt too wide) in paragraph at lines 167--183
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 173--189
+
+ []
+
+
+Overfull \hbox (4.80618pt too wide) in paragraph at lines 173--189
 \OT1/cmr/m/n/10 We used a gen-eral pur-pose database con-tain-ing 14500 im-ages
  drawn from dif-fer-ent
  []
 
 
-Overfull \hbox (17.11162pt too wide) in paragraph at lines 167--183
+Overfull \hbox (14.33383pt too wide) in paragraph at lines 173--189
 \OT1/cmr/m/n/10 cat-e-gories to eval-u-ate the ef-fec-tive-ness and ef-fi-cienc
-y of the se-lected color de-scrip-tors.
+y of the se-lected color de-scrip-tors
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 167--183
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 167--183
+Underfull \hbox (badness 10000) in paragraph at lines 173--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 167--183
+Underfull \hbox (badness 10000) in paragraph at lines 173--189
 
  []
 
-[6]
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--189
+
+ []
+
 File: Truecolor.png Graphic file (type QTm)
- <use  "Truecolor.png" >
+<use  "Truecolor.png" >
 File: 8_bit.png Graphic file (type QTm)
- <use  "8_bit.png" > [7]
-Underfull \hbox (badness 10000) in paragraph at lines 237--239
+ <use  "8_bit.png" > [7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 243--245
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 237--239
+Underfull \hbox (badness 10000) in paragraph at lines 243--245
 
  []
 
 
-Overfull \hbox (14.4805pt too wide) in paragraph at lines 264--265
+Overfull \hbox (14.4805pt too wide) in paragraph at lines 270--271
 [][] 
  []
 
 Missing character: There is no ’ in font cmr12!
 Missing character: There is no ’ in font cmr12!
 
-Overfull \hbox (14.30275pt too wide) in paragraph at lines 269--270
+Overfull \hbox (14.30275pt too wide) in paragraph at lines 275--276
 \OT1/cmr/m/n/12 mean, stan-dard de-vi-a-tion are cal-cu-lated. Af-ter that thes
 e are com-pared
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--270
+Underfull \hbox (badness 10000) in paragraph at lines 275--276
 
  []
 
-[8]
-Overfull \hbox (25.86185pt too wide) in paragraph at lines 296--297
+[9]
+Overfull \hbox (25.86185pt too wide) in paragraph at lines 302--303
 [][] 
  []
 
@@ -847,64 +863,85 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 Missing character: There is no ’ in font cmr12!
 
-Underfull \hbox (badness 10000) in paragraph at lines 301--304
+Underfull \hbox (badness 10000) in paragraph at lines 307--310
 
  []
 
 
-Overfull \hbox (0.50752pt too wide) in paragraph at lines 301--304
+Overfull \hbox (0.50752pt too wide) in paragraph at lines 307--310
 \OT1/cmr/m/n/12 We used com-bi-na-tion of dif-fer-ent color fea-tures and re-tr
 iev-ing im-ages
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 301--304
+Underfull \hbox (badness 10000) in paragraph at lines 307--310
 
  []
 
 
-Overfull \hbox (29.3517pt too wide) in paragraph at lines 306--312
+Overfull \hbox (29.3517pt too wide) in paragraph at lines 312--313
 \OT1/cmr/m/n/12 cat-e-gories like Africans and vil-lages, Beaches, Build-ings, 
 Buses, Di-nosaurs,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 306--312
+Underfull \hbox (badness 10000) in paragraph at lines 312--313
+
+ []
+
+[10]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 369--371
 
  []
 
 
-Overfull \hbox (18.09299pt too wide) in paragraph at lines 306--312
-\OT1/cmr/m/n/12 ta-bles. The color mo-ments gave bet-ter re-sult when the color
- dis-tri-bu-tion
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 306--312
+Underfull \hbox (badness 10000) in paragraph at lines 369--371
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 306--312
-
+[11] (./1305003_1305043.bbl [12]
+Underfull \hbox (badness 1546) in paragraph at lines 25--30
+\OT1/cmr/m/n/12 Wayne Niblack, Dragutin Petkovic, and William Eq-uitz.
  []
 
-[9] [10]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
- [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
+
+Underfull \hbox (badness 2073) in paragraph at lines 42--45
+[]\OT1/cmr/m/n/12 Ming-Kuei Hu.  Vi-sual pat-tern recog-ni-tion by mo-ment
+ []
+
+
+Underfull \hbox (badness 7832) in paragraph at lines 42--45
+\OT1/cmr/m/n/12 in-vari-ants.  \OT1/cmr/m/it/12 IRE trans-ac-tions on in-for-ma
+-tion the-ory\OT1/cmr/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 1019) in paragraph at lines 58--63
+[]\OT1/cmr/m/n/12 Arnold WM Smeul-ders, Mar-cel Wor-ring, Si-mone San-tini,
+ []
+
+[13
+
+])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 379.
+ [14]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 379.
  (./1305003_1305043.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 316.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 316.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 316.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 379.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 379.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 379.
  ) 
 Here is how much of TeX's memory you used:
- 19310 strings out of 493638
- 310331 string characters out of 6146797
- 436459 words of memory out of 5000000
- 22486 multiletter control sequences out of 15000+600000
- 13253 words of font info for 51 fonts, out of 8000000 for 9000
+ 19638 strings out of 493638
+ 314352 string characters out of 6146797
+ 540586 words of memory out of 5000000
+ 22794 multiletter control sequences out of 15000+600000
+ 15676 words of font info for 59 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
- 44i,9n,77p,793b,568s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,10n,77p,814b,568s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on 1305003_1305043.pdf (11 pages).
+Output written on 1305003_1305043.pdf (14 pages).

@@ -1,11 +1,11 @@
-\documentclass[pstricks,10pt]{report}
+\documentclass[pstricks,10pt,notitlepage]{report}
 \usepackage{hyperref,xcolor,color,titlesec} 
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \hypersetup{
-	colorlinks=true,
+	colorlinks=false,
 	linkcolor=blue,  	%setup hyper link styles
 	urlcolor=brown
 }
@@ -14,6 +14,10 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{pstricks-add}
+\usepackage{multirow}
+\usepackage{cite}
+
+\usepackage{lipsum}
 
 
 \titleformat{\chapter}{\normalfont\huge}{\thechapter.}{20pt}{\huge\it} %format chapter/section header styles
@@ -23,37 +27,44 @@
 %%%%%%SOME FORMATTING MAY NOT WORK IF pdflatex full IS NOT AVAILABLE%%%%%%
 %%%COMPILE WITH xelatex instead of pdflatex as latexdraw has been used%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+\title{A Report on paper : Comparison of Color Features for Image Retrieval}
+\author{
+  Abdullah Al Mamun (1305003)
+  \and
+  S.Mahmudul Hasan (1305043)
+  }
+ \date{}
 \begin{document}
+\maketitle
+
+\begin{abstract}
+This is a report on a paper titled ``Comparison of Color Features for Image Retrieval''. The paper is written by S.R. Kodituwakku \& S.Selvarajah. In this report, we described the content of the paper in our own language. The paper deals with image retrieval problem. We described the importance of the topic covered in the paper, the methods used, the evaluation metrics and the evaluation results given in this report.
+\end{abstract}
+
 
 \section{Introduction}
 
-Content Based Image Retrieval  is an application of computer vision 
-techniques to a problem known as image retrieval problem. Image retrieval 
-problem deals with the searching and retrieval of digital images from 
+\textbf{Content Based Image Retrieval}  is an application of \textbf{computer vision 
+techniques} to a problem known as \textbf{image retrieval problem}. Image retrieval 
+problem deals with the \textbf{searching and retrieval of digital images} from 
 large databases.\\
 \newline
-The phrase “content based” means that the process analyzes the contents 
-of the image and not the meta-data such as keywords, tags, associated 
+The phrase \textbf{“content based”} means that the process analyzes the \textbf{contents} 
+of the image and \textbf{not} the meta-data such as keywords, tags, associated 
 descriptions etc. The content in this context may refer to colors, 
 shapes, textures, or any other informations that can be derived from the image.\\
 \\
-In the paper, images were represented by color descriptors. There are 
-various color descriptors, but in this paper color histogram, color 
-moments and color coherent vector are used as color descriptors. The 
-efficiency of these color descriptors to represent visual features of 
-images are compared in the paper. 
+In this paper, images are represented by \textbf{color descriptors}. There are various color descriptors, but in this paper \textbf{color histogram, color moments and color coherent vector} are used as color descriptors. The efficiency of these color descriptors to represent visual features of images are compared in the paper. 
 
 \section{Motivation}
-Content based image retrieval is important because it lacks the drawbacks meta-data based image retrieval has. Searches that rely purely on meta-data are not independent. Rather they depend on annotation quality and completeness. Also to manually annotate images by entering meta-data  or keywords in a large database is time consuming and can have human errors like not capturing the keywords desired to describe a particular image.\\
+Content based image retrieval is important because it lacks the drawbacks meta-data based image retrieval has. Searches that rely purely on meta-data are not independent. Rather they depend on \textbf{annotation quality and completeness}. Also to manually annotating images by entering meta-data  or keywords in a large database is time consuming and can have human errors like not capturing the keywords desired to describe a particular image.\\
 \\
-Content based image retrieval has applications in various important sectors including architectural and engineering design, art collections, crime prevention, geographical information and remote sensing systems, medical diagnosis, military, photograph archive, retail catalogs, nudity-detection filters, face recognition etc. Commercial systems that have been developed based on this include IBM’s QBIC, Virage’s VIR Image Engine, Excalibur’s Image RetrievalWare etc. Also various experimental systems have been and are being developed based on content based image retrieval.
+Content based image retrieval has applications in various important sectors including architectural and engineering design, art collections, crime prevention, geographical information and remote sensing systems, medical diagnosis, military, photograph archive, retail catalogs, nudity-detection filters, face recognition etc. \textbf{Commercial systems} that have been developed based on this include IBM’s QBIC, Virage’s VIR Image Engine, Excalibur’s Image RetrievalWare etc. Also various \textbf{experimental systems} have been and are being developed based on content based image retrieval.
 
-\section{Core Ideas}
-CBIR systems manages images by automatically indexing them by summarizing their visual features. A feature can capture some characteristics of images either in a global manner or in a local manner. CBIR systems uses color, textures and shapes as features. Image’s features are extracted by mapping the image pixels to the feature space. Feature spaces are generally represented as feature vectors. Once the features are represented as feature vectors, they can be used to measure similarity between different images.\\
+\section{Core Concepts}
+\textbf{CBIR} systems manages images by automatically \textbf{indexing} them by summ{}arizing their visual features\cite{n1,n2,n3,n4,n5,n6,n7,n8,n9}. A feature can capture some characteristics of images either in a global manner or in a local manner\cite{n5}. CBIR systems uses \textbf{color, textures and shapes} as features. Image’s features are extracted by mapping the image pixels to the \textit{feature space}. Feature spaces are generally represented as feature vectors. Once the features are represented as feature vectors, they can be used to measure similarity between different images. Query image and database's images are represented as feature vector at retrieval stage.\cite{n8}\\
 \\
-The paper deals with performance of different color descriptors to describe images and based on the description of images the retrieval rate of certain images from the database. For that purpose a fixed color model is selected. The RBG color model is used in this paper. 
+The paper deals with performance of different color descriptors to describe images and based on the description of images the retrieval rate of certain images from the database. For that purpose a fixed color model is selected. The \textbf{RBG color model} is used in this paper. 
 
 \begin{figure}[!h]
 \centering
@@ -73,12 +84,12 @@ The paper deals with performance of different color descriptors to describe imag
 \label{fig:RGB}
 \end{figure}
 
-Color is a very important feature of an image. It doesn’t change whether an image is scaled, translated or rotated. The key components of color feature extraction are color space, color quantification and similarity measurement. A color space is a specific organization of color which allows for reproducible representation of color when combined with physical device profiling.
+Color is a very important feature of an image. It doesn’t change whether an image is \textbf{scaled, translated or rotated}. The key components of color feature extraction are \textbf{color space, color quantification and similarity measurement}. A color space is a specific organization of color which allows for reproducible representation of color when combined with physical device profiling.
 
 \subsection{Color Moments}
-Color moments are measures that can be used differentiate images based on their features of color. These moments provide a measurement for color similarity between images. These values of similarity can be compared to the values of images in a database for image retrieval. Color moments assume that the distribution of color in an image can be interpreted as a probability distribution. As probability distributions are characterized by a number of unique moments, the color in an image follows a certain probability distribution and the moments of that distribution can be used as features to identify the image based on color.\\
+Color moments are measures that can be used differentiate images based on their \textit{features of color}. These moments provide a measurement for color similarity between images. These values of similarity can be compared to the values of images in a database for image retrieval. Color moments assume that the \textit{distribution of color} in an image can be interpreted as a \textit{probability distribution}. As probability distributions are characterized by a number of unique moments, the color in an image follows a certain probability distribution and the moments of that distribution can be used as features to identify the image based on color.\\
 \\
-Mean, variance and standard deviation are used as color moments. A color is defined by three or more values. Generally we use hue, saturation and brightness to define a color. In our RGB color space, there are red, blue and green color. For each of the color there are three color moments and so in total nine color moments are computed. \\
+\textbf{Mean, variance and standard deviation} are used as color moments\cite{n10}. A color is defined by \textit{three or more} values. Generally we use \textbf{hue, saturation and brightness} to define a color. In our RGB color space, there are red, blue and green color. For each of the color there are three color moments and so in \textit{total nine} color moments are computed. \\
 \\
 Let a image be of size $n\times m$ and $X_{ij}$ be the pixel at $i^{th}$ row and $j^{th}$ column, then,\\
 \begin{equation}
@@ -90,13 +101,8 @@ variance=\frac{1}{nm}\sum_{i=1}^{n}\sum_{j=1}^{m}(X_{ij}-mean)^{2}\label{eq:2}
 \begin{equation}
 stddev=\sqrt{variance}\label{eq:3}
 \end{equation}
-
-$INCLUDE\_EXAMPLE$\\ 
-
 \subsection{Color Histogram}
-A color histogram is a representation of the distribution of colors in an image. It represents the number of pixels that have colors in each of a fixed list of color ranges that span the image’s color space. The color histogram of a certain image can be built for any kind of color space but in this paper, histogram is built for three-dimensional RGB color space. Color histogram is a statistic that can be viewed as an approximation of an underlying continuous distribution of color values.\\
-\\
-A color histogram is a graphical representation of the number of pixels in an image. It is a bar graph whose X-axis represents tonal scale and Y-axis represents the number of pixels in an image in a certain area of the tonal scale.\\
+A color histogram is a representation of the \textbf{distribution} of colors in an image\cite{n1}. It represents the number of pixels that have colors in each of a fixed list of color ranges that span the image’s color space. The color histogram of a certain image can be built for any kind of color space but in this paper, histogram is built for three-dimensional RGB color space. Color histogram is a \textit{statistic} that can be viewed as an \textit{approximation} of an underlying continuous distribution of color values.It is a graphical representation of the number of pixels in an image. It is a \textbf{bar graph} whose X-axis represents \textbf{tonal scale} and Y-axis represents the \textbf{number of pixels} in an image in a certain area of the tonal scale.\\
 
 \begin{figure}[!h]
 \centering
@@ -104,7 +110,7 @@ A color histogram is a graphical representation of the number of pixels in an im
     \caption{Histogram of an image}
     \label{fig:verticalcell}
 \end{figure}
-The color histogram for an image is constructed by counting the number of pixels of each color. There can be a number of elements in the histogram of an image. This number depends on the number of bits in each pixel of an image. If an image has a pixel depth on n bit, then the pixel values of the image will be between $0$  and $2^n-1$. In this case, the histogram will have $2^{n}$ elements.\\
+The color histogram for an image is constructed by \textbf{counting the number of pixels of each color}. There can be a number of elements in the histogram of an image. This number depends on the \textbf{number of bits} in each pixel of an image. If an image has a pixel depth on n bit, then the pixel values of the image will be between $0$  and $2^n-1$. In this case, the histogram will have $2^{n}$ elements.\\
 \\
 Let, color histogram be $h$. Then it is defined by,\\
 \begin{equation}
@@ -112,7 +118,7 @@ h_{A,B,C}(a,b,c)=N*Prob(A=a,B=b,C=c)\label{eq:4}
 \end{equation}
 where A, B and C represent the three color channels (R, G, B) and N is the number of pixels in the image.\\
 \\
-Computationally, color histogram is made by discretizing the colors within an image and counting the number of pixels of each color. If the data sets are too large, color moments can be computed  by using color histograms.\\
+Computationally, color histogram is made by \textbf{discretizing the colors} within an image and counting the number of pixels of each color. If the data sets are too large, color moments can be computed  by using color histograms.\\
 \\ 
 \begin{equation}
 mean=\sum_{i=0}^{255}i*h(i)/\sum_{i=0}^{255}h(i)\label{eq:5}
@@ -122,8 +128,8 @@ variance=\sqrt \frac{\displaystyle \sum_{i=0}^{255}h(i)*(i-mean)^2}{\displaystyl
 \end{equation}
 Here $h=$ histogram of the image\\
 \\
-In this experiment two techniques of histogram based image retrieval are used. The first one is Global Color Histogram (GCH) and the next one is Local Color Histogram (LCH). In GCH, the whole image is represented by a single histogram. In LCH, the image is divided into blocks of 8x8 and for each of the blocks a histogram is computed.\\
-In both cases, the histograms of query image and database’s images are compared and relevant images are retrieved. Let h and g represent two color histograms. Then the euclidean distance between the color histograms $h$ and $g$ can be computed as: 
+In this experiment two techniques of histogram based image retrieval are used. The first one is \textbf{Global Color Histogram (GCH)} and the next one is \textbf{Local Color Histogram (LCH)}. In GCH, the whole image is represented by a single histogram. In LCH, the image is divided into blocks of $8\times8$ and for each of the blocks a histogram is computed.\\
+In both cases, the histograms of query image and database’s images are compared and relevant images are retrieved. Let $h$ and $g$ represent two color histograms. Then the \textit{euclidean distance} between the color histograms $h$ and $g$ can be computed as: 
 \begin{equation}
 d^2(h,g)=\sum_A\sum_B\sum_C(h(a,b,c)-g(a,b,c))^2\label{eq:7}
 \end{equation}
@@ -143,7 +149,7 @@ The images shown in Figure \ref{fig:similar histogram} have similar color histog
 \\
 Our coherence measure classifies pixels as either coherent or incoherent. Coherent pixels are a part of sizable contiguous region while incoherent pixels are not. A color coherent vector represents this classification for each color in the image. CCV’s prevent coherent pixels in one image from matching incoherent pixels in another. This allows fine distinctions that can’t be achieved with color histograms.\\
 \\
-To classify the pixels within a given color bucket as either coherent or incoherent, some steps are taken. A coherent pixel is part of a large group of pixel of the same color, while an incoherent pixel is not. To determine coherent pixels ‘pixel groups’ are calculated. We determine pixel groups by computing connected components.\\
+To classify the pixels within a given color bucket as either coherent or incoherent, some steps are taken. A coherent pixel is part of a \textbf{large group of pixel of the same color}, while an incoherent pixel is not. To determine coherent pixels ‘pixel groups’ are calculated. We determine pixel groups by computing connected components.\\
 \\
 A connected component $C$ is a maximal set of points such that for any two points $p,p' \in C$, there is a path between $p$ and $p'$. We only compute connected components within a given discretized color bucket.\\
 \\
@@ -157,7 +163,7 @@ A connected component $C$ is a maximal set of points such that for any two point
 The connected component can be computed in linear time. When it is completed, each pixel will belong to exactly one connected component. We classify each pixel as coherent or incoherent based on the size of its connected component. A pixel is considered coherent if its connected component’s size exceeds a fixed value $\mathrm{T}$. All other pixels are considered incoherent.\\
 
 \section{Things To Evaluate}
-There are eight similarity measurements which can be used to measure the similarities between images. But in this paper, Sum of Squared Differences (SSD) and Sum of Absolute Differences (SAD) are used. These two methods are reported to have the most effectiveness and efficiency. 
+There are eight similarity measurements which can be used to measure the similarities between images\cite{n9}. But in this paper, Sum of Squared Differences (SSD) and Sum of Absolute Differences (SAD) are used. These two methods are reported to have the most effectiveness and efficiency\cite{n2}. 
 \\
 \begin{equation}
 SSD(f_q,f_t)=\sum_{i=0}^{n-1}(f_q[i]-f_t[i])^2\label{eq:8}
@@ -171,7 +177,7 @@ $f_{q}=$ query feature vector\\
 $f_{t}=$ database feature vectors\\
 $n=$ the number of features in each vector\\
 \\
-We used a general purpose database containing 14500 images drawn from different categories to evaluate the effectiveness and efficiency of the selected color descriptors. In the database, the images have dimension of 384X256. We calculated the color features of different images in the database and stored them in a database.\\
+We used a general purpose database containing 14500 images drawn from different categories to evaluate the effectiveness and efficiency of the selected color descriptors\cite{n11,n12,n13,n14,n15}. In the database, the images have dimension of 384X256. We calculated the color features of different images in the database and stored them in a database.\\
 \\
 The color features are evaluated by means of two ratios: precision and recall. Precision is the ratio of relevant retrieved images to the total retrieved images. Recall is the ratio of relevant retrieved images to the total relevant images in the database.\\
 \\
@@ -304,13 +310,70 @@ We used combination of different color features and retrieving images based on i
 
 \section{Results}
 We used the previously mentioned database. The database has categories like  Africans and villages, Beaches, Buildings, Buses, Dinosaurs, Elephants, Flowers, Horses, Mountains and glaciers, Food, Faces, Objects, Drawings, Textures and Natural scenes. Five images of each of the types are used as query images for the retrieval purpose. All these images quality are different. Some have uniform color distribution, some have non-uniform color distribution and others have widely scattered colors. The tables below shows parts of our result.\\
-$TABLE1$\\
-$TABLE2$\\
-\\
-We can see the precision and recall of the color descriptors in the tables. The color moments gave better result when the color distribution is of average level. Color histogram gives better result in case of uniform color distribution images. And for widely scattered colors Color Coherent Vector gives the best result. But the combination of different color descriptors produce remarkable results among all.\\
+
+
+\begin{table}
+\centering
+\caption{\textbf{Category - Dinosaurs (Single Color Descriptor)}}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Descriptor & Recall & Precision\\
+\hline
+\multirow{2}{*}{\textbf{CM}} & 0.100137931 & 0.698748797\\
+& 0.09862069 & 0.754219409\\
+& 0.097586207 & 0.815092166\\
+\hline
+\multirow{2}{*}{\textbf{GCH}} & 0.099586207 & 0.529325513\\ & 0.09862069 & 0.580121704\\ & 0.096551724 & 0.615114236\\
+\hline
+\multirow{2}{*}{\textbf{LCH}} & 0.097586207 & 0.5\\ & 0.095586207 & 0.508064516\\
+& 0.093586207 & 0.534672971\\
+\hline
+\multirow{2}{*}{\textbf{CCV}} & 0.10062069 & 0.555597867\\ & 0.099586207 & 0.585801217\\ & 0.096551724 & 0.631483987\\
+\hline
+\end{tabular}
+\label{tab:a}
+\end{table}
+
+
+
+
+\begin{table}[!h]
+\caption{\textbf{Category - Africans (Multiple Color Descriptors)}}
+
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Descriptor & Recall & Precision\\
+\hline
+\multirow{2}{*}{\textbf{GCH \& CCV}} & 0.088531187 & 0.871287129\\
+& 0.08249497 & 0.872340426\\
+& 0.079476861 & 0.877777778\\
+\hline
+\multirow{2}{*}{\textbf{LCH \& CCV}} & 0.100603622 & 0.487804878\\
+& 0.099597586 & 0.5\\
+& 0.097585513 & 0.510526316\\
+\hline
+\multirow{2}{*}{\textbf{CCV, CM, LCH \& GCH}} & 0.095573441 & 0.95959596\\
+& 0.09054326 & 0.97826087\\
+& 0.088531187 & 0.988764045\\
+\hline
+\multirow{2}{*}{\textbf{GCH, LCH \& CCV}} & 0.098591549 & 0.439461883\\
+& 0.096579477 & 0.507936508\\
+& 0.095573441 & 0.50802139\\
+\hline
+\end{tabular}
+\label{tab:b}
+\end{table}
+
+
+We can see the precision and recall of the color descriptors in the tables (Table \ref{tab:a} and \ref{tab:b}). The color moments gave better result when the color distribution is of average level. Color histogram gives better result in case of uniform color distribution images. And for widely scattered colors Color Coherent Vector gives the best result. But the combination of different color descriptors produce remarkable results among all.\\
 \\
 \section{Conclusion}
 In the paper, comparison of three color feature for image retrieval is presented. The analysis and the data collection process that are presented in the paper are quite agreeable. These data can be used to further test and analyze the new systems built on the similar principles. As with time new methods of image retrieval are being discovered, these results as well as the process of achieving these results can come to help to further facilitate research in related areas.
+
+
+\bibliographystyle{plain}
+\bibliography{all}
 
 
 \end{document}
