@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="245.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="600.0" text="Exam ID:">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Exam Name:" />
+                  <TextField HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Start Time:" />
+                  <TextField HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Warning Time:" />
+                  <TextField HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Backup interval:" />
+                  <TextField HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="23.0" prefWidth="600.0">
+               <children>
+                  <Label text="Allowed IDs:" />
+                  <TextField HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="87.0" text="Corrections:" />
+                  <TextArea prefHeight="27.0" prefWidth="384.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextArea>
+                  <Button mnemonicParsing="false" text="Send Corrections" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox prefHeight="155.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="List of Corrections:" textAlignment="CENTER">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+            <ListView prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
