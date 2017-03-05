@@ -1,4 +1,6 @@
-package main; /**
+package main;
+
+/**
  * Sample Skeleton for 'client_side_gui.fxml' Controller Class
  */
 

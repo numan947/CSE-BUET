@@ -14,8 +14,8 @@ public class ClientSide extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/res/client_side_gui.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setTitle("Not Your Regular Hello World");
+        primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
     }
 
