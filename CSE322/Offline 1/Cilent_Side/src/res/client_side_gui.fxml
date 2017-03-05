@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.client_main_gui_controller">
+   <top>
+      <HBox prefHeight="164.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="exam_name" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Exam Name: " />
+                  <Label fx:id="start_time" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Start Time:" />
+                  <Label fx:id="duration" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Duration:" />
+                  <Label fx:id="backup_interval" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Backup interval:" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Rules &amp; Regulations:" />
+                  <TextArea fx:id="rules_and_regulations" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="82.0" prefWidth="300.0" text="CLIENT END" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="KacstPoster" size="34.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="server_ip_address" promptText="Server IP Address" />
+                  <TextField fx:id="port_number" promptText="Port Number" />
+                  <Button fx:id="connect" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#connect" text="Connect" />
+                  <Label fx:id="status" text="Status: " textFill="#ee1c09">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="36.0" prefWidth="600.0" text="Correction List">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ListView fx:id="correction_list" prefHeight="209.0" prefWidth="600.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
