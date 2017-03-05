@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller_for_the_tabs">
+   <top>
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="245.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="exam_id" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="600.0" text="Exam ID:">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Exam Name:" />
+                  <TextField fx:id="exam_name" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Start Time:" />
+                  <TextField fx:id="start_time" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Warning Time:" />
+                  <TextField fx:id="warning_time" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Backup interval:" />
+                  <TextField fx:id="backup_interval" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="23.0" prefWidth="600.0">
+               <children>
+                  <Label text="Allowed IDs:" />
+                  <TextField fx:id="allowed_ids" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="87.0" text="Corrections:" />
+                  <TextArea fx:id="corrections" prefHeight="27.0" prefWidth="384.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin>
+                  </TextArea>
+                  <Button fx:id="send_corrections" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendCorrections" text="Send Corrections">
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
+                     </HBox.margin></Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox prefHeight="155.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="List of Corrections:" textAlignment="CENTER">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+            <ListView fx:id="correction_list" prefHeight="139.0" prefWidth="612.0" />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
