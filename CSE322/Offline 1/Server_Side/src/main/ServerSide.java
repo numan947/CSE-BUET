@@ -14,10 +14,8 @@ public class ServerSide extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/res/server_side_gui_main.fxml"));
         Parent root = fxmlLoader.load();
-        server_gui_controller c=fxmlLoader.getController();
 
-
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("OWOWOWOWWOWOWOWOW");
         primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
     }

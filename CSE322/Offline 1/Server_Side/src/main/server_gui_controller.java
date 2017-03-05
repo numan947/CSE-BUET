@@ -5,6 +5,7 @@ package main;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -12,10 +13,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 
 public class server_gui_controller {
 
+    public BorderPane bp;
     // general fields
+    private String server_default_status="not started";
     private FXMLLoader fxmlLoader=null;
 
 
@@ -61,9 +65,11 @@ public class server_gui_controller {
             fxmlLoader.setRoot(null);
             fxmlLoader.setController(null);
 
+
             fxmlLoader.setLocation(getClass().getResource("/res/server_side_tab_pane.fxml"));
             Parent pp=fxmlLoader.load();
             controller_for_the_tabs tabController=fxmlLoader.getController();
+
 
             //get-set the exam_
             tabController.setUnique_exam_id(this.exam_id.getText());
@@ -71,6 +77,8 @@ public class server_gui_controller {
 
 
             Tab t=new Tab("WHY",pp);
+            t.setClosable(true);
+
             exam_list.getTabs().add(t);
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,8 +89,9 @@ public class server_gui_controller {
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         // initiate general resource
-        fxmlLoader=new FXMLLoader();
 
+        fxmlLoader=new FXMLLoader();
+        exam_list.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         assert start_server != null : "fx:id=\"start_server\" was not injected: check your FXML file 'server_side_gui_main.fxml'.";
         assert port_number != null : "fx:id=\"port_number\" was not injected: check your FXML file 'server_side_gui_main.fxml'.";
         assert exam_list != null : "fx:id=\"exam_list\" was not injected: check your FXML file 'server_side_gui_main.fxml'.";
@@ -90,6 +99,10 @@ public class server_gui_controller {
         assert exam_id != null : "fx:id=\"exam_id\" was not injected: check your FXML file 'server_side_gui_main.fxml'.";
         assert create_exam != null : "fx:id=\"create_exam\" was not injected: check your FXML file 'server_side_gui_main.fxml'.";
         assert status != null : "fx:id=\"status\" was not injected: check your FXML file 'server_side_gui_main.fxml'.";
+
+
+        this.status.setText(this.status.getText()+" "+server_default_status);
+
 
     }
 }

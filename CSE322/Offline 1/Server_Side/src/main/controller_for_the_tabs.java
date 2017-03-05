@@ -13,12 +13,25 @@ import javafx.scene.control.TextField;
 
 public class controller_for_the_tabs {
 
+
+    public Button back_up_storage_path;
     private String unique_exam_id;
 
     public void setUnique_exam_id(String unique_exam_id) {
         this.unique_exam_id = unique_exam_id;
         this.exam_id.setText(exam_id.getText()+" "+unique_exam_id);
     }
+
+
+    @FXML
+    public Button add_to_exam_list;
+
+    @FXML
+    public Button remove_from_exam_list;
+
+    
+    @FXML
+    private Button question_paper_path;
 
     @FXML
     private ResourceBundle resources;
@@ -70,5 +83,17 @@ public class controller_for_the_tabs {
         assert send_corrections != null : "fx:id=\"send_corrections\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
         assert exam_id != null : "fx:id=\"exam_id\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
 
+    }
+
+    public void setQuestionPaperPath(ActionEvent actionEvent) {
+    }
+
+    public void addToExamList(ActionEvent actionEvent) {
+    }
+
+    public void removeFromExamList(ActionEvent actionEvent) {
+    }
+
+    public void setBackUpStoragePath(ActionEvent actionEvent) {
     }
 }
