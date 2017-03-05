@@ -17,6 +17,14 @@ import javafx.scene.control.TextField;
 
 public class client_main_gui_controller {
 
+
+
+    @FXML
+    private TextField exam_code;
+
+    @FXML
+    private TextField StudentID;
+
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -55,11 +63,6 @@ public class client_main_gui_controller {
 
     @FXML
     void connect(ActionEvent event) {
-
-    }
-
-    @FXML
-    void ee1c09(ActionEvent event) {
 
     }
 

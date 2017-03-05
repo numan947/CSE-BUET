@@ -1,6 +1,7 @@
 package main;
 
 import java.net.Socket;
+import java.util.Date;
 
 /**
  * Created by numan947 on 3/5/17.
@@ -9,6 +10,7 @@ public class Participant {
     private String ipAddress;
     private String examCode;
     private Socket socket;
+    private Date startTime;
 
     public Participant(String ipAddress, String examCode, Socket socket) {
         this.ipAddress = ipAddress;
@@ -39,5 +41,13 @@ public class Participant {
 
     public void setSocket(Socket socket) {
         this.socket = socket;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }
