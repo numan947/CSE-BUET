@@ -23,7 +23,7 @@ public class client_main_gui_controller {
     private TextField exam_code;
 
     @FXML
-    private TextField StudentID;
+    private TextField studentID;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -63,12 +63,33 @@ public class client_main_gui_controller {
 
     @FXML
     void connect(ActionEvent event) {
+        if(exam_code.getText()!=null||!exam_code.getText().equals(""))
+            if(studentID.getText()!=null||!studentID.getText().equals(""))
+                if(server_ip_address.getText()!=null||!server_ip_address.getText().equals(""))
+                    if(port_number.getText()!=null||!port_number.getText().equals("")){
+                        try {
+                            String ipaddress = server_ip_address.getText();
+                            int port = Integer.parseInt(port_number.getText());
+                            String sid=studentID.getText();
+                            String e_c=exam_code.getText();
 
+                            //todo here'll be the code for initializing the MainNetworkThread
+
+
+
+                        }catch (Exception e){
+                            //todo throw with alert dialog
+                            System.out.println(e);
+                        }
+                    }
+        //todo may be show an alert dialog to say that the inputs are empty?
     }
+
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert duration != null : "fx:id=\"duration\" was not injected: check your FXML file 'client_side_gui.fxml'.";
+        assert studentID != null : "fx:id=\"studentID\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         assert correction_list != null : "fx:id=\"correction_list\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         assert start_time != null : "fx:id=\"start_time\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         assert rules_and_regulations != null : "fx:id=\"rules_and_regulations\" was not injected: check your FXML file 'client_side_gui.fxml'.";
@@ -77,7 +98,8 @@ public class client_main_gui_controller {
         assert exam_name != null : "fx:id=\"exam_name\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         assert backup_interval != null : "fx:id=\"backup_interval\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         assert connect != null : "fx:id=\"connect\" was not injected: check your FXML file 'client_side_gui.fxml'.";
+        assert exam_code != null : "fx:id=\"exam_code\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         assert status != null : "fx:id=\"status\" was not injected: check your FXML file 'client_side_gui.fxml'.";
-
+        rules_and_regulations.setEditable(false);
     }
 }

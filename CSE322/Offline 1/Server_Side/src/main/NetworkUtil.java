@@ -13,7 +13,7 @@ public class NetworkUtil {
     private BufferedInputStream is=null;
     private BufferedOutputStream os=null;
     private Socket socket=null;
-    private int DEFAULT_BUFFER_SIZE=8192;
+    private int DEFAULT_BUFFER_SIZE=12000;
     private int BUFFER_SIZE;
 
     public NetworkUtil(Socket socket) throws IOException {
