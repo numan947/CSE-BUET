@@ -82,8 +82,6 @@ public class MainNetworkThread implements Runnable {
                         networkUtil.flushStream();
 
 
-
-
                         //read the response msg
                         cnt=networkUtil.readBuff(buff);
                         msg=new String(buff,0,cnt);
@@ -159,7 +157,12 @@ public class MainNetworkThread implements Runnable {
                                                 networkUtil.flushStream();
                                                 tmpCt=0;
                                             }
+
                                         }
+                                        networkUtil.flushStream();
+                                        fbuff.close();
+
+
                                         //read the response: QUESTION_RECEIVED
                                         cnt=networkUtil.readBuff(buff);
                                         msg=new String(buff,0,cnt);
@@ -177,7 +180,7 @@ public class MainNetworkThread implements Runnable {
                     }
                 }
             }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 

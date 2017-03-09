@@ -28,6 +28,7 @@
                         <Font name="KacstPoster" size="34.0" />
                      </font>
                   </Label>
+                  <Button fx:id="questionSavePath" mnemonicParsing="false" onAction="#setQuestionSavePath" text="SetQuestionSavePath" />
                   <TextField fx:id="exam_code" promptText="Exam Code" />
                   <TextField fx:id="studentID" promptText="Student ID" />
                   <TextField fx:id="server_ip_address" promptText="Server IP Address" />

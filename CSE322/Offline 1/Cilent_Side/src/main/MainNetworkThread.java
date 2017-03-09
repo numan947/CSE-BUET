@@ -1,13 +1,7 @@
 package main;
 
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.stage.FileChooser;
-
 import java.io.*;
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * Created by numan947 on 3/5/17.
@@ -21,16 +15,16 @@ public class MainNetworkThread implements Runnable {
     private byte[]buff=null;
     private File fileLocation;
 
-    public MainNetworkThread(Client_GUI_Controller controller, String examCode, String studentID, String ipAddress, int port) {
+    public MainNetworkThread(Client_GUI_Controller controller, String examCode, String studentID, String ipAddress, int port,File fileLocation) {
         this.studentID = studentID;
         this.ipAddress = ipAddress;
         this.port = port;
         this.examCode=examCode;
         this.controller=controller;
+        this.fileLocation=fileLocation;
         buff=new byte[8192];
 
-
-
+        
         Thread t=new Thread(this);
         t.setDaemon(true);
         t.start();
@@ -95,7 +89,7 @@ public class MainNetworkThread implements Runnable {
 
                     //todo may be we'll need clean up here
                     String[] info = fullmsg.split("\\$\\$\\$\\$");
-                    System.out.println(fullmsg);
+                    //System.out.println(fullmsg);
 
                     //parsed all the basic info
                     if(info.length>=6) {
@@ -114,7 +108,7 @@ public class MainNetworkThread implements Runnable {
 
                     msg=new String(buff,0,cnt);
 
-                    System.out.println(msg);
+                   // System.out.println(msg);
 
                     String[]tmp=msg.split("\\$\\$\\$\\$");
                     String fileName=tmp[0];
@@ -127,14 +121,17 @@ public class MainNetworkThread implements Runnable {
                     boolean corrupted=false;
 
 
-                    String path=System.getProperty("user.home")+File.separator+fileName;
-                    System.out.println(path);
-                    File fileToSave=new File(path);
+
+                    File fileToSave=new File(fileLocation,fileName);
 
                     if(!fileToSave.exists())fileToSave.createNewFile();
 
 
-                    BufferedOutputStream fbuff=new BufferedOutputStream(new FileOutputStream(fileToSave));
+
+                    FileOutputStream fos=new FileOutputStream(fileToSave);
+                    BufferedOutputStream fbuff=new BufferedOutputStream(fos);
+                    cnt=0;
+                    totalRead=0;
                     while (true) {
                         if (cnt >= fileSize||totalRead==-1) break;
                         totalRead = networkUtil.readBuff(buff);
@@ -152,42 +149,7 @@ public class MainNetworkThread implements Runnable {
                         networkUtil.flushStream();
                     }
                     fbuff.close();
-
-                    //show alertDialog to save the file
-                    fileLocation=null;
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Question Received");
-                        alert.setHeaderText("Let the game of thrones begin :)");
-                        alert.setContentText("You MUST SAVE the Question");
-
-                        ButtonType buttonTypeOne = new ButtonType("SaveFile");
-                        alert.getButtonTypes().setAll(buttonTypeOne);
-                        Optional<ButtonType> result = alert.showAndWait();
-                        if (result.get() == buttonTypeOne){
-                            FileChooser fc=new FileChooser();
-                            fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("doc only :)","doc"));
-                            fileLocation=fc.showSaveDialog(controller.getInitiator().getMainStage());
-                        }
-                        //alert.showAndWait();
-                        System.out.println(fileLocation.getName());
-                        notifyAll();
-                    });
-
-                    wait();
-
-                    //move the file
-                    InputStream is = new FileInputStream(fileToSave);
-                    OutputStream os = new FileOutputStream(fileLocation);
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = is.read(buffer)) > 0) {
-                        os.write(buffer, 0, length);
-                    }
-                    is.close();
-                    os.close();
-
-
+                    fos.close();
 
                     //now we wait for any correction or something :)
 
@@ -219,7 +181,7 @@ public class MainNetworkThread implements Runnable {
                 //todo what'll happen if the server sends something else?
             }
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             //todo show with alertDialog?
             e.printStackTrace();
         }
@@ -227,20 +189,6 @@ public class MainNetworkThread implements Runnable {
 
     }
 
-    private String readNBytes(long sizeOfDetails, NetworkUtil networkUtil) throws IOException {
-
-        System.out.println("HELLO WORLD");
-        int cnt=0;
-        int tmp=0;
-        StringBuilder toReturn=new StringBuilder();
-        while(cnt>=sizeOfDetails||tmp==-1){
-            tmp=networkUtil.readBuff(buff);
-            cnt+=tmp;
-            toReturn.append(new String(buff,0,tmp));
-            System.out.println(toReturn);
-        }
-        return toReturn.toString();
-    }
 
     private void writeToFile(byte[] b, int totalRead, int cnt, BufferedOutputStream fbuff)
     {

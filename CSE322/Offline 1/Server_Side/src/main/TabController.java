@@ -27,8 +27,8 @@ public class TabController {
 
     private String unique_exam_id;
     private Server_GUI_Controller controller;
-    private URL backUpStoragePath;
-    private URL questionStoragePath;
+    private File backUpStoragePath;
+    private File questionStoragePath;
 
     public void setUnique_exam_id(String unique_exam_id) {
         this.unique_exam_id = unique_exam_id;
@@ -164,8 +164,8 @@ public class TabController {
         try {
             directoryChooser.setInitialDirectory(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
             File ff=directoryChooser.showDialog(controller.getInitiator().getMainStage());
-            backUpStoragePath=ff.toURI().toURL();
-        } catch (URISyntaxException | MalformedURLException e) {
+            backUpStoragePath=ff;
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
@@ -176,8 +176,8 @@ public class TabController {
         try {
             filechooser.setInitialDirectory(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
             File ff=filechooser.showOpenDialog(controller.getInitiator().getMainStage());
-            questionStoragePath=ff.toURI().toURL();
-        } catch (URISyntaxException | MalformedURLException e) {
+            questionStoragePath=ff;
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 

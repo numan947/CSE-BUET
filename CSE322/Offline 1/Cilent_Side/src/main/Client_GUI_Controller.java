@@ -4,6 +4,7 @@ package main;
  * Sample Skeleton for 'client_side_gui.fxml' Controller Class
  */
 
+import java.io.File;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -16,11 +17,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 
 public class Client_GUI_Controller {
 
-    private ClientSide initiator;
 
+    private ClientSide initiator;
+    private File saveLocation;
+
+    @FXML
+    private Button questionSavePath;
     @FXML
     private Label warning_time;
     @FXML
@@ -79,8 +85,7 @@ public class Client_GUI_Controller {
                             String e_c=exam_code.getText();
 
                             //todo here'll be the code for initializing the MainNetworkThread
-                            MainNetworkThread networkThread=new MainNetworkThread(this,e_c,sid,ipaddress,port);
-
+                            MainNetworkThread networkThread=new MainNetworkThread(this,e_c,sid,ipaddress,port,saveLocation);
 
                         }catch (Exception e){
                             //todo throw with alert dialog
@@ -106,6 +111,7 @@ public class Client_GUI_Controller {
         assert exam_code != null : "fx:id=\"exam_code\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         assert status != null : "fx:id=\"status\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         rules_and_regulations.setEditable(false);
+        saveLocation=new File(System.getProperty("user.home"));
     }
 
     public void setInitiator(ClientSide initiator) {
@@ -142,9 +148,9 @@ public class Client_GUI_Controller {
 
     }
 
-
-
-
-
-
+    @FXML
+    void setQuestionSavePath(ActionEvent actionEvent) {
+        DirectoryChooser dc=new DirectoryChooser();
+        saveLocation=dc.showDialog(initiator.getMainStage());
+    }
 }

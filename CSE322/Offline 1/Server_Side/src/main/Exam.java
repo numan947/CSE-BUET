@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,8 +28,8 @@ public class Exam {
     private ArrayList<String>listOfCorrections;
     private String examCode;
     private ArrayList<Participant>participants;
-    private URL pathToBackupFolder;
-    private URL pathToQuestion;
+    private File pathToBackupFolder;
+    private File pathToQuestion;
 
 
     public Exam(TabController controllerForTheTabs, String examCode) {
@@ -49,11 +50,11 @@ public class Exam {
         this.participants = participants;
     }
 
-    public URL getPathToBackupFolder() {
+    public File getPathToBackupFolder() {
         return pathToBackupFolder;
     }
 
-    public void setPathToBackupFolder(URL pathToBackupFolder) {
+    public void setPathToBackupFolder(File pathToBackupFolder) {
         this.pathToBackupFolder = pathToBackupFolder;
     }
 
@@ -113,11 +114,11 @@ public class Exam {
         this.examCode = examCode;
     }
 
-    public URL getPathToQuestion() {
+    public File getPathToQuestion() {
         return pathToQuestion;
     }
 
-    public void setPathToQuestion(URL pathToQuestion) {
+    public void setPathToQuestion(File pathToQuestion) {
         this.pathToQuestion = pathToQuestion;
     }
 
