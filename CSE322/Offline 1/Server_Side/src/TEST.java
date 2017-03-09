@@ -11,11 +11,9 @@ import java.net.UnknownHostException;
 public class TEST {
 
     public static void main(String[] args) {
-        System.out.println(new File("/home/numan947/Documents/Server/Question/question1.doc").exists());
-        System.out.println(new File("/home/numan947/Documents/Server/Question/question1.doc").getName());
-        System.out.println(new File("/home/numan947/Documents/Server/Question/question1.doc").getFreeSpace());
-        System.out.println(new File("/home/numan947/Documents/Server/Question/question1.doc").getTotalSpace());
-        System.out.println(new File("/home/numan947/Documents/Server/Question/question1.doc").length());
+        String a="AAAABBBBCDD";
+        String bb=a.replace("AAA","KKK");
+        System.out.println(bb);
 
 
 

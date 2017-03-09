@@ -69,11 +69,12 @@ public class MainServerThread implements Runnable {
                             new MainNetworkThread(this,util);
 
                         }
-                        else if(msg.equals("FILE_TRANSFER")){
+                        else if(msg.contains("FILE_TRANSFER")){
                             //open a file transfer thread
-                            util.writeBuff("SEND_ADDITIONAL_INFO".getBytes());
-                            util.flushStream();
-                            // todo new FileTransferThread();
+                            String[]tmp=msg.split("\\$\\$\\$\\$");
+                            Participant p=controller.getInitiator().getParticipantObjectMap().get(Integer.parseInt(tmp[0]));
+                            p.getFileTransferThread().setUtil(util);
+                            p.getFileTransferThread().runThread();
                         }
                         else{
                             util.closeAll();

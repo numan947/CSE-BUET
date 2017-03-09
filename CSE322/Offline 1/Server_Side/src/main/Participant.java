@@ -1,7 +1,6 @@
 package main;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Date;
 
 /**
@@ -11,8 +10,25 @@ public class Participant {
     private String ipAddress;
     private String examCode;
     private File backupStoragePath;
-
     private Date startTime;
+    private FileTransferThread fileTransferThread;
+    private int backupInterval;
+
+    public int getBackupInterval() {
+        return backupInterval;
+    }
+
+    public void setBackupInterval(int backupInterval) {
+        this.backupInterval = backupInterval;
+    }
+
+    public FileTransferThread getFileTransferThread() {
+        return fileTransferThread;
+    }
+
+    public void setFileTransferThread(FileTransferThread fileTransferThread) {
+        this.fileTransferThread = fileTransferThread;
+    }
 
     public File getBackupStoragePath() {
         return backupStoragePath;

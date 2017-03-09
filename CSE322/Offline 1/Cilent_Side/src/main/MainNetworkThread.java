@@ -24,7 +24,7 @@ public class MainNetworkThread implements Runnable {
         this.fileLocation=fileLocation;
         buff=new byte[8192];
 
-        
+
         Thread t=new Thread(this);
         t.setDaemon(true);
         t.start();
@@ -89,18 +89,16 @@ public class MainNetworkThread implements Runnable {
 
                     //todo may be we'll need clean up here
                     String[] info = fullmsg.split("\\$\\$\\$\\$");
-                    //System.out.println(fullmsg);
-
                     //parsed all the basic info
-                    if(info.length>=6) {
-                        String e_c = info[0];
-                        String examName = info[1];
-                        int duration = Integer.parseInt(info[2]);
-                        int backupInterval = Integer.parseInt(info[3]);
-                        int warningTime = Integer.parseInt(info[4]);
-                        long startTimeInLong = Long.parseLong(info[5]);
-                        Date startTime = new Date(startTimeInLong);
-                    }
+
+                    String e_c = info[0];
+                    String examName = info[1];
+                    int duration = Integer.parseInt(info[2]);
+                    int backupInterval = Integer.parseInt(info[3]);
+                    int warningTime = Integer.parseInt(info[4]);
+                    long startTimeInLong = Long.parseLong(info[5]);
+                    Date startTime = new Date(startTimeInLong);
+
                     networkUtil.writeBuff("DATA_RECEIVED".getBytes());
                     networkUtil.flushStream();
 
@@ -127,7 +125,7 @@ public class MainNetworkThread implements Runnable {
                     if(!fileToSave.exists())fileToSave.createNewFile();
 
 
-
+                    //file transfer start
                     FileOutputStream fos=new FileOutputStream(fileToSave);
                     BufferedOutputStream fbuff=new BufferedOutputStream(fos);
                     cnt=0;
@@ -150,6 +148,16 @@ public class MainNetworkThread implements Runnable {
                     }
                     fbuff.close();
                     fos.close();
+                    //file transfer finished
+
+
+                    //now we start our FileTransferThread that'll do the backup
+                    cnt=networkUtil.readBuff(buff);
+                    msg=new String(buff,0,cnt);
+                    if(msg.equals("INITIATE_FILE_TRANSFER_THREAD")){
+                        new FileTransferThread(this,examCode,studentID,ipAddress,port,backupInterval,fileToSave);
+                    }
+
 
                     //now we wait for any correction or something :)
 

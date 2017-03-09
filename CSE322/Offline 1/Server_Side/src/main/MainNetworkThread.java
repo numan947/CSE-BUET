@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 /**
  * Created by numan947 on 3/9/17.
@@ -26,12 +25,12 @@ public class MainNetworkThread implements Runnable {
     }
 
 
-    private int getBuff(byte[]buff, BufferedInputStream fbuff)
+    private int getBuffFromFile(byte[]buff, BufferedInputStream fbuff)
     {
         try {
             return fbuff.read(buff);
         } catch (IOException e) {
-            System.out.println("Exception In ClientPackage.Client.getBuff "+e.getMessage());
+            System.out.println("Exception In ClientPackage.Client.getBuffFromFile "+e.getMessage());
         }
         return 0;
     }
@@ -73,6 +72,8 @@ public class MainNetworkThread implements Runnable {
 
                         //put in the participant table
                         Participant participant=new Participant(networkUtil.getSocket().getInetAddress().getHostAddress(),examCode);
+                        participant.setFileTransferThread(new FileTransferThread(null,participant));
+                        participant.setBackupInterval(exam.getBackupInterval());
                         serverThread.getController().getInitiator().getParticipantObjectMap().put(studentId,participant);
 
 
@@ -90,7 +91,8 @@ public class MainNetworkThread implements Runnable {
 
 
                         //create the "Details" string to send
-                        String details=exam.getExamCode()+"$$$$"+exam.getExamName()+"$$$$"+exam.getDuration()+"$$$$"+exam.getBackupInterval()+"$$$$"+exam.getWarningTime()+"$$$$"+exam.getStartTime().getTime();
+                        String ss=exam.getExamCode().replace("Exam ID: ","");
+                        String details=ss+"$$$$"+exam.getExamName()+"$$$$"+exam.getDuration()+"$$$$"+exam.getBackupInterval()+"$$$$"+exam.getWarningTime()+"$$$$"+exam.getStartTime().getTime();
 
 
                         if(msg.equals("REQUESTING_SIZE_OF_DETAILS_STRING")){
@@ -123,12 +125,12 @@ public class MainNetworkThread implements Runnable {
                                     //now we wait for appropriate time to send the question to the sender
                                     long diff=exam.getStartTime().getTime()-System.currentTimeMillis();
 
-                                    //prepare the filename and filesize to send
-                                    File file=new File(exam.getPathToQuestion().toURI());
+                                    //prepare the fileName and fileSize to send
+                                    File file=exam.getPathToQuestion();
                                     details=file.getName()+"$$$$"+file.length();
 
                                     //create folder for the participant
-                                    File folderForParticipant=new File(new File(exam.getPathToBackupFolder().toURI()),String.valueOf(studentId));
+                                    File folderForParticipant=new File(exam.getPathToBackupFolder(),String.valueOf(studentId));
                                     participant.setBackupStoragePath(folderForParticipant);
 
                                     if(diff>0)Thread.sleep(diff-30);
@@ -150,7 +152,7 @@ public class MainNetworkThread implements Runnable {
                                         BufferedInputStream fbuff=new BufferedInputStream(new FileInputStream(file));
                                         int tmpCt=0;
                                         int totalRead=0;
-                                        while ((totalRead = getBuff(buff,fbuff)) > -1) {
+                                        while ((totalRead = getBuffFromFile(buff,fbuff)) > -1) {
                                             tmpCt+=totalRead;
                                             networkUtil.writeBuff(buff, 0, totalRead);
                                             if(tmpCt>=8192){
@@ -171,6 +173,8 @@ public class MainNetworkThread implements Runnable {
 
 
                                         if(msg.equals("QUESTION_RECEIVED"))correctionFlag=true;
+
+                                        networkUtil.writeBuff("INITIATE_FILE_TRANSFER_THREAD".getBytes());
 
                                         // now we go to correction flag to wait for corrections :)
                                     }
