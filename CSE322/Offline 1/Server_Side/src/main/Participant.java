@@ -9,13 +9,13 @@ import java.util.Date;
 public class Participant {
     private String ipAddress;
     private String examCode;
-    private Socket socket;
+    private NetworkUtil networkUtil;
     private Date startTime;
 
-    public Participant(String ipAddress, String examCode, Socket socket) {
+    public Participant(String ipAddress, String examCode, NetworkUtil networkUtil) {
         this.ipAddress = ipAddress;
         this.examCode = examCode;
-        this.socket = socket;
+        this.networkUtil = networkUtil;
     }
 
 
@@ -35,12 +35,12 @@ public class Participant {
         this.examCode = examCode;
     }
 
-    public Socket getSocket() {
-        return socket;
+    public NetworkUtil getNetworkUtil() {
+        return networkUtil;
     }
 
-    public void setSocket(Socket socket) {
-        this.socket = socket;
+    public void setNetworkUtil(NetworkUtil networkUtil) {
+        this.networkUtil = networkUtil;
     }
 
     public Date getStartTime() {

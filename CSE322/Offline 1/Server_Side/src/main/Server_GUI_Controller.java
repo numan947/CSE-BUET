@@ -3,28 +3,30 @@ package main;
  * Sample Skeleton for 'server_side_gui_main.fxml' Controller Class
  */
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Date;
-import java.util.ResourceBundle;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 
-public class server_gui_controller {
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    public BorderPane bp;
+public class Server_GUI_Controller {
     // general fields
     private String server_default_status="not started";
     private FXMLLoader fxmlLoader=null;
+    private ServerSide initiator;
+    private MainServerThread mainServerThread=null;
 
+    public void setInitiator(ServerSide initiator) {
+        this.initiator = initiator;
+    }
 
-
-
+    public ServerSide getInitiator() {
+        return initiator;
+    }
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -55,34 +57,61 @@ public class server_gui_controller {
 
     @FXML
     void start_server_action(ActionEvent event) {
+        if(status.getText().equals("status: not started")||status.getText().equals("status: stopped")){
+            //server start code here
+            if(mainServerThread==null){
+                try {
+                    this.mainServerThread=new MainServerThread(this, ip_address.getText(),Integer.parseInt(port_number.getText()));
+                    status.setText("status: running");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            else{
+                this.mainServerThread.setStopServer(false);
+                status.setText("status: running");
+            }
+
+            start_server.setText("Stop Server");
+        }else{
+            //server stop code here
+            if(mainServerThread!=null){
+                mainServerThread.setStopServer(true);
+            }
+            status.setText("status: stopped");
+            start_server.setText("Start Server");
+        }
     }
 
     @FXML
     void create_exam_action(ActionEvent event) {
-        try {
-            // reuse fxmlLoader
-            fxmlLoader.setRoot(null);
-            fxmlLoader.setController(null);
+        // code for the button create exam
+        if(!exam_id.getText().equals(""))
+            try {
+                // reuse fxmlLoader
+                fxmlLoader.setRoot(null);
+                fxmlLoader.setController(null);
 
 
-            fxmlLoader.setLocation(getClass().getResource("/res/server_side_tab_pane.fxml"));
-            Parent pp=fxmlLoader.load();
-            controller_for_the_tabs tabController=fxmlLoader.getController();
+                fxmlLoader.setLocation(getClass().getResource("/res/server_side_tab_pane.fxml"));
+                Parent pp=fxmlLoader.load();
+                TabController tabController=fxmlLoader.getController();
 
 
-            //get-set the exam_
-            tabController.setUnique_exam_id(this.exam_id.getText());
-            this.exam_id.clear();
+                //get-set the exam_
+                tabController.setUnique_exam_id(this.exam_id.getText());
+                tabController.setController(this);
+                this.exam_id.clear();
 
 
-            Tab t=new Tab("WHY",pp);
-            t.setClosable(true);
+                Tab t=new Tab("WHY",pp);
+                t.setClosable(true);
 
-            exam_list.getTabs().add(t);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                exam_list.getTabs().add(t);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
     }
 

@@ -8,18 +8,30 @@ import java.util.Date;
  * Created by numan947 on 3/5/17.
  **/
 public class Exam {
-    private controller_for_the_tabs controllerForTheTabs;
+    private String examName;
+    private TabController controllerForTheTabs;
     private Date startTime;
     private int warningTime;
     private int backupInterval;
-    private ArrayList<String>allowedIDs;
+    private int duration;
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    private ArrayList<Integer>allowedIDs;
     private ArrayList<String>listOfCorrections;
     private String examCode;
     private ArrayList<Participant>participants;
     private URL pathToBackupFolder;
+    private URL pathToQuestion;
 
 
-    public Exam(controller_for_the_tabs controllerForTheTabs, String examCode) {
+    public Exam(TabController controllerForTheTabs, String examCode) {
         this.controllerForTheTabs = controllerForTheTabs;
         this.examCode = examCode;
         this.allowedIDs=new ArrayList<>();
@@ -46,11 +58,11 @@ public class Exam {
         this.pathToBackupFolder = pathToBackupFolder;
     }
 
-    public controller_for_the_tabs getControllerForTheTabs() {
+    public TabController getControllerForTheTabs() {
         return controllerForTheTabs;
     }
 
-    public void setControllerForTheTabs(controller_for_the_tabs controllerForTheTabs) {
+    public void setControllerForTheTabs(TabController controllerForTheTabs) {
         this.controllerForTheTabs = controllerForTheTabs;
     }
 
@@ -78,11 +90,11 @@ public class Exam {
         this.backupInterval = backupInterval;
     }
 
-    public ArrayList<String> getAllowedIDs() {
+    public ArrayList<Integer> getAllowedIDs() {
         return allowedIDs;
     }
 
-    public void setAllowedIDs(ArrayList<String> allowedIDs) {
+    public void setAllowedIDs(ArrayList<Integer> allowedIDs) {
         this.allowedIDs = allowedIDs;
     }
 
@@ -100,5 +112,21 @@ public class Exam {
 
     public void setExamCode(String examCode) {
         this.examCode = examCode;
+    }
+
+    public URL getPathToQuestion() {
+        return pathToQuestion;
+    }
+
+    public void setPathToQuestion(URL pathToQuestion) {
+        this.pathToQuestion = pathToQuestion;
+    }
+
+    public String getExamName() {
+        return examName;
+    }
+
+    public void setExamName(String examName) {
+        this.examName = examName;
     }
 }

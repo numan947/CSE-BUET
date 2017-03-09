@@ -5,8 +5,10 @@ package main;
  */
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,9 +17,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class client_main_gui_controller {
+public class Client_GUI_Controller {
 
-
+    private ClientSide initiator;
 
     @FXML
     private TextField exam_code;
@@ -61,6 +63,7 @@ public class client_main_gui_controller {
     @FXML // fx:id="status"
     private Label status; // Value injected by FXMLLoader
 
+
     @FXML
     void connect(ActionEvent event) {
         if(exam_code.getText()!=null||!exam_code.getText().equals(""))
@@ -102,4 +105,39 @@ public class client_main_gui_controller {
         assert status != null : "fx:id=\"status\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         rules_and_regulations.setEditable(false);
     }
+
+    public void setInitiator(ClientSide initiator) {
+        this.initiator = initiator;
+    }
+
+    public ClientSide getInitiator() {
+        return initiator;
+    }
+
+
+    public void setAll(String fullmsg)
+    {
+        Platform.runLater(() -> {
+            String[] info = fullmsg.split("\\$\\$\\$\\$");
+            //parsed all the basic info
+            String e_c=info[0];
+            String examName=info[1];
+            int duration=Integer.parseInt(info[2]);
+            int backupInterval=Integer.parseInt(info[3]);
+            int warningTime=Integer.parseInt(info[4]);
+            long startTimeInLong=Long.parseLong(info[5]);
+            Date startTime=new Date(startTimeInLong);
+
+            this.backup_interval.setText(backup_interval.getText()+" "+backupInterval+"millis");
+            this.
+
+        });
+
+    }
+
+
+
+
+
+
 }

@@ -1,23 +1,20 @@
 package main;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.Socket;
-import java.net.URL;
+import java.util.Date;
 
 /**
  * Created by numan947 on 3/5/17.
  **/
 public class MainNetworkThread implements Runnable {
-    private client_main_gui_controller controller;
+    private Client_GUI_Controller controller;
     private String examCode;
     private String studentID;
     private String ipAddress;
     private int port;
     private byte[]buff=null;
 
-    public MainNetworkThread(client_main_gui_controller controller, String examCode, String studentID, String ipAddress, int port) {
+    public MainNetworkThread(Client_GUI_Controller controller, String examCode, String studentID, String ipAddress, int port) {
         this.studentID = studentID;
         this.ipAddress = ipAddress;
         this.port = port;
@@ -28,40 +25,70 @@ public class MainNetworkThread implements Runnable {
 
     @Override
     public void run() {
+        int cnt;
+        String msg;
         NetworkUtil networkUtil=null;
         try {
             networkUtil = new NetworkUtil(ipAddress, port);
 
-            //send student id and exam code
-            String data=examCode+"$$$$"+studentID;
-            networkUtil.writeBuff(data.getBytes());
+            //send requestType
+            networkUtil.writeBuff("NEW_CONNECTION".getBytes());
             networkUtil.flushStream();
 
-            //reading server's response
-            int cnt=networkUtil.readBuff(buff);
-            String s=new String(buff,0,cnt);
+            cnt=networkUtil.readBuff(buff);
+            msg=new String(buff,0,cnt);
 
-            //if response is "APPROVED"
-            if(s.equals("APPROVED")){
+            if(msg.equals("SEND_ADDITIONAL_INFO")){
 
-                //send msg for size of the details string
-                networkUtil.writeBuff("REQUESTING_SIZE_OF_DETAILS_STRING".getBytes());
 
-                //now we wait for the server to send the size of the details
+                //send student id and exam code; $$$$ is our separator for multiple string information
+                String data=examCode+"$$$$"+studentID;
+                networkUtil.writeBuff(data.getBytes());
+                networkUtil.flushStream();
+
+                //reading server's response
                 cnt=networkUtil.readBuff(buff);
-                s=new String(buff,0,cnt);
+                msg=new String(buff,0,cnt);
 
-                int sizeOfDetails=Integer.parseInt(s);
+                //if response is "APPROVED"
+                if(msg.equals("APPROVED")) {
 
-                //send acknowledgement of receiving the size
-                networkUtil.writeBuff("SIZE_RECEIVED".getBytes());
+                    //send msg for size of the details string
+                    networkUtil.writeBuff("REQUESTING_SIZE_OF_DETAILS_STRING".getBytes());
 
-                //after this we'll start receiving a big msg, so, to read we make another method
-                String fullmsg=readNBytes(sizeOfDetails,networkUtil);
-                //now we decode the fullmsg
-                String[]info=fullmsg.split("\\$\\$\\$\\$");
-                //todo the rest will be done of wednesday inshallah :)
+                    //now we wait for the server to send the size of the details
+                    cnt = networkUtil.readBuff(buff);
+                    msg = new String(buff, 0, cnt);
 
+                    int sizeOfDetails = Integer.parseInt(msg);
+
+                    //send acknowledgement of receiving the size
+                    networkUtil.writeBuff("SIZE_RECEIVED".getBytes());
+
+                    //after this we'll start receiving a big msg, so, to read we make another method
+                    String fullmsg = readNBytes(sizeOfDetails, networkUtil);
+                    //now we decode the fullmsg:
+                    String[] info = fullmsg.split("\\$\\$\\$\\$");
+
+
+                    //parsed all the basic info
+                    String e_c=info[0];
+                    String examName=info[1];
+                    int duration=Integer.parseInt(info[2]);
+                    int backupInterval=Integer.parseInt(info[3]);
+                    int warningTime=Integer.parseInt(info[4]);
+                    long startTimeInLong=Long.parseLong(info[5]);
+                    Date startTime=new Date(startTimeInLong);
+
+                    //set the basic info appropriately
+
+
+
+                    //todo the rest will be done of wednesday inshallah :)
+                }
+                else{
+
+                }
 
             }else{
                 //todo what'll happen if the server sends something else?

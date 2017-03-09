@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller_for_the_tabs">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.TabController">
    <top>
       <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="245.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -50,8 +50,18 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
+                  <Label text="Exam Duration:" />
+                  <TextField fx:id="exam_duration" promptText="&lt;In seconds&gt;" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="2.0" left="1.0" right="1.0" top="2.0" />
+                     </padding>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
                   <Label text="Start Time:" />
-                  <TextField fx:id="start_time" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="start_time" promptText="dd-MM-yyyy&lt;space&gt;hh:mm aa" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
                      </HBox.margin>
@@ -61,7 +71,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="Warning Time:" />
-                  <TextField fx:id="warning_time" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="warning_time" promptText="&lt;seconds before sending warning&gt;" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
                      </HBox.margin>
@@ -71,7 +81,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="Backup interval:" />
-                  <TextField fx:id="backup_interval" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="backup_interval" promptText="&lt;seconds between two backups&gt;" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
                      </HBox.margin>
@@ -81,7 +91,7 @@
             <HBox prefHeight="23.0" prefWidth="600.0">
                <children>
                   <Label text="Allowed IDs:" />
-                  <TextField fx:id="allowed_ids" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="allowed_ids" promptText="allowed IDs(integer): &lt;ID1,ID2...&gt; or &lt;ID1-ID100&gt;" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
                      </HBox.margin>
