@@ -24,7 +24,7 @@ public class Server_GUI_Controller {
         this.initiator = initiator;
     }
 
-    public ServerSide getInitiator() {
+    public synchronized ServerSide getInitiator() {
         return initiator;
     }
 

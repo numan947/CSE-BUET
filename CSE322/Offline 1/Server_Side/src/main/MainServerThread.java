@@ -94,7 +94,7 @@ public class MainServerThread implements Runnable {
         }
     }
 
-    public Server_GUI_Controller getController() {
+    public synchronized Server_GUI_Controller getController() {
         return controller;
     }
 }

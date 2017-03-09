@@ -22,6 +22,8 @@ public class Client_GUI_Controller {
     private ClientSide initiator;
 
     @FXML
+    private Label warning_time;
+    @FXML
     private TextField exam_code;
 
     @FXML
@@ -77,7 +79,7 @@ public class Client_GUI_Controller {
                             String e_c=exam_code.getText();
 
                             //todo here'll be the code for initializing the MainNetworkThread
-
+                            MainNetworkThread networkThread=new MainNetworkThread(this,e_c,sid,ipaddress,port);
 
 
                         }catch (Exception e){
@@ -128,8 +130,13 @@ public class Client_GUI_Controller {
             long startTimeInLong=Long.parseLong(info[5]);
             Date startTime=new Date(startTimeInLong);
 
-            this.backup_interval.setText(backup_interval.getText()+" "+backupInterval+"millis");
-            this.
+            this.backup_interval.setText(backup_interval.getText()+" "+backupInterval/1000+" seconds");
+            this.exam_code.setText(e_c);
+            this.exam_code.setEditable(false);
+            this.exam_name.setText(exam_name.getText()+" "+examName);
+            this.start_time.setText(start_time.getText()+" "+startTime.toString());
+            this.duration.setText(this.duration.getText()+" "+duration+" seconds");
+            this.warning_time.setText(this.warning_time.getText()+" "+warningTime/1000+" seconds");
 
         });
 

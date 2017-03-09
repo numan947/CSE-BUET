@@ -1,6 +1,7 @@
 package main;
 
-import java.net.Socket;
+import java.io.File;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -9,15 +10,22 @@ import java.util.Date;
 public class Participant {
     private String ipAddress;
     private String examCode;
-    private NetworkUtil networkUtil;
+    private File backupStoragePath;
+
     private Date startTime;
 
-    public Participant(String ipAddress, String examCode, NetworkUtil networkUtil) {
-        this.ipAddress = ipAddress;
-        this.examCode = examCode;
-        this.networkUtil = networkUtil;
+    public File getBackupStoragePath() {
+        return backupStoragePath;
     }
 
+    public void setBackupStoragePath(File backupStoragePath) {
+        this.backupStoragePath = backupStoragePath;
+    }
+
+    public Participant(String ipAddress, String examCode) {
+        this.ipAddress = ipAddress;
+        this.examCode = examCode;
+    }
 
     public String getIpAddress() {
         return ipAddress;
@@ -33,14 +41,6 @@ public class Participant {
 
     public void setExamCode(String examCode) {
         this.examCode = examCode;
-    }
-
-    public NetworkUtil getNetworkUtil() {
-        return networkUtil;
-    }
-
-    public void setNetworkUtil(NetworkUtil networkUtil) {
-        this.networkUtil = networkUtil;
     }
 
     public Date getStartTime() {

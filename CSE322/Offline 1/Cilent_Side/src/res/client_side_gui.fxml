@@ -15,7 +15,7 @@
                   <Label fx:id="exam_name" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Exam Name: " />
                   <Label fx:id="start_time" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Start Time:" />
                   <Label fx:id="duration" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Duration:" />
-                  <Label fx:id="exam_name1" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Warning Time:" />
+                  <Label fx:id="warning_time" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Warning Time:" />
                   <Label fx:id="backup_interval" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Backup interval:" />
                   <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Rules &amp; Regulations:" />
                   <TextArea fx:id="rules_and_regulations" prefHeight="200.0" prefWidth="200.0" />

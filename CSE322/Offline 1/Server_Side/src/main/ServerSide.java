@@ -16,7 +16,7 @@ public class ServerSide extends Application {
     //these are some maps and lists that'll be singleton in the whole project
     private ArrayList<String>examList;
     private Hashtable<String,ArrayList<String>>exam_Participant_Map;
-    private Hashtable<String,Participant>participantObjectMap;
+    private Hashtable<Integer, Participant> participantObjectMap;
     private Hashtable <String,Exam> examMap;
     private Stage mainStage;
 
@@ -29,7 +29,7 @@ public class ServerSide extends Application {
         //initialization
         exam_Participant_Map=new Hashtable<>();
         examList=new ArrayList<>();
-        participantObjectMap=new Hashtable<>();
+        participantObjectMap=new Hashtable<Integer, Participant>();
         examMap =new Hashtable<>();
 
 
@@ -59,7 +59,7 @@ public class ServerSide extends Application {
         return exam_Participant_Map;
     }
 
-    public Hashtable<String, Participant> getParticipantObjectMap() {
+    public Hashtable<Integer, Participant> getParticipantObjectMap() {
         return participantObjectMap;
     }
 

@@ -34,7 +34,6 @@ public class Exam {
     public Exam(TabController controllerForTheTabs, String examCode) {
         this.controllerForTheTabs = controllerForTheTabs;
         this.examCode = examCode;
-        this.allowedIDs=new ArrayList<>();
         this.listOfCorrections=new ArrayList<>();
         this.participants=new ArrayList<>();
     }

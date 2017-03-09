@@ -122,7 +122,7 @@ public class TabController {
         }
         int warning=Integer.parseInt(warning_time.getText())*1000; //milliseconds before warning
         int backupInterval=Integer.parseInt(backup_interval.getText())*1000;//milliseconds
-        int duration=Integer.parseInt(exam_duration.getText());// minutes
+        int duration=Integer.parseInt(exam_duration.getText());// seconds
 
 
         String idlist=allowed_ids.getText();
@@ -151,6 +151,7 @@ public class TabController {
 
         //adding to exam_list
         controller.getInitiator().getExamMap().put(exam_id.getText(),exam);
+        System.out.println(controller.getInitiator().getExamMap().toString());
     }
 
     public void removeFromExamList(ActionEvent actionEvent) {
