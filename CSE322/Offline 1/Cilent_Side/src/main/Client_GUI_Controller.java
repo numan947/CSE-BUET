@@ -24,7 +24,7 @@ public class Client_GUI_Controller {
 
     private ClientSide initiator;
     private File saveLocation;
-
+    MainNetworkThread networkThread;
     @FXML
     private Button questionSavePath;
     @FXML
@@ -71,27 +71,45 @@ public class Client_GUI_Controller {
     @FXML // fx:id="status"
     private Label status; // Value injected by FXMLLoader
 
+    public void clearConnectButton()
+    {
+        connect.setText("Connect");
+        status.setText("Status: Server Not Connected");
+        if (networkThread != null) {
+            networkThread.setRunning(false);
+            while (networkThread.getT().isAlive()) networkThread.getT().interrupt();
+        }
+    }
+
+
 
     @FXML
     void connect(ActionEvent event) {
-        if(exam_code.getText()!=null||!exam_code.getText().equals(""))
-            if(studentID.getText()!=null||!studentID.getText().equals(""))
-                if(server_ip_address.getText()!=null||!server_ip_address.getText().equals(""))
-                    if(port_number.getText()!=null||!port_number.getText().equals("")){
+
+
+        if(!exam_code.getText().equals("")&&!connect.getText().equals("connected")) {
+            if (studentID.getText() != null || !studentID.getText().equals(""))
+                if (server_ip_address.getText() != null || !server_ip_address.getText().equals(""))
+                    if (port_number.getText() != null || !port_number.getText().equals("")) {
                         try {
                             String ipaddress = server_ip_address.getText();
                             int port = Integer.parseInt(port_number.getText());
-                            String sid=studentID.getText();
-                            String e_c=exam_code.getText();
+                            String sid = studentID.getText();
+                            String e_c = exam_code.getText();
 
                             //todo here'll be the code for initializing the MainNetworkThread
-                            MainNetworkThread networkThread=new MainNetworkThread(this,e_c,sid,ipaddress,port,saveLocation);
-
-                        }catch (Exception e){
+                            networkThread = new MainNetworkThread(this, e_c, sid, ipaddress, port, saveLocation);
+                            connect.setText("Connected");
+                            status.setText("Status: Server Connected");
+                        } catch (Exception e) {
                             //todo throw with alert dialog
                             System.out.println(e);
                         }
                     }
+        }
+        else {
+            clearConnectButton();
+        }
         //todo may be show an alert dialog to say that the inputs are empty?
     }
 

@@ -1,5 +1,7 @@
 package main;
 
+import javafx.application.Platform;
+
 import java.io.*;
 import java.util.Date;
 
@@ -14,7 +16,8 @@ public class MainNetworkThread implements Runnable {
     private int port;
     private byte[]buff=null;
     private File fileLocation;
-
+    private boolean running;
+    private Thread t;
     public MainNetworkThread(Client_GUI_Controller controller, String examCode, String studentID, String ipAddress, int port,File fileLocation) {
         this.studentID = studentID;
         this.ipAddress = ipAddress;
@@ -23,9 +26,9 @@ public class MainNetworkThread implements Runnable {
         this.controller=controller;
         this.fileLocation=fileLocation;
         buff=new byte[8192];
+        this.running=true;
 
-
-        Thread t=new Thread(this);
+        t=new Thread(this);
         t.setDaemon(true);
         t.start();
 
@@ -161,7 +164,7 @@ public class MainNetworkThread implements Runnable {
 
                     //now we wait for any correction or something :)
 
-                    while(true){
+                    while(running&&!Thread.interrupted()){
                         networkUtil.readBuff(buff);
 
 
@@ -191,6 +194,13 @@ public class MainNetworkThread implements Runnable {
 
         } catch (IOException e) {
             //todo show with alertDialog?
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    controller.clearConnectButton();
+                }
+            });
+
             e.printStackTrace();
         }
 
@@ -206,5 +216,17 @@ public class MainNetworkThread implements Runnable {
         } catch (IOException e) {
             System.out.println("Exception In ServerPackage.FileProcessingThread.writeToFile "+e.getMessage());
         }
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    public Thread getT() {
+        return t;
+    }
+
+    public void setT(Thread t) {
+        this.t = t;
     }
 }
