@@ -42,7 +42,7 @@ public class Client_GUI_Controller {
     private Label duration; // Value injected by FXMLLoader
 
     @FXML // fx:id="correction_list"
-    private ListView<?> correction_list; // Value injected by FXMLLoader
+    private ListView<String> correction_list; // Value injected by FXMLLoader
 
     @FXML // fx:id="start_time"
     private Label start_time; // Value injected by FXMLLoader
@@ -70,13 +70,13 @@ public class Client_GUI_Controller {
 
     public void clearConnectButton()
     {
+        if (networkThread != null) {
+            networkThread.setRunning(false);
+        }
         Platform.runLater(() -> {
             connect.setText("Connect");
             status.setText("Status: Server Not Connected");
             exam_code.setEditable(true);
-            if (networkThread != null) {
-                networkThread.setRunning(false);
-            }
         });
     }
 
@@ -153,13 +153,13 @@ public class Client_GUI_Controller {
             String rules=info[6];
             Date startTime=new Date(startTimeInLong);
 
-            this.backup_interval.setText(backup_interval.getText()+" "+backupInterval/1000+" seconds");
+            this.backup_interval.setText("Backup Interval: "+backupInterval/1000+" seconds");
             this.exam_code.setText(e_c);
             this.exam_code.setEditable(false);
-            this.exam_name.setText(exam_name.getText()+" "+examName);
-            this.start_time.setText(start_time.getText()+" "+startTime.toString());
-            this.duration.setText(this.duration.getText()+" "+duration+" seconds");
-            this.warning_time.setText(this.warning_time.getText()+" "+warningTime/1000+" seconds");
+            this.exam_name.setText("Exam Name: "+examName);
+            this.start_time.setText("Start Time: "+startTime.toString());
+            this.duration.setText("Duration: "+duration+" seconds");
+            this.warning_time.setText("Warning Time: "+warningTime/1000+" seconds");
             this.rules_and_regulations.setText(rules);
 
         });
@@ -182,5 +182,12 @@ public class Client_GUI_Controller {
             this.clearConnectButton();
         });
 
+    }
+
+    public void addToCorrectionsList(String msg) {
+
+        Platform.runLater(() -> {
+            this.correction_list.getItems().add(0,msg);
+        });
     }
 }

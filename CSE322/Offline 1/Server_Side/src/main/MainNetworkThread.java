@@ -12,7 +12,11 @@ public class MainNetworkThread implements Runnable {
     private MainServerThread serverThread;
     private NetworkUtil networkUtil;
     private byte[]buff=null;
-    boolean correctionFlag = false;
+    private boolean correctionFlag = false;
+    private String correctionString=null;
+    private  TabController tabController;
+    private Participant participant=null;
+
     Thread t;
     public MainNetworkThread(MainServerThread serverThread, NetworkUtil networkUtil) {
         this.serverThread = serverThread;
@@ -49,7 +53,6 @@ public class MainNetworkThread implements Runnable {
     public void run() {
         int cnt;
         String msg;
-        Participant participant=null;
 
 
 
@@ -82,19 +85,30 @@ public class MainNetworkThread implements Runnable {
 
                         File questionFile=exam.getPathToQuestion();
 
-                        //put in the participant table, if the id is not new
-                        if(!serverThread.getController().getInitiator().getParticipantObjectMap().containsKey(studentId)) {
+                        //put in the participant table, if the id is not new or the id is registering for new exam,
+                        //a client of unique roll number at the same time can't participate in two exams
+                        if(!serverThread.getController().getInitiator().
+                                getParticipantObjectMap().containsKey(studentId)||
+                                !serverThread.getController().getInitiator().
+                                        getParticipantObjectMap().get(studentId).
+                                        getExamCode().equals(examCode)) {
                             participant = new Participant(networkUtil.getSocket().getInetAddress().getHostAddress(), examCode);
                             participant.setFileTransferThread(new FileTransferThread(null, participant));
                             participant.setBackupInterval(exam.getBackupInterval());
                             serverThread.getController().getInitiator().getParticipantObjectMap().put(studentId, participant);
                             participant.setCurrentBackupFile(questionFile);//as there's no backup received, this is default
+                            participant.getCorrectionSent().clear();
+                            participant.getCorrectionSent().addAll(tabController.getAllCorrections());
                         }
                         // the id's pc is crashed so, send back the last backup
-                        else if(serverThread.getController().getInitiator().getParticipantObjectMap().get(studentId).isCrashed()){
-                            System.out.println("IS IT ME??");
+                        else if(serverThread.getController().getInitiator().
+                                getParticipantObjectMap().get(studentId).isCrashed()){
+                            //System.out.println("IS IT ME??");
                             participant=serverThread.getController().getInitiator().getParticipantObjectMap().get(studentId);
                             questionFile=participant.getCurrentBackupFile();
+
+                            participant.getCorrectionSent().clear();
+                            participant.getCorrectionSent().addAll(tabController.getAllCorrections());
                             //the rest of the participant object should have been set by now
                         }
                         else{
@@ -219,10 +233,34 @@ public class MainNetworkThread implements Runnable {
                     networkUtil.flushStream();
                 }
 
+
+                //send the previous corrections
+                for(String cc:participant.getCorrectionSent())
+                {
+                    if(cc!=null&&!cc.equals("")){
+                        networkUtil.writeBuff("Corrections".getBytes());
+                        networkUtil.flushStream();
+                        cnt=networkUtil.readBuff(buff);
+                        if(new String(buff,0,cnt).equals("Send")){
+                            networkUtil.writeBuff(cc.getBytes());
+                            networkUtil.flushStream();
+                        }
+                    }
+                }
+
+                //send any new corrections
                 while (correctionFlag && !Thread.interrupted()){
                     // let there be the code for sending correction
-
-
+                    if(correctionString!=null&&!correctionString.equals("")){
+                        networkUtil.writeBuff("Corrections".getBytes());
+                        networkUtil.flushStream();
+                        cnt=networkUtil.readBuff(buff);
+                        if(new String(buff,0,cnt).equals("Send")){
+                            networkUtil.writeBuff(correctionString.getBytes());
+                            networkUtil.flushStream();
+                            correctionString=null;
+                        }
+                    }
                 }
 
                 networkUtil.closeAll();
@@ -235,14 +273,31 @@ public class MainNetworkThread implements Runnable {
             if(e.getMessage().toLowerCase().contains("string index out of range: -1")||
                     e.getMessage().toLowerCase().contains("socket closed")){
                 //handle crash
-                assert participant != null;
-                participant.setCrashed(true);
-                participant.setTimeup(false);
+                if(participant!=null) {
+                    participant.setCrashed(true);
+                    participant.setTimeup(false);
+                }
             }
 
 
             e.printStackTrace();
         }
 
+    }
+
+    public String getCorrectionString() {
+        return correctionString;
+    }
+
+    public void setCorrectionString(String correctionString) {
+        this.correctionString = correctionString;
+    }
+
+    public TabController getTabController() {
+        return tabController;
+    }
+
+    public void setTabController(TabController tabController) {
+        this.tabController = tabController;
     }
 }

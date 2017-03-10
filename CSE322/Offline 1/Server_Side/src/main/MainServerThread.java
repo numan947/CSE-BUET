@@ -1,5 +1,7 @@
 package main;
 
+import sun.applet.Main;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -44,7 +46,7 @@ public class MainServerThread implements Runnable {
     @Override
     public void run() {
         while (!stopServer){
-            System.out.println("HELLO FROM SERVER");
+
             try {
                 Socket accept=serverSocket.accept();
                 final NetworkUtil util=new NetworkUtil(accept);
@@ -62,12 +64,17 @@ public class MainServerThread implements Runnable {
                         // send msg to tell the client to send additional information
                         // and create the proper threads
 
-                        if(msg.equals("NEW_CONNECTION")){
+                        if(msg.contains("NEW_CONNECTION")){
                             //open new networkThread as it's a new connection
+                            System.out.println("HELLO FROM SERVER: "+msg);
+                            String []ss=msg.split("_");
+                            String id=ss[ss.length-1];
+                            TabController t=controller.getControllerHashtable().get(id);
                             util.writeBuff("SEND_ADDITIONAL_INFO".getBytes());
                             util.flushStream();
-                            new MainNetworkThread(this,util);
-
+                            MainNetworkThread k=new MainNetworkThread(this,util);
+                            t.setMainNetworkThread(k);
+                            t.networkThreadSetter();
                         }
                         else if(msg.contains("FILE_TRANSFER")){
                             //open a file transfer thread
@@ -77,7 +84,7 @@ public class MainServerThread implements Runnable {
                             p.getFileTransferThread().runThread();
                         }
                         else{
-                            util.closeAll();
+                            //util.closeAll();
                         }
 
                     } catch (IOException e) {

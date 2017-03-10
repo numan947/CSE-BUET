@@ -47,7 +47,7 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="36.0" prefWidth="600.0" text="Correction List">
+            <Label alignment="CENTER" prefHeight="36.0" prefWidth="600.0" text="Correction List (The LATEST are at the TOP)">
                <font>
                   <Font size="18.0" />
                </font>

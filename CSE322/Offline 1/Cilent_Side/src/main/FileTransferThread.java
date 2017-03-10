@@ -35,7 +35,7 @@ public class FileTransferThread implements Runnable {
     public void setRunning(boolean running) {
         this.running = running;
         try {
-            util.closeAll();
+            if(util!=null)util.closeAll();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,6 @@ public class FileTransferThread implements Runnable {
                     if(!file.exists()){
                         //user 'Accidentally' deleted the file
                         util.closeAll();
-                        parentThread.setRunning(false);
                     }
 
                     System.out.println(counter());

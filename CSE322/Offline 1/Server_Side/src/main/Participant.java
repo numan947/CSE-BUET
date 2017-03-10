@@ -1,6 +1,7 @@
 package main;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -18,6 +19,7 @@ public class Participant {
                                         //and update by filetransferthread
     private boolean crashed;
     private boolean timeup;
+    private ArrayList<String>correctionSent;
 
 
     public Participant(String ipAddress, String examCode) {
@@ -27,6 +29,15 @@ public class Participant {
         this.nextScheduledBackup=-1;
         this.crashed=false;
         this.timeup=false;
+        this.correctionSent=new ArrayList<>();
+    }
+
+    public ArrayList<String> getCorrectionSent() {
+        return correctionSent;
+    }
+
+    public void setCorrectionSent(ArrayList<String> correctionSent) {
+        this.correctionSent = correctionSent;
     }
 
     public boolean isTimeup() {

@@ -7,10 +7,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import sun.applet.Main;
 
 public class TabController {
 
@@ -30,6 +28,7 @@ public class TabController {
     private Server_GUI_Controller controller;
     private File backUpStoragePath;
     private File questionStoragePath;
+    private MainNetworkThread mainNetworkThread=null;
 
     public void setUnique_exam_id(String unique_exam_id) {
         this.unique_exam_id = unique_exam_id;
@@ -64,7 +63,7 @@ public class TabController {
     private TextField allowed_ids;
 
     @FXML
-    private ListView<?> correction_list;
+    private ListView<String> correction_list;
 
     @FXML
     private TextField start_time;
@@ -89,7 +88,12 @@ public class TabController {
 
     @FXML
     void sendCorrections(ActionEvent event) {
-
+        if(!corrections.getText().equals("")){
+            String cc=corrections.getText();
+            corrections.clear();
+            correction_list.getItems().add(cc);//the latest are at the bottom
+            mainNetworkThread.setCorrectionString(cc);
+        }
     }
 
     @FXML
@@ -109,6 +113,8 @@ public class TabController {
         assert send_corrections != null : "fx:id=\"send_corrections\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
         assert exam_id != null : "fx:id=\"exam_id\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
         assert rules != null : "fx:id=\"rules\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
+
+
     }
 
     public void addToExamList(ActionEvent actionEvent) {
@@ -190,5 +196,20 @@ public class TabController {
 
     public void setController(Server_GUI_Controller controller) {
         this.controller = controller;
+    }
+
+    public void setMainNetworkThread(MainNetworkThread mainNetworkThread) {
+        this.mainNetworkThread = mainNetworkThread;
+    }
+
+    public ArrayList<String> getAllCorrections() {
+
+        ArrayList<String>aa=new ArrayList<>(correction_list.getItems());
+        return aa;
+    }
+
+    public void networkThreadSetter()
+    {
+        mainNetworkThread.setTabController(this);
     }
 }

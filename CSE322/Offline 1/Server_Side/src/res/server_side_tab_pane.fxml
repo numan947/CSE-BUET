@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.TabController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.TabController">
    <top>
-      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="245.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="293.0" prefWidth="622.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="exam_id" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="600.0" text="Exam ID:">
                <font>
@@ -98,10 +98,11 @@
                   </TextField>
                </children>
             </HBox>
+            <TextArea fx:id="rules" prefWidth="622.0" promptText="write rules and regulations here" />
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <Label prefHeight="30.0" prefWidth="87.0" text="Corrections:" />
-                  <TextArea fx:id="corrections" prefHeight="27.0" prefWidth="384.0" HBox.hgrow="ALWAYS">
+                  <TextArea fx:id="corrections" prefHeight="0.0" prefWidth="384.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
                      </HBox.margin>
@@ -116,15 +117,14 @@
       </VBox>
    </top>
    <center>
-      <VBox prefHeight="155.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="96.0" prefWidth="622.0" BorderPane.alignment="CENTER">
          <children>
             <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="List of Corrections:" textAlignment="CENTER">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <ListView fx:id="correction_list" prefHeight="45.0" prefWidth="622.0" VBox.vgrow="ALWAYS" />
-            <TextArea fx:id="rules" prefHeight="68.0" prefWidth="622.0" promptText="write rules and regulations here" />
+            <ListView fx:id="correction_list" prefHeight="106.0" prefWidth="622.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </center>

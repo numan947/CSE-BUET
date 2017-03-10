@@ -45,9 +45,9 @@ public class MainNetworkThread implements Runnable {
 
         try {
             networkUtil = new NetworkUtil(ipAddress, port);
-
+            System.out.println("I AM HERE!!!! "+networkUtil.getSocket());
             //send requestType
-            networkUtil.writeBuff("NEW_CONNECTION".getBytes());
+            networkUtil.writeBuff(("NEW_CONNECTION_"+examCode).getBytes());
             networkUtil.flushStream();
 
             cnt=networkUtil.readBuff(buff);
@@ -177,26 +177,23 @@ public class MainNetworkThread implements Runnable {
                     //now we wait for any correction or something :)
 
                     while(running&&!Thread.interrupted()){
-                        networkUtil.readBuff(buff);
+                        cnt=networkUtil.readBuff(buff);
+                        msg=new String(buff,0,cnt);
+                        if(msg.equals("Corrections")){
+                            networkUtil.writeBuff("Send".getBytes());
+                            networkUtil.flushStream();
+
+                            cnt=networkUtil.readBuff(buff);
+                            msg=new String(buff,0,cnt); //this is the correction message
+                            controller.addToCorrectionsList(msg);
+                        }
 
 
 
                     }
 
                     //stop the filetransferthread
-                    ft.setRunning(false);
-
-
-
-
-
-
-
-
-
-
-
-
+                    if(ft!=null)ft.setRunning(false);
 
                 }
                 else{
@@ -238,9 +235,8 @@ public class MainNetworkThread implements Runnable {
     public void setRunning(boolean running) {
         this.running = running;
         try {
-            networkUtil.closeAll();
-            ft.setRunning(false);
-            controller.clearConnectButton();
+            if(networkUtil!=null)networkUtil.closeAll();
+            if(ft!=null)ft.setRunning(false);
         } catch (IOException e) {
             e.printStackTrace();
         }

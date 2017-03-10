@@ -15,6 +15,7 @@ import javafx.scene.layout.Priority;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.ResourceBundle;
 
 public class Server_GUI_Controller {
@@ -26,6 +27,19 @@ public class Server_GUI_Controller {
     private MainServerThread mainServerThread=null;
     private BackupCheckerThread backupCheckerThread=null;
     private Alert alert=null;
+
+    private Hashtable<String,TabController>controllerHashtable;
+
+    public Server_GUI_Controller() {
+    }
+
+    public Hashtable<String, TabController> getControllerHashtable() {
+        return controllerHashtable;
+    }
+
+    public void setControllerHashtable(Hashtable<String, TabController> controllerHashtable) {
+        this.controllerHashtable = controllerHashtable;
+    }
 
     public void setInitiator(ServerSide initiator) {
         this.initiator = initiator;
@@ -110,13 +124,16 @@ public class Server_GUI_Controller {
                 //get-set the exam_
                 tabController.setUnique_exam_id(this.exam_id.getText());
                 tabController.setController(this);
-                this.exam_id.clear();
+                controllerHashtable.put(exam_id.getText(),tabController);
 
 
-                Tab t=new Tab("WHY",pp);
+                Tab t=new Tab(exam_id.getText(),pp);
+                t.setId(exam_id.getText());
                 t.setClosable(true);
 
                 exam_list.getTabs().add(t);
+
+                this.exam_id.clear();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -140,6 +157,7 @@ public class Server_GUI_Controller {
 
         this.status.setText(this.status.getText()+" "+server_default_status);
         alert=new Alert(Alert.AlertType.ERROR);
+        this.controllerHashtable=new Hashtable<>();
     }
 
 
@@ -187,6 +205,5 @@ public class Server_GUI_Controller {
             alert.showAndWait();
             //this.clearConnectButton();
         });
-
     }
 }
