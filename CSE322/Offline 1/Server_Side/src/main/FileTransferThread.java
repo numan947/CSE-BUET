@@ -114,6 +114,10 @@ public class FileTransferThread implements Runnable {
                 if(!corrupted){
                     util.writeBuff("BACKUP_RECEIVED".getBytes());
                     util.flushStream();
+
+                    //giving 2 second extra time to send some backup
+                    participant.setNextScheduledBackup(System.currentTimeMillis()+participant.getBackupInterval()+Server_GUI_Controller.backupepstime);
+                    participant.setCurrentBackupFile(fileToSave);
                 }
                 fbuff.close();
                 fos.close();

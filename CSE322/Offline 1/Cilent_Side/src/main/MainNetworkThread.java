@@ -1,8 +1,9 @@
 package main;
 
-import javafx.application.Platform;
-
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -18,6 +19,9 @@ public class MainNetworkThread implements Runnable {
     private File fileLocation;
     private boolean running;
     private Thread t;
+    private  NetworkUtil networkUtil=null;
+    private  FileTransferThread ft=null;
+
     public MainNetworkThread(Client_GUI_Controller controller, String examCode, String studentID, String ipAddress, int port,File fileLocation) {
         this.studentID = studentID;
         this.ipAddress = ipAddress;
@@ -38,7 +42,7 @@ public class MainNetworkThread implements Runnable {
     public void run() {
         int cnt;
         String msg;
-        NetworkUtil networkUtil=null;
+
         try {
             networkUtil = new NetworkUtil(ipAddress, port);
 
@@ -155,10 +159,11 @@ public class MainNetworkThread implements Runnable {
 
 
                     //now we start our FileTransferThread that'll do the backup
+
                     cnt=networkUtil.readBuff(buff);
                     msg=new String(buff,0,cnt);
                     if(msg.equals("INITIATE_FILE_TRANSFER_THREAD")){
-                        new FileTransferThread(this,examCode,studentID,ipAddress,port,backupInterval,fileToSave);
+                        ft=new FileTransferThread(this,examCode,studentID,ipAddress,port,backupInterval,fileToSave);
                     }
 
 
@@ -170,6 +175,9 @@ public class MainNetworkThread implements Runnable {
 
 
                     }
+
+                    //stop the filetransferthread
+                    ft.setRunning(false);
 
 
 
@@ -185,23 +193,23 @@ public class MainNetworkThread implements Runnable {
 
                 }
                 else{
-
+                    // the roll number or the exam code is not accepted handle it here
+                    if(msg.equals("NO_SUCH_ROLL_NUMBER_FOR_THE_GIVEN_EXAM_CODE")){
+                        controller.showErrorDialog("Server Said: "+msg+"\nInput a correct roll number.");
+                    }
+                    else if(msg.equals("NO_SUCH_EXAM_CODE")){
+                        controller.showErrorDialog("Server Said: "+msg+"\nInput a correct exam code and roll number.");
+                    }
+                    else{
+                        controller.showErrorDialog("Unknown Error: "+msg+"\nDid you mess up the connection?");
+                    }
                 }
-
-            }else{
-                //todo what'll happen if the server sends something else?
             }
 
         } catch (IOException e) {
             //todo show with alertDialog?
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    controller.clearConnectButton();
-                }
-            });
-
             e.printStackTrace();
+            controller.showErrorDialog("Inside "+e.getClass()+": \nException while Processing: \n"+e.getMessage());
         }
 
 
@@ -214,12 +222,21 @@ public class MainNetworkThread implements Runnable {
             fbuff.write(b,0,totalRead);
             if(cnt>=8192)fbuff.flush();
         } catch (IOException e) {
-            System.out.println("Exception In ServerPackage.FileProcessingThread.writeToFile "+e.getMessage());
+            e.printStackTrace();
+            controller.showErrorDialog("Inside "+e.getClass()+": \nException while Processing: \n"+e.getMessage());
+            //System.out.println("Exception In ServerPackage.FileProcessingThread.writeToFile "+e.getMessage());
         }
     }
 
     public void setRunning(boolean running) {
         this.running = running;
+        try {
+            networkUtil.closeAll();
+            ft.setRunning(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public Thread getT() {

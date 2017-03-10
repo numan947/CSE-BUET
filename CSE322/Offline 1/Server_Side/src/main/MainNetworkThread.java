@@ -55,7 +55,6 @@ public class MainNetworkThread implements Runnable {
             if(tmp.length==2){
 
                 //check if the exam code is in the exam map
-                System.out.println("AM I STUCK HERE??1 + "+tmp[0]);
                 if(serverThread.getController().getInitiator().getExamMap().containsKey("Exam ID: "+tmp[0])){
 
                     //check if the student id is in the exam object
@@ -122,17 +121,19 @@ public class MainNetworkThread implements Runnable {
                                 System.out.println(msg);
 
                                 if(msg.equals("DATA_RECEIVED")){
-                                    //now we wait for appropriate time to send the question to the sender
-                                    long diff=exam.getStartTime().getTime()-System.currentTimeMillis();
-
                                     //prepare the fileName and fileSize to send
+
                                     File file=exam.getPathToQuestion();
+                                    participant.setCurrentBackupFile(file);//as there's no backup received, this is default
                                     details=file.getName()+"$$$$"+file.length();
 
                                     //create folder for the participant
                                     File folderForParticipant=new File(exam.getPathToBackupFolder(),String.valueOf(studentId));
                                     participant.setBackupStoragePath(folderForParticipant);
 
+
+                                    //now we wait for appropriate time to send the question to the sender
+                                    long diff=exam.getStartTime().getTime()-System.currentTimeMillis();
                                     if(diff>0)Thread.sleep(diff-30);
 
 
@@ -175,13 +176,23 @@ public class MainNetworkThread implements Runnable {
                                         if(msg.equals("QUESTION_RECEIVED"))correctionFlag=true;
 
                                         networkUtil.writeBuff("INITIATE_FILE_TRANSFER_THREAD".getBytes());
+                                        participant.setNextScheduledBackup(System.currentTimeMillis()+participant.getBackupInterval()+Server_GUI_Controller.backupepstime);
 
                                         // now we go to correction flag to wait for corrections :)
                                     }
                                 }
                             }
                         }
+                    }else{
+                        //send error for the studentID of the examID
+                        networkUtil.writeBuff("NO_SUCH_ROLL_NUMBER_FOR_THE_GIVEN_EXAM_CODE".getBytes());
+                        networkUtil.flushStream();
                     }
+                }
+                else{
+                    //send error for the examID
+                    networkUtil.writeBuff("NO_SUCH_EXAM_CODE".getBytes());
+                    networkUtil.flushStream();
                 }
             }
         } catch (IOException | InterruptedException e) {
@@ -189,10 +200,15 @@ public class MainNetworkThread implements Runnable {
         }
 
         while (correctionFlag){
+            // let there be the code for sending correction
 
 
+        }
 
-
+        try {
+            networkUtil.closeAll();
+        } catch (IOException ignore) {
+            /*igonre*/
         }
 
 

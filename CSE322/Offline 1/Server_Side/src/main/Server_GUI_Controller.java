@@ -3,22 +3,29 @@ package main;
  * Sample Skeleton for 'server_side_gui_main.fxml' Controller Class
  */
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Server_GUI_Controller {
     // general fields
+    public static long backupepstime=5000;
     private String server_default_status="not started";
     private FXMLLoader fxmlLoader=null;
     private ServerSide initiator;
     private MainServerThread mainServerThread=null;
+    private BackupCheckerThread backupCheckerThread=null;
+    private Alert alert=null;
 
     public void setInitiator(ServerSide initiator) {
         this.initiator = initiator;
@@ -62,23 +69,24 @@ public class Server_GUI_Controller {
             if(mainServerThread==null){
                 try {
                     this.mainServerThread=new MainServerThread(this, ip_address.getText(),Integer.parseInt(port_number.getText()));
+
+                    //initiate the backup checker thread
+                    this.backupCheckerThread=new BackupCheckerThread(initiator.getParticipantObjectMap(),this);
                     status.setText("status: running");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
             else{
                 this.mainServerThread.setStopServer(false);
+                this.backupCheckerThread=new BackupCheckerThread(initiator.getParticipantObjectMap(),this);
                 status.setText("status: running");
             }
-
             start_server.setText("Stop Server");
         }else{
             //server stop code here
-            if(mainServerThread!=null){
-                mainServerThread.setStopServer(true);
-            }
+            if(mainServerThread!=null)mainServerThread.setStopServer(true);
+            if(backupCheckerThread!=null)backupCheckerThread.setRunning(false);
             status.setText("status: stopped");
             start_server.setText("Start Server");
         }
@@ -131,7 +139,52 @@ public class Server_GUI_Controller {
 
 
         this.status.setText(this.status.getText()+" "+server_default_status);
+        alert=new Alert(Alert.AlertType.ERROR);
+    }
 
+
+    public void showErrorDialog(String ss)
+    {
+        Platform.runLater(() -> {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR!!");
+            alert.setHeaderText("There's an error while connecting");
+            alert.setContentText(ss);
+            alert.showAndWait();
+
+            //this.clearConnectButton();
+        });
+
+    }
+
+    public void showErrorDialog(ArrayList<Integer> integers) {
+
+        Platform.runLater(() -> {
+            alert.setAlertType(Alert.AlertType.WARNING);
+            alert.setTitle("Warning!!");
+
+            Label label=new Label("NO BACK UP RECEIVED!!");
+
+            TextArea textArea = new TextArea("The Server didn't receive any backup for the following studentIDs: "+integers.toString());
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+            textArea.setMaxWidth(Double.MAX_VALUE);
+            textArea.setMaxHeight(Double.MAX_VALUE);
+            GridPane.setVgrow(textArea, Priority.ALWAYS);
+            GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+            GridPane expContent = new GridPane();
+            expContent.setMaxWidth(Double.MAX_VALUE);
+            expContent.add(label, 0, 0);
+            expContent.add(textArea, 0, 1);
+
+
+            alert.getDialogPane().setExpandableContent(expContent);
+            alert.getDialogPane().setExpanded(true);
+
+            alert.showAndWait();
+            //this.clearConnectButton();
+        });
 
     }
 }

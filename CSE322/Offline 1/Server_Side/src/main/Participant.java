@@ -13,6 +13,27 @@ public class Participant {
     private Date startTime;
     private FileTransferThread fileTransferThread;
     private int backupInterval;
+    private File currentBackupFile;//the file that'll be sent in case of crash;
+    private long nextScheduledBackup;//the next scheduled backup time, it'll be accessed by backupchecker thread,
+                                        //and update by filetransferthread
+
+
+
+    public File getCurrentBackupFile() {
+        return currentBackupFile;
+    }
+
+    public void setCurrentBackupFile(File currentBackupFile) {
+        this.currentBackupFile = currentBackupFile;
+    }
+
+    public long getNextScheduledBackup() {
+        return nextScheduledBackup;
+    }
+
+    public void setNextScheduledBackup(long nextScheduledBackup) {
+        this.nextScheduledBackup = nextScheduledBackup;
+    }
 
     public int getBackupInterval() {
         return backupInterval;
@@ -41,6 +62,8 @@ public class Participant {
     public Participant(String ipAddress, String examCode) {
         this.ipAddress = ipAddress;
         this.examCode = examCode;
+        this.currentBackupFile=null;
+        this.nextScheduledBackup=-1;
     }
 
     public String getIpAddress() {

@@ -12,11 +12,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 
 public class Client_GUI_Controller {
@@ -25,6 +21,7 @@ public class Client_GUI_Controller {
     private ClientSide initiator;
     private File saveLocation;
     MainNetworkThread networkThread;
+    Alert alert =null;
     @FXML
     private Button questionSavePath;
     @FXML
@@ -73,12 +70,14 @@ public class Client_GUI_Controller {
 
     public void clearConnectButton()
     {
-        connect.setText("Connect");
-        status.setText("Status: Server Not Connected");
-        if (networkThread != null) {
-            networkThread.setRunning(false);
-            while (networkThread.getT().isAlive()) networkThread.getT().interrupt();
-        }
+        Platform.runLater(() -> {
+            connect.setText("Connect");
+            status.setText("Status: Server Not Connected");
+            exam_code.setEditable(true);
+            if (networkThread != null) {
+                networkThread.setRunning(false);
+            }
+        });
     }
 
 
@@ -86,31 +85,29 @@ public class Client_GUI_Controller {
     @FXML
     void connect(ActionEvent event) {
 
-
-        if(!exam_code.getText().equals("")&&!connect.getText().equals("connected")) {
-            if (studentID.getText() != null || !studentID.getText().equals(""))
-                if (server_ip_address.getText() != null || !server_ip_address.getText().equals(""))
-                    if (port_number.getText() != null || !port_number.getText().equals("")) {
-                        try {
-                            String ipaddress = server_ip_address.getText();
-                            int port = Integer.parseInt(port_number.getText());
-                            String sid = studentID.getText();
-                            String e_c = exam_code.getText();
-
-                            //todo here'll be the code for initializing the MainNetworkThread
-                            networkThread = new MainNetworkThread(this, e_c, sid, ipaddress, port, saveLocation);
-                            connect.setText("Connected");
-                            status.setText("Status: Server Connected");
-                        } catch (Exception e) {
-                            //todo throw with alert dialog
-                            System.out.println(e);
-                        }
-                    }
+        System.out.println("H1");
+        if(!connect.getText().equals("Connected")&&!studentID.getText().equals("")
+                &&!exam_code.getText().equals("") && !server_ip_address.getText().equals("")
+                && !port_number.getText().equals("")) {
+            System.out.println("H2");
+            try {
+                String ipaddress = server_ip_address.getText();
+                int port = Integer.parseInt(port_number.getText());
+                String sid = studentID.getText();
+                String e_c = exam_code.getText();
+                //todo here'll be the code for initializing the MainNetworkThread
+                networkThread = new MainNetworkThread(this, e_c, sid, ipaddress, port, saveLocation);
+                connect.setText("Connected");
+                status.setText("Status: Server Connected");
+            } catch (Exception e) {
+                //todo throw with alert dialog
+                System.out.println(e);
+            }
         }
         else {
+            System.out.println("H3");
             clearConnectButton();
         }
-        //todo may be show an alert dialog to say that the inputs are empty?
     }
 
 
@@ -130,6 +127,7 @@ public class Client_GUI_Controller {
         assert status != null : "fx:id=\"status\" was not injected: check your FXML file 'client_side_gui.fxml'.";
         rules_and_regulations.setEditable(false);
         saveLocation=new File(System.getProperty("user.home"));
+        alert=new Alert(Alert.AlertType.ERROR);
     }
 
     public void setInitiator(ClientSide initiator) {
@@ -170,5 +168,17 @@ public class Client_GUI_Controller {
     void setQuestionSavePath(ActionEvent actionEvent) {
         DirectoryChooser dc=new DirectoryChooser();
         saveLocation=dc.showDialog(initiator.getMainStage());
+    }
+
+    public void showErrorDialog(String ss)
+    {
+        Platform.runLater(() -> {
+            alert.setTitle("ERROR!!");
+            alert.setHeaderText("There's an error while connecting");
+            alert.setContentText(ss);
+            alert.showAndWait();
+            this.clearConnectButton();
+        });
+
     }
 }

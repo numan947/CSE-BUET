@@ -14,7 +14,8 @@ public class FileTransferThread implements Runnable {
     private int backupInterval;
     private File file;
     private boolean running;
-    byte[]buff;
+    private byte[]buff;
+    private  NetworkUtil util=null;
 
     public FileTransferThread(MainNetworkThread parentThread, String examCode, String studentID, String ipAddress, int port, int backupInterval, File fileToSave) {
         this.parentThread = parentThread;
@@ -33,6 +34,11 @@ public class FileTransferThread implements Runnable {
 
     public void setRunning(boolean running) {
         this.running = running;
+        try {
+            util.closeAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -42,7 +48,7 @@ public class FileTransferThread implements Runnable {
         String msg;
 
         try {
-            NetworkUtil util=new NetworkUtil(ipAddress,port);
+            util=new NetworkUtil(ipAddress,port);
             util.writeBuff((studentID+"$$$$"+"FILE_TRANSFER").getBytes());
             util.flushStream();
 
