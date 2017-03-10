@@ -16,8 +16,34 @@ public class Participant {
     private File currentBackupFile;//the file that'll be sent in case of crash;
     private long nextScheduledBackup;//the next scheduled backup time, it'll be accessed by backupchecker thread,
                                         //and update by filetransferthread
+    private boolean crashed;
+    private boolean timeup;
 
 
+    public Participant(String ipAddress, String examCode) {
+        this.ipAddress = ipAddress;
+        this.examCode = examCode;
+        this.currentBackupFile=null;
+        this.nextScheduledBackup=-1;
+        this.crashed=false;
+        this.timeup=false;
+    }
+
+    public boolean isTimeup() {
+        return timeup;
+    }
+
+    public void setTimeup(boolean timeup) {
+        this.timeup = timeup;
+    }
+
+    public boolean isCrashed() {
+        return crashed;
+    }
+
+    public void setCrashed(boolean crashed) {
+        this.crashed = crashed;
+    }
 
     public File getCurrentBackupFile() {
         return currentBackupFile;
@@ -57,13 +83,6 @@ public class Participant {
 
     public void setBackupStoragePath(File backupStoragePath) {
         this.backupStoragePath = backupStoragePath;
-    }
-
-    public Participant(String ipAddress, String examCode) {
-        this.ipAddress = ipAddress;
-        this.examCode = examCode;
-        this.currentBackupFile=null;
-        this.nextScheduledBackup=-1;
     }
 
     public String getIpAddress() {

@@ -25,6 +25,7 @@ import javafx.stage.FileChooser;
 public class TabController {
 
 
+
     private String unique_exam_id;
     private Server_GUI_Controller controller;
     private File backUpStoragePath;
@@ -35,6 +36,8 @@ public class TabController {
         this.exam_id.setText(exam_id.getText()+" "+unique_exam_id);
     }
 
+    @FXML
+    private TextArea rules;
     @FXML
     private TextField exam_duration;
 
@@ -105,7 +108,7 @@ public class TabController {
         assert backup_interval != null : "fx:id=\"backup_interval\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
         assert send_corrections != null : "fx:id=\"send_corrections\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
         assert exam_id != null : "fx:id=\"exam_id\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
-
+        assert rules != null : "fx:id=\"rules\" was not injected: check your FXML file 'server_side_tab_pane.fxml'.";
     }
 
     public void addToExamList(ActionEvent actionEvent) {
@@ -148,6 +151,7 @@ public class TabController {
         exam.setStartTime(dd);
         exam.setExamName(examName);
         exam.setDuration(duration);
+        exam.setRules(rules.getText());
 
         //adding to exam_list
         controller.getInitiator().getExamMap().put(exam_id.getText(),exam);

@@ -150,6 +150,7 @@ public class Client_GUI_Controller {
             int backupInterval=Integer.parseInt(info[3]);
             int warningTime=Integer.parseInt(info[4]);
             long startTimeInLong=Long.parseLong(info[5]);
+            String rules=info[6];
             Date startTime=new Date(startTimeInLong);
 
             this.backup_interval.setText(backup_interval.getText()+" "+backupInterval/1000+" seconds");
@@ -159,6 +160,7 @@ public class Client_GUI_Controller {
             this.start_time.setText(start_time.getText()+" "+startTime.toString());
             this.duration.setText(this.duration.getText()+" "+duration+" seconds");
             this.warning_time.setText(this.warning_time.getText()+" "+warningTime/1000+" seconds");
+            this.rules_and_regulations.setText(rules);
 
         });
 

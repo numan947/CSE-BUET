@@ -57,6 +57,11 @@ public class FileTransferThread implements Runnable {
 
     public void stopThread(boolean running){
         this.running=false;
+        try {
+            util.closeAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void run() {
@@ -68,6 +73,7 @@ public class FileTransferThread implements Runnable {
         try {
             util.writeBuff("CONFIRMED".getBytes());
             util.flushStream();
+
 
             System.out.println(counter());
 
@@ -100,7 +106,9 @@ public class FileTransferThread implements Runnable {
                 cnt=0;
                 totalRead=0;
                 while (true) {
-                    if (cnt >= fileSize||totalRead==-1) break;
+                    if (cnt >= fileSize||totalRead==-1){
+                        break;
+                    }
                     totalRead = util.readBuff(buff);
                     cnt += totalRead;
                     writeToFile(buff, totalRead,cnt,fbuff);
@@ -123,11 +131,17 @@ public class FileTransferThread implements Runnable {
                 fos.close();
 
             }
+        } catch (Exception e) {
+            if(e.getMessage().toLowerCase().contains("string index out of range: -1")||
+                    e.getMessage().toLowerCase().contains("socket closed")){
+                //handle crash
 
-
-        } catch (IOException e) {
+                participant.setCrashed(true);
+                participant.setTimeup(false);
+            }
             e.printStackTrace();
         }
+
     }
 
 

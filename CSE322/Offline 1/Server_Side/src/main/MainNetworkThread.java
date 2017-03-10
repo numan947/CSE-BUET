@@ -12,16 +12,26 @@ public class MainNetworkThread implements Runnable {
     private MainServerThread serverThread;
     private NetworkUtil networkUtil;
     private byte[]buff=null;
-    private String examCode;
-    private int studentId;
-
+    boolean correctionFlag = false;
+    Thread t;
     public MainNetworkThread(MainServerThread serverThread, NetworkUtil networkUtil) {
         this.serverThread = serverThread;
         this.networkUtil = networkUtil;
         this.buff=new byte[8192];
-        Thread t=new Thread(this);
+        t=new Thread(this);
         t.setDaemon(true);
         t.start();
+    }
+
+    public void stopThread(boolean b)
+    {
+        this.correctionFlag=false;
+        try {
+            this.networkUtil.closeAll();
+            this.t.interrupt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -39,7 +49,9 @@ public class MainNetworkThread implements Runnable {
     public void run() {
         int cnt;
         String msg;
-        boolean correctionFlag = false;
+        Participant participant=null;
+
+
 
         try {
             cnt=networkUtil.readBuff(buff);
@@ -62,19 +74,34 @@ public class MainNetworkThread implements Runnable {
                     if(serverThread.getController().getInitiator().getExamMap().get("Exam ID: "+tmp[0]).getAllowedIDs().contains(Integer.parseInt(tmp[1]))){
 
                         //save the info
-                        examCode="Exam ID: "+tmp[0];
+                        String examCode = "Exam ID: " + tmp[0];
 
-                        studentId= Integer.parseInt(tmp[1]);
+                        int studentId = Integer.parseInt(tmp[1]);
 
                         Exam exam=serverThread.getController().getInitiator().getExamMap().get(examCode);
 
+                        File questionFile=exam.getPathToQuestion();
 
-                        //put in the participant table
-                        Participant participant=new Participant(networkUtil.getSocket().getInetAddress().getHostAddress(),examCode);
-                        participant.setFileTransferThread(new FileTransferThread(null,participant));
-                        participant.setBackupInterval(exam.getBackupInterval());
-                        serverThread.getController().getInitiator().getParticipantObjectMap().put(studentId,participant);
+                        //put in the participant table, if the id is not new
+                        if(!serverThread.getController().getInitiator().getParticipantObjectMap().containsKey(studentId)) {
+                            participant = new Participant(networkUtil.getSocket().getInetAddress().getHostAddress(), examCode);
+                            participant.setFileTransferThread(new FileTransferThread(null, participant));
+                            participant.setBackupInterval(exam.getBackupInterval());
+                            serverThread.getController().getInitiator().getParticipantObjectMap().put(studentId, participant);
+                            participant.setCurrentBackupFile(questionFile);//as there's no backup received, this is default
+                        }
+                        // the id's pc is crashed so, send back the last backup
+                        else if(serverThread.getController().getInitiator().getParticipantObjectMap().get(studentId).isCrashed()){
+                            System.out.println("IS IT ME??");
+                            participant=serverThread.getController().getInitiator().getParticipantObjectMap().get(studentId);
+                            questionFile=participant.getCurrentBackupFile();
+                            //the rest of the participant object should have been set by now
+                        }
+                        else{
+                            // check if the participant is trying to connect after the exam is finished and handle it
 
+
+                        }
 
 
                         //send approval
@@ -91,7 +118,7 @@ public class MainNetworkThread implements Runnable {
 
                         //create the "Details" string to send
                         String ss=exam.getExamCode().replace("Exam ID: ","");
-                        String details=ss+"$$$$"+exam.getExamName()+"$$$$"+exam.getDuration()+"$$$$"+exam.getBackupInterval()+"$$$$"+exam.getWarningTime()+"$$$$"+exam.getStartTime().getTime();
+                        String details=ss+"$$$$"+exam.getExamName()+"$$$$"+exam.getDuration()+"$$$$"+exam.getBackupInterval()+"$$$$"+exam.getWarningTime()+"$$$$"+exam.getStartTime().getTime()+"$$$$"+exam.getRules();
 
 
                         if(msg.equals("REQUESTING_SIZE_OF_DETAILS_STRING")){
@@ -122,10 +149,7 @@ public class MainNetworkThread implements Runnable {
 
                                 if(msg.equals("DATA_RECEIVED")){
                                     //prepare the fileName and fileSize to send
-
-                                    File file=exam.getPathToQuestion();
-                                    participant.setCurrentBackupFile(file);//as there's no backup received, this is default
-                                    details=file.getName()+"$$$$"+file.length();
+                                    details=questionFile.getName()+"$$$$"+questionFile.length();
 
                                     //create folder for the participant
                                     File folderForParticipant=new File(exam.getPathToBackupFolder(),String.valueOf(studentId));
@@ -150,7 +174,7 @@ public class MainNetworkThread implements Runnable {
 
                                     if(msg.equals("SEND_QUESTION")){
 
-                                        BufferedInputStream fbuff=new BufferedInputStream(new FileInputStream(file));
+                                        BufferedInputStream fbuff=new BufferedInputStream(new FileInputStream(questionFile));
                                         int tmpCt=0;
                                         int totalRead=0;
                                         while ((totalRead = getBuffFromFile(buff,fbuff)) > -1) {
@@ -194,23 +218,31 @@ public class MainNetworkThread implements Runnable {
                     networkUtil.writeBuff("NO_SUCH_EXAM_CODE".getBytes());
                     networkUtil.flushStream();
                 }
+
+                while (correctionFlag && !Thread.interrupted()){
+                    // let there be the code for sending correction
+
+
+                }
+
+                networkUtil.closeAll();
             }
-        } catch (IOException | InterruptedException e) {
+
+
+
+
+        } catch (Exception e) {
+            if(e.getMessage().toLowerCase().contains("string index out of range: -1")||
+                    e.getMessage().toLowerCase().contains("socket closed")){
+                //handle crash
+                assert participant != null;
+                participant.setCrashed(true);
+                participant.setTimeup(false);
+            }
+
+
             e.printStackTrace();
         }
-
-        while (correctionFlag){
-            // let there be the code for sending correction
-
-
-        }
-
-        try {
-            networkUtil.closeAll();
-        } catch (IOException ignore) {
-            /*igonre*/
-        }
-
 
     }
 }

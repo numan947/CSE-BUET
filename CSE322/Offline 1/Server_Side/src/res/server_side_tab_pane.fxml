@@ -123,7 +123,8 @@
                   <Font size="19.0" />
                </font>
             </Label>
-            <ListView fx:id="correction_list" prefHeight="139.0" prefWidth="612.0" />
+            <ListView fx:id="correction_list" prefHeight="45.0" prefWidth="622.0" VBox.vgrow="ALWAYS" />
+            <TextArea fx:id="rules" prefHeight="68.0" prefWidth="622.0" promptText="write rules and regulations here" />
          </children>
       </VBox>
    </center>

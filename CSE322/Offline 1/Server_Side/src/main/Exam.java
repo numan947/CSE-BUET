@@ -15,15 +15,7 @@ public class Exam {
     private int warningTime;
     private int backupInterval;
     private int duration;
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
+    private String rules;
     private ArrayList<Integer>allowedIDs;
     private ArrayList<String>listOfCorrections;
     private String examCode;
@@ -40,7 +32,21 @@ public class Exam {
     }
 
 
+    public String getRules() {
+        return rules;
+    }
 
+    public void setRules(String rules) {
+        this.rules = rules;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
     public ArrayList<Participant> getParticipants() {
         return participants;

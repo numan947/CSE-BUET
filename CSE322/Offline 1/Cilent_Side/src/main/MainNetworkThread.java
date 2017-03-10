@@ -117,6 +117,13 @@ public class MainNetworkThread implements Runnable {
 
                     String[]tmp=msg.split("\\$\\$\\$\\$");
                     String fileName=tmp[0];
+
+                    //fix the file name, in case it's a backup
+                    int x=fileName.lastIndexOf("_");
+                    if(x!=-1)fileName=fileName.substring(x+1);
+
+
+
                     long fileSize= Long.parseLong(tmp[1]);
 
                     networkUtil.writeBuff("SEND_QUESTION".getBytes());
@@ -233,6 +240,7 @@ public class MainNetworkThread implements Runnable {
         try {
             networkUtil.closeAll();
             ft.setRunning(false);
+            controller.clearConnectButton();
         } catch (IOException e) {
             e.printStackTrace();
         }

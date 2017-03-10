@@ -165,7 +165,9 @@ public class Server_GUI_Controller {
 
             Label label=new Label("NO BACK UP RECEIVED!!");
 
-            TextArea textArea = new TextArea("The Server didn't receive any backup for the following studentIDs: "+integers.toString());
+            String msg="The Server didn't receive any backup for the following studentIDs: "+integers.toString()+"\n"+"They might be crashed";
+
+            TextArea textArea = new TextArea(msg);
             textArea.setEditable(false);
             textArea.setWrapText(true);
             textArea.setMaxWidth(Double.MAX_VALUE);
