@@ -1,5 +1,7 @@
 package main;
 
+import sun.applet.Main;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,8 +13,9 @@ public class Participant {
     private String ipAddress;
     private String examCode;
     private File backupStoragePath;
-    private Date startTime;
+    private int remainingTimeInSeconds;
     private FileTransferThread fileTransferThread;
+    private MainNetworkThread mainNetworkThread;
     private int backupInterval;
     private File currentBackupFile;//the file that'll be sent in case of crash;
     private long nextScheduledBackup;//the next scheduled backup time, it'll be accessed by backupchecker thread,
@@ -20,6 +23,7 @@ public class Participant {
     private boolean crashed;
     private boolean timeup;
     private ArrayList<String>correctionSent;
+
 
 
     public Participant(String ipAddress, String examCode) {
@@ -30,12 +34,19 @@ public class Participant {
         this.crashed=false;
         this.timeup=false;
         this.correctionSent=new ArrayList<>();
+        this.remainingTimeInSeconds=-1;
     }
 
     public ArrayList<String> getCorrectionSent() {
         return correctionSent;
     }
+    public MainNetworkThread getMainNetworkThread() {
+        return mainNetworkThread;
+    }
 
+    public void setMainNetworkThread(MainNetworkThread mainNetworkThread) {
+        this.mainNetworkThread = mainNetworkThread;
+    }
     public void setCorrectionSent(ArrayList<String> correctionSent) {
         this.correctionSent = correctionSent;
     }
@@ -112,11 +123,11 @@ public class Participant {
         this.examCode = examCode;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public int getRemainingTimeInSeconds() {
+        return remainingTimeInSeconds;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setRemainingTimeInSeconds(int remainingTimeInSeconds) {
+        this.remainingTimeInSeconds = remainingTimeInSeconds;
     }
 }

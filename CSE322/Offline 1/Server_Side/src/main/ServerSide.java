@@ -19,7 +19,7 @@ public class ServerSide extends Application {
     private Hashtable<Integer, Participant> participantObjectMap;
     private Hashtable <String,Exam> examMap;
     private Stage mainStage;
-
+    Server_GUI_Controller controller=null;
 
 
 
@@ -36,7 +36,9 @@ public class ServerSide extends Application {
         //setting up the primary gui
         FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/res/server_side_gui_main.fxml"));
         Parent root = fxmlLoader.load();
-        ((Server_GUI_Controller)fxmlLoader.getController()).setInitiator(this);
+
+        controller= fxmlLoader.getController();
+        controller.setInitiator(this);
 
 
 
@@ -69,5 +71,12 @@ public class ServerSide extends Application {
 
     public Stage getMainStage() {
         return mainStage;
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        controller.timer.cancel();
+        controller.timer.purge();
     }
 }

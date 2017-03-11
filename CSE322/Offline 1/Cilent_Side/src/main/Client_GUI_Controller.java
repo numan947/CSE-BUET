@@ -175,11 +175,26 @@ public class Client_GUI_Controller {
     public void showErrorDialog(String ss)
     {
         Platform.runLater(() -> {
+            alert.setAlertType(Alert.AlertType.ERROR);
             alert.setTitle("ERROR!!");
             alert.setHeaderText("There's an error while connecting");
             alert.setContentText(ss);
             alert.showAndWait();
             this.clearConnectButton();
+        });
+
+    }
+
+
+
+    public void informationDialog(String ss)
+    {
+        Platform.runLater(() -> {
+            alert.setAlertType(Alert.AlertType.INFORMATION);
+            alert.setTitle("NEW INFORMATION!");
+            alert.setHeaderText("You've received a new information!");
+            alert.setContentText(ss);
+            alert.showAndWait();
         });
 
     }

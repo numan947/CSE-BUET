@@ -179,6 +179,8 @@ public class MainNetworkThread implements Runnable {
                     while(running&&!Thread.interrupted()){
                         cnt=networkUtil.readBuff(buff);
                         msg=new String(buff,0,cnt);
+
+
                         if(msg.equals("Corrections")){
                             networkUtil.writeBuff("Send".getBytes());
                             networkUtil.flushStream();
@@ -187,9 +189,18 @@ public class MainNetworkThread implements Runnable {
                             msg=new String(buff,0,cnt); //this is the correction message
                             controller.addToCorrectionsList(msg);
                         }
+                        else if(msg.equals("Warning")){
+                            networkUtil.writeBuff("Send".getBytes());
+                            networkUtil.flushStream();
+
+                            cnt=networkUtil.readBuff(buff);
+                            controller.informationDialog(new String(buff,0,cnt));
+                        }
+                        else if(msg.equals("TimeUp")){
 
 
 
+                        }
                     }
 
                     //stop the filetransferthread

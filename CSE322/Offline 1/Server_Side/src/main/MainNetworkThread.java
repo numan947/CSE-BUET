@@ -17,7 +17,10 @@ public class MainNetworkThread implements Runnable {
     private  TabController tabController;
     private Participant participant=null;
 
-    Thread t;
+    private Thread t;
+    private boolean sendWarningFlag;
+    private boolean finishedExamFlag;
+
     public MainNetworkThread(MainServerThread serverThread, NetworkUtil networkUtil) {
         this.serverThread = serverThread;
         this.networkUtil = networkUtil;
@@ -38,6 +41,22 @@ public class MainNetworkThread implements Runnable {
         }
     }
 
+
+    public boolean isSendWarningFlag() {
+        return sendWarningFlag;
+    }
+
+    public void setSendWarningFlag(boolean sendWarningFlag) {
+        this.sendWarningFlag = sendWarningFlag;
+    }
+
+    public boolean isFinishedExamFlag() {
+        return finishedExamFlag;
+    }
+
+    public void setFinishedExamFlag(boolean finishedExamFlag) {
+        this.finishedExamFlag = finishedExamFlag;
+    }
 
     private int getBuffFromFile(byte[]buff, BufferedInputStream fbuff)
     {
@@ -72,8 +91,6 @@ public class MainNetworkThread implements Runnable {
                 //check if the exam code is in the exam map
                 if(serverThread.getController().getInitiator().getExamMap().containsKey("Exam ID: "+tmp[0])){
 
-                    //check if the student id is in the exam object
-                    System.out.println("AM I STUCK HERE??2");
                     if(serverThread.getController().getInitiator().getExamMap().get("Exam ID: "+tmp[0]).getAllowedIDs().contains(Integer.parseInt(tmp[1]))){
 
                         //save the info
@@ -92,6 +109,9 @@ public class MainNetworkThread implements Runnable {
                                 !serverThread.getController().getInitiator().
                                         getParticipantObjectMap().get(studentId).
                                         getExamCode().equals(examCode)) {
+
+
+
                             participant = new Participant(networkUtil.getSocket().getInetAddress().getHostAddress(), examCode);
                             participant.setFileTransferThread(new FileTransferThread(null, participant));
                             participant.setBackupInterval(exam.getBackupInterval());
@@ -99,16 +119,24 @@ public class MainNetworkThread implements Runnable {
                             participant.setCurrentBackupFile(questionFile);//as there's no backup received, this is default
                             participant.getCorrectionSent().clear();
                             participant.getCorrectionSent().addAll(tabController.getAllCorrections());
+                            participant.setMainNetworkThread(this);
+
+
                         }
                         // the id's pc is crashed so, send back the last backup
                         else if(serverThread.getController().getInitiator().
                                 getParticipantObjectMap().get(studentId).isCrashed()){
-                            //System.out.println("IS IT ME??");
+
+
                             participant=serverThread.getController().getInitiator().getParticipantObjectMap().get(studentId);
                             questionFile=participant.getCurrentBackupFile();
 
                             participant.getCorrectionSent().clear();
                             participant.getCorrectionSent().addAll(tabController.getAllCorrections());
+                            participant.setMainNetworkThread(this);
+
+
+                            participant.setCrashed(false);
                             //the rest of the participant object should have been set by now
                         }
                         else{
@@ -214,8 +242,11 @@ public class MainNetworkThread implements Runnable {
                                         if(msg.equals("QUESTION_RECEIVED"))correctionFlag=true;
 
                                         networkUtil.writeBuff("INITIATE_FILE_TRANSFER_THREAD".getBytes());
+
                                         participant.setNextScheduledBackup(System.currentTimeMillis()+participant.getBackupInterval()+Server_GUI_Controller.backupepstime);
 
+                                        //new client
+                                        if(participant.getRemainingTimeInSeconds()==-1)participant.setRemainingTimeInSeconds(exam.getDuration());
                                         // now we go to correction flag to wait for corrections :)
                                     }
                                 }
@@ -250,7 +281,7 @@ public class MainNetworkThread implements Runnable {
 
                 //send any new corrections
                 while (correctionFlag && !Thread.interrupted()){
-                    // let there be the code for sending correction
+                    // code for sending correction
                     if(correctionString!=null&&!correctionString.equals("")){
                         networkUtil.writeBuff("Corrections".getBytes());
                         networkUtil.flushStream();
@@ -261,6 +292,33 @@ public class MainNetworkThread implements Runnable {
                             correctionString=null;
                         }
                     }
+                    // code that'll send warning before time up
+                    if(sendWarningFlag){
+                        networkUtil.writeBuff("Warning".getBytes());
+                        networkUtil.flushStream();
+                        cnt=networkUtil.readBuff(buff);
+                        if(new String(buff,0,cnt).equals("Send")){
+                            Exam e=serverThread.getController().getInitiator().getExamMap().get(participant.getExamCode());
+                            String ss="You have "+(e.getWarningTime()/1000)+" seconds to finish";
+                            networkUtil.writeBuff(ss.getBytes());
+                            networkUtil.flushStream();
+                        }
+
+                        // we've sent the warning once, we're done! It'll not be true again.
+                        sendWarningFlag=false;
+
+                    }
+                    if(finishedExamFlag){
+                        //stop the filetransferthread
+
+
+
+
+                    }
+
+
+
+
                 }
 
                 networkUtil.closeAll();

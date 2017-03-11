@@ -3,6 +3,7 @@ package main;
  * Sample Skeleton for 'server_side_gui_main.fxml' Controller Class
  */
 
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
+import java.util.Timer;
 
 public class Server_GUI_Controller {
     // general fields
@@ -27,6 +29,7 @@ public class Server_GUI_Controller {
     private MainServerThread mainServerThread=null;
     private BackupCheckerThread backupCheckerThread=null;
     private Alert alert=null;
+    Timer timer=null;
 
     private Hashtable<String,TabController>controllerHashtable;
 
@@ -86,6 +89,10 @@ public class Server_GUI_Controller {
 
                     //initiate the backup checker thread
                     this.backupCheckerThread=new BackupCheckerThread(initiator.getParticipantObjectMap(),this);
+
+                    timer=new Timer();
+                    timer.schedule(new MyClock(initiator.getParticipantObjectMap(),initiator.getExamMap()),0,1000);
+
                     status.setText("status: running");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -93,6 +100,9 @@ public class Server_GUI_Controller {
             }
             else{
                 this.mainServerThread.setStopServer(false);
+
+                timer=new Timer();
+                timer.schedule(new MyClock(initiator.getParticipantObjectMap(),initiator.getExamMap()),0,1000);
                 this.backupCheckerThread=new BackupCheckerThread(initiator.getParticipantObjectMap(),this);
                 status.setText("status: running");
             }
@@ -101,6 +111,9 @@ public class Server_GUI_Controller {
             //server stop code here
             if(mainServerThread!=null)mainServerThread.setStopServer(true);
             if(backupCheckerThread!=null)backupCheckerThread.setRunning(false);
+            if(timer!=null){
+                timer.cancel();timer.purge();
+            }
             status.setText("status: stopped");
             start_server.setText("Start Server");
         }
