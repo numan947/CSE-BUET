@@ -37,7 +37,7 @@ public class BackupCheckerThread implements Runnable {
                 int roll=pppp.getKey();
                 Participant p=pppp.getValue();
                 long backuptime=p.getNextScheduledBackup();
-                if(backuptime<System.currentTimeMillis()&&backuptime!=-1){
+                if(backuptime<System.currentTimeMillis()&&backuptime!=-1&&!p.isTimeup()){
                     noScheduledBackList.add(roll);
 
                     //set it to -1, so that we don't show it again and again

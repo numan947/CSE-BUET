@@ -76,7 +76,10 @@ public class ServerSide extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        controller.timer.cancel();
-        controller.timer.purge();
+
+        if(controller.timer!=null) {
+            controller.timer.cancel();
+            controller.timer.purge();
+        }
     }
 }

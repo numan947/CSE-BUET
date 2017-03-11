@@ -310,10 +310,16 @@ public class MainNetworkThread implements Runnable {
                     }
                     if(finishedExamFlag){
                         //stop the filetransferthread
+                        System.out.println("receiving last backup");
+                        networkUtil.writeBuff("TimeUp".getBytes());
+                        networkUtil.flushStream();
+                        participant.getFileTransferThread().stopThread(true);
+                        participant.setTimeup(true);
 
+                        participant.getFileTransferThread().receiveBackup(networkUtil,cnt,msg,buff,"FINAL");
 
-
-
+                        finishedExamFlag=false;
+                        break;
                     }
 
 

@@ -197,9 +197,9 @@ public class MainNetworkThread implements Runnable {
                             controller.informationDialog(new String(buff,0,cnt));
                         }
                         else if(msg.equals("TimeUp")){
-
-
-
+                            controller.informationDialog("Your Time is Up!!");
+                            ft.sendBackup(networkUtil);
+                            break;
                         }
                     }
 

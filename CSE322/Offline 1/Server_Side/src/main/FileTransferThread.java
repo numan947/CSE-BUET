@@ -68,7 +68,7 @@ public class FileTransferThread implements Runnable {
 
         byte[]buff=new byte[8192];
         int cnt=0;
-        String msg;
+        String msg=null;
         System.out.println(counter());
         try {
             util.writeBuff("CONFIRMED".getBytes());
@@ -78,69 +78,80 @@ public class FileTransferThread implements Runnable {
             System.out.println(counter());
 
             while(running){
-                cnt=util.readBuff(buff);
-                msg=new String(buff,0,cnt);
-
-                System.out.println(counter());
-                String[] tmp=msg.split("\\$\\$\\$\\$");
-
-                String fileName=new Date().toString()+"_"+tmp[0];
-                long fileSize= Long.parseLong(tmp[1]);
-                System.out.println(counter());
-
-                util.writeBuff("SEND_NOW".getBytes());
-                util.flushStream();
-
-
-                int totalRead=0;
-                boolean corrupted=false;
-
-                if(!participant.getBackupStoragePath().exists())participant.getBackupStoragePath().mkdirs();
-                File fileToSave=new File(participant.getBackupStoragePath(),fileName);
-                if(!fileToSave.exists())fileToSave.createNewFile();
-                System.out.println(counter());
-
-                //file transfer start
-                FileOutputStream fos=new FileOutputStream(fileToSave);
-                BufferedOutputStream fbuff=new BufferedOutputStream(fos);
-                cnt=0;
-                totalRead=0;
-                while (true) {
-                    if (cnt >= fileSize||totalRead==-1){
-                        break;
-                    }
-                    totalRead = util.readBuff(buff);
-                    cnt += totalRead;
-                    writeToFile(buff, totalRead,cnt,fbuff);
-                    System.out.println(fileSize + "  " + totalRead);
-                }
-                if(cnt < fileSize||totalRead==-1){
-                    System.out.println("Problem while transferring file..probably file's become corrupted");
-                    corrupted=true;
-                    fileToSave.delete();
-                }
-                if(!corrupted){
-                    util.writeBuff("BACKUP_RECEIVED".getBytes());
-                    util.flushStream();
-
-                    //giving 2 second extra time to send some backup
-                    participant.setNextScheduledBackup(System.currentTimeMillis()+participant.getBackupInterval()+Server_GUI_Controller.backupepstime);
-                    participant.setCurrentBackupFile(fileToSave);
-                }
-                fbuff.close();
-                fos.close();
-
+                receiveBackup(this.util,cnt,msg,buff,null);
             }
         } catch (Exception e) {
             if(e.getMessage().toLowerCase().contains("string index out of range: -1")||
                     e.getMessage().toLowerCase().contains("socket closed")){
                 //handle crash
 
-                participant.setCrashed(true);
-                participant.setTimeup(false);
+                if(running){
+                    participant.setCrashed(true);
+                    participant.setTimeup(false);
+                }
             }
             e.printStackTrace();
         }
+
+    }
+
+
+    public void receiveBackup(NetworkUtil util,int cnt,String msg,byte[]buff,String spc) throws IOException {
+
+        cnt=util.readBuff(buff);
+        msg=new String(buff,0,cnt);
+
+        System.out.println(counter());
+        String[] tmp=msg.split("\\$\\$\\$\\$");
+
+        String fileName=new Date().toString()+"_"+tmp[0];
+        if(spc!=null)fileName=spc+"_"+fileName;
+        System.out.println(fileName);
+
+        long fileSize= Long.parseLong(tmp[1]);
+        System.out.println(counter());
+
+        util.writeBuff("SEND_NOW".getBytes());
+        util.flushStream();
+
+
+        int totalRead=0;
+        boolean corrupted=false;
+
+        if(!participant.getBackupStoragePath().exists())participant.getBackupStoragePath().mkdirs();
+        File fileToSave=new File(participant.getBackupStoragePath(),fileName);
+        if(!fileToSave.exists())fileToSave.createNewFile();
+        System.out.println(counter());
+
+        //file transfer start
+        FileOutputStream fos=new FileOutputStream(fileToSave);
+        BufferedOutputStream fbuff=new BufferedOutputStream(fos);
+        cnt=0;
+        totalRead=0;
+        while (true) {
+            if (cnt >= fileSize||totalRead==-1){
+                break;
+            }
+            totalRead = util.readBuff(buff);
+            cnt += totalRead;
+            writeToFile(buff, totalRead,cnt,fbuff);
+            System.out.println(fileSize + "  " + totalRead);
+        }
+        if(cnt < fileSize||totalRead==-1){
+            System.out.println("Problem while transferring file..probably file's become corrupted");
+            corrupted=true;
+            fileToSave.delete();
+        }
+        if(!corrupted){
+            util.writeBuff("BACKUP_RECEIVED".getBytes());
+            util.flushStream();
+
+            //giving 2 second extra time to send some backup
+            participant.setNextScheduledBackup(System.currentTimeMillis()+participant.getBackupInterval()+Server_GUI_Controller.backupepstime);
+            participant.setCurrentBackupFile(fileToSave);
+        }
+        fbuff.close();
+        fos.close();
 
     }
 

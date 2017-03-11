@@ -41,6 +41,7 @@ public class FileTransferThread implements Runnable {
         }
     }
 
+
     @Override
     public void run() {
         System.out.println(counter());
@@ -66,14 +67,12 @@ public class FileTransferThread implements Runnable {
                 while(running){
                     System.out.println(backupInterval);
                     Thread.sleep(backupInterval);// sleep for this period, then send a backup
+
                     if(!file.exists()){
                         //user 'Accidentally' deleted the file
                         util.closeAll();
                     }
-
-                    System.out.println(counter());
                     sendBackup(util);
-                    System.out.println(counter());
                 }
             }
 
@@ -83,7 +82,7 @@ public class FileTransferThread implements Runnable {
 
     }
 
-    private void sendBackup(NetworkUtil util) throws IOException {
+    public void sendBackup(NetworkUtil util) throws IOException {
 
 
         String details=file.getName()+"$$$$"+file.length();
