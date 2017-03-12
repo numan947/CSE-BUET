@@ -204,7 +204,10 @@ public class MainNetworkThread implements Runnable {
                     }
 
                     //stop the filetransferthread
-                    if(ft!=null)ft.setRunning(false);
+                    if(ft!=null){
+                        ft.setRunning(false);
+                        controller.clearConnectButton();
+                    }
 
                 }
                 else{
