@@ -129,7 +129,7 @@ public class FileTransferThread implements Runnable {
         cnt=0;
         totalRead=0;
         while (true) {
-            if (cnt >= fileSize||totalRead==-1){
+            if (cnt == fileSize||totalRead==-1){
                 break;
             }
             totalRead = util.readBuff(buff);
