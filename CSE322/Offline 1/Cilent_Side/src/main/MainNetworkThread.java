@@ -172,6 +172,7 @@ public class MainNetworkThread implements Runnable {
                     if(msg.equals("INITIATE_FILE_TRANSFER_THREAD")){
                         ft=new FileTransferThread(this,examCode,studentID,ipAddress,port,backupInterval,fileToSave);
                     }
+                    controller.informationDialog("START EXAM NOW");
 
 
                     //now we wait for any correction or something :)

@@ -219,6 +219,8 @@ public class MainNetworkThread implements Runnable {
                                         BufferedInputStream fbuff=new BufferedInputStream(new FileInputStream(questionFile));
                                         int tmpCt=0;
                                         int totalRead=0;
+
+
                                         while ((totalRead = getBuffFromFile(buff,fbuff)) > -1) {
                                             tmpCt+=totalRead;
                                             networkUtil.writeBuff(buff, 0, totalRead);
