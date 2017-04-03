@@ -282,7 +282,7 @@ void *D_Func(void *arg)
 
 
 // FOR NORMAL CHECKING
-/*
+
 int main()
 {
 	int totalStudent;
@@ -319,15 +319,13 @@ int main()
 	pthread_join(C,NULL);
 	pthread_join(D,NULL);
 	pthread_join(E,NULL);
-	for(int i=0;i<10;i++)pthread_join(student_threads[i],NULL);
+	for(int i=0;i<totalStudent;i++)pthread_join(student_threads[i],NULL);
 	return 0;
 }
 
-*/
-
 
 //FOR DUPLICATE CHECKING
-
+/*
 int main()
 {
 	int totalStudent;
@@ -366,6 +364,6 @@ int main()
 	pthread_join(C,NULL);
 	pthread_join(D,NULL);
 	pthread_join(E,NULL);
-	for(int i=0;i<10;i++)pthread_join(student_threads[i],NULL);
+	for(int i=0;i<totalStudent+20;i++)pthread_join(student_threads[i],NULL);
 	return 0;
-}
+}*/
