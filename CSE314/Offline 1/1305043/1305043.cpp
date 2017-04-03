@@ -77,9 +77,9 @@ void *student_Func(void *arg)
 	
 
 	int t=0;
-	while(t<=requestCounter){ //#WRAP AROUND WITH A WHILE
+	while(t<requestCounter){ //#WRAP AROUND WITH A WHILE
 	
-	
+
 	printf("I am student %d REQUEST NO %d\n\n",*id,++t);
 	
 	//queue id for ACE,PRODUCER
@@ -142,7 +142,7 @@ void *student_Func(void *arg)
 
 	} //#wrap around with a while
 
-
+	printf("EXITING: %d\n\n",*id);
 	//todo: wrap the whole code around a while??
 }
 
@@ -281,8 +281,8 @@ void *D_Func(void *arg)
 
 
 
-
-
+// FOR NORMAL CHECKING
+/*
 int main()
 {
 	int totalStudent;
@@ -313,6 +313,53 @@ int main()
 	for(int i=0;i<totalStudent;i++)
 		pthread_create(&student_threads[i],NULL,student_Func,(void*)&id[i]);
 
+	//joining from launcher thread
+	pthread_join(A,NULL);
+	pthread_join(B,NULL);
+	pthread_join(C,NULL);
+	pthread_join(D,NULL);
+	pthread_join(E,NULL);
+	for(int i=0;i<10;i++)pthread_join(student_threads[i],NULL);
+	return 0;
+}
+
+*/
+
+
+//FOR DUPLICATE CHECKING
+
+int main()
+{
+	int totalStudent;
+	printf("Input total student: <totalStudent> <requestCounter>\n\n");
+	scanf("%d %d",&totalStudent,&requestCounter);
+
+
+	pthread_t student_threads[MAX];
+	pthread_t A,B,C,D,E;
+	init_all();
+
+	int id[MAX];
+	for(int i=0;i<totalStudent;i++)id[i]=i;
+	char teach1='A';
+	char teach2='B';
+	char teach3='C';
+	char teach4='D';
+	char teach5='E';
+
+	pthread_create(&A,NULL,ACE_Func,(void*)&teach1);
+	pthread_create(&C,NULL,ACE_Func,(void*)&teach3);
+	pthread_create(&E,NULL,ACE_Func,(void*)&teach5);
+	pthread_create(&B,NULL,B_Func,(void*)&teach2);
+	pthread_create(&D,NULL,D_Func,(void*)&teach4);
+
+
+
+	for(int i=0;i<totalStudent+20;i++){
+		int pp=rand()%totalStudent;
+		pthread_create(&student_threads[i],NULL,student_Func,(void*)&id[pp]);
+	}
+	
 	//joining from launcher thread
 	pthread_join(A,NULL);
 	pthread_join(B,NULL);
