@@ -7,6 +7,9 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <algorithm>
+#include <sstream>
+#include <iostream>
 using namespace std;
 
 struct gen_pass{
@@ -171,8 +174,74 @@ void *ACE_Func(void *arg)
 
 void *B_Func(void *arg)
 {
+	char* myID=(char*)arg;
+
+	while(true){
+		
+		// B gets the input from its 'Q',CONSUMER
+		sem_wait(&B_Q_full);
+		pthread_mutex_lock(&B_Q_lock);
+
+		int cur=B_Q;
+
+		pthread_mutex_unlock(&B_Q_lock);
+		sem_post(&B_Q_empty);
 
 
+		// now B checks for duplicate
+
+		pthread_mutex_lock(&duplicate_checking_Q_lock);
+
+		int pos,sid;
+		int cnt=count(duplicate_checking_Q.begin(),duplicate_checking_Q.end(),cur);
+
+		if(cnt==1){
+			
+			//determine the position
+			pos=find(duplicate_checking_Q.begin(),duplicate_checking_Q.end(),cur)-duplicate_checking_Q.begin();
+			
+			//copy the id
+			sid=duplicate_checking_Q[pos];
+			
+			//remove it from the Q
+			duplicate_checking_Q.erase(duplicate_checking_Q.begin()+pos);
+
+			//unlock the list
+			pthread_mutex_unlock(&duplicate_checking_Q_lock);
+		}
+		else{//todo: do nothing, duplicate OR
+			pthread_mutex_unlock(&duplicate_checking_Q_lock);
+		}
+
+		
+
+		if(cnt==1){
+			//generate the password
+			stringstream ss;
+			ss<<sid;
+			string s=ss.str()+"_"+"THIS_IS_BUET";
+
+
+			gen_pass pass;
+			pass.id=sid;
+			pass.password=s; 
+
+
+			pthread_mutex_lock(&generated_password_Q_lock);
+			
+
+			generated_password_Q.push_back(pass);
+			printf("%c putting generted password to generated_password_Q for %d: %s\n",*myID,sid,s.c_str());
+
+
+			pthread_mutex_unlock(&generated_password_Q_lock);
+
+		}
+		
+	
+
+
+	}
 
 
 
@@ -212,7 +281,7 @@ int main()
 	pthread_create(&A,NULL,ACE_Func,(void*)&teach1);
 	pthread_create(&C,NULL,ACE_Func,(void*)&teach3);
 	pthread_create(&E,NULL,ACE_Func,(void*)&teach5);
-	//pthread_create(&A,NULL,ACE_Func,NULL);
+	pthread_create(&B,NULL,B_Func,(void*)&teach2);
 	//pthread_create(&A,NULL,ACE_Func,NULL);
 
 
