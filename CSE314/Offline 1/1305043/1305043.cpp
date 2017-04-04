@@ -39,8 +39,6 @@ pthread_mutex_t duplicate_checking_Q_lock;
 vector<gen_pass>generated_password_Q;
 pthread_mutex_t generated_password_Q_lock;
 
-// vector<gen_pass>ready_password_Q;
-// pthread_mutex_t ready_password_Q_lock;
 
 int s_req_pass;
 sem_t s_req_pass_empty;
@@ -53,6 +51,9 @@ string s_pass;
 sem_t s_pass_empty;
 sem_t s_pass_full;
 pthread_mutex_t s_pass_lock;
+
+
+pthread_mutex_t req_res_area_lock;
 
 
 
@@ -80,6 +81,10 @@ void init_all()
 	sem_init(&s_pass_empty,0,1);
 	sem_init(&s_pass_full,0,0);
 	pthread_mutex_init(&s_pass_lock,0);
+
+
+
+	pthread_mutex_init(&req_res_area_lock,0);
 
 }
 
@@ -130,6 +135,10 @@ void *student_Func(void *arg)
 	while(true) //ask for password using s_req_pass,providing the sid,PRODUCER
 				//
 	{
+		
+		pthread_mutex_lock(&req_res_area_lock);
+
+
 		sem_wait(&s_req_pass_empty); //reduce empty, so that other gets blocked out
 		pthread_mutex_lock(&s_req_pass_lock); //lock the variable before accessing
 
@@ -147,9 +156,16 @@ void *student_Func(void *arg)
 		pthread_mutex_unlock(&s_pass_lock);
 		sem_post(&s_pass_empty);
 
+		
+		pthread_mutex_unlock(&req_res_area_lock);
+
+
 		if(pass!="NOT_FOUND")break;
 
+
 	}
+
+	printf("GOT PASSWORD < %d , %s >---turn---%d\n\n",*id,pass.c_str(),t);
 	
 
 	//sleep before asking again
