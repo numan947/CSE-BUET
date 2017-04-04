@@ -136,6 +136,7 @@ void *student_Func(void *arg)
 				//
 	{
 		
+		//so that more than one student can't disturb our teacher D
 		pthread_mutex_lock(&req_res_area_lock);
 
 
