@@ -185,7 +185,7 @@ void *D_Func(void *arg)
 
 		pthread_mutex_lock(&generated_password_Q_lock);
 		for(int i=0;i<generated_password_Q.size();i++)
-			if(generated_password_Q[i].id=roll){
+			if(generated_password_Q[i].id==roll){
 				pass=generated_password_Q[i].password;
 				break;
 			}
