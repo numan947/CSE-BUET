@@ -39,8 +39,20 @@ pthread_mutex_t duplicate_checking_Q_lock;
 vector<gen_pass>generated_password_Q;
 pthread_mutex_t generated_password_Q_lock;
 
-vector<gen_pass>ready_password_Q;
-pthread_mutex_t ready_password_Q_lock;
+// vector<gen_pass>ready_password_Q;
+// pthread_mutex_t ready_password_Q_lock;
+
+int s_req_pass;
+sem_t s_req_pass_empty;
+sem_t s_req_pass_full;
+pthread_mutex_t s_req_pass_lock;
+
+
+
+string s_pass;
+sem_t s_pass_empty;
+sem_t s_pass_full;
+pthread_mutex_t s_pass_lock;
 
 
 
@@ -60,10 +72,14 @@ void init_all()
 	pthread_mutex_init(&duplicate_checking_Q_lock,0);
 
 
-	pthread_mutex_init(&generated_password_Q_lock,0);
+	sem_init(&s_req_pass_empty,0,1);
+	sem_init(&s_req_pass_full,0,0);
+	pthread_mutex_init(&s_req_pass_lock,0);
 
 
-	pthread_mutex_init(&ready_password_Q_lock,0);
+	sem_init(&s_pass_empty,0,1);
+	sem_init(&s_pass_full,0,0);
+	pthread_mutex_init(&s_pass_lock,0);
 
 }
 
@@ -109,30 +125,29 @@ void *student_Func(void *arg)
 
 
 	//poll password from D,CONSUMER
-	gen_pass pass;
+	string pass;
 	bool breaker=false;
-	while(true) //lock: find,if not found: unlock,
-				//if found : increase empty,remove item,unlock,break
+	while(true) //ask for password using s_req_pass,providing the sid,PRODUCER
+				//
 	{
-		pthread_mutex_lock(&ready_password_Q_lock);
+		sem_wait(&s_req_pass_empty); //reduce empty, so that other gets blocked out
+		pthread_mutex_lock(&s_req_pass_lock); //lock the variable before accessing
 
-		for(int i=0;i<ready_password_Q.size();i++){
-			if(ready_password_Q[i].id==*id){//found
-				breaker=true;
-				pass=ready_password_Q[i];
-				ready_password_Q.erase(ready_password_Q.begin()+i);
-				break;
-			}
-		}
-		pthread_mutex_unlock(&ready_password_Q_lock);
+		s_req_pass=*id;
 
-		if(breaker){
-			printf("STUDENT: %d, REQUEST NO: %d got it's password, it's %s\n\n",*id,t,pass.password.c_str());
-			break;
-		}
+		pthread_mutex_unlock(&s_req_pass_lock);
+		sem_post(&s_req_pass_full); //increase full, so that D can wake up
 
-		printf("POLLING:D for pasword--> STUDENT_NO: %d, REQUEST_NO:%d\n\n",*id,t);
-		sleep(2);
+		
+		sem_wait(&s_pass_full); // now we wait for password, CONSUMER
+		pthread_mutex_lock(&s_pass_lock); //lock before accessing
+
+		pass=s_pass;
+
+		pthread_mutex_unlock(&s_pass_lock);
+		sem_post(&s_pass_empty);
+
+		if(pass!="NOT_FOUND")break;
 
 	}
 	
@@ -145,6 +160,57 @@ void *student_Func(void *arg)
 	printf("EXITING: %d\n\n",*id);
 	//todo: wrap the whole code around a while??
 }
+
+
+
+void *D_Func(void *arg)
+{
+	char *myID=(char*)arg;
+	printf("HELLO ");
+
+	while(true){
+
+		//CONSUMER
+		sem_wait(&s_req_pass_full); //block until someone asks for a question
+		pthread_mutex_lock(&s_req_pass_lock);//lock before accessing
+		
+		int roll=s_req_pass;
+		printf("%c : PASSWORD REQUEST found from %d\n",*myID,roll);
+
+		pthread_mutex_unlock(&s_req_pass_lock);
+		sem_post(&s_req_pass_empty);
+
+		string pass;
+		pass="NOT_FOUND";
+
+		pthread_mutex_lock(&generated_password_Q_lock);
+		for(int i=0;i<generated_password_Q.size();i++)
+			if(generated_password_Q[i].id=roll){
+				pass=generated_password_Q[i].password;
+				break;
+			}
+
+		pthread_mutex_unlock(&generated_password_Q_lock);
+
+
+
+		//PRODUCER
+		sem_wait(&s_pass_empty);
+		pthread_mutex_lock(&s_pass_lock);
+
+		s_pass=pass;
+		printf("%c : SENDING PASSWORD for %d, it's %s\n",*myID,roll,pass.c_str());
+
+
+		pthread_mutex_unlock(&s_pass_lock);
+		sem_post(&s_pass_full);
+
+	}
+
+}
+
+
+
 
 void *ACE_Func(void *arg)
 {
@@ -253,28 +319,6 @@ void *B_Func(void *arg)
 }
 
 
-
-void *D_Func(void *arg)
-{
-	char *myID=(char*)arg;
-
-	//it basically takes the generated passwords from the generated_password_Q and 
-	//puts them to ready_passwrod_Q, so, CONSUMER and PRODUCER
-	while(true){
-
-		pthread_mutex_lock(&generated_password_Q_lock);
-		pthread_mutex_lock(&ready_password_Q_lock);
-
-		if(generated_password_Q.size()>0){
-			ready_password_Q.insert(ready_password_Q.end(),generated_password_Q.begin(),generated_password_Q.end());
-			generated_password_Q.clear();
-			printf("%c taking generated passwords to ready_password_Q\n\n",*myID);
-		}
-		pthread_mutex_unlock(&ready_password_Q_lock);
-		pthread_mutex_unlock(&generated_password_Q_lock);
-	}
-
-}
 
 
 
