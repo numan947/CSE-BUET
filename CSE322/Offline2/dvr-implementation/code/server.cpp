@@ -20,7 +20,7 @@ int main(){
 
 	server_address.sin_family = AF_INET;
 	server_address.sin_port = htons(4747);
-	inet_pton(AF_INET,"192.168.10.100", &server_address.sin_addr);
+	inet_pton(AF_INET,"192.168.10.1", &server_address.sin_addr);
 	
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 	
@@ -31,10 +31,13 @@ int main(){
 	while(true){
 		bytes_received = recvfrom(sockfd, buffer, 1024, 0, (struct sockaddr*) &client_address, &addrlen);
 		
-		printf("[%s:%hu]: %s\n", inet_ntoa(client_address.sin_addr), ntohs(client_address.sin_port), buffer);
+		char ip[20];
+		if(buffer[0]=='s')inet_ntop(AF_INET,buffer+4,ip,sizeof(ip));
+		printf("found ip %s\n",ip );
+		//printf("[%s:%hu]: %s\n", inet_ntoa(client_address.sin_addr), ntohs(client_address.sin_port), buffer);
 		
-		printf("%hu\n",client_address.sin_port);
-		printf("%u\n",client_address.sin_addr.s_addr);
+		//printf("%hu\n",client_address.sin_port);
+		//printf("%u\n",client_address.sin_addr.s_addr);
 		if(strcmp(buffer,"shutdown")==0)break;		
 
 	}
