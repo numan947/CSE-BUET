@@ -13,7 +13,7 @@
 #include <utility>
 #include <algorithm>
 #include <cerrno>
-#define INF -999999
+#define INF 10000000
 
 using namespace std;
 
@@ -132,6 +132,49 @@ void sendToNeighbours(vector<string>neighbours,string msgToSend,int socketDescri
 }
 
 
+map<string,pair<string,int> >buildMap(vector<string>vct)
+{
+	map<string,pair<string,int> >neighbourTable;
+	
+	//entry 0 is "tabl", so avoid that
+	for(int i=1;i<vct.size();i+=3){
+		neighbourTable[vct[i]]=make_pair(vct[i+1],strToInt(vct[i+2]));
+	}
+	return neighbourTable;
+}
+
+
+
+void updateRoutingTable(map<string,pair<string,int> >&routingTable,map<string,pair<string,int> >&neighbourTable,string neighbour,string myIpAddress)
+{
+map<string,pair<string,int> >::iterator it1,it2;
+
+	for(it1=routingTable.begin();it1!=routingTable.end();it1++){
+		string dest=it1->first;
+		string current_nexthop=it1->second.first;
+		int current_cost=it1->second.second;
+
+		it2=neighbourTable.find(dest);
+		if(it2==neighbourTable.end())continue;//this case should arise only for neighbours
+		string neighbour_nexthop=it2->second.first;
+		int neighbour_cost=it2->second.second;
+
+		it2=routingTable.find(neighbour);
+		int cost_to_go_to_neighbour=it2->second.second;
+
+
+		//split horizon || forced update
+		if((neighbour_nexthop!=myIpAddress && (current_cost>cost_to_go_to_neighbour+neighbour_cost))||(neighbour==current_nexthop)){
+			it1->second.first=neighbour;
+			it1->second.second=cost_to_go_to_neighbour+neighbour_cost;
+		}
+
+
+	}
+}
+
+
+
 int main(int argc, char *argv[])
 {
 	map<string,pair<string,int> >routingTable;
@@ -190,8 +233,8 @@ int main(int argc, char *argv[])
 		}
 		//the connection is not between ME and someone, so let's save other routers in the network
 		else{
-			if(routingTable.find(n1)==routingTable.end())routingTable[n1]=make_pair("NOT CONNECTED",INF);
-			if(routingTable.find(n2)==routingTable.end())routingTable[n2]=make_pair("NOT CONNECTED",INF);
+			if(routingTable.find(n1)==routingTable.end())routingTable[n1]=make_pair("waiting for calculation",INF);
+			if(routingTable.find(n2)==routingTable.end())routingTable[n2]=make_pair("waiting for calculation",INF);
 		}
 
 	}
@@ -268,9 +311,12 @@ int main(int argc, char *argv[])
 
     		vector<string> parsed=tokenizeString(msg,"$$$$");
 
-    		
+    		map<string,pair<string,int> >neighbourTable=buildMap(parsed);
 
+    		//for(int i=0;i<parsed.size();i++)printf("asdasd  %s\n",parsed[i].c_str() );
 
+    		printRoutingTable(neighbourTable);
+    		updateRoutingTable(routingTable,neighbourTable,neighbourIp,myIpAddress);
     	}
 
 
