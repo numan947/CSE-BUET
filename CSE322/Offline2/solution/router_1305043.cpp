@@ -17,6 +17,12 @@
 
 using namespace std;
 
+struct linkToNeighbour
+{
+	string neighbourIp;
+	int linkcost;
+	int linkstatus;
+};
 
 
 
@@ -71,7 +77,7 @@ void printRoutingTable(map<string,pair<string,int> >table)
 
 
 
-void updateCost(map<string,pair<string,int> >&routingTable,string myIpAddress,char* buffer)
+void updateCost(map<string,pair<string,int> >&routingTable,vector<linkToNeighbour>&neighbours,string myIpAddress,char* buffer)
 {
    		char ip1[20],ip2[20];unsigned char costBuff[2];
 
@@ -86,10 +92,34 @@ void updateCost(map<string,pair<string,int> >&routingTable,string myIpAddress,ch
 
 		string updateCostIp=(ip1==myIpAddress) ? ip2:ip1;
 		
-		map<string,pair<string,int> >::iterator it=routingTable.find(ip2);;
+		map<string,pair<string,int> >::iterator it=routingTable.find(updateCostIp);
 		
 		if(it!=routingTable.end()){
-			it->second.second=cost;
+
+			//link cost update
+			linkToNeighbour x;
+			for(int i=0;i<neighbours.size();i++)
+				if(it->first==neighbours[i].neighbourIp){
+					neighbours[i].linkcost=cost;
+					x=neighbours[i];
+					break;
+				}
+
+			//routing table update
+
+			//nexthop neighbour, so need to update
+			if(it->second.first==it->first){
+				it->second.second=x.linkcost;
+			}
+			//case2: nexthop is not neighbour, so update if.... 
+			else if((it->second.second>=x.linkcost)&&(x.linkstatus==1)){
+				it->second.first=updateCostIp; //nexthop change
+				it->second.second=x.linkcost; //cost change
+			}
+
+
+			//printf("WHYHWYHWY--");
+			//cout<<updateCostIp<<" "<<it->first<<" "<<it->second.first<<" "<<it->second.second<<"\n";
 			printf("Updating cost\n");
 			printRoutingTable(routingTable);//dummy print;remove later
 		}
@@ -114,19 +144,23 @@ string serializeRoutingTable(map<string,pair<string,int> >&routingTable)
 	return serialized;
 }
 
-void sendToNeighbours(vector<string>neighbours,string msgToSend,int socketDescriptor)
+void sendToNeighbours(vector<linkToNeighbour>neighbours,string msgToSend,int socketDescriptor)
 {
 	int totalBytesSent;
 	struct sockaddr_in remoteAddress;
 	remoteAddress.sin_family=AF_INET;
 	remoteAddress.sin_port=htons(4747);
-
+	string ip;
 
 	for(int i=0;i<neighbours.size();i++){
-		inet_pton(AF_INET,neighbours[i].c_str(),&remoteAddress.sin_addr);
+
+
+		ip=neighbours[i].neighbourIp;
+
+		inet_pton(AF_INET,ip.c_str(),&remoteAddress.sin_addr);
 		totalBytesSent=sendto(socketDescriptor,msgToSend.c_str(), 1024, 0, (struct sockaddr*) &remoteAddress, sizeof(sockaddr_in));
 		
-		printf("just sent %d to %s\n",totalBytesSent,neighbours[i].c_str());//remove later
+		printf("just sent %d to %s\n",totalBytesSent,ip.c_str());//remove later
 	}
 
 }
@@ -145,10 +179,11 @@ map<string,pair<string,int> >buildMap(vector<string>vct)
 
 
 
-void updateRoutingTable(map<string,pair<string,int> >&routingTable,map<string,pair<string,int> >&neighbourTable,string neighbour,string myIpAddress)
+void updateRoutingTable(map<string,pair<string,int> >&routingTable,map<string,pair<string,int> >&neighbourTable,vector<linkToNeighbour>&neighbours,string neighbour,string myIpAddress)
 {
 map<string,pair<string,int> >::iterator it1,it2;
 
+	//update routing table using neighbour's routing table
 	for(it1=routingTable.begin();it1!=routingTable.end();it1++){
 		string dest=it1->first;
 		string current_nexthop=it1->second.first;
@@ -168,9 +203,31 @@ map<string,pair<string,int> >::iterator it1,it2;
 			it1->second.first=neighbour;
 			it1->second.second=cost_to_go_to_neighbour+neighbour_cost;
 		}
-
-
 	}
+
+	//update routing table using my neighbour table
+
+	for(int i=0;i<neighbours.size();i++){
+
+		if(neighbours[i].linkstatus==0)continue;
+
+		string ip=neighbours[i].neighbourIp;
+		int cost=neighbours[i].linkcost;
+		//int status=neighbours[i].linkstatus;
+
+		it1=routingTable.find(ip);
+
+		if(it1!=routingTable.end())
+			if(it1->second.second>=cost){
+				it1->second.first=ip;
+				it1->second.second=cost;
+			}
+	}
+
+
+
+
+
 }
 
 
@@ -178,7 +235,7 @@ map<string,pair<string,int> >::iterator it1,it2;
 int main(int argc, char *argv[])
 {
 	map<string,pair<string,int> >routingTable;
-	vector<string>myneighbours;
+	vector<linkToNeighbour>myneighbours;
 	int socketDescriptor;
 	int bindFlag;
 
@@ -223,13 +280,24 @@ int main(int argc, char *argv[])
 		if(n1==myIpAddress){
 			//printf("Hello1\n");
 			routingTable[n2]=make_pair(n2,cost);
-			myneighbours.push_back(n2);
+
+			linkToNeighbour a;
+			a.neighbourIp=n2;
+			a.linkcost=cost;
+			a.linkstatus=1;
+			myneighbours.push_back(a);
 		}
 		//check if second router is ME, hence neighbour
 		else if(n2==myIpAddress){
 			//printf("Hello2\n");
 			routingTable[n1]=make_pair(n1,cost);
-			myneighbours.push_back(n1);
+
+			linkToNeighbour a;
+			a.neighbourIp=n1;
+			a.linkcost=cost;
+			a.linkstatus=1;
+
+			myneighbours.push_back(a);
 		}
 		//the connection is not between ME and someone, so let's save other routers in the network
 		else{
@@ -303,7 +371,7 @@ int main(int argc, char *argv[])
     		printRoutingTable(routingTable);
     	}
     	else if(!strcmp(command,"cost")){
-    		updateCost(routingTable,myIpAddress,buffer);
+    		updateCost(routingTable,myneighbours,myIpAddress,buffer);
     	}
     	else if(!strcmp(command,"tabl")){
     		string neighbourIp=inet_ntoa(clientAddress.sin_addr);
@@ -315,13 +383,12 @@ int main(int argc, char *argv[])
 
     		//for(int i=0;i<parsed.size();i++)printf("asdasd  %s\n",parsed[i].c_str() );
 
-    		printRoutingTable(neighbourTable);
-    		updateRoutingTable(routingTable,neighbourTable,neighbourIp,myIpAddress);
+    		//printRoutingTable(neighbourTable);
+    		updateRoutingTable(routingTable,neighbourTable,myneighbours,neighbourIp,myIpAddress);
+    		printf("UPDATED ROUTING TABLE:\n");
+    		printRoutingTable(routingTable);
     	}
 
-
-
-    
     }
 
 
