@@ -64,7 +64,7 @@ void printRoutingTable(map<string,pair<string,int> >table)
 {
 	map<string,pair<string,int> >::iterator it;
 
-	printf("destination--------nexthop--------cost\n\n");
+	printf("\n\ndestination--------nexthop--------cost\n\n");
 
 	for(it=table.begin();it!=table.end();it++){
 		printf("%s-------%s-------%d\n",(it->first).c_str(),(it->second).first.c_str(),(it->second).second);
@@ -128,8 +128,8 @@ void updateCost(map<string,pair<string,int> >&routingTable,vector<linkToNeighbou
 			}
 
 			//cout<<updateCostIp<<" "<<it->first<<" "<<it->second.first<<" "<<it->second.second<<"\n";
-			printf("Updating cost\n");
-			printRoutingTable(routingTable);//dummy print;remove later
+			//printf("Updating cost\n");
+			//printRoutingTable(routingTable);//dummy print;remove later
 		}
 }
 
@@ -152,14 +152,14 @@ void makeLinkDead(string neighbourIp,vector<linkToNeighbour>&neighbours,map<stri
 		if(it->second.first==neighbourIp)it->second.second=INF;
 	}
 
-	printf("making %s DEAD\n",neighbourIp.c_str());
+	//printf("making %s DEAD\n",neighbourIp.c_str());
 }
 
 
 void makeLinkAlive(string neighbourIp,vector<linkToNeighbour>&neighbours,map<string,pair<string,int> >&routingTable)
 {
 	
-	printf("making %s ALIVE\n",neighbourIp.c_str());
+	//printf("making %s ALIVE\n",neighbourIp.c_str());
 	linkToNeighbour x;
 	for(int i=0;i<neighbours.size();i++)
 		if(neighbourIp==neighbours[i].neighbourIp){
@@ -204,7 +204,7 @@ string serializeRoutingTable(map<string,pair<string,int> >&routingTable)
 		serialized+=it->second.first+"$$$$";
 		serialized+=intToStr(it->second.second)+"$$$$";
 	}
-	printf("serialized string is %s\n",serialized.c_str());
+	//printf("serialized string is %s\n",serialized.c_str());
 
 	return serialized;
 }
@@ -225,7 +225,7 @@ void sendToNeighbours(vector<linkToNeighbour>neighbours,string msgToSend,int soc
 		inet_pton(AF_INET,ip.c_str(),&remoteAddress.sin_addr);
 		totalBytesSent=sendto(socketDescriptor,msgToSend.c_str(), 1024, 0, (struct sockaddr*) &remoteAddress, sizeof(sockaddr_in));
 		
-		printf("just sent %d to %s\n",totalBytesSent,ip.c_str());//remove later
+		//printf("just sent %d to %s\n",totalBytesSent,ip.c_str());//remove later
 	}
 
 }
@@ -297,7 +297,7 @@ map<string,pair<string,int> >::iterator it1,it2;
 }
 
 
-void sendMessage(map<string,pair<string,int> >&routingTable,char* buffer)
+void sendMessage(map<string,pair<string,int> >&routingTable,char* buffer,int socketDescriptor,string myIpAddress)
 {
 
    	char ip1[20],ip2[20];unsigned char lengthBuff[2];
@@ -311,33 +311,137 @@ void sendMessage(map<string,pair<string,int> >&routingTable,char* buffer)
 	lengthBuff[1]=buffer[13];//msb
 	int length=lengthBuff[0]|(lengthBuff[1]<<8);
 
+	//printf("%d sadasdasdasdasda\n",length);
+	//printf("%d %d\n",buffer[12],buffer[13]);
+
 	string message="";
 	for(int i=14;i<14+length;i++)
 		message+=buffer[i];
 
 
 
-	char newbuffer[1024];
+	char newbuffer[8];
 	strcpy(newbuffer,"frwd");
+	
+	//printf("aaaaaaaaaa->>>%s\n",newbuffer);
+
+	string tmp=ip2;
+	tmp+=".";
+	vector<string>parsedAddress=tokenizeString(tmp,".");
+
+	//for(int i=0;i<parsedAddress.size();i++)cout<<parsedAddress[i]<<endl;
+
+	for(int i=4;i<8;i++)newbuffer[i]=strToInt(parsedAddress[i-4]);
+	newbuffer[8]='\0';
+	
+	string msg=newbuffer;
+	msg+=(unsigned char)lengthBuff[0];
+	msg+=(unsigned char)lengthBuff[1];
+	msg+=message;
+
+	map<string,pair<string,int> >::iterator it=routingTable.find(ip2);
+
+	if(it==routingTable.end()||it->second.second==INF){
+		printf("NO PATH TO %s FROM %s\n",ip2,ip1);
+		return;
+	}
 
 
 
+	struct sockaddr_in remoteAddress;
+	remoteAddress.sin_family=AF_INET;
+	remoteAddress.sin_port=htons(4747);
+	string ip;
 
 
+	ip=it->second.first;
 
-	//printf("%s PACKET FORWARDED TO %s (PRINTED BY %s)\n",);
+	//printf("WILL SEND MESSAGE TO %s\n",ip.c_str());
+	inet_pton(AF_INET,ip.c_str(),&remoteAddress.sin_addr);
+	
+	int totalBytesSent=sendto(socketDescriptor,msg.c_str(), 1024, 0, (struct sockaddr*) &remoteAddress, sizeof(sockaddr_in));
+	
+	//printf("just sent %d to %s\n",totalBytesSent,ip.c_str());//remove later
 
 
-
-
-
-
+	printf("%s PACKET FORWARDED TO %s (PRINTED BY %s)\n",message.c_str(),ip.c_str(),myIpAddress.c_str());
 
 }
 
 
-void forwardMessage(map<string,pair<string,int> >&routingTable,char* buffer)
+
+void forwardMessage(map<string,pair<string,int> >&routingTable,char* buffer,int socketDescriptor,string myIpAddress)
 {
+
+   	char ipToSend[20];
+   	unsigned char lengthBuff[2];
+
+	//get the ips from the buffer
+	inet_ntop(AF_INET,buffer+4,ipToSend,sizeof(ipToSend));
+
+	lengthBuff[0]=buffer[8];//lsb
+	lengthBuff[1]=buffer[9];//msb
+	int length=lengthBuff[0]|(lengthBuff[1]<<8);
+
+	//printf("%d %d\n",buffer[8],buffer[9]);
+
+	//printf("HElooppppppppppppppppppppp %d\n",length);
+
+	string message="";
+	for(int i=10;i<10+length;i++)
+		message+=buffer[i];
+
+	if(ipToSend==myIpAddress){
+		printf("%s PACKET REACHED DESTINATION (PRINTED BY %s)\n",message.c_str(),myIpAddress.c_str());
+		return;
+	}
+
+
+
+	char newbuffer[8];
+	strcpy(newbuffer,"frwd");
+	
+	//printf("aaaaaaaaaa->>>%s\n",newbuffer);
+
+	string tmp=ipToSend;
+	tmp+=".";
+	vector<string>parsedAddress=tokenizeString(tmp,".");
+
+	for(int i=0;i<parsedAddress.size();i++)cout<<parsedAddress[i]<<endl;
+
+	for(int i=4;i<8;i++)newbuffer[i]=strToInt(parsedAddress[i-4]);
+	newbuffer[8]='\0';
+	
+	string msg=newbuffer;
+	msg+=(unsigned char)lengthBuff[0];
+	msg+=(unsigned char)lengthBuff[1];
+	msg+=message;
+
+	map<string,pair<string,int> >::iterator it=routingTable.find(ipToSend);
+
+	if(it==routingTable.end()||it->second.second==INF){
+		printf("NO PATH TO %s FROM %s\n",ipToSend,myIpAddress.c_str());
+		return;
+	}
+
+
+
+	struct sockaddr_in remoteAddress;
+	remoteAddress.sin_family=AF_INET;
+	remoteAddress.sin_port=htons(4747);
+	string ip;
+
+
+	ip=it->second.first;
+
+	inet_pton(AF_INET,ip.c_str(),&remoteAddress.sin_addr);
+	
+	int totalBytesSent=sendto(socketDescriptor,msg.c_str(), 1024, 0, (struct sockaddr*) &remoteAddress, sizeof(sockaddr_in));
+	
+	//printf("just sent %d to %s\n",totalBytesSent,ip.c_str());//remove later
+
+
+	printf("%s PACKET FORWARDED TO %s (PRINTED BY %s)\n",message.c_str(),ip.c_str(),myIpAddress.c_str());
 
 }
 
@@ -473,7 +577,7 @@ int main(int argc, char *argv[])
     	//send -- sent from driver
     	//tabl -- sent from neightbout with the routing table
     	//show -- sent from driver
-    	printf("command is %s\n",command );
+    	//printf("command is %s\n",command );
     	//printf("%s\n",buffer);
 
 
@@ -488,7 +592,7 @@ int main(int argc, char *argv[])
     			if(count(responsiveNeighbours.begin(),responsiveNeighbours.end(),ip)==0){
     				//didn't response last time, so increase counter
     				neighbourNonResponsiveCounter[ip]++;
-    				printf("%s didn't respond\n",ip.c_str());
+    				//printf("%s didn't respond\n",ip.c_str());
     			}
     		}
     		responsiveNeighbours.clear();
@@ -534,21 +638,14 @@ int main(int argc, char *argv[])
 
     		//printRoutingTable(neighbourTable);
     		updateRoutingTable(routingTable,neighbourTable,myneighbours,neighbourIp,myIpAddress);
-    		printf("UPDATED ROUTING TABLE:\n");
-    		printRoutingTable(routingTable);
+    		//printf("UPDATED ROUTING TABLE:\n");
+    		//printRoutingTable(routingTable);
     	}
     	else if(!strcmp(command,"send")){
-
-
-
-
-
+    		sendMessage(routingTable,buffer,socketDescriptor,myIpAddress);
     	}
     	else if(!strcmp(command,"frwd")){
-
-
-
-
+    		forwardMessage(routingTable,buffer,socketDescriptor,myIpAddress);
     	}
 
     }
