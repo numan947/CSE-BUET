@@ -294,12 +294,57 @@ map<string,pair<string,int> >::iterator it1,it2;
 				it1->second.second=cost;
 			}
 	}
+}
+
+
+void sendMessage(map<string,pair<string,int> >&routingTable,char* buffer)
+{
+
+   	char ip1[20],ip2[20];unsigned char lengthBuff[2];
+
+	//get the ips from the buffer
+	inet_ntop(AF_INET,buffer+4,ip1,sizeof(ip1));
+	inet_ntop(AF_INET,buffer+8,ip2,sizeof(ip2));
+
+	//get the cost from the buffer
+	lengthBuff[0]=buffer[12];//lsb
+	lengthBuff[1]=buffer[13];//msb
+	int length=lengthBuff[0]|(lengthBuff[1]<<8);
+
+	string message="";
+	for(int i=14;i<14+length;i++)
+		message+=buffer[i];
+
+
+
+	char newbuffer[1024];
+	strcpy(newbuffer,"frwd");
+
+
+
+
+
+
+	//printf("%s PACKET FORWARDED TO %s (PRINTED BY %s)\n",);
+
+
 
 
 
 
 
 }
+
+
+void forwardMessage(map<string,pair<string,int> >&routingTable,char* buffer)
+{
+
+}
+
+
+
+
+
 
 
 
@@ -423,7 +468,7 @@ int main(int argc, char *argv[])
 
     	//command list
     	//clk<space>
-    	//mssg -- sent from neighbour to forward a message
+    	//frwd -- sent from neighbour to forward a message
     	//cost -- sent from driver
     	//send -- sent from driver
     	//tabl -- sent from neightbout with the routing table
@@ -491,6 +536,19 @@ int main(int argc, char *argv[])
     		updateRoutingTable(routingTable,neighbourTable,myneighbours,neighbourIp,myIpAddress);
     		printf("UPDATED ROUTING TABLE:\n");
     		printRoutingTable(routingTable);
+    	}
+    	else if(!strcmp(command,"send")){
+
+
+
+
+
+    	}
+    	else if(!strcmp(command,"frwd")){
+
+
+
+
     	}
 
     }
