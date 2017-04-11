@@ -13,7 +13,7 @@
 #include <utility>
 #include <algorithm>
 #include <cerrno>
-#define INF 10000000
+#define INF 123456789
 
 using namespace std;
 
@@ -98,6 +98,7 @@ void updateCost(map<string,pair<string,int> >&routingTable,vector<linkToNeighbou
 
 			//link cost update
 			linkToNeighbour x;
+			
 			for(int i=0;i<neighbours.size();i++)
 				if(it->first==neighbours[i].neighbourIp){
 					neighbours[i].linkcost=cost;
@@ -107,23 +108,87 @@ void updateCost(map<string,pair<string,int> >&routingTable,vector<linkToNeighbou
 
 			//routing table update
 
-			//nexthop neighbour, so need to update
-			if(it->second.first==it->first){
-				it->second.second=x.linkcost;
-			}
-			//case2: nexthop is not neighbour, so update if.... 
-			else if((it->second.second>=x.linkcost)&&(x.linkstatus==1)){
-				it->second.first=updateCostIp; //nexthop change
-				it->second.second=x.linkcost; //cost change
+			//case1: neighbour's nexthop neighbour, so need to update
+			//case2: neighbour's nexthop is not neighbour, 
+			//		 but we can reach neighbour in less cost via updated link,so update
+			int oldcost;
+			if((it->second.first==it->first)||((it->second.second>=x.linkcost)&&(x.linkstatus==1))){
+				it->second.first=updateCostIp; //nexthop change, cause we need to handle case2
+				int oldcost=it->second.second; //old cost to reach this neighbour
+				it->second.second=x.linkcost; //new cost to reach this neighbour
+				
+				// as our cost to the next hop changed we need to update the routing table
+				// for those destinations whose next hop is this neighbour
+				for(it=routingTable.begin();it!=routingTable.end();it++){
+					if(it->second.first==updateCostIp && it->first!=updateCostIp){
+						if(x.linkstatus)it->second.second+=(x.linkcost-oldcost);
+						//else it->second.second=INF;// cost update if deadlinks
+					}
+				}
 			}
 
-
-			//printf("WHYHWYHWY--");
 			//cout<<updateCostIp<<" "<<it->first<<" "<<it->second.first<<" "<<it->second.second<<"\n";
 			printf("Updating cost\n");
 			printRoutingTable(routingTable);//dummy print;remove later
 		}
 }
+
+
+
+void makeLinkDead(string neighbourIp,vector<linkToNeighbour>&neighbours,map<string,pair<string,int> >&routingTable)
+{
+
+	linkToNeighbour x;
+	for(int i=0;i<neighbours.size();i++)
+		if(neighbourIp==neighbours[i].neighbourIp){
+			neighbours[i].linkstatus=0;
+			x=neighbours[i];
+			break;
+		}
+
+	map<string,pair<string,int> >::iterator it;
+
+	for(it=routingTable.begin();it!=routingTable.end();it++){
+		if(it->second.first==neighbourIp)it->second.second=INF;
+	}
+
+	printf("making %s DEAD\n",neighbourIp.c_str());
+}
+
+
+void makeLinkAlive(string neighbourIp,vector<linkToNeighbour>&neighbours,map<string,pair<string,int> >&routingTable)
+{
+	
+	printf("making %s ALIVE\n",neighbourIp.c_str());
+	linkToNeighbour x;
+	for(int i=0;i<neighbours.size();i++)
+		if(neighbourIp==neighbours[i].neighbourIp){
+			neighbours[i].linkstatus=1;
+			x=neighbours[i];
+			break;
+		}
+
+	map<string,pair<string,int> >::iterator it=routingTable.find(neighbourIp);
+
+
+	//only  update if we can reach that neighbour in less/equal cost via this link
+	if(it->second.second>=x.linkcost){
+		it->second.first=it->first; //nexthop is neighbour now
+		int oldcost=it->second.second;
+		it->second.second=x.linkcost; //updated cost
+
+
+		//update those destination cost, whose nexthop is this neighbour,as we've updated the cost
+		//to reach the neighbour, those should be updated accordingly
+		for(it=routingTable.begin();it!=routingTable.end();it++){
+			if(it->second.first==neighbourIp && it->first!=neighbourIp &&it->second.second!=INF)
+				it->second.second+=(x.linkcost-oldcost);
+		}
+	}
+}
+
+
+
 
 
 
@@ -190,18 +255,24 @@ map<string,pair<string,int> >::iterator it1,it2;
 		int current_cost=it1->second.second;
 
 		it2=neighbourTable.find(dest);
-		if(it2==neighbourTable.end())continue;//this case should arise only for neighbours
+		if(it2==neighbourTable.end())continue;//this case should arise only for the neighbour itself
 		string neighbour_nexthop=it2->second.first;
 		int neighbour_cost=it2->second.second;
 
 		it2=routingTable.find(neighbour);
 		int cost_to_go_to_neighbour=it2->second.second;
 
+		// cout<<dest<<" CCCC ";
+		// cout<<current_nexthop<<" AAAAAA "<<neighbour_nexthop<<" BBBBBB "<<endl;  
+
+
+		int d=(neighbour_cost==INF) ? INF:(cost_to_go_to_neighbour+neighbour_cost);
 
 		//split horizon || forced update
-		if((neighbour_nexthop!=myIpAddress && (current_cost>cost_to_go_to_neighbour+neighbour_cost))||(neighbour==current_nexthop)){
+		if((neighbour_nexthop!=myIpAddress && (current_cost>=d))||(neighbour==current_nexthop)){
+			
 			it1->second.first=neighbour;
-			it1->second.second=cost_to_go_to_neighbour+neighbour_cost;
+			it1->second.second=d;
 		}
 	}
 
@@ -236,6 +307,10 @@ int main(int argc, char *argv[])
 {
 	map<string,pair<string,int> >routingTable;
 	vector<linkToNeighbour>myneighbours;
+	map<string,int>neighbourNonResponsiveCounter;
+	vector<string>responsiveNeighbours;
+
+
 	int socketDescriptor;
 	int bindFlag;
 
@@ -280,6 +355,7 @@ int main(int argc, char *argv[])
 		if(n1==myIpAddress){
 			//printf("Hello1\n");
 			routingTable[n2]=make_pair(n2,cost);
+			neighbourNonResponsiveCounter[n2]=0;
 
 			linkToNeighbour a;
 			a.neighbourIp=n2;
@@ -291,6 +367,7 @@ int main(int argc, char *argv[])
 		else if(n2==myIpAddress){
 			//printf("Hello2\n");
 			routingTable[n1]=make_pair(n1,cost);
+			neighbourNonResponsiveCounter[n1]=0;
 
 			linkToNeighbour a;
 			a.neighbourIp=n1;
@@ -360,6 +437,31 @@ int main(int argc, char *argv[])
 
 
     	if(!strcmp(command,"clk ")){
+    		for(int i=0;i<myneighbours.size();i++){
+    			string ip=myneighbours[i].neighbourIp;
+
+    			if(count(responsiveNeighbours.begin(),responsiveNeighbours.end(),ip)==0){
+    				//didn't response last time, so increase counter
+    				neighbourNonResponsiveCounter[ip]++;
+    				printf("%s didn't respond\n",ip.c_str());
+    			}
+    		}
+    		responsiveNeighbours.clear();
+
+    		for(int i=0;i<myneighbours.size();i++){
+    			string ip=myneighbours[i].neighbourIp;
+    			
+    			if(neighbourNonResponsiveCounter[ip]==3){
+    				//neighbour dead, so update linkstatus in myneighbours and cost in routing table
+    				//myneighbours[i].linkstatus=0; //dead link
+    				makeLinkDead(ip,myneighbours,routingTable);
+    			}
+    		}
+
+
+
+
+
     		string s=serializeRoutingTable(routingTable);
     		s="tabl$$$$"+s;
     		sendToNeighbours(myneighbours,s,socketDescriptor);
@@ -375,10 +477,12 @@ int main(int argc, char *argv[])
     	}
     	else if(!strcmp(command,"tabl")){
     		string neighbourIp=inet_ntoa(clientAddress.sin_addr);
+    		responsiveNeighbours.push_back(neighbourIp);
+    		if(neighbourNonResponsiveCounter[neighbourIp]>=3)makeLinkAlive(neighbourIp,myneighbours,routingTable);
+    		neighbourNonResponsiveCounter[neighbourIp]=0;
+
     		string msg=buffer;
-
     		vector<string> parsed=tokenizeString(msg,"$$$$");
-
     		map<string,pair<string,int> >neighbourTable=buildMap(parsed);
 
     		//for(int i=0;i<parsed.size();i++)printf("asdasd  %s\n",parsed[i].c_str() );
@@ -390,17 +494,6 @@ int main(int argc, char *argv[])
     	}
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 	return 0;
 }
