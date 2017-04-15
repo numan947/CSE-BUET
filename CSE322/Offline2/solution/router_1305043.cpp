@@ -271,7 +271,10 @@ map<string,pair<string,int> >::iterator it1,it2;
 		//split horizon || forced update
 		if((neighbour_nexthop!=myIpAddress && (current_cost>=d))||(neighbour==current_nexthop)){
 			
-			it1->second.first=neighbour;
+			//update with the nexthop to reach the neighbour
+			it2=routingTable.find(neighbour);
+			it1->second.first=it2->second.first;
+			
 			it1->second.second=d;
 		}
 	}
@@ -638,8 +641,8 @@ int main(int argc, char *argv[])
 
     		//printRoutingTable(neighbourTable);
     		updateRoutingTable(routingTable,neighbourTable,myneighbours,neighbourIp,myIpAddress);
-    		//printf("UPDATED ROUTING TABLE:\n");
-    		//printRoutingTable(routingTable);
+    		printf("UPDATED ROUTING TABLE: Using %s Table\n",neighbourIp.c_str());
+    		printRoutingTable(routingTable);
     	}
     	else if(!strcmp(command,"send")){
     		sendMessage(routingTable,buffer,socketDescriptor,myIpAddress);
