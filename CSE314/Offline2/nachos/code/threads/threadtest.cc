@@ -14,7 +14,7 @@
 
 #include "copyright.h"
 #include "system.h"
-
+#include "synch.h"
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 10 times, yielding the CPU to another ready thread 
@@ -23,6 +23,8 @@
 //	"name" points to a string with a thread name, just for
 //      debugging purposes.
 //----------------------------------------------------------------------
+
+Lock *myLock;
 
 void
 SimpleThread(void* name)
@@ -35,13 +37,17 @@ SimpleThread(void* name)
     // printf execution may cause race conditions.
     for (int num = 0; num < 10; num++) {
         //IntStatus oldLevel = interrupt->SetLevel(IntOff);
-	printf("*** thread %s looped %d times\n", threadName, num);
-	//interrupt->SetLevel(oldLevel);
-        //currentThread->Yield();
+	   myLock->Acquire();
+       printf("*** thread %s looped %d times\n", threadName, num);
+	   myLock->Release();
+        //interrupt->SetLevel(oldLevel);
+        currentThread->Yield();
     }
     //IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    myLock->Acquire();
     printf(">>> Thread %s has finished\n", threadName);
     //interrupt->SetLevel(oldLevel);
+    myLock->Release();
 }
 
 //----------------------------------------------------------------------
@@ -55,6 +61,8 @@ void
 ThreadTest()
 {
     DEBUG('t', "Entering SimpleTest");
+
+    myLock = new Lock("owLock");
 
     for ( int k=1; k<=10; k++) {
       char* threadname = new char[100];

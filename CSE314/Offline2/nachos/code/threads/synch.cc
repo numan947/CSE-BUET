@@ -100,10 +100,93 @@ Semaphore::V()
 // Dummy functions -- so we can compile our later assignments 
 // Note -- without a correct implementation of Condition::Wait(), 
 // the test case in the network assignment won't work!
-Lock::Lock(const char* debugName) {}
-Lock::~Lock() {}
-void Lock::Acquire() {}
-void Lock::Release() {}
+
+
+Lock::Lock(const char* debugName) 
+{
+    this->name = debugName;
+    this->threadQueue = new List<Thread*>;
+    this->isFree = true;
+    this->masterThread = NULL;
+}
+
+
+Lock::~Lock() 
+{
+    delete threadQueue;
+}
+
+
+void Lock::Acquire() 
+{
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+
+    if(this->isFree == true){
+        //free so give ownership of the lock
+
+        this->isFree = false;
+
+        this->masterThread = currentThread;
+
+    }
+    else if( isHeldByCurrentThread() ){
+        //do nothing
+    }
+    else{
+        //not free, so make'em sleep :) 
+        
+        //while assures rechecking of lock's free state
+        while(!(this->isFree)){
+            this->threadQueue->Append(currentThread);
+            currentThread->Sleep();
+        }
+        
+
+        //if the thread can come out of the loop,
+        //then isFree is definitely true, and it's no longer inside threadQueue,so give that access
+        this->isFree = false;
+        this->masterThread = currentThread;
+    }
+
+    //enable interrupts
+    interrupt->SetLevel(oldLevel);
+
+}
+
+
+
+
+void Lock::Release()
+{
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+
+    if(isHeldByCurrentThread()){
+        //release the lock and wake one of the waiting threads
+        this->isFree = true;
+        this->masterThread = NULL;
+
+        Thread* toRunThread = threadQueue->Remove();
+
+        if(toRunThread != NULL)
+            scheduler->ReadyToRun(toRunThread);
+    }
+
+    //else do nothing
+    interrupt->SetLevel(oldLevel);
+}
+
+
+
+//slef explanatory method
+bool Lock::isHeldByCurrentThread()
+{
+    return currentThread == masterThread;
+}
+
+
+
 
 Condition::Condition(const char* debugName, Lock* conditionLock) { }
 Condition::~Condition() { }

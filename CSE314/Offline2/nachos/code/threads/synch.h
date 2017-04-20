@@ -86,7 +86,10 @@ class Lock {
   bool isHeldByCurrentThread();	
 
   private:
-    const char* name;				// para depuraci�n
+    const char* name;
+    List<Thread*> *threadQueue;
+    bool isFree;
+    Thread *masterThread;				// para depuraci�n
     // a�adir aqu� otros campos que sean necesarios
 };
 
