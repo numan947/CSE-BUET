@@ -66,7 +66,7 @@
 #include <cstdio>
 #include <string>
 #include <sstream>
-#define MAXSIZE 10
+
 using namespace std;
 
 
@@ -74,6 +74,7 @@ queue<int>foodTable; //let maxsize be 30
 Lock *myLock;
 Condition *producerWaitCondition;
 Condition *consumerWaitCondition;
+int maxsize;
 
 void producerFunction(void *producer)
 {
@@ -88,7 +89,7 @@ void producerFunction(void *producer)
 
         cout<<myProducer->getName()<<" ACQUIRED access to the foodTable"<<endl;
 
-        while(foodTable.size()>=MAXSIZE)
+        while(foodTable.size()>=maxsize)
         { //wait until there's some space for the food
             cout<<myProducer->getName()<<" is going to SLEEP"<<endl;
             producerWaitCondition->Wait();
@@ -168,9 +169,9 @@ ThreadTest()
     DEBUG('t', "Entering SimpleTest");
 
     int prodNum, consNum;
-    cout<<"Enter number of Producers and Consumers: <Producers><space><Consumers>"<<endl;
+    cout<<"Enter number of Producers and Consumers: <Producers><space><Consumers><max size of foodTable>"<<endl;
     
-    cin>>prodNum>>consNum;
+    cin>>prodNum>>consNum>>maxsize;
 
     // myLock = new Lock("owLock");
 
