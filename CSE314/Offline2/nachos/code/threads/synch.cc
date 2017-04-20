@@ -113,7 +113,7 @@ Lock::Lock(const char* debugName)
 
 Lock::~Lock() 
 {
-    delete threadQueue;
+    delete this->threadQueue;
 }
 
 
@@ -188,10 +188,92 @@ bool Lock::isHeldByCurrentThread()
 
 
 
-Condition::Condition(const char* debugName, Lock* conditionLock) { }
-Condition::~Condition() { }
-void Condition::Wait() { ASSERT(false); }
-void Condition::Signal() { }
-void Condition::Broadcast() { }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Condition::Condition(const char* debugName, Lock* conditionLock) 
+{ 
+
+    this->name = debugName;
+
+    this->conditionLock = conditionLock;
+
+    this->threadQueue = new List<Thread*>;
+
+}
+
+
+
+Condition::~Condition() 
+{ 
+    delete this->threadQueue;
+}
+
+
+void Condition::Wait() 
+{
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+    if(conditionLock->isHeldByCurrentThread()) //explicit checking
+    {
+        //append to waitQueue
+        threadQueue->Append(currentThread);
+
+        //release lock and go to sleep
+        conditionLock->Release();
+        currentThread->Sleep();
+
+        //someone woke this thread up, so acquire lock
+        conditionLock->Acquire();
+    }
+
+    interrupt->SetLevel(oldLevel);
+
+}
+
+void Condition::Signal() 
+{ 
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+    if(conditionLock->isHeldByCurrentThread()){
+        Thread* threadToWakeUp = threadQueue->Remove();
+
+        //if someone was sleeping on this condition variable it'll be woken up
+        if(threadToWakeUp != NULL)
+            scheduler->ReadyToRun(threadToWakeUp);
+    }
+
+    interrupt->SetLevel(oldLevel);
+
+
+}
+void Condition::Broadcast() 
+{
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+    if(conditionLock->isHeldByCurrentThread())
+    {
+        Thread *threadToWakeUp=NULL;
+
+        while(!(threadQueue->IsEmpty())){
+            threadToWakeUp = threadQueue->Remove();
+            scheduler->ReadyToRun(threadToWakeUp);
+        }
+    }
+
+    interrupt->SetLevel(oldLevel);
+}
 
 

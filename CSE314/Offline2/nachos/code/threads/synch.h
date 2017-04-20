@@ -146,6 +146,8 @@ class Condition {
 
   private:
     const char* name;
+    Lock* conditionLock;
+    List<Thread*> *threadQueue;
     // aqu� se a�aden otros campos que sean necesarios
 };
 

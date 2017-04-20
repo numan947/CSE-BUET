@@ -24,31 +24,33 @@
 //      debugging purposes.
 //----------------------------------------------------------------------
 
-Lock *myLock;
+// Lock *myLock;
 
-void
-SimpleThread(void* name)
-{
-    // Reinterpret arg "name" as a string
-    char* threadName = (char*)name;
+// void
+// SimpleThread(void* name)
+// {
+//     // Reinterpret arg "name" as a string
+//     char* threadName = (char*)name;
     
-    // If the lines dealing with interrupts are commented,
-    // the code will behave incorrectly, because
-    // printf execution may cause race conditions.
-    for (int num = 0; num < 10; num++) {
-        //IntStatus oldLevel = interrupt->SetLevel(IntOff);
-	   myLock->Acquire();
-       printf("*** thread %s looped %d times\n", threadName, num);
-	   myLock->Release();
-        //interrupt->SetLevel(oldLevel);
-        currentThread->Yield();
-    }
-    //IntStatus oldLevel = interrupt->SetLevel(IntOff);
-    myLock->Acquire();
-    printf(">>> Thread %s has finished\n", threadName);
-    //interrupt->SetLevel(oldLevel);
-    myLock->Release();
-}
+//     // If the lines dealing with interrupts are commented,
+//     // the code will behave incorrectly, because
+//     // printf execution may cause race conditions.
+//     for (int num = 0; num < 10; num++) {
+//         //IntStatus oldLevel = interrupt->SetLevel(IntOff);
+// 	   myLock->Acquire();
+//        printf("*** thread %s acquired lock %s\n",threadName,myLock->getName());
+//        printf("*** thread %s looped %d times\n", threadName, num);
+//        printf("*** thread %s about to release lock %s\n",threadName,myLock->getName());
+// 	   myLock->Release();
+//         //interrupt->SetLevel(oldLevel);
+//         //currentThread->Yield();
+//     }
+//     //IntStatus oldLevel = interrupt->SetLevel(IntOff);
+//     myLock->Acquire();
+//     printf(">>> Thread %s has finished\n", threadName);
+//     //interrupt->SetLevel(oldLevel);
+//     myLock->Release();
+// }
 
 //----------------------------------------------------------------------
 // ThreadTest
@@ -57,20 +59,175 @@ SimpleThread(void* name)
 //	SimpleThread ourselves.
 //----------------------------------------------------------------------
 
+#include "producer.h"
+#include "consumer.h"
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <sstream>
+#define MAXSIZE 10
+using namespace std;
+
+
+queue<int>foodTable; //let maxsize be 30
+Lock *myLock;
+Condition *producerWaitCondition;
+Condition *consumerWaitCondition;
+
+void producerFunction(void *producer)
+{
+    Producer *myProducer = (Producer*)producer;
+
+    string name = myProducer->getName();
+    cout<< name <<" hearing loud and clear!\n"<<endl;
+
+    while(true)
+    {
+        myLock->Acquire(); //acquire lock to the table
+
+        cout<<myProducer->getName()<<" ACQUIRED access to the foodTable"<<endl;
+
+        while(foodTable.size()>=MAXSIZE)
+        { //wait until there's some space for the food
+            cout<<myProducer->getName()<<" is going to SLEEP"<<endl;
+            producerWaitCondition->Wait();
+        }
+
+        myProducer->produceFood(foodTable);
+        Delay(1);
+
+        //wake up the waiting consumers
+        consumerWaitCondition->Signal();
+
+        cout<<myProducer->getName()<<" RELEASING access to the foodTable\n\n\n"<<endl;
+
+        myLock->Release();
+
+        //do some random stuff
+        Delay(1);
+        int randomLoop=rand()%4000;
+        for(int i=0;i<randomLoop;i++){
+        //random loop
+         }
+     }
+
+
+}
+
+
+
+void consumerFunction(void *consumer)
+{
+    Consumer *myConsumer = (Consumer*)consumer;
+
+    cout<< myConsumer->getName()<<" hearing loud and clear!\n"<<endl;        
+
+    while(true){
+        myLock->Acquire(); //acquire the lock to the table
+
+
+        cout<<myConsumer->getName()<<" ACQUIRED access to foodTable"<<endl;
+        while(foodTable.empty())
+        { // wait until there's some food
+            cout<<myConsumer->getName()<<" is going to SLEEP"<<endl;
+            consumerWaitCondition->Wait();
+        }
+        myConsumer->consumeFood(foodTable); //pass the queue for consuming
+        Delay(1);
+        //wake up the waiting producers
+        producerWaitCondition->Signal();
+
+        //done consuming so release lock
+        cout<<myConsumer->getName()<<" RELEASING access to foodTable\n\n\n"<<endl;
+        myLock->Release();
+
+        //do some random stuff
+        Delay(1);
+        int randomLoop=rand()%4000;
+        for(int i=0;i<randomLoop;i++){
+        //random loop
+         }
+     }
+
+}
+
+
+
+string intToStr(int x)
+{
+    stringstream ss;
+    ss<<x;
+    return ss.str();
+}
+
+
 void
 ThreadTest()
 {
     DEBUG('t', "Entering SimpleTest");
 
-    myLock = new Lock("owLock");
-
-    for ( int k=1; k<=10; k++) {
-      char* threadname = new char[100];
-      sprintf(threadname, "Hilo %d", k);
-      Thread* newThread = new Thread (threadname);
-      newThread->Fork (SimpleThread, (void*)threadname);
-    }
+    int prodNum, consNum;
+    cout<<"Enter number of Producers and Consumers: <Producers><space><Consumers>"<<endl;
     
-    SimpleThread( (void*)"Hilo 0");
+    cin>>prodNum>>consNum;
+
+    // myLock = new Lock("owLock");
+
+    // for ( int k=1; k<=10; k++) {
+    //   char* threadname = new char[100];
+    //   sprintf(threadname, "Hilo %d", k);
+    //   Thread* newThread = new Thread (threadname);
+    //   newThread->Fork (SimpleThread, (void*)threadname);
+    // }
+    
+    // SimpleThread( (void*)"Hilo 0");
+
+    myLock = new Lock("producer_consumer_critical_region_lock");
+    producerWaitCondition = new Condition("Producers Wait in this queue",myLock);
+    consumerWaitCondition = new Condition("Consumers Wait in this queue",myLock);
+
+    Producer* p;
+    Consumer* c;
+    Thread* newThread;
+
+    for(int i = 0 ; i < prodNum ; i++){
+
+        p = NULL;
+        newThread = NULL;
+
+        string name = "Producer #"+intToStr(i+1);
+        // cout<<name<<endl;
+        p = new Producer(name); 
+        
+        newThread = new Thread(name.c_str());
+        newThread->Fork(producerFunction,(void*)p);
+
+    }
+
+
+    for(int i = 0 ; i < consNum ; i++){
+
+        c = NULL;
+        newThread = NULL;
+
+        string name = "Consumer #"+intToStr(i+1);
+        // cout<<name<<endl;
+        c = new Consumer(name); 
+        
+        newThread = new Thread(name.c_str());
+        newThread->Fork(consumerFunction,(void*)c);
+
+    }
+
+
+
+
+
+
+
+
 }
+
+
 
