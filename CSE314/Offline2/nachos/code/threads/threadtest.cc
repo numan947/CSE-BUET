@@ -191,9 +191,8 @@ ThreadTest()
     Producer* p;
     Consumer* c;
     Thread* newThread;
-
+/*
     for(int i = 0 ; i < prodNum ; i++){
-
         p = NULL;
         newThread = NULL;
 
@@ -203,6 +202,8 @@ ThreadTest()
         
         newThread = new Thread(name.c_str());
         newThread->Fork(producerFunction,(void*)p);
+        
+        prodNum--;
 
     }
 
@@ -218,6 +219,42 @@ ThreadTest()
         
         newThread = new Thread(name.c_str());
         newThread->Fork(consumerFunction,(void*)c);
+
+    }
+*/
+    int i=0;
+    while(consNum || prodNum){
+        
+        if(prodNum){
+            p = NULL;
+            newThread = NULL;
+
+            string name = "Producer #"+intToStr(i+1);
+            // cout<<name<<endl;
+            p = new Producer(name); 
+            
+            newThread = new Thread(name.c_str());
+            newThread->Fork(producerFunction,(void*)p);
+            
+            prodNum--;
+        }
+
+        if(consNum){
+
+            c = NULL;
+            newThread = NULL;
+
+            string name = "Consumer #"+intToStr(i+1);
+            // cout<<name<<endl;
+            c = new Consumer(name); 
+            
+            newThread = new Thread(name.c_str());
+            newThread->Fork(consumerFunction,(void*)c);
+
+            consNum--;
+        }
+
+        i++;
 
     }
 
