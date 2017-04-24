@@ -641,8 +641,8 @@ int main(int argc, char *argv[])
 
     		//printRoutingTable(neighbourTable);
     		updateRoutingTable(routingTable,neighbourTable,myneighbours,neighbourIp,myIpAddress);
-    		printf("UPDATED ROUTING TABLE: Using %s Table\n",neighbourIp.c_str());
-    		printRoutingTable(routingTable);
+    		//printf("UPDATED ROUTING TABLE: Using %s Table\n",neighbourIp.c_str());
+    		//printRoutingTable(routingTable);
     	}
     	else if(!strcmp(command,"send")){
     		sendMessage(routingTable,buffer,socketDescriptor,myIpAddress);
