@@ -115,9 +115,9 @@ $topo load_flatgrid $x_dim $y_dim
 #$topo load_flatgrid 1000 1000
 
 if {$num_sink_flow > 0} { ;#sink
-	create-god [expr $num_row * $num_col + 1 ]
+	create-god [expr $number_of_nodes + 1 ] ;#numan947
 } else {
-	create-god [expr $num_row * $num_col ]
+	create-god [expr $number_of_nodes ] ;#numan947
 }
 
 

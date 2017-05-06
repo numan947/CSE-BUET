@@ -111,7 +111,7 @@ set topofile [open $topo_file "w"]
 
 
 
-
+  
 set dist(5m)  7.69113e-06
 set dist(9m)  2.37381e-06
 set dist(10m) 1.92278e-06
@@ -126,18 +126,19 @@ set dist(25m) 3.07645e-07
 set dist(30m) 2.13643e-07
 set dist(35m) 1.56962e-07
 set dist(40m) 1.20174e-07
-Phy/WirelessPhy/802_15_4 set CSThresh_ $dist(30m)
-Phy/WirelessPhy/802_15_4 set RXThresh_ $dist(30m)
-Phy/WirelessPhy/802_15_4 set TXThresh_ $dist(30m)
+Phy/WirelessPhy/802_15_4 set CSThresh_ $dist(40m)
+Phy/WirelessPhy/802_15_4 set RXThresh_ $dist(40m)
+Phy/WirelessPhy/802_15_4 set TXThresh_ $dist(40m)
 
 
 #numan947
-set TransmissionArea 30
+set TransmissionArea 40
 set multiplier [lindex $argv 4]
 
 set x_dim [expr $multiplier*$TransmissionArea] ; 
 set y_dim [expr $multiplier*$TransmissionArea] ; 
 
+puts "X DIM Y DIM IS $x_dim $y_dim"
 
 # set up topography object
 set topo       [new Topography]
@@ -145,9 +146,9 @@ $topo load_flatgrid $x_dim $y_dim
 #$topo load_flatgrid 1000 1000
 
 if {$num_sink_flow > 0} { ;#sink
-	create-god [expr $num_row * $num_col + 1 ]
+	create-god [expr $number_of_nodes+1 ] ;#numan947
 } else {
-	create-god [expr $num_row * $num_col ]
+	create-god [expr $number_of_nodes ] ;#numan947
 }
 
 
