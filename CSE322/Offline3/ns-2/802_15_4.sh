@@ -28,7 +28,7 @@ num_flow=20
 
 num_packet_per_sec=100
 
-t_area_mul=4
+t_area_mul=5
 
 ###############NUMAN947#############
 
