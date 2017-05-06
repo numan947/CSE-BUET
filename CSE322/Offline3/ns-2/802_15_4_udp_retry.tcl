@@ -1,5 +1,5 @@
 ################################################################802.11 in Grid topology with cross folw
-set cbr_size 64 ; #[lindex $argv 2]; #4,8,16,32,64
+set cbr_size 32 ; #[lindex $argv 2]; #4,8,16,32,64
 set cbr_rate 11.0Mb
 set cbr_pckt_per_sec [lindex $argv 3]; #numan947
 set cbr_interval [expr 1.0/$cbr_pckt_per_sec] ;# ?????? 1 for 1 packets per second and 0.1 for 10 packets per second
@@ -81,7 +81,7 @@ set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 50 ;# max packet in ifq
-set val(rp) DSDV ; #[lindex $argv 4] ;# routing protocol
+set val(rp) AODV ; #[lindex $argv 4] ;# routing protocol #numan947
 
 Mac/802_15_4 set syncFlag_ 1
 
