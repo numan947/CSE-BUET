@@ -140,22 +140,23 @@ under="_"
 #output_file="$dir$output_file_format$under$r$under$r.out"
 output_file="$dir$output_file_format$under$r.out"
 
-echo -ne "Throughput:          $thr " >> $output_file
-echo -ne "AverageDelay:         $del " >> $output_file
-echo -ne "Sent Packets:         $s_packet " >> $output_file
-echo -ne "Received Packets:         $r_packet " >> $output_file
-echo -ne "Dropped Packets:         $d_packet " >> $output_file
-echo -ne "PacketDeliveryRatio:      $del_ratio " >> $output_file
-echo -ne "PacketDropRatio:      $dr_ratio " >> $output_file
-echo -ne "Total time:  $time " >> $output_file
+echo -ne "" > $output_file
+echo -ne "Throughput:          $thr \n" >> $output_file
+echo -ne "AverageDelay:         $del \n" >> $output_file
+echo -ne "Sent Packets:         $s_packet \n" >> $output_file
+echo -ne "Received Packets:         $r_packet \n" >> $output_file
+echo -ne "Dropped Packets:         $d_packet \n" >> $output_file
+echo -ne "PacketDeliveryRatio:      $del_ratio \n" >> $output_file
+echo -ne "PacketDropRatio:      $dr_ratio \n" >> $output_file
+echo -ne "Total time:  $time \n" >> $output_file
 echo -ne "" >> $output_file
 echo -ne "" >> $output_file
-echo -ne "Total energy consumption:        $t_energy " >> $output_file
-echo -ne "Average Energy per bit:         $energy_bit " >> $output_file
-echo -ne "Average Energy per byte:         $energy_byte " >> $output_file
-echo -ne "Average energy per packet:         $energy_packet " >> $output_file
-echo -ne "total_retransmit:         $total_retransmit " >> $output_file
-echo -ne "energy_efficiency(nj/bit):         $enr_nj " >> $output_file
+echo -ne "Total energy consumption:        $t_energy \n" >> $output_file
+echo -ne "Average Energy per bit:         $energy_bit \n" >> $output_file
+echo -ne "Average Energy per byte:         $energy_byte \n" >> $output_file
+echo -ne "Average energy per packet:         $energy_packet \n" >> $output_file
+echo -ne "total_retransmit:         $total_retransmit \n" >> $output_file
+echo -ne "energy_efficiency(nj/bit):         $enr_nj \n" >> $output_file
 echo "" >> $output_file
 
 r=$(($r+1))

@@ -14,7 +14,7 @@ set parallel_start_gap 0.0
 set cross_start_gap 0.0
 
 set number_of_nodes [lindex $argv 1] ; #numan947
-set node_speed [lindex $argv 4] ; #numan947
+# set node_speed [lindex $argv 4] ; #numan947
 
 
 #############################################################ENERGY PARAMETERS
@@ -196,12 +196,12 @@ for {set i 0} {$i < $number_of_nodes} {incr i} {
 
 
 #numan947 create random motion
-for {set i 0} {$i < $number_of_nodes} {incr i} {
-    set x_pos [expr rand()*$x_dim]
-    set y_pos [expr rand()*$y_dim]
-    set random_time [expr rand()* ([expr $start_time + $time_duration ])]
-    $ns_ at $random_time "$node_($i) setdest $x_pos $y_pos $node_speed";
-}
+# for {set i 0} {$i < $number_of_nodes} {incr i} {
+#     set x_pos [expr rand()*$x_dim]
+#     set y_pos [expr rand()*$y_dim]
+#     set random_time [expr rand()* ([expr $start_time + $time_duration ])]
+#     $ns_ at $random_time "$node_($i) setdest $x_pos $y_pos $node_speed";
+# }
 
 
 

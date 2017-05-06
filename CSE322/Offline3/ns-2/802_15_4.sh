@@ -28,7 +28,7 @@ num_flow=20
 
 num_packet_per_sec=100
 
-t_area_mul=2
+t_area_mul=4
 
 ###############NUMAN947#############
 
@@ -59,7 +59,7 @@ ns 802_15_4_udp_retry.tcl  $r $num_node $num_flow $num_packet_per_sec $t_area_mu
 echo "SIMULATION COMPLETE. BUILDING STAT......"
 #awk -f rule_th_del_enr_tcp.awk 802_11_grid_tcp_with_energy_random_traffic.tr > math_model1.out
 #                            CHNG PATH		2		######################################################
-awk -f rule_wireless_udp.awk multi_radio_802_15_4.tr > multi_radio_802_15_4_random.out
+awk -f rule_wireless_udp.awk multi_radio_802_15_4_random.tr > multi_radio_802_15_4_random.out
 
 ok=1;
 while read val
@@ -140,23 +140,23 @@ dir="./"
 under="_"
 #output_file="$dir$output_file_format$under$r$under$r.out"
 output_file="$dir$output_file_format$under$r.out"
-
-echo -ne "Throughput:          $thr " >> $output_file
-echo -ne "AverageDelay:         $del " >> $output_file
-echo -ne "Sent Packets:         $s_packet " >> $output_file
-echo -ne "Received Packets:         $r_packet " >> $output_file
-echo -ne "Dropped Packets:         $d_packet " >> $output_file
-echo -ne "PacketDeliveryRatio:      $del_ratio " >> $output_file
-echo -ne "PacketDropRatio:      $dr_ratio " >> $output_file
-echo -ne "Total time:  $time " >> $output_file
+echo -ne "" > $output_file
+echo -ne "Throughput:          $thr \n" >> $output_file
+echo -ne "AverageDelay:         $del \n" >> $output_file
+echo -ne "Sent Packets:         $s_packet \n" >> $output_file
+echo -ne "Received Packets:         $r_packet \n" >> $output_file
+echo -ne "Dropped Packets:         $d_packet \n" >> $output_file
+echo -ne "PacketDeliveryRatio:      $del_ratio \n" >> $output_file
+echo -ne "PacketDropRatio:      $dr_ratio \n" >> $output_file
+echo -ne "Total time:  $time \n" >> $output_file
 echo -ne "" >> $output_file
 echo -ne "" >> $output_file
-echo -ne "Total energy consumption:        $t_energy " >> $output_file
-echo -ne "Average Energy per bit:         $energy_bit " >> $output_file
-echo -ne "Average Energy per byte:         $energy_byte " >> $output_file
-echo -ne "Average energy per packet:         $energy_packet " >> $output_file
-echo -ne "total_retransmit:         $total_retransmit " >> $output_file
-echo -ne "energy_efficiency(nj/bit):         $enr_nj " >> $output_file
+echo -ne "Total energy consumption:        $t_energy \n" >> $output_file
+echo -ne "Average Energy per bit:         $energy_bit \n" >> $output_file
+echo -ne "Average Energy per byte:         $energy_byte \n" >> $output_file
+echo -ne "Average energy per packet:         $energy_packet \n" >> $output_file
+echo -ne "total_retransmit:         $total_retransmit \n" >> $output_file
+echo -ne "energy_efficiency(nj/bit):         $enr_nj \n" >> $output_file
 echo "" >> $output_file
 
 r=$(($r+1))
