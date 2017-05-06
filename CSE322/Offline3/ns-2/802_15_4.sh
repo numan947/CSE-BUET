@@ -9,8 +9,8 @@
 output_file_format="multi_radio_802_15_4_random";
 iteration_float=5.0;
 
-start=5
-end=5
+start=10
+end=10
 
 hop_15_4=5
 dist_15_4=30
@@ -20,6 +20,17 @@ pckt_size=64
 pckt_per_sec=1000
 #pckt_interval=[expr 1 / $pckt_per_sec]
 #echo "INERVAL: $pckt_interval"
+
+###############NUMAN947#############
+num_node=20
+
+num_flow=20
+
+num_packet_per_sec=100
+
+t_area_mul=2
+
+###############NUMAN947#############
 
 routing=DSDV
 
@@ -44,11 +55,11 @@ echo "                             EXECUTING $(($i+1)) th ITERATION"
 
 
 #                            CHNG PATH		1		######################################################
-ns 802_15_4_udp.tcl $r # $dist_11 $pckt_size $pckt_per_sec $routing $time_sim
+ns 802_15_4_udp_retry.tcl  $r $num_node $num_flow $num_packet_per_sec $t_area_mul # $dist_11 $pckt_size $pckt_per_sec $routing $time_sim
 echo "SIMULATION COMPLETE. BUILDING STAT......"
 #awk -f rule_th_del_enr_tcp.awk 802_11_grid_tcp_with_energy_random_traffic.tr > math_model1.out
 #                            CHNG PATH		2		######################################################
-awk -f rule_wireless_udp.awk multi_radio_802_15_4_linear.tr > multi_radio_802_15_4_random.out
+awk -f rule_wireless_udp.awk multi_radio_802_15_4.tr > multi_radio_802_15_4_random.out
 
 ok=1;
 while read val
@@ -58,10 +69,10 @@ do
 
 
 	if [ "$l" == "1" ]; then
-		if [ `echo "if($val > 0.0) 1; if($val <= 0.0) 0" | bc` -eq 0 ]; then
-			ok=0;
-			break
-			fi	
+		# if [ `echo "if($val > 0.0) 1; if($val <= 0.0) 0" | bc` -eq 0 ]; then
+		# 	ok=0;
+		# 	break
+		# 	fi	
 		thr=$(echo "scale=5; $thr+$val/$iteration_float" | bc)
 #		echo -ne "throughput: $thr "
 	elif [ "$l" == "2" ]; then
