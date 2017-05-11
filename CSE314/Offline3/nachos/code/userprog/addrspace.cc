@@ -61,6 +61,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 {
     NoffHeader noffH;
     unsigned int i, size;
+    bool isOk;
 
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0); //read the executible's header
     
@@ -99,15 +100,27 @@ AddrSpace::AddrSpace(OpenFile *executable)
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
     // bzero(machine->mainMemory, size);
+    isOk = true;
 
-    for(int i=0;i<numPages;i++){
-        bzero(&(machine->mainMemory[pageTable[i].physicalPage * PageSize]),PageSize); //make the pages zero
+    for(int i=0;i<numPages && isOk;i++){
+        
+        if(pageTable[i].physicalPage==-1){
+                printf("EXCEPTION: NOT ENOUGH PAGE AVAILABLE\n");
+                isOk = false;
+                for(int k =0;k<numPages;k++)
+                    if(k!=i)memoryManager->FreePage(pageTable[k].physicalPage);
+            //couldn't get enough page, so deallocate the whole thing
+
+        }
+        else
+             bzero(&(machine->mainMemory[pageTable[i].physicalPage * PageSize]),PageSize); //make the pages zero
+    
     }
 
 
 
 // then, copy in the code and data segments into memory
-    if (noffH.code.size > 0) {
+    if (noffH.code.size > 0 && isOk) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
 			noffH.code.virtualAddr, noffH.code.size);
         
@@ -124,7 +137,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 
     }
-    if (noffH.initData.size > 0) {
+    if (noffH.initData.size > 0 && isOk) {
         DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
 			noffH.initData.virtualAddr, noffH.initData.size);
 

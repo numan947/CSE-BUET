@@ -10,6 +10,11 @@ MemoryManager::MemoryManager(int numPages, Lock* lock)
 	this->mapForMemory = new BitMap(numPages);
 }
 
+MemoryManager::~MemoryManager()
+{
+	delete mapForMemory;
+}
+
 int MemoryManager::AllocPage()
 {
 	lock->Acquire(); //make it thread safe

@@ -41,12 +41,18 @@
 //
 //	The result of the system call, if any, must be put back into r2. 
 //
-// And don't forget to increment the pc before returning. (Or else you'll
+// And don't forget to increment the PC before returning. (Or else you'll
 // loop making the same system call forever!
 //
 //	"which" is the kind of exception.  The list of possible exceptions 
 //	are in machine.h.
 //----------------------------------------------------------------------
+
+#define MAX 105
+
+void UpdateProgramCounter();
+void HandleExecSysCall();
+
 
 void
 ExceptionHandler(ExceptionType which)
@@ -54,11 +60,94 @@ ExceptionHandler(ExceptionType which)
     int type = machine->ReadRegister(2);
     
 
-    if ((which == SyscallException) && (type == SC_Halt)) {
-	DEBUG('a', "Shutdown, initiated by user program.\n");
-	   	interrupt->Halt();
-    } else {
+    if (which == SyscallException) {
+		
+			switch(type){
+				case SC_Halt:
+					DEBUG('a', "Shutdown, initiated by user program.\n");
+	   				interrupt->Halt();
+    				break;
+
+    			case SC_Exec:
+    				HandleExecSysCall();
+    				UpdateProgramCounter();
+    				break;
+			}
+				
+
+    } 
+    else {
 	printf("Unexpected user mode exception %d %d\n", which, type);
 	ASSERT(false);
     }
 }
+
+
+
+void HandleExecSysCall()
+{
+	int namePosInMem = machine->ReadRegister(4); //get the address of the name start
+
+	char *nameOftheFile = new char[MAX];
+	char ch;
+
+	bool isOk = machine->ReadMem(namePosInMem,1,(int*)&ch); //read one Byte at a time
+
+	if(!isOk)return;
+
+	int size=0;
+
+	while(ch!=0 && size < MAX){
+
+		nameOftheFile[size++] = (char)ch;
+
+		namePosInMem++;
+
+		isOk = machine->ReadMem(namePosInMem,1,(int*)&ch);
+
+		if(!isOk)return;
+	}
+
+	nameOftheFile[size] = '\0';
+
+	OpenFile *executable = fileSystem->Open(nameOftheFile);
+
+
+	if(executable != NULL){
+
+		AddrSpace *space = new AddrSpace(executable);
+
+		Thread *thread = new Thread("FORKED THREAD");
+
+		thread->space = space;
+
+
+
+	}
+
+
+
+
+}
+
+
+void UpdateProgramCounter(){
+
+		int curPC, nextPC, prevPC;
+
+		// Read PCs
+		prevPC = machine->ReadRegister(PrevPCReg);
+		curPC = machine->ReadRegister(PCReg);
+		nextPC = machine->ReadRegister(NextPCReg);
+
+		// Update PCs
+		prevPC = curPC;
+		curPC = nextPC;
+		nextPC = nextPC + 4;	// PC incremented by 4 in MIPS
+
+		// Write back PCs
+		machine->WriteRegister(PrevPCReg, prevPC);
+		machine->WriteRegister(PCReg, curPC);
+		machine->WriteRegister(NextPCReg, nextPC);
+	}
+
