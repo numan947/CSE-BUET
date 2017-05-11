@@ -45,7 +45,7 @@ bool MemoryManager::PageIsAllocated(int physPageNum)
 }
 
 
-int MemoryManager::getAvailablePages()
+int MemoryManager::GetAvailablePages()
 {
 	lock->Acquire();
 

@@ -76,7 +76,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     numPages = divRoundUp(size, PageSize);      //numan947--check for the needed number of (rounded)physical page
     size = numPages * PageSize;                 //numan947--so this will be the size of the address space
 
-    ASSERT(numPages <= memoryManager->getAvailablePages());		// check we're not trying //numan947--we can't run bigger things than our physicalpages can afford
+    ASSERT(numPages <= NumPhysPages);		// check we're not trying //numan947--we can't run bigger things than our physicalpages can afford
 						// to run anything too big --
 						// at least until we have
 						// virtual memory
@@ -87,7 +87,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
 	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page # //numan947--physical page to virtual page translation
-	pageTable[i].physicalPage = i;
+	pageTable[i].physicalPage = memoryManager->AllocPage(); //allocate page
 	pageTable[i].valid = true;
 	pageTable[i].use = false;
 	pageTable[i].dirty = false;
@@ -98,22 +98,46 @@ AddrSpace::AddrSpace(OpenFile *executable)
     
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
-    bzero(machine->mainMemory, size);
+    // bzero(machine->mainMemory, size);
+
+    for(int i=0;i<numPages;i++){
+        bzero(&(machine->mainMemory[pageTable[i].physicalPage * PageSize]),PageSize); //make the pages zero
+    }
+
+
 
 // then, copy in the code and data segments into memory
     if (noffH.code.size > 0) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
 			noffH.code.virtualAddr, noffH.code.size);
         
-        executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]), //numan947--read the executable's code memory from it's main memory
-			noffH.code.size, noffH.code.inFileAddr);
+   //      executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]), //numan947--read the executable's code memory from it's main memory
+			// noffH.code.size, noffH.code.inFileAddr);
+
+        for(int i=0;i<noffH.code.size;i++){
+                                //where do I write, how many bytes I read, from where do I read, these three things
+            executable->ReadAt(&(machine->mainMemory[TranslateToPhysical(noffH.code.virtualAddr+i)]),1,noffH.code.inFileAddr+i);
+
+        }
+
+
+
+
     }
     if (noffH.initData.size > 0) {
         DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
 			noffH.initData.virtualAddr, noffH.initData.size);
-        
-        executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]), //numan947--read the executable's initial data memory from it's main memory
-			noffH.initData.size, noffH.initData.inFileAddr);
+
+   //      executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]), //numan947--read the executable's initial data memory from it's main memory
+			// noffH.initData.size, noffH.initData.inFileAddr);
+    
+        for(int i=0;i<noffH.initData.size;i++){
+
+            executable->ReadAt(&(machine->mainMemory[TranslateToPhysical(noffH.initData.virtualAddr+i)]),1,noffH.initData.inFileAddr+i);
+
+        }
+
+
     }
 
 }
@@ -125,6 +149,8 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 AddrSpace::~AddrSpace()
 {
+    for(int i =0;i<numPages;i++)
+        memoryManager->FreePage(pageTable[i].physicalPage);
    delete pageTable;
 }
 
@@ -183,4 +209,16 @@ void AddrSpace::RestoreState()
 {
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
+}
+
+
+
+int AddrSpace::TranslateToPhysical(int v)
+{
+    int physicalAddress;
+                      //navigate to head of the pagetable entry for that byte,
+                    //plus offset
+    physicalAddress = pageTable[v/PageSize].physicalPage * PageSize + (v%PageSize);
+
+    return physicalAddress;
 }

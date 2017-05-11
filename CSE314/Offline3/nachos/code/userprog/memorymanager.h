@@ -13,7 +13,7 @@ public:
 
 	bool PageIsAllocated(int physPageNum);
 
-	int getAvailablePages();
+	int GetAvailablePages();
 	
 private:
 	Lock* lock;
