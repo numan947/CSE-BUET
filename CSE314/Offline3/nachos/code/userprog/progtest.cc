@@ -20,9 +20,15 @@
 //	memory, and jump to it.
 //----------------------------------------------------------------------
 
+
 void
 StartProcess(const char *filename)
 {
+    //initiate the memorymanager
+    Lock *lock = new Lock("MemoryManagerLock");
+    memoryManager = new MemoryManager(NumPhysPages,lock);
+
+
     OpenFile *executable = fileSystem->Open(filename);
     AddrSpace *space;
 

@@ -19,7 +19,6 @@ Interrupt *interrupt;			// interrupt status
 Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
 					// for invoking context switches
-					
 // 2007, Jose Miguel Santos Espino
 PreemptiveScheduler* preemptiveScheduler = NULL;
 const long long DEFAULT_TIME_SLICE = 50000;
@@ -34,6 +33,7 @@ SynchDisk   *synchDisk;
 
 #ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
 Machine *machine;	// user program memory and registers
+MemoryManager *memoryManager;
 #endif
 
 #ifdef NETWORK
@@ -178,6 +178,8 @@ Initialize(int argc, char **argv)
     
 #ifdef USER_PROGRAM
     machine = new Machine(debugUserProg);	// this must come first
+    Lock * lock = new Lock("MemoryManagerLock");
+    memoryManager = new MemoryManager(NumPhysPages,lock);
 #endif
 
 #ifdef FILESYS
