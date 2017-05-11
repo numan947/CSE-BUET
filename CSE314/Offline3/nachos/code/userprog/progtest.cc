@@ -13,17 +13,21 @@
 #include "console.h"
 #include "addrspace.h"
 #include "synch.h"
-
+#include "table.h"
 //----------------------------------------------------------------------
 // StartProcess
 // 	Run a user program.  Open the executable, load it into
 //	memory, and jump to it.
 //----------------------------------------------------------------------
 
+#define NUM_PROCESS 30
+Table *processIdTable;
+
 
 void
 StartProcess(const char *filename)
 {
+    processIdTable = new Table(NUM_PROCESS);
 
     OpenFile *executable = fileSystem->Open(filename);
     AddrSpace *space;

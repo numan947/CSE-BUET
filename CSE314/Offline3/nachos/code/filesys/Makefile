@@ -823,7 +823,8 @@ exception.o: ../userprog/exception.cc /usr/include/stdc-predef.h \
  ../threads/list.h ../machine/interrupt.h ../threads/list.h \
  ../machine/stats.h ../machine/timer.h ../userprog/memorymanager.h \
  ../threads/synch.h ../userprog/bitmap.h ../filesys/openfile.h \
- ../filesys/synchdisk.h ../machine/disk.h ../userprog/syscall.h
+ ../filesys/synchdisk.h ../machine/disk.h ../userprog/syscall.h \
+ ../userprog/table.h
 progtest.o: ../userprog/progtest.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../threads/system.h ../threads/copyright.h \
  ../threads/utility.h ../machine/sysdep.h /usr/include/stdlib.h \
@@ -858,7 +859,7 @@ progtest.o: ../userprog/progtest.cc /usr/include/stdc-predef.h \
  ../machine/stats.h ../machine/timer.h ../userprog/memorymanager.h \
  ../threads/synch.h ../userprog/bitmap.h ../filesys/openfile.h \
  ../filesys/synchdisk.h ../machine/disk.h ../machine/console.h \
- ../userprog/addrspace.h
+ ../userprog/addrspace.h ../userprog/table.h
 console.o: ../machine/console.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../machine/console.h ../threads/utility.h \
  ../threads/copyright.h ../machine/sysdep.h /usr/include/stdlib.h \

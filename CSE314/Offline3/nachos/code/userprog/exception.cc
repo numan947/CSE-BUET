@@ -24,6 +24,7 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
+#include "table.h"
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -49,6 +50,9 @@
 //----------------------------------------------------------------------
 
 #define MAX 105
+
+extern Table *processIdTable;
+
 
 void UpdateProgramCounter();
 void HandleExecSysCall();
@@ -120,6 +124,13 @@ void HandleExecSysCall()
 		Thread *thread = new Thread("FORKED THREAD");
 
 		thread->space = space;
+
+		int x = processIdTable->Alloc(thread);
+
+		if(x!=-1){
+			machine->WriteRegister(2,x); //return the new process id
+			thread->Fork(myThread,NULL);
+		}
 
 
 

@@ -1,3 +1,5 @@
+#ifndef TABLE_H
+#define TABLE_H
 
 #include "bitmap.h"
 #include "stdio.h"
@@ -27,3 +29,5 @@ private:
 
 	Lock* lock;
 };
+
+#endif
