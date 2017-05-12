@@ -25,7 +25,8 @@
 #include "system.h"
 #include "syscall.h"
 #include "table.h"
-
+#include "string"
+using namespace std;
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -57,6 +58,10 @@ extern Table *processIdTable;
 void UpdateProgramCounter();
 void HandleExecSysCall();
 void HandleExitSysCall();
+void HandleReadSysCall();
+void HandleWriteSysCall();
+
+
 
 void myThread(void* args)
 {
@@ -92,13 +97,18 @@ ExceptionHandler(ExceptionType which)
     				HandleExitSysCall();
     				break;
     			case SC_Read:
+    				printf("SYSCALL READ CALLED\n");
+    				HandleReadSysCall();
     				UpdateProgramCounter();
     				break;
     			case SC_Write:
+    				printf("SYSCALL WRITE CALLED\n");
+    				HandleWriteSysCall();
     				UpdateProgramCounter();
     				break;
     			
 			}
+			printf("\n\nINIFINITE LOOP CHECKER\n\n");
 				
 
     } 
@@ -177,27 +187,81 @@ void HandleExitSysCall()
 	currentThread->Finish();
 }
 
+void HandleReadSysCall()
+{
+	int arg1 = machine->ReadRegister(4); //where do I store
+	int arg2 = machine->ReadRegister(5); //how many do I read
+	int arg3 = machine->ReadRegister(6); //from where do I read
+
+
+	string fromConsole = customConsole->read(arg2);
+
+	int totalRead = fromConsole.size();
+
+	printf("JUST READ FROM CONSOLE -- %s\n",fromConsole.c_str() );
+
+	for(int i=0;i<totalRead;i++){
+		int a = fromConsole[i];
+		if(!machine->WriteMem(arg1+i,sizeof(char),a)){
+			machine->WriteRegister(2,-1); //failure
+			return;
+		}
+	}
+
+	machine->WriteRegister(2,totalRead);
+
+}
+
+
+void HandleWriteSysCall()
+{
+	int arg1 = machine->ReadRegister(4); //from where do I read
+	int arg2 = machine->ReadRegister(5); //how many do I read
+	int arg3 = machine->ReadRegister(6); //from where do I write
+
+
+
+	string toWrite="";
+	
+	for(int i=0;i<arg2;i++){
+		int tmp;
+		if(!machine->ReadMem(arg1+i,sizeof(char), &tmp)){
+			machine->WriteRegister(2,-1);
+			return;//failure
+		}
+
+		toWrite+=(char)tmp;
+
+	}
+
+
+	printf("WRITING TO CONSOLE -- %d byte -- %s\n",arg2, toWrite.c_str());
+	customConsole->write(toWrite);
+
+	machine->WriteRegister(2,0);//success
+
+}
 
 void UpdateProgramCounter(){
 
 		int curPC=-1, nextPC=-1, prevPC=-1;
 
 
-		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
+		//printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 		// Read PCs
 		prevPC = machine->ReadRegister(PrevPCReg);
 		curPC = machine->ReadRegister(PCReg);
 		nextPC = machine->ReadRegister(NextPCReg);
-		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
+		//printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 		// Update PCs
 		prevPC = curPC;
 		curPC = nextPC;
 		nextPC = nextPC + 4;	// PC incremented by 4 in MIPS
-		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
+		//printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 		// Write back PCs
 		machine->WriteRegister(PrevPCReg, prevPC);
 		machine->WriteRegister(PCReg, curPC);
 		machine->WriteRegister(NextPCReg, nextPC);
-		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
+		//printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 	}
 

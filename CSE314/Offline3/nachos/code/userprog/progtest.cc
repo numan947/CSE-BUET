@@ -23,10 +23,10 @@
 #define NUM_PROCESS 30
 Table *processIdTable;
 
-
 void
 StartProcess(const char *filename)
 {
+
     processIdTable = new Table(NUM_PROCESS);
 
     OpenFile *executable = fileSystem->Open(filename);
@@ -46,8 +46,8 @@ StartProcess(const char *filename)
 
     machine->Run();			// jump to the user progam
     ASSERT(false);			// machine->Run never returns;
-					// the address space exits
-					// by doing the syscall "exit"
+    
+    delete processIdTable; //clean up
 }
 
 // Data structures needed for the console test.  Threads making

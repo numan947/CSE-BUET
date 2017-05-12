@@ -34,7 +34,11 @@ SynchDisk   *synchDisk;
 
 #ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
 Machine *machine;	// user program memory and registers
+Lock * lock;
 MemoryManager *memoryManager;
+CustomConsole *customConsole;
+
+
 #endif
 
 #ifdef NETWORK
@@ -82,6 +86,9 @@ TimerInterruptHandler(void* dummy)
 //	"argv" is an array of strings, one for each command line argument
 //		ex: "nachos -d +" -> argv = {"nachos", "-d", "+"}
 //----------------------------------------------------------------------
+
+
+
 void
 Initialize(int argc, char **argv)
 {
@@ -179,8 +186,9 @@ Initialize(int argc, char **argv)
     
 #ifdef USER_PROGRAM
     machine = new Machine(debugUserProg);	// this must come first
-    Lock * lock = new Lock("MemoryManagerLock");
+    lock = new Lock("MemoryManagerLock");
     memoryManager = new MemoryManager(NumPhysPages,lock);
+    customConsole = new CustomConsole();
 #endif
 
 #ifdef FILESYS
@@ -215,6 +223,9 @@ Cleanup()
     
 #ifdef USER_PROGRAM
     delete machine;
+    delete memoryManager;
+    delete lock;
+    delete customConsole;
 #endif
 
 #ifdef FILESYS_NEEDED
