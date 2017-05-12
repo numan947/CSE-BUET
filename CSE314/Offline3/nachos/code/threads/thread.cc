@@ -99,6 +99,8 @@ Thread::Fork(VoidFunctionPtr func, void* arg)
     StackAllocate(func, arg);
 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    
+    printf("Scheduler scheduled\n");
     scheduler->ReadyToRun(this);	// ReadyToRun assumes that interrupts 
 					// are disabled!
     interrupt->SetLevel(oldLevel);

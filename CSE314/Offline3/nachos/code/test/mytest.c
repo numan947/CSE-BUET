@@ -1,21 +1,15 @@
-/*
- * exectest.c
- *
- * Exec a simple program.  Return the result of Exec.
- */
-
 #include "syscall.h"
-#include <stdio.h>
+
 int
 main()
 {
-//     int result;
-// char str[4];
-
-//     result = Exec("../test/exittest");
-    Halt();
+    int result;
+	char str[4];
+    result = Exec("../test/exittest");
 	//void Write(char *buffer, int size, OpenFileId id);
 	
+	printf("result is %d\n",result );
+
 	// str[0] = 'a';
 	// str[1] = 'b';
 	// str[2] = 'c';

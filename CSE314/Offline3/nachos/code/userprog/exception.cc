@@ -57,15 +57,26 @@ extern Table *processIdTable;
 void UpdateProgramCounter();
 void HandleExecSysCall();
 
+void myThread(void* args)
+{
+	currentThread->space->InitRegisters();
+	currentThread->space->RestoreState();
+
+	machine->Run();
+
+	ASSERT(false);
+}
 
 void
 ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
+    Lock *mylock =  new Lock("SYS LOCK");
     
-
+    mylock->Acquire();
     if (which == SyscallException) {
-		
+			
+
 			switch(type){
 				case SC_Halt:
 					DEBUG('a', "Shutdown, initiated by user program.\n");
@@ -76,6 +87,16 @@ ExceptionHandler(ExceptionType which)
     				HandleExecSysCall();
     				UpdateProgramCounter();
     				break;
+    			case SC_Exit:
+    				HandleExitSysCall();
+    				break;
+    			case SC_Read:
+    				UpdateProgramCounter();
+    				break;
+    			case SC_Write:
+    				UpdateProgramCounter();
+    				break;
+    			
 			}
 				
 
@@ -84,6 +105,7 @@ ExceptionHandler(ExceptionType which)
 	printf("Unexpected user mode exception %d %d\n", which, type);
 	ASSERT(false);
     }
+mylock->Release();
 }
 
 
@@ -92,36 +114,32 @@ void HandleExecSysCall()
 {
 	int namePosInMem = machine->ReadRegister(4); //get the address of the name start
 
+	
 	char *nameOftheFile = new char[MAX];
-	char ch;
 
-	bool isOk = machine->ReadMem(namePosInMem,1,(int*)&ch); //read one Byte at a time
-
-	if(!isOk)return;
 
 	int size=0;
 
-	while(ch!=0 && size < MAX){
+	do
+	{
+		bool stat = machine->ReadMem(namePosInMem + size, 1, (int*)&nameOftheFile[size]);
+		
+		if(!stat)return;
+	}while(nameOftheFile[size++] != '\0' && size<MAX);
 
-		nameOftheFile[size++] = (char)ch;
-
-		namePosInMem++;
-
-		isOk = machine->ReadMem(namePosInMem,1,(int*)&ch);
-
-		if(!isOk)return;
-	}
-
-	nameOftheFile[size] = '\0';
 
 	OpenFile *executable = fileSystem->Open(nameOftheFile);
 
+	printf("name of the file: %s\n",nameOftheFile );
+
+
+	AddrSpace *space = new AddrSpace(executable);
+
+	Thread *thread = new Thread("FORKED THREAD");
 
 	if(executable != NULL){
 
-		AddrSpace *space = new AddrSpace(executable);
 
-		Thread *thread = new Thread("FORKED THREAD");
 
 		thread->space = space;
 
@@ -131,34 +149,58 @@ void HandleExecSysCall()
 			machine->WriteRegister(2,x); //return the new process id
 			thread->Fork(myThread,NULL);
 		}
-
-
-
+		else{
+			machine->WriteRegister(2,-1);
+		} 
 	}
-
-
+	else{
+			machine->WriteRegister(2,-1);
+		}
 
 
 }
 
 
+
+void HandleExitSysCall()
+{
+
+	int namePosInMem = machine->ReadRegister(4); //get the address of the name start
+	
+	int s;
+
+	bool stat = machine->ReadMem(namePosInMem, 1, (int*)s);
+
+	if(!stat)return;
+
+
+	printf("System Call Exit, Status: %d\n",s );
+	
+	
+	currentThread->Finish();
+}
+
+
 void UpdateProgramCounter(){
 
-		int curPC, nextPC, prevPC;
+		int curPC=-1, nextPC=-1, prevPC=-1;
 
+
+		printf("%d %d %d \n",prevPC,curPC,nextPC);
 		// Read PCs
 		prevPC = machine->ReadRegister(PrevPCReg);
 		curPC = machine->ReadRegister(PCReg);
 		nextPC = machine->ReadRegister(NextPCReg);
-
+printf("%d %d %d \n",prevPC,curPC,nextPC);
 		// Update PCs
 		prevPC = curPC;
 		curPC = nextPC;
 		nextPC = nextPC + 4;	// PC incremented by 4 in MIPS
-
+printf("%d %d %d \n",prevPC,curPC,nextPC);
 		// Write back PCs
 		machine->WriteRegister(PrevPCReg, prevPC);
 		machine->WriteRegister(PCReg, curPC);
 		machine->WriteRegister(NextPCReg, nextPC);
+printf("%d %d %d \n",prevPC,curPC,nextPC);
 	}
 

@@ -59,6 +59,7 @@ SwapHeader (NoffHeader *noffH)
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
+    
     NoffHeader noffH;
     unsigned int i, size;
     bool isOk;
