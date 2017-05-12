@@ -8,7 +8,6 @@
 
 int
 main()
-{	
-	printf("JELLO LWSASD\n");
-    //Exit(123);
+{
+    Exit(123);
 }

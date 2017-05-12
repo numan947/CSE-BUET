@@ -90,8 +90,6 @@ ExceptionHandler(ExceptionType which)
     				break;
     			case SC_Exit:
     				HandleExitSysCall();
-    				printf("HELLO");
-    				UpdateProgramCounter();
     				break;
     			case SC_Read:
     				UpdateProgramCounter();
@@ -140,13 +138,14 @@ void HandleExecSysCall()
 
 	Thread *thread = new Thread("FORKED THREAD");
 
+	int x = -1;
 	if(executable != NULL){
 
 
 
 		thread->space = space;
 
-		int x = processIdTable->Alloc(thread);
+		x= processIdTable->Alloc(thread);
 
 		if(x!=-1){
 			machine->WriteRegister(2,x); //return the new process id
@@ -159,6 +158,8 @@ void HandleExecSysCall()
 	else{
 			machine->WriteRegister(2,-1);
 		}
+	
+	if(x!=-1)processIdTable->Release(x);
 
 
 }
@@ -168,16 +169,9 @@ void HandleExecSysCall()
 void HandleExitSysCall()
 {
 
-	int namePosInMem = machine->ReadRegister(4); //get the address of the name start
-	
-	int s;
+	int exitStatus = machine->ReadRegister(4); //get the address of the name start
 
-	bool stat = machine->ReadMem(namePosInMem, 1, (int*)&s);
-
-	if(!stat)return;
-
-
-	printf("SYSTEM CALL EXIT STATUS: %d\n",s );
+	printf("SYSTEM CALL EXIT STATUS: %d -- ThreadName %s \n",exitStatus,currentThread->getName());
 	
 
 	currentThread->Finish();
@@ -189,21 +183,21 @@ void UpdateProgramCounter(){
 		int curPC=-1, nextPC=-1, prevPC=-1;
 
 
-		printf("%d %d %d \n",prevPC,curPC,nextPC);
+		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 		// Read PCs
 		prevPC = machine->ReadRegister(PrevPCReg);
 		curPC = machine->ReadRegister(PCReg);
 		nextPC = machine->ReadRegister(NextPCReg);
-printf("%d %d %d \n",prevPC,curPC,nextPC);
+		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 		// Update PCs
 		prevPC = curPC;
 		curPC = nextPC;
 		nextPC = nextPC + 4;	// PC incremented by 4 in MIPS
-printf("%d %d %d \n",prevPC,curPC,nextPC);
+		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 		// Write back PCs
 		machine->WriteRegister(PrevPCReg, prevPC);
 		machine->WriteRegister(PCReg, curPC);
 		machine->WriteRegister(NextPCReg, nextPC);
-printf("%d %d %d \n",prevPC,curPC,nextPC);
+		printf("PC FOR THREAD: %s -- %d %d %d \n",currentThread->getName(),prevPC,curPC,nextPC);
 	}
 
