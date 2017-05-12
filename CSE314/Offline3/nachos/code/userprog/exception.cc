@@ -79,43 +79,72 @@ ExceptionHandler(ExceptionType which)
     int type = machine->ReadRegister(2);
     Lock *mylock =  new Lock("SYS LOCK");
     
-    mylock->Acquire();
-    if (which == SyscallException) {
-			
-
+    
+    switch (which) {
+		
+    	case SyscallException:
+			mylock->Acquire();
 			switch(type){
 				case SC_Halt:
 					DEBUG('a', "Shutdown, initiated by user program.\n");
+	   				mylock->Release();
 	   				interrupt->Halt();
     				break;
 
     			case SC_Exec:
     				HandleExecSysCall();
     				UpdateProgramCounter();
+    				mylock->Release();
     				break;
     			case SC_Exit:
+    				mylock->Release();
     				HandleExitSysCall();
     				break;
     			case SC_Read:
     				printf("SYSCALL READ CALLED\n");
     				HandleReadSysCall();
+    				mylock->Release();
     				UpdateProgramCounter();
     				break;
     			case SC_Write:
     				printf("SYSCALL WRITE CALLED\n");
     				HandleWriteSysCall();
+    				mylock->Release();
     				UpdateProgramCounter();
     				break;
     			
 			}
 			printf("\n\nINIFINITE LOOP CHECKER\n\n");
-				
+			break;
+		
 
+		case PageFaultException:
+			printf("Page Fault Exception:  No valid translation found -- %d %d\n",which,type );
+			break
+		case ReadOnlyException:
+			printf("Read Only Exception: Write attempted to page marked -- %d %d\n",which,type );
+			break;
+		case BusErrorException:
+			printf("Bus Error Exception: Translation resulted in an invalid physical address -- %d %d\n",which,type);
+			break;
+		case AddressErrorException:
+			printf("Address Error Exception:  Unaligned reference or one that was beyond the end of the address space -- %d %d\n",which,type);
+			break;
+		case OverflowException:
+			printf("Overflow Exception: Integer overflow in add or sub %d %d\n",which,type);
+			break;
+		case IllegalInstrException:
+			printf("Illegal Instruction Exception: Unimplemented or reserved instr. %d %d\n",which,type);
+			break;
+		case NumExceptionTypes:
+			printf("NumExceptionTypes -- %d %d\n",which,type);
+			break;
     } 
     else {
-	printf("Unexpected user mode exception %d %d\n", which, type);
-	ASSERT(false);
+		printf("Unexpected user mode exception %d %d\n", which, type);
+		ASSERT(false);
     }
+
 mylock->Release();
 }
 
