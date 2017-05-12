@@ -116,3 +116,5 @@
 **/Module.symvers
 **/Mkfile.old
 **/dkms.conf
+**/*.zip
+**/*.tar.gz
