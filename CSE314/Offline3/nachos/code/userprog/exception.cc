@@ -56,6 +56,7 @@ extern Table *processIdTable;
 
 void UpdateProgramCounter();
 void HandleExecSysCall();
+void HandleExitSysCall();
 
 void myThread(void* args)
 {
@@ -89,6 +90,8 @@ ExceptionHandler(ExceptionType which)
     				break;
     			case SC_Exit:
     				HandleExitSysCall();
+    				printf("HELLO");
+    				UpdateProgramCounter();
     				break;
     			case SC_Read:
     				UpdateProgramCounter();
@@ -169,14 +172,14 @@ void HandleExitSysCall()
 	
 	int s;
 
-	bool stat = machine->ReadMem(namePosInMem, 1, (int*)s);
+	bool stat = machine->ReadMem(namePosInMem, 1, (int*)&s);
 
 	if(!stat)return;
 
 
-	printf("System Call Exit, Status: %d\n",s );
+	printf("SYSTEM CALL EXIT STATUS: %d\n",s );
 	
-	
+
 	currentThread->Finish();
 }
 
