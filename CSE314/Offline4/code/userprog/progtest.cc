@@ -20,6 +20,7 @@
 #include "thread.h"
 
 MemoryManager *memoryManager;
+MemoryManager *swapMemoryManager;
 Lock *memoryLock, *syscallLock;
 ProcessTable *processTable;
 
@@ -37,7 +38,10 @@ public:
     ExecuteOnce()
     {
         if(t == 0){
-            memoryManager = new MemoryManager(NumPhysPages);
+
+            swapMemoryManager = new MemoryManager(NumPhysPages);
+            memoryManager = new MemoryManager(3*NumPhysPages);
+            
             memoryLock = new Lock("memory lock");
             syscallLock = new Lock("syscall lock");
             processTable = new ProcessTable(100);

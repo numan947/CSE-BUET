@@ -15,6 +15,9 @@
 #include "noff.h"
 #include "copyright.h"
 #include "filesys.h"
+#include <map>
+
+using namespace std;
 
 #define UserStackSize		1024 	// increase this as necessary!
 
@@ -35,6 +38,11 @@ class AddrSpace {
 
     void loadMemoryToPage(int vpn, int currentByteOffSet, int inFileAddr, int inFileAddrOffset);
 
+
+    void saveIntoSwapSpace(int vpn);
+    void loadFromSwapSpace(int vpn);
+    void isSwapPageExists(int vpn);
+
   private:
     TranslationEntry *pageTable;	// Assume linear page table translation
 					// for now!
@@ -43,6 +51,7 @@ class AddrSpace {
 
     NoffHeader memberNoffH; //numan947--making noffHeader e memeber variable
     OpenFile * localExecutable;
+    map<int,int> *vpnToSwapPageMap;
 };
 
 #endif // ADDRSPACE_H

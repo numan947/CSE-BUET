@@ -24,7 +24,7 @@
 
 extern MemoryManager *memoryManager;
 extern Lock *memoryLock;
-
+extern MemoryManager *swapMemoryManager;
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -65,10 +65,13 @@ SwapHeader (NoffHeader *noffH)
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
+
+    
     NoffHeader noffH;
 
     this->localExecutable = executable; //numan947
     
+    this->vpnToSwapPageMap = new map<int,int>();
     unsigned int i, j, size;
 
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
@@ -105,7 +108,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
         //     ASSERT(false);
         // }
 
-        pageTable[i].physicalPage = -2;
+        pageTable[i].physicalPage = -1;
     	pageTable[i].valid = false;
     	pageTable[i].use = false;
     	pageTable[i].dirty = false;
@@ -291,4 +294,17 @@ void AddrSpace::loadMemoryToPage(int vpn, int currentByteOffSet, int inFileAddr,
 {
     this->localExecutable->ReadAt(&(machine->mainMemory[(pageTable[vpn].physicalPage * PageSize) + currentByteOffSet]),
                             1,inFileAddr + inFileAddrOffset);
+}
+
+
+
+void AddrSpace::saveIntoSwapSpace(int vpn)
+{
+    int swapPageNo = swapMemoryManager->AllocPage();
+
+    //mapping it
+    vpnToSwapPageMap[vpn]=swapPageNo;
+    
+
+
 }
