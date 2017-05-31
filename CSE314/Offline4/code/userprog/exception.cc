@@ -71,8 +71,12 @@ void ExitProcess()
 	syscallLock->Acquire();
 
 	int size = machine->pageTableSize;
-	for(int i = 0; i < size; ++i)
-		memoryManager->FreePage(machine->pageTable[i].physicalPage);
+	for(int i = 0; i < size; ++i){
+		
+		if(machine->pageTable[i].valid) //##numan947
+			memoryManager->FreePage(machine->pageTable[i].physicalPage);
+	
+	}
 	processTable->Release(currentThread->id);
 
 	printf("exited with exit code %d\n", machine->ReadRegister(4));
@@ -183,7 +187,22 @@ ExceptionHandler(ExceptionType which)
     else if(which == PageFaultException)
     {
     	printf("PageFaultException\n");
-    	ExitProcess();
+
+    	//##numan947
+    	int faultingAddress = machine->ReadRegister(39);
+
+    	int physicalPageNo = -1;
+
+    	if(memoryManager->IsAnyPageFree()){
+    		physicalPageNo = memoryManager->AllocPage();
+    	}
+    	else{
+    		//todo 
+    	}
+
+    	currentThread->space->loadIntoFreePage(faultingAddress,physicalPageNo);
+
+    	//ExitProcess();
     } 
     else if(which == ReadOnlyException)
     {

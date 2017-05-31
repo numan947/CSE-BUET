@@ -12,7 +12,7 @@
 
 #ifndef ADDRSPACE_H
 #define ADDRSPACE_H
-
+#include "noff.h"
 #include "copyright.h"
 #include "filesys.h"
 
@@ -31,11 +31,18 @@ class AddrSpace {
     void SaveState();			// Save/restore address space-specific
     void RestoreState();		// info on a context switch 
 
+    int loadIntoFreePage(int faultingPageAddr, int physicalPageNo);
+
+    void loadMemoryToPage(int vpn, int currentByteOffSet, int inFileAddr, int inFileAddrOffset);
+
   private:
     TranslationEntry *pageTable;	// Assume linear page table translation
 					// for now!
     unsigned int numPages;		// Number of pages in the virtual 
 					// address space
+
+    NoffHeader memberNoffH; //numan947--making noffHeader e memeber variable
+    OpenFile * localExecutable;
 };
 
 #endif // ADDRSPACE_H

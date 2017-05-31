@@ -18,12 +18,13 @@
 #include "copyright.h"
 #include "system.h"
 #include "addrspace.h"
-#include "noff.h"
 #include "synch.h"
 #include "memorymanager.h"
+#include <algorithm>
 
 extern MemoryManager *memoryManager;
 extern Lock *memoryLock;
+
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -65,6 +66,9 @@ SwapHeader (NoffHeader *noffH)
 AddrSpace::AddrSpace(OpenFile *executable)
 {
     NoffHeader noffH;
+
+    this->localExecutable = executable; //numan947
+    
     unsigned int i, j, size;
 
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
@@ -80,7 +84,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     numPages = divRoundUp(size, PageSize);
     size = numPages * PageSize;
 
-    ASSERT(numPages <= NumPhysPages);		// check we're not trying
+   // ASSERT(numPages <= NumPhysPages);		// check we're not trying
 						// to run anything too big --
 						// at least until we have
 						// virtual memory
@@ -92,16 +96,17 @@ AddrSpace::AddrSpace(OpenFile *executable)
     for (i = 0; i < numPages; i++) {
     	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
     	//pageTable[i].physicalPage = i;
-        if(memoryManager->IsAnyPageFree() == true)
-            pageTable[i].physicalPage = memoryManager->AllocPage();
-        else
-        {
-            for(j = 0; j < i; ++j)
-                memoryManager->FreePage(pageTable[j].physicalPage);
-            ASSERT(false);
-        }
+        // if(memoryManager->IsAnyPageFree() == true)
+        //     pageTable[i].physicalPage = memoryManager->AllocPage();
+        // else
+        // {
+        //     for(j = 0; j < i; ++j)
+        //         memoryManager->FreePage(pageTable[j].physicalPage);
+        //     ASSERT(false);
+        // }
 
-    	pageTable[i].valid = true;
+        pageTable[i].physicalPage = -2;
+    	pageTable[i].valid = false;
     	pageTable[i].use = false;
     	pageTable[i].dirty = false;
     	pageTable[i].readOnly = false;  // if the code segment was entirely on 
@@ -112,7 +117,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     // zero out the entire address space, to zero the unitialized data segment 
     // and the stack segment
     //bzero(machine->mainMemory, size);
-    memoryLock->Acquire();
+   /* memoryLock->Acquire();
     for(i = 0; i < numPages; ++i)
     {
         bzero(&machine->mainMemory[pageTable[i].physicalPage * PageSize], PageSize);
@@ -140,8 +145,17 @@ AddrSpace::AddrSpace(OpenFile *executable)
                             PageSize, 
                             noffH.initData.inFileAddr + (j - numPagesForCode) * PageSize);
     }
-    memoryLock->Release();
+    memoryLock->Release();*/
 
+    printf("NOFFHEADER CHECK -- CodeSeg %d %d %d InitSeg %d %d %d  UninitSeg %d %d %d\n",noffH.code.virtualAddr,noffH.code.inFileAddr,noffH.code.size,
+                                                noffH.initData.virtualAddr,noffH.initData.inFileAddr,noffH.initData.size,
+                                                noffH.uninitData.virtualAddr,noffH.uninitData.inFileAddr,noffH.uninitData.size);
+
+    this->memberNoffH = noffH;  
+
+    printf("Member NOFFHEADER CHECK -- CodeSeg %d %d %d InitSeg %d %d %d  UninitSeg %d %d %d\n",memberNoffH.code.virtualAddr,memberNoffH.code.inFileAddr,memberNoffH.code.size,
+                                                memberNoffH.initData.virtualAddr,memberNoffH.initData.inFileAddr,memberNoffH.initData.size,
+                                                memberNoffH.uninitData.virtualAddr,memberNoffH.uninitData.inFileAddr,memberNoffH.uninitData.size);
 }
 
 //----------------------------------------------------------------------
@@ -152,6 +166,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 AddrSpace::~AddrSpace()
 {
    delete pageTable;
+   delete localExecutable;
 }
 
 //----------------------------------------------------------------------
@@ -209,4 +224,71 @@ void AddrSpace::RestoreState()
 {
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
+}
+
+
+
+int AddrSpace::loadIntoFreePage(int faultingPageAddr, int physicalPageNo)
+{
+    int vpn = faultingPageAddr/PageSize;
+
+    pageTable[vpn].physicalPage = physicalPageNo;
+    pageTable[vpn].valid =true;
+
+    int virAdd = vpn*PageSize;
+
+    bzero(machine->mainMemory + (pageTable[vpn].physicalPage*PageSize),PageSize);
+
+
+    int startCodeSegment = memberNoffH.code.virtualAddr;
+    int endCodeSegment = memberNoffH.code.virtualAddr + memberNoffH.code.size;
+
+    int startDataSegment = memberNoffH.initData.virtualAddr;
+    int endDataSegment = memberNoffH.initData.virtualAddr + memberNoffH.initData.size;
+
+    int startUDataSegment = memberNoffH.uninitData.virtualAddr;
+    int endUDataSegment = memberNoffH.uninitData.virtualAddr + memberNoffH.uninitData.size;
+
+
+    int totalWrittenBytes = 0;
+
+    bool debug = false; //for debugging
+
+    //load into memory byte by byte so that, we don't need to do the extra checking of whether the segment
+    //takes the full page or not ,i.e. no checking for 'code segment, data segment being multiple of PageSize'
+    while(totalWrittenBytes < PageSize){
+        int currentAddress  = virAdd + totalWrittenBytes; //current byte address
+
+        if(memberNoffH.code.size > 0 && currentAddress < endCodeSegment && currentAddress >= startCodeSegment)
+        {
+            if(debug)printf("Loading into free page-- faultingPageAddr, CODE   %d  %d %d %d\n",faultingPageAddr,this->memberNoffH.code.virtualAddr,this->memberNoffH.code.inFileAddr,this->memberNoffH.code.size);
+
+            loadMemoryToPage(vpn,totalWrittenBytes,memberNoffH.code.inFileAddr,currentAddress - startCodeSegment);
+        }
+
+        else if(memberNoffH.initData.size > 0 && currentAddress < endDataSegment && currentAddress >= startDataSegment)
+        {
+            if(debug)printf("Loading into free page-- faultingPageAddr, DATA   %d  %d %d %d\n",faultingPageAddr,this->memberNoffH.initData.virtualAddr,this->memberNoffH.initData.inFileAddr,this->memberNoffH.initData.size);
+
+            loadMemoryToPage(vpn,totalWrittenBytes,memberNoffH.initData.inFileAddr,currentAddress - startDataSegment);
+        }
+
+        else if(memberNoffH.uninitData.size > 0 && currentAddress < endUDataSegment && currentAddress >= startUDataSegment)
+        {
+              if(debug)printf("Loading into free page-- faultingPageAddr, DATA   %d  %d %d %d\n",faultingPageAddr,this->memberNoffH.uninitData.virtualAddr,this->memberNoffH.uninitData.inFileAddr,this->memberNoffH.uninitData.size);
+
+              loadMemoryToPage(vpn,totalWrittenBytes,memberNoffH.uninitData.inFileAddr,currentAddress - startUDataSegment);
+        } 
+
+        totalWrittenBytes++;
+    }
+
+
+    return 0;
+}
+
+void AddrSpace::loadMemoryToPage(int vpn, int currentByteOffSet, int inFileAddr, int inFileAddrOffset)
+{
+    this->localExecutable->ReadAt(&(machine->mainMemory[(pageTable[vpn].physicalPage * PageSize) + currentByteOffSet]),
+                            1,inFileAddr + inFileAddrOffset);
 }

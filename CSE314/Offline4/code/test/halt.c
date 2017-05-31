@@ -15,7 +15,6 @@
 int
 main()
 {
-	printf("HALT MY MACHINE\n");
     Halt();
     /* not reached */
 }

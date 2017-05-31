@@ -81,7 +81,7 @@ StartProcess(void *arg)
     currentThread->space = space;
     currentThread->id = processTable->Alloc( (void *) currentThread );
 
-    delete executable;			// close file
+    //delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values
     space->RestoreState();		// load page table register
