@@ -1,8 +1,20 @@
 #include "memorymanager.h"
+#include <stdio.h>
+#include <stdlib.h>
+
 
 MemoryManager::MemoryManager(int numPages)
 {
 	bitMap = new BitMap(numPages);
+
+
+	processMap = new int[numPages];
+	entries = new TranslationEntry[numPages];
+	iterator=0;
+
+	this->numPages = numPages;
+	
+
 	lock = new Lock("lock of memory manager");
 }
 
@@ -58,4 +70,27 @@ MemoryManager::NumFreePages()
 	int ret = bitMap->NumClear();
 	lock->Release();
 	return ret;
+}
+
+
+int MemoryManager::AllocPage(int processNo, TranslationEntry &entry)
+{
+	lock->Acquire();
+	
+	int ret = bitMap->Find();
+
+	if(ret!=-1){ //valid
+		processMap[iterator] = processNo;
+		entries[iterator] = entry;
+	}
+	
+	lock->Release();
+
+	return ret;
+}
+
+
+int MemoryManager::AllocByForce()
+{
+	return rand()%numPages; //returning random number
 }

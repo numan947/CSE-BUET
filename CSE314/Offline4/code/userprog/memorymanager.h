@@ -14,6 +14,9 @@ public:
 	MemoryManager(int numPages);
 	~MemoryManager();
 	int AllocPage();
+	int AllocPage(int processNo, TranslationEntry &entry);
+	int AllocByForce();
+
 	void FreePage(int physPageNum);
 	bool PageIsAllocated(int physPageNum);
 	bool IsAnyPageFree();
@@ -21,6 +24,12 @@ public:
 private:
 	BitMap *bitMap;
 	Lock *lock;
+	int numPages;
+
+	int *processMap;
+	TranslationEntry *entries;
+
+	int iterator;
 };
 
 #endif
