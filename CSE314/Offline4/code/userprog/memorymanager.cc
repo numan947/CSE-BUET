@@ -7,6 +7,7 @@ MemoryManager::MemoryManager(int numPages)
 {
 	bitMap = new BitMap(numPages);
 
+	printf("%d NumClear\n",bitMap->NumClear() );
 
 	processMap = new int[numPages];
 	entries = new TranslationEntry[numPages];
@@ -80,8 +81,8 @@ int MemoryManager::AllocPage(int processNo, TranslationEntry &entry)
 	int ret = bitMap->Find();
 
 	if(ret!=-1){ //valid
-		processMap[iterator] = processNo;
-		entries[iterator] = entry;
+		processMap[ret] = processNo;
+		entries[ret] = entry;
 	}
 	
 	lock->Release();
@@ -93,4 +94,14 @@ int MemoryManager::AllocPage(int processNo, TranslationEntry &entry)
 int MemoryManager::AllocByForce()
 {
 	return rand()%numPages; //returning random number
+}
+
+TranslationEntry& MemoryManager::getTranslationEntry(int physPageNum)
+{
+	return entries[physPageNum];
+}
+
+int& MemoryManager::getProcessId(int physPageNum)
+{
+	return processMap[physPageNum];
 }

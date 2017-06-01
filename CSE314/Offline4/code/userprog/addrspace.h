@@ -15,7 +15,7 @@
 #include "noff.h"
 #include "copyright.h"
 #include "filesys.h"
-#include <map>
+#include "bitmap.h"
 
 using namespace std;
 
@@ -41,7 +41,9 @@ class AddrSpace {
 
     void saveIntoSwapSpace(int vpn);
     void loadFromSwapSpace(int vpn);
-    void isSwapPageExists(int vpn);
+    bool isSwapPageExists(int vpn);
+
+    void evictPage(TranslationEntry& tle);
 
   private:
     TranslationEntry *pageTable;	// Assume linear page table translation
@@ -51,7 +53,8 @@ class AddrSpace {
 
     NoffHeader memberNoffH; //numan947--making noffHeader e memeber variable
     OpenFile * localExecutable;
-    map<int,int> *vpnToSwapPageMap;
+
+    BitMap *swapMap;
 };
 
 #endif // ADDRSPACE_H

@@ -21,6 +21,9 @@ public:
 	bool PageIsAllocated(int physPageNum);
 	bool IsAnyPageFree();
 	int NumFreePages();
+
+	TranslationEntry& getTranslationEntry(int physPageNum);
+	int& getProcessId(int physPageNum);
 private:
 	BitMap *bitMap;
 	Lock *lock;

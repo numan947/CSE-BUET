@@ -190,15 +190,35 @@ ExceptionHandler(ExceptionType which)
 
     	//##numan947
     	int faultingAddress = machine->ReadRegister(39);
+    	int vpn = faultingAddress/PageSize;
 
     	int physicalPageNo = -1;
 
     	if(memoryManager->IsAnyPageFree()){
-    		physicalPageNo = memoryManager->AllocPage();
+    		printf("Allocating 'Free' page for PID: %d \n",currentThread->id );
+
+    		physicalPageNo = memoryManager->AllocPage(currentThread->id,machine->pageTable[vpn]);
     	}
     	else{
-    		//todo 
+    		printf("Allocating 'Not Free' page for PID: %d\n",currentThread->id );
+    		physicalPageNo = memoryManager->AllocByForce();
+
+    		int processIdForThePhysPage = memoryManager->getProcessId(physicalPageNo);
+
+
+    		TranslationEntry tleForThePhysPage = memoryManager->getTranslationEntry(physicalPageNo);
+
+
+    		Process* process = (Process*)processTable->Get(processIdForThePhysPage);
+
+    		Thread* thread = (Thread*)process->GetProcess();
+
+    		printf("ID ---- %d\n",process->GetID() );
+    		currentThread->space->evictPage(tleForThePhysPage);
+    		//evict the page
     	}
+
+    	printf("Allocating Page No: %d %d\n",vpn,physicalPageNo );
 
     	currentThread->space->loadIntoFreePage(faultingAddress,physicalPageNo);
 

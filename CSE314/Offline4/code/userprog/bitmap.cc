@@ -77,6 +77,9 @@ BitMap::Clear(int which)
 bool 
 BitMap::Test(int which)
 {
+
+    if(which==-1)return false;
+    //printf("which %d numBits %d\n",which,numBits );
     ASSERT(which >= 0 && which < numBits);
     
     if (map[which / BitsInWord] & (1 << (which % BitsInWord)))
