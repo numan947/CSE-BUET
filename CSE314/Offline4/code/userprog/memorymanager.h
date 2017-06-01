@@ -14,10 +14,14 @@ public:
 	MemoryManager(int numPages);
 	~MemoryManager();
 	int AllocPage();
+	int AllocPage(int processNo, TranslationEntry &entry);
+	int AllocByForce();
+
 	void FreePage(int physPageNum);
 	bool PageIsAllocated(int physPageNum);
 	bool IsAnyPageFree();
 	int NumFreePages();
+
 
 	int AllocPage(int processNo,TranslationEntry &entry);
 	int AllocByForce();
@@ -30,6 +34,7 @@ private:
 	int* processMap;
 	TranslationEntry **entries;
 	int physPageNum;
+
 };
 
 #endif

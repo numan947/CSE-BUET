@@ -190,12 +190,14 @@ ExceptionHandler(ExceptionType which)
 
     	//##numan947
     	int faultingAddress = machine->ReadRegister(39);
+    	int vpn = faultingAddress/PageSize;
 
     	int vpn = faultingAddress/PageSize;
 
     	int physicalPageNo = -1;
 
     	if(memoryManager->IsAnyPageFree()){
+
     		
     		physicalPageNo = memoryManager->AllocPage(currentThread->id,machine->pageTable[vpn]);
     		
@@ -218,8 +220,9 @@ ExceptionHandler(ExceptionType which)
     		thread->space->saveIntoSwapSpace(tmp->virtualPage);
     		//memoryManager->FreePage(physicalPageNo);
 
-
     	}
+
+    	printf("Allocating Page No: %d %d\n",vpn,physicalPageNo );
 
     	currentThread->space->loadIntoFreePage(faultingAddress,physicalPageNo);
 

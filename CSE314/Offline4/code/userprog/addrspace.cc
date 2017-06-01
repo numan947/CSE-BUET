@@ -27,7 +27,7 @@ using namespace std;
 
 extern MemoryManager *memoryManager;
 extern Lock *memoryLock;
-
+extern MemoryManager *swapMemoryManager;
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -68,6 +68,8 @@ SwapHeader (NoffHeader *noffH)
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
+
+
     NoffHeader noffH;
 
 
@@ -153,10 +155,10 @@ AddrSpace::AddrSpace(OpenFile *executable)
     printf("NOFFHEADER CHECK -- CodeSeg %d %d %d InitSeg %d %d %d  UninitSeg %d %d %d\n",noffH.code.virtualAddr,noffH.code.inFileAddr,noffH.code.size,
                                                 noffH.initData.virtualAddr,noffH.initData.inFileAddr,noffH.initData.size,
                                                 noffH.uninitData.virtualAddr,noffH.uninitData.inFileAddr,noffH.uninitData.size);
-
     this->memberNoffH = noffH;  
     this->localExecutable = executable; //numan947
     
+
     printf("Member NOFFHEADER CHECK -- CodeSeg %d %d %d InitSeg %d %d %d  UninitSeg %d %d %d\n",memberNoffH.code.virtualAddr,memberNoffH.code.inFileAddr,memberNoffH.code.size,
                                                 memberNoffH.initData.virtualAddr,memberNoffH.initData.inFileAddr,memberNoffH.initData.size,
                                                 memberNoffH.uninitData.virtualAddr,memberNoffH.uninitData.inFileAddr,memberNoffH.uninitData.size);
@@ -195,6 +197,7 @@ AddrSpace::~AddrSpace()
    delete localExecutable;
    delete swapMap;
    delete swapFile;
+
 }
 
 //----------------------------------------------------------------------
@@ -267,10 +270,16 @@ int AddrSpace::loadIntoFreePage(int faultingPageAddr, int physicalPageNo)
     pageTable[vpn].physicalPage = physicalPageNo;
     pageTable[vpn].valid =true;
 
+
     int virAdd = vpn*PageSize;
 
     bzero(machine->mainMemory + (pageTable[vpn].physicalPage*PageSize),PageSize);
 
+    bool debug = false; //for debugging
+
+
+    memoryLock->Acquire();
+    
 
     int startCodeSegment = memberNoffH.code.virtualAddr;
     int endCodeSegment = memberNoffH.code.virtualAddr + memberNoffH.code.size;
@@ -280,6 +289,7 @@ int AddrSpace::loadIntoFreePage(int faultingPageAddr, int physicalPageNo)
 
     int startUDataSegment = memberNoffH.uninitData.virtualAddr;
     int endUDataSegment = memberNoffH.uninitData.virtualAddr + memberNoffH.uninitData.size;
+
 
 
     int totalWrittenBytes = 0;
@@ -324,6 +334,8 @@ int AddrSpace::loadIntoFreePage(int faultingPageAddr, int physicalPageNo)
     }
 
 
+    memoryLock->Release();
+
     return 0;
 }
 
@@ -332,6 +344,7 @@ void AddrSpace::loadMemoryToPage(int vpn, int currentByteOffSet, int inFileAddr,
     this->localExecutable->ReadAt(&(machine->mainMemory[(pageTable[vpn].physicalPage * PageSize) + currentByteOffSet]),
                             1,inFileAddr + inFileAddrOffset);
 }
+
 
 
 bool AddrSpace::isSwapPageExists(int vpn)
@@ -365,10 +378,12 @@ void AddrSpace:: saveIntoSwapSpace(int vpn)
     pageTable[vpn].valid = false;
     pageTable[vpn].dirty = false;
 
+
 }
 
 void AddrSpace::loadFromSwapSpace(int vpn)
 {
+
     printf("LOADING VPN %d from SWAP SPACE\n",vpn );
 
     TranslationEntry tle = pageTable[vpn];
@@ -382,4 +397,3 @@ void AddrSpace::loadFromSwapSpace(int vpn)
     if(x)printf("load completed %d\n",vpn);
     pageTable[vpn].valid = true;
 }
-

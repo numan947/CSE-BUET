@@ -20,6 +20,7 @@
 #include "thread.h"
 
 MemoryManager *memoryManager;
+MemoryManager *swapMemoryManager;
 Lock *memoryLock, *syscallLock;
 ProcessTable *processTable;
 
@@ -37,7 +38,10 @@ public:
     ExecuteOnce()
     {
         if(t == 0){
+
+            swapMemoryManager = new MemoryManager(NumPhysPages);
             memoryManager = new MemoryManager(NumPhysPages);
+
             memoryLock = new Lock("memory lock");
             syscallLock = new Lock("syscall lock");
             processTable = new ProcessTable(100);
@@ -80,6 +84,13 @@ StartProcess(void *arg)
     space = new AddrSpace(executable);    
     currentThread->space = space;
     currentThread->id = processTable->Alloc( (void *) currentThread );
+
+    void * pp = processTable->Get(0);
+
+    Process *p = (Process*)pp;
+
+
+    printf("currentThread id %d %d\n",((Thread*)p->GetProcess())->id,p->GetID() );
 
     //delete executable;			// close file
 

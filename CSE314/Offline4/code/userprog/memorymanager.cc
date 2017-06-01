@@ -1,8 +1,20 @@
 #include "memorymanager.h"
+
 #include <stdlib.h>
+
 MemoryManager::MemoryManager(int numPages)
 {
 	bitMap = new BitMap(numPages);
+
+	printf("%d NumClear\n",bitMap->NumClear() );
+
+	processMap = new int[numPages];
+	entries = new TranslationEntry* [numPages];
+	iterator=0;
+
+	this->numPages = numPages;
+	
+
 	lock = new Lock("lock of memory manager");
 
 	processMap = new int[numPages];
@@ -66,6 +78,7 @@ MemoryManager::NumFreePages()
 	lock->Release();
 	return ret;
 }
+
 
 int MemoryManager::AllocPage(int processNo,TranslationEntry &entry)
 {
