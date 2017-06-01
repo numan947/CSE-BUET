@@ -15,6 +15,7 @@
 #include "noff.h"
 #include "copyright.h"
 #include "filesys.h"
+#include "bitmap.h"
 
 #define UserStackSize		1024 	// increase this as necessary!
 
@@ -43,6 +44,9 @@ class AddrSpace {
 
     NoffHeader memberNoffH; //numan947--making noffHeader e memeber variable
     OpenFile * localExecutable;
+
+    OpenFile* swapFile;
+    BitMap *swapMap;
 };
 
 #endif // ADDRSPACE_H

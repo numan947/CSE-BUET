@@ -21,6 +21,9 @@
 #include "synch.h"
 #include "memorymanager.h"
 #include <algorithm>
+#include <string>
+#include <sstream>
+using namespace std;
 
 extern MemoryManager *memoryManager;
 extern Lock *memoryLock;
@@ -157,6 +160,26 @@ AddrSpace::AddrSpace(OpenFile *executable)
     printf("Member NOFFHEADER CHECK -- CodeSeg %d %d %d InitSeg %d %d %d  UninitSeg %d %d %d\n",memberNoffH.code.virtualAddr,memberNoffH.code.inFileAddr,memberNoffH.code.size,
                                                 memberNoffH.initData.virtualAddr,memberNoffH.initData.inFileAddr,memberNoffH.initData.size,
                                                 memberNoffH.uninitData.virtualAddr,memberNoffH.uninitData.inFileAddr,memberNoffH.uninitData.size);
+
+    
+
+    //creating swapFile
+    stringstream ss;
+    ss<<currentThread->id;
+    string swapFileName = "swap"+ss.str()+".swp";
+
+    printf("SWAP FILE for process %d is %s\n",currentThread->id,swapFileName.c_str());
+
+    if(!fileSystem->Create(swapFileName.c_str(),size)){
+        printf("SwapFile of same name exists, so deleting and recreating\n");
+        fileSystem->Remove(swapFileName.c_str());
+        bool x = fileSystem->Create(swapFileName.c_str(),size);
+        ASSERT(x!=false);
+    }
+
+    //initializing swapMap
+    this->swapMap = new BitMap(numPages);
+
 }
 
 //----------------------------------------------------------------------
