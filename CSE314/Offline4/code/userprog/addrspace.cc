@@ -177,6 +177,8 @@ AddrSpace::AddrSpace(OpenFile *executable)
         ASSERT(x!=false);
     }
 
+    this->swapFile = fileSystem->Open(swapFileName.c_str());
+
     //initializing swapMap
     this->swapMap = new BitMap(numPages);
 
@@ -191,6 +193,8 @@ AddrSpace::~AddrSpace()
 {
    delete pageTable;
    delete localExecutable;
+   delete swapMap;
+   delete swapFile;
 }
 
 //----------------------------------------------------------------------
@@ -316,3 +320,21 @@ void AddrSpace::loadMemoryToPage(int vpn, int currentByteOffSet, int inFileAddr,
     this->localExecutable->ReadAt(&(machine->mainMemory[(pageTable[vpn].physicalPage * PageSize) + currentByteOffSet]),
                             1,inFileAddr + inFileAddrOffset);
 }
+
+
+bool AddrSpace::isSwapPageExists(int vpn)
+{
+    return swapMap->Test(vpn);
+}
+
+void AddrSpace::saveIntoSwapSpace(int vpn)
+{
+
+}
+
+
+void AddrSpace::loadFromSwapSpace(int vpn)
+{
+
+}
+

@@ -1,5 +1,5 @@
 #include "memorymanager.h"
-
+#include <stdlib.h>
 MemoryManager::MemoryManager(int numPages)
 {
 	bitMap = new BitMap(numPages);
@@ -7,7 +7,8 @@ MemoryManager::MemoryManager(int numPages)
 
 	processMap = new int[numPages];
 	entries = new TranslationEntry*[numPages];
-	this->physPageNum = physPageNum;
+	this->physPageNum = numPages;
+	
 }
 
 MemoryManager::~MemoryManager()

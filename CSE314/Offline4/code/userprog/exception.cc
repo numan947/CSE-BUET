@@ -196,10 +196,24 @@ ExceptionHandler(ExceptionType which)
     	int physicalPageNo = -1;
 
     	if(memoryManager->IsAnyPageFree()){
+    		
     		physicalPageNo = memoryManager->AllocPage(currentThread->id,machine->pageTable[vpn]);
+    		
     	}
     	else{
+    		
     		physicalPageNo = memoryManager->AllocByForce();
+
+    		int processId = memoryManager->getProcessNo(physicalPageNo);
+
+    		Thread* thread = (Thread*)processTable->Get(processId);
+
+    		printf("process id-- %d\n",thread->id );
+
+
+
+
+
     	}
 
     	currentThread->space->loadIntoFreePage(faultingAddress,physicalPageNo);
