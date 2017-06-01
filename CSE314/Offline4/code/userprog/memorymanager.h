@@ -18,9 +18,18 @@ public:
 	bool PageIsAllocated(int physPageNum);
 	bool IsAnyPageFree();
 	int NumFreePages();
+
+	int AllocPage(int processNo,TranslationEntry &entry);
+	int AllocByForce();
+	int getProcessNo(int physPageNum);
+	TranslationEntry& getTranslationEntry(int physPageNum);
 private:
 	BitMap *bitMap;
 	Lock *lock;
+
+	int* processMap;
+	TranslationEntry **entries;
+	int physPageNum;
 };
 
 #endif

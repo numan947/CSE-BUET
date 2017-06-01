@@ -4,12 +4,18 @@ MemoryManager::MemoryManager(int numPages)
 {
 	bitMap = new BitMap(numPages);
 	lock = new Lock("lock of memory manager");
+
+	processMap = new int[numPages];
+	entries = new TranslationEntry*[numPages];
+	this->physPageNum = physPageNum;
 }
 
 MemoryManager::~MemoryManager()
 {
 	delete bitMap;
 	delete lock;
+	delete processMap;
+	delete entries;
 }
 
 int
@@ -58,4 +64,40 @@ MemoryManager::NumFreePages()
 	int ret = bitMap->NumClear();
 	lock->Release();
 	return ret;
+}
+
+int MemoryManager::AllocPage(int processNo,TranslationEntry &entry)
+{
+	lock->Acquire();
+	int ret = bitMap->Find();
+
+	entries[ret] = &entry;
+	processMap[ret] = processNo;
+
+	lock->Release();
+	return ret;
+}
+
+int MemoryManager::AllocByForce()
+{
+	lock->Acquire();
+	int ret = rand()%(this->physPageNum);
+	lock->Release();
+	return ret;
+}
+
+int MemoryManager::getProcessNo(int physPageNum)
+{
+	lock->Acquire();
+	int ret= processMap[physPageNum];
+	lock->Release();
+	return ret;
+}
+
+TranslationEntry& MemoryManager:: getTranslationEntry(int physPageNum)
+{
+	lock->Acquire();
+	TranslationEntry tr = *entries[physPageNum];
+	lock->Release();
+	return tr;
 }

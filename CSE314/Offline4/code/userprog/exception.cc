@@ -191,16 +191,20 @@ ExceptionHandler(ExceptionType which)
     	//##numan947
     	int faultingAddress = machine->ReadRegister(39);
 
+    	int vpn = faultingAddress/PageSize;
+
     	int physicalPageNo = -1;
 
     	if(memoryManager->IsAnyPageFree()){
-    		physicalPageNo = memoryManager->AllocPage();
+    		physicalPageNo = memoryManager->AllocPage(currentThread->id,machine->pageTable[vpn]);
     	}
     	else{
-    		//todo 
+    		physicalPageNo = memoryManager->AllocByForce();
     	}
 
     	currentThread->space->loadIntoFreePage(faultingAddress,physicalPageNo);
+
+    	printf("DEBUG--EXCEPTION.cc:virtualPageNo %d physicalPageNo %d\n",machine->pageTable[vpn].virtualPage,machine->pageTable[vpn].physicalPage );
 
     	//ExitProcess();
     } 

@@ -67,8 +67,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 {
     NoffHeader noffH;
 
-    this->localExecutable = executable; //numan947
-    
+
     unsigned int i, j, size;
 
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
@@ -105,7 +104,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
         //     ASSERT(false);
         // }
 
-        pageTable[i].physicalPage = -2;
+        pageTable[i].physicalPage = -1;
     	pageTable[i].valid = false;
     	pageTable[i].use = false;
     	pageTable[i].dirty = false;
@@ -147,12 +146,14 @@ AddrSpace::AddrSpace(OpenFile *executable)
     }
     memoryLock->Release();*/
 
+    printf("TOTAL SWAP MEMORY NEEDED--- %d Bytes\nTotal Machine Memory Available--- %d Bytes\n\n",size,MemorySize);
     printf("NOFFHEADER CHECK -- CodeSeg %d %d %d InitSeg %d %d %d  UninitSeg %d %d %d\n",noffH.code.virtualAddr,noffH.code.inFileAddr,noffH.code.size,
                                                 noffH.initData.virtualAddr,noffH.initData.inFileAddr,noffH.initData.size,
                                                 noffH.uninitData.virtualAddr,noffH.uninitData.inFileAddr,noffH.uninitData.size);
 
     this->memberNoffH = noffH;  
-
+    this->localExecutable = executable; //numan947
+    
     printf("Member NOFFHEADER CHECK -- CodeSeg %d %d %d InitSeg %d %d %d  UninitSeg %d %d %d\n",memberNoffH.code.virtualAddr,memberNoffH.code.inFileAddr,memberNoffH.code.size,
                                                 memberNoffH.initData.virtualAddr,memberNoffH.initData.inFileAddr,memberNoffH.initData.size,
                                                 memberNoffH.uninitData.virtualAddr,memberNoffH.uninitData.inFileAddr,memberNoffH.uninitData.size);
