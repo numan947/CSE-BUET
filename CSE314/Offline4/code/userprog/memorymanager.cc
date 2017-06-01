@@ -10,7 +10,7 @@ MemoryManager::MemoryManager(int numPages)
 	printf("%d NumClear\n",bitMap->NumClear() );
 
 	processMap = new int[numPages];
-	entries = new TranslationEntry[numPages];
+	entries = new TranslationEntry* [numPages];
 	iterator=0;
 
 	this->numPages = numPages;
@@ -82,7 +82,8 @@ int MemoryManager::AllocPage(int processNo, TranslationEntry &entry)
 
 	if(ret!=-1){ //valid
 		processMap[ret] = processNo;
-		entries[ret] = entry;
+		entries[ret] = &entry;
+		entry.physicalPage=120;
 	}
 	
 	lock->Release();
@@ -98,7 +99,7 @@ int MemoryManager::AllocByForce()
 
 TranslationEntry& MemoryManager::getTranslationEntry(int physPageNum)
 {
-	return entries[physPageNum];
+	return (*entries[physPageNum]);
 }
 
 int& MemoryManager::getProcessId(int physPageNum)

@@ -30,7 +30,7 @@ private:
 	int numPages;
 
 	int *processMap;
-	TranslationEntry *entries;
+	TranslationEntry **entries;
 
 	int iterator;
 };

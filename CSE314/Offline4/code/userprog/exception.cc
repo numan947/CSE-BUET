@@ -198,6 +198,8 @@ ExceptionHandler(ExceptionType which)
     		printf("Allocating 'Free' page for PID: %d \n",currentThread->id );
 
     		physicalPageNo = memoryManager->AllocPage(currentThread->id,machine->pageTable[vpn]);
+
+    		printf("DEBUG ---- %d\n",machine->pageTable[vpn].physicalPage );
     	}
     	else{
     		printf("Allocating 'Not Free' page for PID: %d\n",currentThread->id );
@@ -209,11 +211,10 @@ ExceptionHandler(ExceptionType which)
     		TranslationEntry tleForThePhysPage = memoryManager->getTranslationEntry(physicalPageNo);
 
 
-    		Process* process = (Process*)processTable->Get(processIdForThePhysPage);
+    		
+    		Thread* thread = (Thread*)processTable->Get(processIdForThePhysPage);
 
-    		Thread* thread = (Thread*)process->GetProcess();
-
-    		printf("ID ---- %d\n",process->GetID() );
+    		printf("ID ---- %d\n",thread->id );
     		currentThread->space->evictPage(tleForThePhysPage);
     		//evict the page
     	}
