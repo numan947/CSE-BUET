@@ -202,6 +202,7 @@ ExceptionHandler(ExceptionType which)
     	}
     	else{
 
+    		printf("FORCE ALLOCATING....\n");
     		physicalPageNo = memoryManager->AllocByForce();
 
     		int processId = memoryManager->getProcessNo(physicalPageNo);
@@ -210,18 +211,20 @@ ExceptionHandler(ExceptionType which)
     		
     		Thread* thread = (Thread*)processTable->Get(processId);
 
-    		printf("process id-- %d\n Translation Entry--vpn--%d ppn--%d\n",thread->id,tmp->virtualPage,tmp->physicalPage);
+    		//printf("process id-- %d Translation Entry--vpn--%d ppn--%d curppn--%d\n",thread->id,tmp->virtualPage,tmp->physicalPage,physicalPageNo);
 
 
-    		thread->space->saveIntoSwapSpace(*tmp);
+    		//thread->space->saveIntoSwapSpace(*tmp);
+    		thread->space->saveIntoSwapSpace(tmp->virtualPage);
+    		//memoryManager->FreePage(physicalPageNo);
 
 
     	}
 
     	currentThread->space->loadIntoFreePage(faultingAddress,physicalPageNo);
 
-    	printf("DEBUG--EXCEPTION.cc:virtualPageNo %d physicalPageNo %d\n",machine->pageTable[vpn].virtualPage,machine->pageTable[vpn].physicalPage );
-
+		printf("DEBUG--EXCEPTION.cc:virtualPageNo %d physicalPageNo %d\n",machine->pageTable[vpn].virtualPage,machine->pageTable[vpn].physicalPage );
+    	
     	//ExitProcess();
     } 
     else if(which == ReadOnlyException)

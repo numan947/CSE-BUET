@@ -37,7 +37,8 @@ class AddrSpace {
     void loadMemoryToPage(int vpn, int currentByteOffSet, int inFileAddr, int inFileAddrOffset);
 
     bool isSwapPageExists(int vpn);
-    void saveIntoSwapSpace(TranslationEntry vpn);
+    void saveIntoSwapSpace(TranslationEntry tle);
+    void saveIntoSwapSpace(int vpn);
     void loadFromSwapSpace(int vpn);
 
   private:

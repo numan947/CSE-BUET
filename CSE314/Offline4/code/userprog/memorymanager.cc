@@ -81,10 +81,33 @@ int MemoryManager::AllocPage(int processNo,TranslationEntry &entry)
 
 int MemoryManager::AllocByForce()
 {
-	lock->Acquire();
-	int ret = rand()%(this->physPageNum);
-	lock->Release();
+	//normal replacement
+	// lock->Acquire();
+	// int ret = rand()%(this->physPageNum);
+	// lock->Release();
+	// return ret;
+
+	//lru replacement
+
+	TranslationEntry* iterator;
+	
+	int ret=-1;
+	int least=123456789;
+
+	for(int i=0;i<physPageNum;i++){
+		iterator = entries[i];
+
+		if(iterator!=NULL){
+			if(iterator->lruCnt<least||ret==-1){
+				ret = iterator->physicalPage;
+				least = iterator->lruCnt;
+			}
+		}
+	}
+
 	return ret;
+
+
 }
 
 int MemoryManager::getProcessNo(int physPageNum)
