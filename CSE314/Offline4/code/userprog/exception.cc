@@ -201,17 +201,19 @@ ExceptionHandler(ExceptionType which)
     		
     	}
     	else{
-    		
+
     		physicalPageNo = memoryManager->AllocByForce();
 
     		int processId = memoryManager->getProcessNo(physicalPageNo);
 
+    		TranslationEntry *tmp = memoryManager->getTranslationEntry(physicalPageNo);
+    		
     		Thread* thread = (Thread*)processTable->Get(processId);
 
-    		printf("process id-- %d\n",thread->id );
+    		printf("process id-- %d\n Translation Entry--vpn--%d ppn--%d\n",thread->id,tmp->virtualPage,tmp->physicalPage);
 
 
-
+    		thread->space->saveIntoSwapSpace(*tmp);
 
 
     	}

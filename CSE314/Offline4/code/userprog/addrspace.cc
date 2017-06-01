@@ -327,8 +327,9 @@ bool AddrSpace::isSwapPageExists(int vpn)
     return swapMap->Test(vpn);
 }
 
-void AddrSpace::saveIntoSwapSpace(int vpn)
+void AddrSpace::saveIntoSwapSpace(TranslationEntry vpn)
 {
+    printf("HELLO WORLD\n");
 
 }
 

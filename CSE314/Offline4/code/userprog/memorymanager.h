@@ -22,7 +22,7 @@ public:
 	int AllocPage(int processNo,TranslationEntry &entry);
 	int AllocByForce();
 	int getProcessNo(int physPageNum);
-	TranslationEntry& getTranslationEntry(int physPageNum);
+	TranslationEntry* getTranslationEntry(int physPageNum);
 private:
 	BitMap *bitMap;
 	Lock *lock;

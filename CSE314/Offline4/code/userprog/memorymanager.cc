@@ -8,7 +8,7 @@ MemoryManager::MemoryManager(int numPages)
 	processMap = new int[numPages];
 	entries = new TranslationEntry*[numPages];
 	this->physPageNum = numPages;
-	
+
 }
 
 MemoryManager::~MemoryManager()
@@ -95,10 +95,10 @@ int MemoryManager::getProcessNo(int physPageNum)
 	return ret;
 }
 
-TranslationEntry& MemoryManager:: getTranslationEntry(int physPageNum)
+TranslationEntry* MemoryManager:: getTranslationEntry(int physPageNum)
 {
 	lock->Acquire();
-	TranslationEntry tr = *entries[physPageNum];
+	TranslationEntry* tr = entries[physPageNum];
 	lock->Release();
 	return tr;
 }
