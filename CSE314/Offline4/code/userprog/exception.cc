@@ -202,7 +202,9 @@ ExceptionHandler(ExceptionType which)
     		printf("DEBUG ---- %d\n",machine->pageTable[vpn].physicalPage );
     	}
     	else{
+    		
     		printf("Allocating 'Not Free' page for PID: %d\n",currentThread->id );
+    		
     		physicalPageNo = memoryManager->AllocByForce();
 
     		int processIdForThePhysPage = memoryManager->getProcessId(physicalPageNo);
@@ -215,7 +217,7 @@ ExceptionHandler(ExceptionType which)
     		Thread* thread = (Thread*)processTable->Get(processIdForThePhysPage);
 
     		printf("ID ---- %d\n",thread->id );
-    		currentThread->space->evictPage(tleForThePhysPage);
+    		thread->space->evictPage(tleForThePhysPage);
     		//evict the page
     	}
 
