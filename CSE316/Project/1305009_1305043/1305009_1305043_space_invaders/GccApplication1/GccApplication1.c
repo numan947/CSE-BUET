@@ -1,6 +1,16 @@
+/*
+ * GccApplication1.c
+ *
+ * Created: 3/28/2017 9:06:56 AM
+ *  Author: mtkn
+ */ 
+
 #define true 1
 #define false 0
 #define F_CPU 1000000UL
+
+
+
 
 
 #include <avr/io.h>
@@ -11,21 +21,19 @@
 const int NumObjects = 20 ;
 
 
+const int DEFAULT_DELAY=1;
+
+
 struct Object{
 int dir ;
 int x ; //row 
 int y ; // column
 int valid ; // true=Object exist in the matrix ; false = does not exist .
 char type ;	//Mothership= 'M' , Player= 'P' , Enemy= 'A' or 'B' , Fire ='F' .
+int color ; // 0 means Green and 1 means Red.
 }Objects[22];
 
-
-//for keep track of score
 static int score = 0 ;
-
-
-
-//for showing the score
 int number[12][9][4]={
 	{ // zero ..
 		{1,1,1,1},
@@ -149,10 +157,7 @@ int number[12][9][4]={
 	
 };
 
-
-//the main gaming matrix
-int output[16][16];
-
+int   output[16][16];
 
 
 void initializeObjects()
@@ -203,9 +208,7 @@ void initializeObjects()
 	
 	
 }
-
-
-void loadObjects(int mat [][16])
+void loadObjectsColor(int mat [][16])
 {
 	int r,c ;
 	for(int i=0;i<16;i++)
@@ -217,13 +220,13 @@ void loadObjects(int mat [][16])
 		c=Objects[i].y ;
 		switch(Objects[i].type){
 			case 'P': 
-					   mat[r][c+1]= mat[r+1][c]=mat[r+1][c+1]=mat[r+1][c+2]=1;
+					   mat[r][c+1]= mat[r+1][c]=mat[r+1][c+1]=mat[r+1][c+2]=2; // 2 means red ..
 					   break;
 			case 'F':
-					   mat[r][c]=1;
+					   mat[r][c]=2 ; //2 = Red
 					   break;
 			case 'M':
-			           mat[r][c]=mat[r][c+1]=mat[r][c+2]=mat[r+1][c+1]=1;
+			           mat[r][c]=mat[r][c+1]=mat[r][c+2]=mat[r+1][c+1]=1; // 1 means Green .. 
 					   break;
 			case 'A':  
 			
@@ -236,22 +239,58 @@ void loadObjects(int mat [][16])
 		}
 	}
 }
-
-
-//initializing default Registers
+void loadObjects(int mat [][16])
+{
+	int r,c ;
+	for(int i=0;i<16;i++)
+	for(int j=0;j<16;j++)mat[i][j]=0;
+	for(int i=0;i<NumObjects ;i++)
+	{
+		if(Objects[i].valid==false)continue ;
+		r=Objects[i].x ;
+		c=Objects[i].y ;
+		
+		switch(Objects[i].type){
+			case 'P':
+			mat[r][c+1]= mat[r+1][c]=mat[r+1][c+1]=mat[r+1][c+2]=1;
+			break;
+			case 'F':
+			mat[r][c]=1;
+			break;
+			case 'M':
+			mat[r][c]=mat[r][c+1]=mat[r][c+2]=mat[r+1][c+1]=1;
+			break;
+			case 'A':
+			
+			mat[r][c]=mat[r][c+2]=mat[r+1][c+1]=1;
+			break;
+			case 'B':
+			mat[r][c+1]=mat[r+1][c]=mat[r+1][c+2]=1;
+			break;
+			
+		}
+	}
+}
 void initialize()
 {
-	
+	//DDRD=0b11110000 ;
 	DDRA=0b00001111 ;
 	DDRB=0xff ;
 	DDRC=0xff ;
 	MCUCSR = (1<<JTD);
 	MCUCSR = (1<<JTD);
+	
+
 }
-
-
-
-//tesing purpose
+void initializeColor()
+{
+	    DDRD=0b11110000 ;
+		DDRA=0b11001111 ;
+		DDRB=0xff ;
+		DDRC=0xff ;
+		MCUCSR = (1<<JTD);
+		MCUCSR = (1<<JTD);
+}
 void showAll()
 {
 	for(int i=0;i<16;i++)
@@ -259,13 +298,10 @@ void showAll()
 		PORTA=i;
 		PORTB=0xff;
 		PORTC=0xff;
-			_delay_ms(2);
+			_delay_ms(DEFAULT_DELAY);
 	}
 
 }
-
-
-//testing
 void showMat2()
 {
 	for(int i=8;i<16;i++)
@@ -273,13 +309,9 @@ void showMat2()
 		PORTA=i;
 		PORTB=0xff;
 		PORTC=0;
-		_delay_ms(2);
+		_delay_ms(DEFAULT_DELAY);
 	}
 }
-
-
-
-//main drawing function
 void show0(int mat[][16])
 {
 	unsigned char pb=0,pc=0;
@@ -301,16 +333,54 @@ void show0(int mat[][16])
 		
 		//PORTB=B
 		PORTA=i ;
-		_delay_ms(2);
+		_delay_ms(DEFAULT_DELAY);
 		
 	}
 }
+void showPointGreen(int i,int j)
+{
+	if(i<8)
+	{
+		PORTB=1<<i ;
 
+	}
+	else PORTC = 1<< (i%8) ;	
+	PORTA =j|0<<6 | 1<<7;
+		
+}
+void showPointRed(int i,int j)
+{
+		if(i<8)
+		{
+			PORTB=1<<i ;
 
-
-int Mflag=1; //direction for mother ship
-
-
+		}
+		else PORTC = 1<< (i%8) ;
+		PORTA =1<<6 | 0<<7;
+		PORTD = j << 4 ;
+}
+void showPointNull(int i,int j)
+{
+		PORTB=PORTC=0;
+}
+void showColor(int mat[][16])
+{
+	unsigned char pb=0,pc=0;
+	for(int i=0;i<16;i++)
+	{
+		for(int j=0;j<16;j++)
+		{
+				PORTB=PORTC=0;
+				if(mat[i][j]==2)showPointRed(i,j);
+				else if(mat[i][j]==1)showPointGreen(i,j);
+				else showPointNull(i,j);
+				_delay_us(15);
+				
+		}
+		
+	}
+}
+int Mflag=1;
 void moveMothership()
 {
 	if(Mflag==1 && Objects[3].y==13 && Objects[2].y==5)Mflag=0;
@@ -345,11 +415,53 @@ void moveMothership()
 	
 }
 
-
-
-//for moving the normal enemies
+int Mflag1=1,Mflag2=0;
+void moveMothershipFull()
+{
+	if(Mflag1)
+	{
+		Objects[2].y++;
+		
+		if(Objects[2].y>13){
+			Objects[2].y=13;
+			
+			Mflag1=0;
+		}
+	}
+	else
+	{
+		Objects[2].y--;
+		
+		if(Objects[2].y<0){
+			Objects[2].y=0 ;
+			
+			Mflag1=1;
+		}
+	}
+	
+		if(Mflag2)
+		{
+			Objects[3].y++;
+			
+			if(Objects[3].y>13){
+				Objects[3].y=13;
+				
+				Mflag2=0;
+			}
+		}
+		else
+		{
+			Objects[3].y--;
+			
+			if(Objects[3].y<0){
+				Objects[3].y=0 ;
+				
+				Mflag2=1;
+			}
+		}
+	
+}
 int Eflag=0;
-
 void moveEnemy()
 {
 	int chek=0;
@@ -369,10 +481,6 @@ void moveEnemy()
 		//initializeObjects();
 	}
 }
-
-
-
-//for moving the bullets
 void moveFire()
 {
 	if(Objects[1].valid){
@@ -380,9 +488,7 @@ void moveFire()
 		if(Objects[1].x<0)Objects[1].valid=false ;
 	}
 }
-
-
-//check if there's already a bullet in the screen
+float tVolt=3.0 ;
 int isTriggerAvailable(){
 		unsigned int result;
 		float volt;
@@ -415,15 +521,12 @@ int isTriggerAvailable(){
 		volt = result*(1.0*5.0/1024.0);
 		
 
-		if(volt>3.0){
+		if(volt>tVolt){
 			//_delay_ms(3000);
 			return true;
 		}
 		else return false ;
 }
-
-
-//trigger bullets
 void triggerFire()
 {
 	if(Objects[1].valid==false && Objects[0].valid==true  && isTriggerAvailable()==true )
@@ -433,13 +536,8 @@ void triggerFire()
 		Objects[1].y=Objects[0].y+1;
 	}
 }
-
-
 static volatile int pulse = 0;
 static volatile int isHigh = 0;
-
-
-
 ISR(INT0_vect)
 {
 	if (isHigh==1)
@@ -455,7 +553,6 @@ ISR(INT0_vect)
 		isHigh=1;		  //set the state to high
 	}
 }
-
 
 void movePlayer()
 {
@@ -477,10 +574,10 @@ void movePlayer()
 	
 	
 		if(dist<5)dist=5 ;
-		else if(dist>30)dist=30;
+			else if(dist>30)dist=30;
 
 	
-	Objects[0].y=((dist-5.0)/25.0)*13;
+	Objects[0].y=((25-(dist-5.0))/25.0)*13;
 	Objects[0].x=14 ;
 	
 }
@@ -507,8 +604,6 @@ int collidRectangle(int x1,int y1,int x2,int y2)
 	
 	return true ;
 }
-
-
 void collisionDetection()
 {
 	///collision with Fire ;
@@ -550,8 +645,6 @@ void collisionDetection()
 	}
 	
 }
-
-
 void loadNumber(int x,int y,int num,int mat[][16])
 {
 	for(int i=x;i<x+9;i++)
@@ -559,17 +652,11 @@ void loadNumber(int x,int y,int num,int mat[][16])
 		for(int j=y;j<y+4;j++)mat[i][j]=number[num][i-x][j-y] ;
 	}
 }
-
-
 static int baseNum=0 ;
-
-
 void moveScore()
 {
 	
 }
-
-
 void loadScore(int mat[][16])
 {
 	for(int i=0;i<16;i++)
@@ -585,25 +672,24 @@ void loadScore(int mat[][16])
 	loadNumber(3,baseNum,one,mat);
 	loadNumber(3,baseNum+5,two,mat);
 	loadNumber(3,baseNum+10,three,mat);
-
+	
+	
 }
-
-
 int main(void)
 {
 	
 	while(1){
 	score=0;
-	initialize();
+	initializeColor();
 	initializeObjects();
-	loadObjects(output);
+	loadObjectsColor(output);
 	unsigned long cnt=0;
     while(1)
     {
         //TODO:: Please write your application code 
 		if(cnt%60==0)moveEnemy();
 		if(cnt%5==0){
-			moveMothership();
+			moveMothershipFull();
 			
 
 			
@@ -618,15 +704,16 @@ int main(void)
 		
 		
 		triggerFire();
+		if(cnt%2==0)
 		moveFire();
-		initialize();
+		initializeColor();
 		
 		collisionDetection();
 		
-			loadObjects(output);
+			loadObjectsColor(output);
 		if(Objects[0].valid==false ||(Objects[2].valid==false && Objects[3].valid==false))
 			break ;
-		show0(output);
+		showColor(output);
 		//show0(start);
 		//showMat2();
 		cnt++;
@@ -635,12 +722,13 @@ int main(void)
     }
 	
 	loadScore(output);
+	tVolt=3.7 ;
 	while(isTriggerAvailable()==false)
 	{
-		initialize();
-		show0(output);
+		initializeColor();
+		showColor(output);
 	}
-	
+	tVolt=3.0;
 	}
 	return 0;
 }

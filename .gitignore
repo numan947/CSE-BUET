@@ -118,3 +118,6 @@
 **/dkms.conf
 **/*.zip
 **/*.tar.gz
+
+**/*.mp4
+**/*.wmv
