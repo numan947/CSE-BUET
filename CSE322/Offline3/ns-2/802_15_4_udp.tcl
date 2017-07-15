@@ -1,45 +1,49 @@
-
-################################################################802.15.4 in Grid topology with cross folw
-set cbr_size 64; #4,8,16,32,64
+################################################################802.11 in Grid topology with cross folw
+set cbr_size 64 ; #[lindex $argv 2]; #4,8,16,32,64
 set cbr_rate 11.0Mb
-# set cbr_pckt_per_sec 100
 set cbr_pckt_per_sec [lindex $argv 3]; #numan947
 set cbr_interval [expr 1.0/$cbr_pckt_per_sec] ;# ?????? 1 for 1 packets per second and 0.1 for 10 packets per second
+#set cbr_interval 0.00005 ; #[expr 1/[lindex $argv 2]] ;# ?????? 1 for 1 packets per second and 0.1 for 10 packets per second
 set num_row [lindex $argv 0] ;#number of row
 set num_col [lindex $argv 0] ;#number of column
-set x_dim 180
-set y_dim 180
-set time_duration 25 ;#50
+set x_dim 150 ; #[lindex $argv 1]
+set y_dim 150 ; #[lindex $argv 1]
+set time_duration 25 ; #[lindex $argv 5] ;#50
 set start_time 50 ;#100
 set parallel_start_gap 0.0
 set cross_start_gap 0.0
 
 set number_of_nodes [lindex $argv 1] ; #numan947
+# set node_speed [lindex $argv 4] ; #numan947
+
 
 #############################################################ENERGY PARAMETERS
-set val(energymodel_15_4)    EnergyModel     ;
-set val(initialenergy_15_4)  1000            ;# Initial energy in Joules
+set val(energymodel_11)    EnergyModel     ;
+set val(initialenergy_11)  1000            ;# Initial energy in Joules
 
-set val(idlepower_15_4) 56.4e-3		;#LEAP	(active power in spec)
-set val(rxpower_15_4) 59.1e-3			;#LEAP
-set val(txpower_15_4) 52.2e-3			;#LEAP
-set val(sleeppower_15_4) 0.6e-3		;#LEAP
-set val(transitionpower_15_4) 35.708e-3		;#LEAP: 
-set val(transitiontime_15_4) 2.4e-3		;#LEAP
+set val(idlepower_11) 869.4e-3			;#LEAP (802.11g) 
+set val(rxpower_11) 1560.6e-3			;#LEAP (802.11g)
+set val(txpower_11) 1679.4e-3			;#LEAP (802.11g)
+set val(sleeppower_11) 37.8e-3			;#LEAP (802.11g)
+set val(transitionpower_11) 176.695e-3		;#LEAP (802.11g)	??????????????????????????????/
+set val(transitiontime_11) 2.36			;#LEAP (802.11g)
 
-#set val(idlepower_15_4) 3e-3			;#telos	(active power in spec)
-#set val(rxpower_15_4) 38e-3			;#telos
-#set val(txpower_15_4) 35e-3			;#telos
-#set val(sleeppower_15_4) 15e-6			;#telos
-#set val(transitionpower_15_4) 1.8e-6		;#telos: volt = 1.8V; sleep current of MSP430 = 1 microA; so, 1.8 micro W
-#set val(transitiontime_15_4) 6e-6		;#telos
+#set val(idlepower_11) 900e-3			;#Stargate (802.11b) 
+#set val(rxpower_11) 925e-3			;#Stargate (802.11b)
+#set val(txpower_11) 1425e-3			;#Stargate (802.11b)
+#set val(sleeppower_11) 300e-3			;#Stargate (802.11b)
+#set val(transitionpower_11) 200e-3		;#Stargate (802.11b)	??????????????????????????????/
+#set val(transitiontime_11) 3			;#Stargate (802.11b)
 
-#Mac/802_15_4 set dataRate_ 0.250Mb
+#puts "$MAC/802_11.dataRate_"
+Mac/802_15_4 set dataRate_ 11Mb
 
 #CHNG
 set num_parallel_flow 0 ;#[lindex $argv 0]	# along column
 set num_cross_flow 0 ;#[lindex $argv 0]		#along row
 set num_random_flow [lindex $argv 2]
+set num_sink_flow 0;#sink
+set sink_node 100 ;#sink id, dummy here; updated next
 
 set grid 0
 set extra_time 10 ;#10
@@ -70,27 +74,23 @@ set tcp_sink Agent/Null
 set val(chan) Channel/WirelessChannel ;# channel type
 set val(prop) Propagation/TwoRayGround ;# radio-propagation model
 #set val(prop) Propagation/FreeSpace ;# radio-propagation model
-#set val(netif) Phy/WirelessPhy ;# network interface type
 set val(netif) Phy/WirelessPhy/802_15_4 ;# network interface type
-#set val(mac) Mac/802_11 ;# MAC type
 set val(mac) Mac/802_15_4 ;# MAC type
+#set val(mac) SMac/802_15_4 ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 50 ;# max packet in ifq
-set val(rp) DSDV ;# routing protocol
+set val(rp) AODV ; #[lindex $argv 4] ;# routing protocol #numan947
 
 Mac/802_15_4 set syncFlag_ 1
 
 Mac/802_15_4 set dutyCycle_ cbr_interval
 
-# set nm multi_radio_802_15_4_linear.nam
-# set tr /home/ubuntu/ns2\ programs/raw_data/multi_radio_802_15_4_linear.tr
-# set topo_file topo_multi_radio_802_15_4_linear.txt
-set nm multi_radio_802_15_4_linear.nam
-set tr multi_radio_802_15_4_linear.tr
-set topo_file topo_multi_radio_802_15_4_linear.txt
-
+set nm multi_radio_802_15_4_random.nam
+#set tr /home/ubuntu/ns2\ programs/raw_data/multi_radio_802_11_random.tr
+set tr multi_radio_802_15_4_random.tr
+set topo_file topo_multi_radio_802_15_4_random.txt
 
 #set topo_file 5.txt
 # 
@@ -104,11 +104,14 @@ $ns_ trace-all $tracefd
 #$ns_ use-newtrace ;# use the new wireless trace file format
 
 set namtrace [open $nm w]
-#$ns_ namtrace-all-wireless $namtrace $x_dim $y_dim
+$ns_ namtrace-all-wireless $namtrace $x_dim $y_dim
 
 #set topofilename "topo_ex3.txt"
 set topofile [open $topo_file "w"]
 
+
+
+  
 set dist(5m)  7.69113e-06
 set dist(9m)  2.37381e-06
 set dist(10m) 1.92278e-06
@@ -135,13 +138,18 @@ set multiplier [lindex $argv 4]
 set x_dim [expr $multiplier*$TransmissionArea] ; 
 set y_dim [expr $multiplier*$TransmissionArea] ; 
 
+puts "X DIM Y DIM IS $x_dim $y_dim"
 
 # set up topography object
 set topo       [new Topography]
 $topo load_flatgrid $x_dim $y_dim
 #$topo load_flatgrid 1000 1000
 
-create-god [expr $num_row * $num_col ]
+if {$num_sink_flow > 0} { ;#sink
+	create-god [expr $number_of_nodes+1 ] ;#numan947
+} else {
+	create-god [expr $number_of_nodes ] ;#numan947
+}
 
 
 #remove-all-packet-headers
@@ -160,14 +168,14 @@ $ns_ node-config -adhocRouting $val(rp) -llType $val(ll) \
      -agentTrace ON -routerTrace OFF\
      -macTrace ON \
      -movementTrace OFF \
-			 -energyModel $val(energymodel_15_4) \
-			 -idlePower $val(idlepower_15_4) \
-			 -rxPower $val(rxpower_15_4) \
-			 -txPower $val(txpower_15_4) \
-          		 -sleepPower $val(sleeppower_15_4) \
-          		 -transitionPower $val(transitionpower_15_4) \
-			 -transitionTime $val(transitiontime_15_4) \
-			 -initialEnergy $val(initialenergy_15_4)
+			 -energyModel $val(energymodel_11) \
+			 -idlePower $val(idlepower_11) \
+			 -rxPower $val(rxpower_11) \
+			 -txPower $val(txpower_11) \
+          		 -sleepPower $val(sleeppower_11) \
+          		 -transitionPower $val(transitionpower_11) \
+			 -transitionTime $val(transitiontime_11) \
+			 -initialEnergy $val(initialenergy_11)
 
 
 #          		 -transitionTime 0.005 \
@@ -179,17 +187,55 @@ puts "start node creation"
 # #	$node_($i) random-motion 0
 # }
 
+
 #numan947
+
 for {set i 0} {$i < $number_of_nodes} {incr i} {
 	set node_($i) [$ns_ node]
 #	$node_($i) random-motion 0
 }
 
 
+#numan947 create random motion
+# for {set i 0} {$i < $number_of_nodes} {incr i} {
+#     set x_pos [expr rand()*$x_dim]
+#     set y_pos [expr rand()*$y_dim]
+#     set random_time [expr rand()* ([expr $start_time + $time_duration ])]
+#     $ns_ at $random_time "$node_($i) setdest $x_pos $y_pos $node_speed";
+# }
+
+
+
+if {$num_sink_flow > 0} { ;#sink
+	
+	# set sink_node [expr $num_row*$num_col] ;#sink id
+
+	set sink_node $number_of_nodes ;#numan947  
+
+	set node_($sink_node) [$ns_ node]
+	$node_($sink_node) set X_ $x_dim
+	$node_($sink_node) set Y_ $y_dim;
+	$node_($sink_node) set Z_ 0.0
+	puts -nonewline $topofile "SINK NODE $sink_node : at $x_dim $y_dim \n"
+	# if {$sink_node < $num_row*$num_col} {
+	# 	puts "*********ERROR: SINK NODE id($sink_node) is too LOW********"		
+	# }
+
+	if {$sink_node < $number_of_nodes} {
+		puts "*********ERROR: SINK NODE id($sink_node) is too LOW********"		
+	}
+
+	set sink_start_gap [expr 1.0/$num_sink_flow]
+}
+
+
+
 #FULL CHNG
 set x_start [expr $x_dim/($num_col*2)];
 set y_start [expr $y_dim/($num_row*2)];
 set i 0;
+
+
 
 
 #RANDOMLY PLACE THE NODES, #numan947
@@ -210,6 +256,8 @@ if {$grid == 0} {
 
 	}
 };
+
+
 
 
 
@@ -237,6 +285,9 @@ if {$grid == 0} {
 #     incr i;
 # }; 
 
+
+
+
 if {$grid == 1} {
 	puts "GRID topology"
 } else {
@@ -254,7 +305,7 @@ if {$num_cross_flow > $num_col} {
 }
 
 #CHNG
-for {set i 0} {$i < [expr $num_parallel_flow + $num_cross_flow + $num_random_flow]} {incr i} {
+for {set i 0} {$i < [expr $num_parallel_flow + $num_cross_flow + $num_random_flow  + $num_sink_flow]} {incr i} { ;#sink
 #    set udp_($i) [new Agent/UDP]
 #    set null_($i) [new Agent/Null]
 
@@ -344,7 +395,10 @@ for {set i 0} {$i < $num_cross_flow } {incr i} {
 #######################################################################RANDOM FLOW
 set r $k
 set rt $r
+# set num_node [expr $num_row*$num_col]
+
 set num_node $number_of_nodes
+
 for {set i 1} {$i < [expr $num_random_flow+1]} {incr i} {
 	set udp_node [expr int($num_node*rand())] ;# src node
 	set null_node $udp_node
@@ -378,14 +432,60 @@ for {set i 1} {$i < [expr $num_random_flow+1]} {incr i} {
 	incr rt
 }
 
+#######################################################################SINK FLOW
+set r $rt
+set rt $r
+# set num_node [expr $num_row*$num_col]
+
+set num_node $number_of_nodes
+
+for {set i 1} {$i < [expr $num_sink_flow+1]} {incr i} {
+	set udp_node [expr $i-1] ;#[expr int($num_node*rand())] ;# src node
+	set null_node $sink_node
+	#while {$null_node==$udp_node} {
+	#	set null_node [expr int($num_node*rand())] ;# dest node
+	#}
+	$ns_ attach-agent $node_($udp_node) $udp_($rt)
+  	$ns_ attach-agent $node_($null_node) $null_($rt)
+	puts -nonewline $topofile "SINK:  Src: $udp_node Dest: $null_node\n"
+	incr rt
+} 
+
+set rt $r
+for {set i 1} {$i < [expr $num_sink_flow+1]} {incr i} {
+	$ns_ connect $udp_($rt) $null_($rt)
+	incr rt
+}
+set rt $r
+for {set i 1} {$i < [expr $num_sink_flow+1]} {incr i} {
+	set cbr_($rt) [new Application/Traffic/CBR]
+	$cbr_($rt) set packetSize_ $cbr_size
+	$cbr_($rt) set rate_ $cbr_rate
+	$cbr_($rt) set interval_ $cbr_interval
+	$cbr_($rt) attach-agent $udp_($rt)
+	incr rt
+} 
+
+set rt $r
+for {set i 1} {$i < [expr $num_sink_flow+1]} {incr i} {
+	$ns_ at [expr $start_time+$i*$sink_start_gap+rand()] "$cbr_($rt) start"
+	incr rt
+}
+
 puts "flow creation complete"
 ##########################################################################END OF FLOW GENERATION
 
 # Tell nodes when the simulation ends
 #
+# for {set i 0} {$i < [expr $num_row*$num_col] } {incr i} {
+#     $ns_ at [expr $start_time+$time_duration] "$node_($i) reset";
+# }
+
 for {set i 0} {$i < $number_of_nodes } {incr i} {
     $ns_ at [expr $start_time+$time_duration] "$node_($i) reset";
 }
+
+
 $ns_ at [expr $start_time+$time_duration +$extra_time] "finish"
 #$ns_ at [expr $start_time+$time_duration +20] "puts \"NS Exiting...\"; $ns_ halt"
 $ns_ at [expr $start_time+$time_duration +$extra_time] "$ns_ nam-end-wireless [$ns_ now]; puts \"NS Exiting...\"; $ns_ halt"
@@ -401,7 +501,7 @@ proc finish {} {
 	close $tracefd
 	close $namtrace
 	close $topofile
-#        exec nam $nm &
+        #exec nam $nm &
         exit 0
 }
 
@@ -410,9 +510,16 @@ proc finish {} {
 #set opt(traff) "traffic.txt"
 #source $opt(traff)
 
-for {set i 0} {$i < $number_of_nodes  } { incr i} {
+# for {set i 0} {$i < [expr $num_row*$num_col]  } { incr i} {
+# 	$ns_ initial_node_pos $node_($i) 4
+# }
+
+
+for {set i 0} {$i < $number_of_nodes } { incr i} {
 	$ns_ initial_node_pos $node_($i) 4
 }
+
+
 
 puts "Starting Simulation..."
 $ns_ run 
