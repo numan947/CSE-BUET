@@ -1,8 +1,6 @@
 import random
 import math
 from copy import copy, deepcopy
-from queue import PriorityQueue
-
 
 
 def rotate(list,n): #Rotate list by n, -ve means--> right rotate, +ve means--> left rotate
@@ -136,28 +134,28 @@ class RubiksCube:
 
 			p = self._clone()
 			p._move_left(i)
-			p.__move = "L"+str(i)
+			p.__move = "Move Left Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
 			tmp.append(p)
 			
 			p = self._clone()
 			p._move_right(i)
-			p.__move = "R"+str(i)
+			p.__move = "Move Right Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
 			tmp.append(p)
 			
 			p = self._clone()
 			p._move_up(i)
-			p.__move = "U"+str(i)
+			p.__move = "Move Up Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
 			tmp.append(p)
 			
 			p = self._clone()
 			p._move_down(i)
-			p.__move = "D"+str(i)
+			p.__move = "Move Down Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
 			tmp.append(p)
@@ -308,40 +306,55 @@ def main():
 			 [4,4,4,4]
 			 ]
 
-	start_state = [
-			 [2,1,1,4],
-			 [4,2,1,4],
-			 [4,1,2,3],
-			 [3,3,3,2]
-			 ]
+	file = open("test.txt","r")
 
-	dif = [
-			 [1,2,3,4],
-			 [1,2,3,4],
-			 [1,2,3,4],
-			 [1,2,3,4]
-			 ]
-	nn=[
-		[3,1,1,1],
-		[2,2,4,2],
-		[3,3,1,3],
-		[2,4,4,4]
+	input_state = []
 
-		]
+	n = int(file.readline())
+
+	for _ in range(n):
+		red = file.readline()
+		splt = red.split(" ")
+		input_state.append([int(x) for x in splt])
+	term = int(file.readline())
+
+	assert(term == 0)
+
+	file.close()
+	# start_state = [
+	# 		 [2,1,1,4],
+	# 		 [4,2,1,4],
+	# 		 [4,1,2,3],
+	# 		 [3,3,3,2]
+	# 		 ]
+
+	# dif = [
+	# 		 [1,2,3,4],
+	# 		 [1,2,3,4],
+	# 		 [1,2,3,4],
+	# 		 [1,2,3,4]
+	# 		 ]
+	# nn=[
+	# 	[3,1,1,1],
+	# 	[2,2,4,2],
+	# 	[3,3,1,3],
+	# 	[2,4,4,4]
+
+	# 	]
 
 
-	gola = [
-			[1,1,1],
-			[2,2,2],
-			[3,3,3]
-		   ]
+	# gola = [
+	# 		[1,1,1],
+	# 		[2,2,2],
+	# 		[3,3,3]
+	# 	   ]
 	
-	st = [
-    [1,2,3],
-    [1,2,3],
-    [1,2,3]
-    ]
-	cube = RubiksCube(goal_state,start_state)
+	# st = [
+ #    [1,2,3],
+ #    [1,2,3],
+ #    [1,2,3]
+ #    ]
+	cube = RubiksCube(goal_state,input_state)
 
 	# print(len(cube._generate_moves()))
 
@@ -383,6 +396,10 @@ def main():
 			#print(cur.get_current_state())
 
 		print(solution[len(solution)-1].get_current_state())
+
+
+
+
 
 
 if __name__ == "__main__":
