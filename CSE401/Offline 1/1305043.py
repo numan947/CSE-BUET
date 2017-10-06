@@ -282,7 +282,7 @@ class RubiksCube:
 
 			to_visit = sorted(to_visit, key = lambda p : p.__heuristic + p.__distance)
 
-		return [],0
+		return [],0 #No solution
 
 
 
