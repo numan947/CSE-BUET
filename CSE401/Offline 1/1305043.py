@@ -5,6 +5,9 @@ from queue import PriorityQueue
 
 
 
+def rotate(list,n): #Rotate list by n, -ve means--> right rotate, +ve means--> left rotate
+	return list[n:]+list[:n]
+
 
 class RubiksCube:
 
@@ -99,18 +102,17 @@ class RubiksCube:
 				goal_map[goal_state[x][x]] = "C"+str(x)
 		
 		return goal_map
-
 	
 
-	def _move_right(self,row_num): #move the row right 
+	def _move_left(self,row_num): #move the row right 
 		assert(row_num>=0 and row_num<self.__dimension)
-		self.__current_state[row_num] = self.__current_state[row_num][2:]+self.__current_state[row_num][0:2]
+		
+		self.__current_state[row_num] = rotate(self.__current_state[row_num],1)
 
 
-	def _move_left(self,row_num): #move the row left
+	def _move_right(self,row_num): #move the row left
 		assert(row_num>=0 and row_num<self.__dimension)
-		l = len(self.__current_state[row_num])
-		self.__current_state[row_num] = self.__current_state[row_num][l-2:]+self.__current_state[row_num][0:l-2]
+		self.__current_state[row_num] = rotate(self.__current_state[row_num],-1)
 
 	def _move_up(self,col_num):
 		assert(col_num>=0 and col_num<self.__dimension)
@@ -123,6 +125,10 @@ class RubiksCube:
 		self._transpose()
 		self._move_right(col_num)
 		self._transpose()
+
+
+
+
 
 	def _generate_moves(self): #Returns all the moves --> 4*dimension in total
 		def _clone_and_rotate(i):
@@ -221,9 +227,12 @@ class RubiksCube:
 			new_state = to_visit.pop(0)
 
 			state_cnt+=1
-			print(new_state.get_current_state())
 
-			print(state_cnt)
+			if((len(visited))%100==0):
+				print("PQ length: "+str(len(to_visit)))
+				print("Visited length: "+str(len(visited)))
+				print("Explored length:" + str(state_cnt))
+			# print(new_state.get_current_state())
 			
 
 			if(done(new_state)):
@@ -313,11 +322,12 @@ def main():
 			 [1,2,3,4]
 			 ]
 	nn=[
-			 [1,2,3,4],
-			 [1,2,3,4],
-			 [1,2,3,4],
-			 [1,2,3,4]
-			 ]
+		[3,1,1,1],
+		[2,2,4,2],
+		[3,3,1,3],
+		[2,4,4,4]
+
+		]
 
 
 	gola = [
@@ -331,11 +341,27 @@ def main():
     [1,2,3],
     [1,2,3]
     ]
-	cube = RubiksCube(gola,st)
+	cube = RubiksCube(goal_state,start_state)
+
+	# print(len(cube._generate_moves()))
+
+	# for mv in cube._generate_moves():
+	# 	print(mv)
+	
+	# print(cube)
+
+	# cube._move_left(0)
+	# print(cube)
+	# cube._move_right(1)
+	# print(cube)
+
+
 	print("Original:\r\n")
 	
 	print(cube)
+
 	solution,explored_states = cube.solve_cube()
+	
 	print("total explored states: "+str(explored_states)+"\r\n")
 
 	solution.reverse()
@@ -350,7 +376,7 @@ def main():
 			cur = solution[i]
 			
 			if(cur.get_parent_state()==None):
-				print("WTF")
+				print("THIS SHOULD NOT BE PRINTED")
 
 			print(cur.get_parent_state())
 			print("move: "+cur.get_move_on_parent()+"\r\n")
