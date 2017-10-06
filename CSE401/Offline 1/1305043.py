@@ -52,6 +52,27 @@ class RubiksCube:
 		
 		return ret
 
+
+
+	def get_parent_state(self):
+		ret = ""
+		for row in range(self.__dimension):
+			ret+=" ".join(map(str,self.__parent.__current_state[row]))
+			ret+="\r\n"
+
+		return ret
+
+	def get_move_on_parent(self):
+		return self.__move;
+
+	def get_current_state(self):
+		ret = ""
+
+		for row in range(self.__dimension):
+			ret+=" ".join(map(str,self.__current_state[row]))
+			ret+="\r\n"
+		return ret
+
 	
 
 
@@ -199,8 +220,11 @@ class RubiksCube:
 
 			new_state = to_visit.pop(0)
 
-			#print(new_state)
 			state_cnt+=1
+			print(new_state.get_current_state())
+
+			print(state_cnt)
+			
 
 			if(done(new_state)):
 				if(len(visited)>0):
@@ -232,6 +256,7 @@ class RubiksCube:
 
 					if (fval < tmp.__heuristic + tmp.__distance):
 						tmp.__heuristic = hval
+						tmp.__move = move.__move
 						tmp.__distance = move.__distance
 						tmp.__parent = move.__parent
 				elif(idx_visited > -1):
@@ -239,15 +264,16 @@ class RubiksCube:
 
 					if (fval < tmp.__heuristic + tmp.__distance):
 						tmp.__heuristic = hval
+						tmp.__move = move.__move
 						tmp.__distance = move.__distance
 						tmp.__parent = move.__parent
 
 						visited.remove(tmp) # We need to re-explore the state, as better can be found
 						to_visit.append(tmp)
 
-				visited.append(new_state)
+			visited.append(new_state)
 
-				to_visit = sorted(to_visit, key = lambda p : p.__heuristic + p.__distance)
+			to_visit = sorted(to_visit, key = lambda p : p.__heuristic + p.__distance)
 
 		return [],0
 
@@ -265,28 +291,73 @@ class RubiksCube:
 
 
 
-
-
-
-
-
-
 def main():
 	goal_state = [
-			 [1,2,3],
-			 [1,2,3],
-			 [1,2,3]
+			 [1,1,1,1],
+			 [2,2,2,2],
+			 [3,3,3,3],
+			 [4,4,4,4]
 			 ]
 
 	start_state = [
-			 [2,1,3],
-			 [2,3,1],
-			 [3,1,2]
+			 [2,1,1,4],
+			 [4,2,1,4],
+			 [4,1,2,3],
+			 [3,3,3,2]
 			 ]
-	cube = RubiksCube(goal_state, start_state)
-	print("Original:\r\n")
-	x = cube.solve_cube()
 
-	print(x)
+	dif = [
+			 [1,2,3,4],
+			 [1,2,3,4],
+			 [1,2,3,4],
+			 [1,2,3,4]
+			 ]
+	nn=[
+			 [1,2,3,4],
+			 [1,2,3,4],
+			 [1,2,3,4],
+			 [1,2,3,4]
+			 ]
+
+
+	gola = [
+			[1,1,1],
+			[2,2,2],
+			[3,3,3]
+		   ]
+	
+	st = [
+    [1,2,3],
+    [1,2,3],
+    [1,2,3]
+    ]
+	cube = RubiksCube(gola,st)
+	print("Original:\r\n")
+	
+	print(cube)
+	solution,explored_states = cube.solve_cube()
+	print("total explored states: "+str(explored_states)+"\r\n")
+
+	solution.reverse()
+
+
+	#print(cube.get_current_state())
+
+	print("Total steps needed: "+str(len(solution))+"\r\n")
+
+	if(len(solution)>0):
+		for i in range(0,len(solution)):
+			cur = solution[i]
+			
+			if(cur.get_parent_state()==None):
+				print("WTF")
+
+			print(cur.get_parent_state())
+			print("move: "+cur.get_move_on_parent()+"\r\n")
+			#print(cur.get_current_state())
+
+		print(solution[len(solution)-1].get_current_state())
+
+
 if __name__ == "__main__":
 	main()
