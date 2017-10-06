@@ -1,6 +1,7 @@
 import random
 import math
 from copy import copy, deepcopy
+from queue import PriorityQueue
 
 
 
@@ -18,11 +19,16 @@ class RubiksCube:
 		self.__dimension = len(self.__current_state) #saving the dimension of the matrix
 		self.__goal_map = self._generate_goal_map(self.__goal_state)
 
+		self.__move = None
+
 
 	def __eq__(self,other): #Utility function for equality check
+		if(self.__class__ != other.__class__):
+			return False
 		return (self.__current_state ==other.__current_state) and (self.__goal_state == other.__goal_state)
 
 	def __str__(self): #Utility function for printing a RubiksCube Object
+		
 		ret = "Current_State:\r\n"
 
 		for row in range(self.__dimension):
@@ -30,6 +36,20 @@ class RubiksCube:
 			ret+="\r\n"
 		ret+="Goals:\r\n"
 		ret+=str(self.__goal_map)
+		ret+="\r\nMove Parent: "
+		if(self.__move == None):
+			ret+="No more move"+"\r\n"
+		else:
+			ret+=self.__move+"\r\n"
+
+		ret+="Parent State:\r\n"
+		if(self.__parent != None):
+			for row in range(self.__dimension):
+				ret+=" ".join(map(str,self.__parent.__current_state[row]))
+				ret+="\r\n"
+		else:
+			ret+="No Parent State\r\n"
+		
 		return ret
 
 	
@@ -86,18 +106,35 @@ class RubiksCube:
 	def _generate_moves(self): #Returns all the moves --> 4*dimension in total
 		def _clone_and_rotate(i):
 			tmp = []
+
 			p = self._clone()
 			p._move_left(i)
+			p.__move = "L"+str(i)
+			p.__distance = self.__distance+1
+			p.__parent = self
 			tmp.append(p)
+			
 			p = self._clone()
 			p._move_right(i)
+			p.__move = "R"+str(i)
+			p.__distance = self.__distance+1
+			p.__parent = self
 			tmp.append(p)
+			
 			p = self._clone()
 			p._move_up(i)
+			p.__move = "U"+str(i)
+			p.__distance = self.__distance+1
+			p.__parent = self
 			tmp.append(p)
+			
 			p = self._clone()
 			p._move_down(i)
+			p.__move = "D"+str(i)
+			p.__distance = self.__distance+1
+			p.__parent = self
 			tmp.append(p)
+			
 			return tmp
 
 		ret = []
@@ -108,42 +145,117 @@ class RubiksCube:
 
 
 
-	
-
-	def _generate_solution(self,path): #Recursively constructs the solution
-		if(self.__parent == None):
-			return path
-		else:
-			path.append(self)
-			return self._generate_solution(path)
-
 	def _calcH(self): #calculates Heuristic for the cube
 		total = 0
 
+		#print(self.__dimension)
 		for i in range(self.__dimension):
 			for j in range(self.__dimension):
 
 				cur = self.__current_state[i][j]
 				target = self.__goal_map[cur]
 
+				# print(cur)
+				# print(target)
+
 				dst = 0
 				if(target[0]=='C'):
-					dst = min(abs(int(target[1] - j)),abs(self.__dimension - (int(target[1])-j)))
+					dst = min((abs(int(target[1]) - j)),abs(self.__dimension - abs(int(target[1])-j)))
+					# print(str(i)+" "+str(j)+" "+str(dst))
 				
 				elif(target[0]=='R'):
-					dst = min(abs(int(target[1] - i)),abs(self.__dimension - (int(target[1])-i)))
+					dst = min((abs(int(target[1]) - i)),abs(self.__dimension - abs(int(target[1])-i)))
 				total+=dst
 
 		return total
 
+	def _generate_solution(self,path): #Recursively constructs the solution
+		if(self.__parent is None):
+			return path
+		else:
+			path.append(self)
+			return self.__parent._generate_solution(path)
 
-		#TODO
+
 
 	def solve_cube(self): #Main solver for the cube
 
 		def done(cube):
 			return cube.__current_state == cube.__goal_state
-		#TODO
+
+
+		def findIndex(item,iters):
+			if(item in iters):
+				return iters.index(item)
+			return -1
+
+		to_visit = [self] #The states to explore, basically the PQ
+		visited = [] #Already explored states
+
+		state_cnt = 0
+
+
+		while(len(to_visit)>0):
+
+			new_state = to_visit.pop(0)
+
+			#print(new_state)
+			state_cnt+=1
+
+			if(done(new_state)):
+				if(len(visited)>0):
+					return new_state._generate_solution([]),state_cnt
+				else:
+					return [new_state],state_cnt
+
+
+			successors = new_state._generate_moves()
+
+			idx_to_visit = idx_visited = -1
+
+
+			for move in successors:
+				idx_to_visit = findIndex(move,to_visit)
+				idx_visited = findIndex(move, visited)
+
+				# minimize {f(n) = g(n) + h(n)}
+				hval = move._calcH()
+				fval = hval + move.__distance
+
+
+				if(idx_visited == -1 and idx_to_visit == -1): #Forward edge
+					move.__heuristic = hval
+					to_visit.append(move)
+
+				elif(idx_to_visit > -1):
+					tmp = to_visit[idx_to_visit]
+
+					if (fval < tmp.__heuristic + tmp.__distance):
+						tmp.__heuristic = hval
+						tmp.__distance = move.__distance
+						tmp.__parent = move.__parent
+				elif(idx_visited > -1):
+					tmp = visited[idx_visited]
+
+					if (fval < tmp.__heuristic + tmp.__distance):
+						tmp.__heuristic = hval
+						tmp.__distance = move.__distance
+						tmp.__parent = move.__parent
+
+						visited.remove(tmp) # We need to re-explore the state, as better can be found
+						to_visit.append(tmp)
+
+				visited.append(new_state)
+
+				to_visit = sorted(to_visit, key = lambda p : p.__heuristic + p.__distance)
+
+		return [],0
+
+
+
+
+
+
 
 
 
@@ -173,7 +285,8 @@ def main():
 			 ]
 	cube = RubiksCube(goal_state, start_state)
 	print("Original:\r\n")
-	print(cube)
-	
+	x = cube.solve_cube()
+
+	print(x)
 if __name__ == "__main__":
 	main()
