@@ -142,6 +142,7 @@ class RubiksCube:
 			p.__move = "Move Left Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
+			p.__heuristic = p._calcH()
 			tmp.append(p)
 			
 			p = self._clone()
@@ -149,6 +150,7 @@ class RubiksCube:
 			p.__move = "Move Right Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
+			p.__heuristic = p._calcH()
 			tmp.append(p)
 			
 			p = self._clone()
@@ -156,6 +158,7 @@ class RubiksCube:
 			p.__move = "Move Up Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
+			p.__heuristic = p._calcH()
 			tmp.append(p)
 			
 			p = self._clone()
@@ -163,6 +166,7 @@ class RubiksCube:
 			p.__move = "Move Down Row: "+str(i)
 			p.__distance = self.__distance+1
 			p.__parent = self
+			p.__heuristic = p._calcH()
 			tmp.append(p)
 			
 			return tmp
@@ -261,37 +265,37 @@ class RubiksCube:
 				idx_to_visit = findIndex(move,to_visit)
 				idx_visited = findIndex(move, visited)
 
-				# minimize {f(n) = g(n) + h(n)}
-				hval = move._calcH()
-				fval = hval + move.__distance
-				#print(hval,fval)
+				# # minimize {f(n) = g(n) + h(n)}
+				# hval = move._calcH()
+				# fval = hval + move.__distance
+				# #print(hval,fval)
 
 
 				if(idx_visited == -1 and idx_to_visit == -1): #Forward edge
-					move.__heuristic = hval
+					# move.__heuristic = hval
 					to_visit.append(move)
 
-				elif(idx_to_visit > -1):
-					tmp = to_visit[idx_to_visit]
+				# elif(idx_to_visit > -1):
+				# 	tmp = to_visit[idx_to_visit]
 
-					if (fval < tmp.__heuristic + tmp.__distance):
-						tmp.__heuristic = hval
-						tmp.__move = move.__move
-						tmp.__distance = move.__distance
-						tmp.__parent = move.__parent
+				# 	if (fval < tmp.__heuristic + tmp.__distance):
+				# 		tmp.__heuristic = hval
+				# 		tmp.__move = move.__move
+				# 		tmp.__distance = move.__distance
+				# 		tmp.__parent = move.__parent
 
-					#print(tmp)
-				elif(idx_visited > -1):
-					tmp = visited[idx_visited]
+				# 	#print(tmp)
+				# elif(idx_visited > -1):
+				# 	tmp = visited[idx_visited]
 
-					if (fval < tmp.__heuristic + tmp.__distance):
-						tmp.__heuristic = hval
-						tmp.__move = move.__move
-						tmp.__distance = move.__distance
-						tmp.__parent = move.__parent
+				# 	if (fval < tmp.__heuristic + tmp.__distance):
+				# 		tmp.__heuristic = hval
+				# 		tmp.__move = move.__move
+				# 		tmp.__distance = move.__distance
+				# 		tmp.__parent = move.__parent
 
-						visited.remove(tmp) # We need to re-explore the state, as better can be found
-						to_visit.append(tmp)
+				# 		visited.remove(tmp) # We need to re-explore the state, as better can be found
+				# 		to_visit.append(tmp)
 					#print(tmp)
 
 			visited.append(new_state)
