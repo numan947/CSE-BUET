@@ -195,14 +195,21 @@ class RubiksCube:
 
 				dst = 0
 				if(target[0]=='C'):
-					dst = min((abs(int(target[1]) - j)),abs(self.__dimension - abs(int(target[1])-j)))
+					dst = min((
+						abs(int(target[1]) - j)
+						),
+					abs(self.__dimension - abs(int(target[1])-j)
+						))
 					# print(str(i)+" "+str(j)+" "+str(dst))
 				
 				elif(target[0]=='R'):
 					dst = min((abs(int(target[1]) - i)),abs(self.__dimension - abs(int(target[1])-i)))
-				total+=dst
 
-		return total
+				total+=dst
+				# print("TOTL")
+				# print(total)
+
+		return 1.0*total/self.__dimension
 
 	def _generate_solution(self,path): #Recursively constructs the solution
 		if(self.__parent is None):
@@ -216,7 +223,8 @@ class RubiksCube:
 	def solve_cube(self,start_time): #Main solver for the cube
 
 		def done(cube):
-			return cube.__current_state == cube.__goal_state
+			return cube._calcH()==0
+			#return cube.__current_state == cube.__goal_state
 
 
 		def findIndex(item,iters):
@@ -264,8 +272,8 @@ class RubiksCube:
 
 
 			for move in successors:
-				idx_to_visit = findIndex(move,to_visit)
-				idx_visited = findIndex(move, visited)
+				# idx_to_visit = findIndex(move,to_visit)
+				# idx_visited = findIndex(move, visited)
 
 				# # minimize {f(n) = g(n) + h(n)}
 				# hval = move._calcH()
@@ -273,9 +281,10 @@ class RubiksCube:
 				# #print(hval,fval)
 
 
-				if(idx_visited == -1 and idx_to_visit == -1): #Forward edge
+				# if(idx_visited == -1 and idx_to_visit == -1): #Forward edge
 					# move.__heuristic = hval
-					to_visit.append(move)
+					#print(move.__heuristic)
+				to_visit.append(move)
 
 				# elif(idx_to_visit > -1):
 				# 	tmp = to_visit[idx_to_visit]
