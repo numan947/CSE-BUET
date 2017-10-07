@@ -1,5 +1,6 @@
 import random
 import math
+import timeit
 from copy import copy, deepcopy
 
 
@@ -212,7 +213,7 @@ class RubiksCube:
 
 
 
-	def solve_cube(self): #Main solver for the cube
+	def solve_cube(self,start_time): #Main solver for the cube
 
 		def done(cube):
 			return cube.__current_state == cube.__goal_state
@@ -246,7 +247,8 @@ class RubiksCube:
 				print("PQ length: "+str(len(to_visit)))
 				print("Visited length: "+str(len(visited)))
 				print("Explored length:" + str(state_cnt))
-				print(new_state.get_current_state())
+				print("Total Elapsed Time: "+str(timeit.default_timer()-start_time))
+				#print(new_state.get_current_state())
 			
 
 			if(done(new_state)):
@@ -397,9 +399,13 @@ def main():
 	
 	print(cube)
 
-	solution,explored_states = cube.solve_cube()
+	start_time = timeit.default_timer()
+
+	solution,explored_states = cube.solve_cube(start_time)
 	
-	print("total explored states: "+str(explored_states)+"\r\n")
+	stop_time = timeit.default_timer()
+
+	print("Total time needed:"+str(stop_time-start_time)+"\r\ntotal explored states: "+str(explored_states)+"\r\n")
 
 	solution.reverse()
 
