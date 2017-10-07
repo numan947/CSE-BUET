@@ -26,7 +26,7 @@ class RubiksCube:
 	def __eq__(self,other): #Utility function for equality check
 		if(self.__class__ != other.__class__):
 			return False
-		return (self.__current_state ==other.__current_state) and (self.__goal_state == other.__goal_state)
+		return (self.__current_state ==other.__current_state)
 
 	def __str__(self): #Utility function for printing a RubiksCube Object
 		
@@ -50,6 +50,8 @@ class RubiksCube:
 				ret+="\r\n"
 		else:
 			ret+="No Parent State\r\n"
+
+		ret+="Current Cost: "+str(self.__distance)+"\r\n"
 		
 		return ret
 
@@ -73,6 +75,9 @@ class RubiksCube:
 			ret+=" ".join(map(str,self.__current_state[row]))
 			ret+="\r\n"
 		return ret
+
+	def get_current_cost(self):
+		return self.__distance
 
 	
 
@@ -214,6 +219,11 @@ class RubiksCube:
 				return iters.index(item)
 			return -1
 
+
+		def compare(item):
+			return item.__heuristic+item.__distance,item.__distance
+
+
 		to_visit = [self] #The states to explore, basically the PQ
 		visited = [] #Already explored states
 
@@ -224,13 +234,15 @@ class RubiksCube:
 
 			new_state = to_visit.pop(0)
 
+			#print(new_state.__heuristic + new_state.__distance)
+
 			state_cnt+=1
 
 			if((len(visited))%100==0):
 				print("PQ length: "+str(len(to_visit)))
 				print("Visited length: "+str(len(visited)))
 				print("Explored length:" + str(state_cnt))
-			# print(new_state.get_current_state())
+				print(new_state.get_current_state())
 			
 
 			if(done(new_state)):
@@ -252,6 +264,7 @@ class RubiksCube:
 				# minimize {f(n) = g(n) + h(n)}
 				hval = move._calcH()
 				fval = hval + move.__distance
+				#print(hval,fval)
 
 
 				if(idx_visited == -1 and idx_to_visit == -1): #Forward edge
@@ -266,6 +279,8 @@ class RubiksCube:
 						tmp.__move = move.__move
 						tmp.__distance = move.__distance
 						tmp.__parent = move.__parent
+
+					#print(tmp)
 				elif(idx_visited > -1):
 					tmp = visited[idx_visited]
 
@@ -277,10 +292,15 @@ class RubiksCube:
 
 						visited.remove(tmp) # We need to re-explore the state, as better can be found
 						to_visit.append(tmp)
+					#print(tmp)
 
 			visited.append(new_state)
 
-			to_visit = sorted(to_visit, key = lambda p : p.__heuristic + p.__distance)
+			to_visit = sorted(to_visit, key = compare)
+			# for cc in to_visit:
+			# 	print(cc.__heuristic + cc.__distance)
+			# 	print(cc)
+			# #break
 
 		return [],0 #No solution
 
@@ -321,12 +341,12 @@ def main():
 	assert(term == 0)
 
 	file.close()
-	# start_state = [
-	# 		 [2,1,1,4],
-	# 		 [4,2,1,4],
-	# 		 [4,1,2,3],
-	# 		 [3,3,3,2]
-	# 		 ]
+	start_state = [
+			 [2,1,1,4],
+			 [4,2,1,4],
+			 [4,1,2,3],
+			 [3,3,3,2]
+			 ]
 
 	# dif = [
 	# 		 [1,2,3,4],
