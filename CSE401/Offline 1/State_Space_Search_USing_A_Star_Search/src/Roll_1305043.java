@@ -541,7 +541,7 @@ class MismatchHeuristic implements Heuristic{
                 if(start_state[i][j]!=goal_state[i][j])count++;
             }
         }
-        return count;
+        return count/(1.0*start_state.length);
     }
 }
 
@@ -636,8 +636,7 @@ public class Roll_1305043 {
         //Cube cube1 = new Cube(this.makeCopy(start_state),this.makeCopy(goal_state));
        // Cube cube1 = new Cube(this.makeCopy(start3),this.makeCopy(goal3));
         Cube cube1 =new Cube(this.makeCopy(main_input_state),this.makeCopy(goal_state));
-
-        ArrayList<Cube>path = cube1.solve(new ManhattanHeuristic(),true);
+        ArrayList<Cube>path = cube1.solve(new MismatchHeuristic());
         printResult(path, "Manhattan");
 
     }
