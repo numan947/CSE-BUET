@@ -1,0 +1,160 @@
+\documentclass[15pt]{beamer}
+\usetheme{Warsaw}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{graphics}
+\usepackage[export]{adjustbox}
+\usepackage{bookmark}
+\usepackage{graphicx}
+
+
+% \setbeamercolor{normal text}{fg=white,bg=black!90}
+% \setbeamercolor{structure}{fg=white}
+
+% \setbeamercolor{alerted text}{fg=red!85!black}
+
+% \setbeamercolor{item projected}{use=item,fg=black,bg=item.fg!35}
+
+% \setbeamercolor*{palette primary}{use=structure,fg=structure.fg}
+% \setbeamercolor*{palette secondary}{use=structure,fg=structure.fg!95!black}
+% \setbeamercolor*{palette tertiary}{use=structure,fg=structure.fg!90!black}
+% \setbeamercolor*{palette quaternary}{use=structure,fg=structure.fg!95!black,bg=black!80}
+
+% \setbeamercolor*{framesubtitle}{fg=white}
+
+% \setbeamercolor*{block title}{parent=structure,bg=black!60}
+% \setbeamercolor*{block body}{fg=black,bg=black!10}
+% \setbeamercolor*{block title alerted}{parent=alerted text,bg=black!15}
+% \setbeamercolor*{block title example}{parent=example text,bg=black!15}
+
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+
+\title{SPACE INVADERS}
+
+
+\author[Muttakin \and Tasdiq \and Numan \and Mahathir \and Pias \and Masum]
+{Nurul Muttakin [1305009] 
+\and \\ Tasdiqul Islam [1305033]
+\and \\ S. Mahmudul Hasan (Numan) [1305043]
+\and \\ Mahathir Ahmad [1305045]
+\and \\ Tanmoy Sarker Pias [1305055]
+\and \\ Mahmudul Hasan Masum [1205006]
+}
+
+\institute[BUET]{Bangladesh University of Engineering and Technology}
+
+\date{}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+What is Space Invaders?
+
+	\begin{figure}[ht!]
+		\centering
+		\includegraphics[width=60mm]{basic-invaders_2_2.jpg}
+		\caption{Space Invaders Poster}
+	\end{figure}
+
+
+    \begin{itemize}
+        \item A classic arcade game 
+        \item Released in 1978
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+The game screen looks like this:
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=80mm]{space_invaders_screen_2.png}
+\caption{Space Invaders's game screen}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+Enemies:
+	\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=60mm]{basic_enemies_2.png}
+	\caption{Basic Enemies}
+	\end{figure}
+From Left:
+	\begin{itemize}
+    \item Small Invaders
+		\item Large Invader
+		\item Medium Invader
+		\item The UFO/Mothership
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+List of things to use:
+
+\begin{figure}[!tbp]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=.5\textwidth]{sonar_sensor.jpg}
+    \caption{Sonar Sensor}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=.5\textwidth]{dot_matrix.jpg}
+    \caption{Dot Matrix}
+  \end{minipage}
+  \end{figure}
+  \begin{figure}
+    \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=.5\textwidth]{seven_segment.jpg}
+    \caption{Seven Segment Display}
+  \end{minipage}
+    \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=.7\textwidth]{flex.jpg}
+    \caption{Flex Sensor}
+  \end{minipage}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+
+1. LED/Dot Matrix --- For the game display
+
+2. 2 Flex Sensors --- To shoot using player and star/stop game
+
+3. 2 sonar sensors --- To move the player left-right direction
+
+4. 7-segment display --- To show score
+
+\end{frame}
+
+
+\begin{frame}%%     1
+\textbf{Features}\\
+1. Two player game option\\
+2. Single player\\
+3. Multiple levels\\
+4. Bicolor matrix
+\end{frame}
+
+
+\begin{frame}%%     1
+\begin{center}
+\Huge Thank You!
+\end{center}
+\end{frame}
+
+
+\end{document}

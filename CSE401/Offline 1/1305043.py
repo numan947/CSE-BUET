@@ -67,7 +67,7 @@ class RubiksCube:
 		return ret
 
 	def get_move_on_parent(self):
-		return self.__move;
+		return self.__move
 
 	def get_current_state(self):
 		ret = ""
