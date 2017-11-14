@@ -1,8 +1,32 @@
 
-The problem of creating a valid timetable involves scheduling classes, teachers and rooms in such a way that no teacher, class or room is used more than once per period. For example, if a class must meet twice a week, then it must be placed in two different periods to avoid a clash.
-The timetable is to be distributed across a fixed number of periods per week. A class consists of a number of students. We will assume that students have already been grouped into classes.
+The problem of creating a valid timetable involves scheduling 
+classes, teachers and rooms in such a way that no teacher, 
+class or room is used more than once per period.
 
-Initially we consider classes to be disjoint, that is, they have no students in common. In this scheme, a correct timetable is one in which a class can be scheduled concurrently with any other class. Later in the paper this restriction will be relaxed to cater for high schools and Universities in which students can take many options. In each period a class is taught a subject. It is possible for a subject to appear more than once in a period. A particular combination of a teacher, a subject, a room and a class is called an element. An element may be required more than once per week. The combination of an element and a frequency is called a requirement. Thus, the timetabling problem can be phrased as scheduling a number of requirements such that a requirement, teacher, class or room does not appear more than once per period.
+For example, 
+if a class must meet twice a week, then it must be placed in 
+two different periods to avoid a clash.
+
+The timetable is to be distributed across a fixed number of 
+periods per week. A class consists of a number of students. We 
+will assume that students have already been grouped into 
+classes.
+
+
+Initially we consider classes to be disjoint, that is, they have no students in common. In this scheme, a correct timetable is one in which a class can be scheduled concurrently with any other class.
+
+
+Later in the paper this restriction will be relaxed to cater for high schools and Universities in which students can take many options. In each period a class is taught a subject. It is possible for a subject to appear more than once in a period. 
+
+
+##element = <teacher,subject,room,class>
+A particular combination of a teacher, a subject, a room and a class is called an element. An element may be required more than once per week. 
+
+##requirement = <element,frequency>
+The combination of an element and a frequency is called a requirement. 
+
+##timetabling problem = schedule requirements so that, <requirement,teacher,class,room> = unique
+Thus, the timetabling problem can be phrased as scheduling a number of requirements such that a requirement, teacher, class or room does not appear more than once per period.
 
 
 There can be a timetable consisting of 6 periods (at 9 am, at 10 am, at 11 am, at 12 pm, at 2 pm, at 3 pm) per day, 5 days (monday, tuesday, wednesday, thursday, friday) per week, which means there can be a total of 30 periods per week. There will be a class clash or conflict if a timetable shows both (i) Class 1, Room 5, Teacher 1 (ii) Class 1, Room 9, Teacher 2 appearing in at 9 am Monday slot. But there is no class clash if (i) Class 1, Room 5, Teacher 1 appears in at 9 am Monday slot and (ii) Class 1, Room 9, Teacher 2 appears in at 10 am Monday slot because they are two different time slots. Similarly, there is a teacher conflict, if one teacher appears more than once in a time slot, and a room conflict, if one room appears more than once in a time slot.
