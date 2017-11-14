@@ -1,5 +1,6 @@
 import bisect
-import copy
+import timeit
+from copy import copy, deepcopy
 import logging
 import math
 import random
