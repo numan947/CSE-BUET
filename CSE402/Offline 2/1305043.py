@@ -8,6 +8,8 @@ import re
 import argparse
 import itertools
 from collections import Counter
+from queue import PriorityQueue
+
 
 def print_total_periods(tt_grid):
 	print(len(list(itertools.chain.from_iterable(tt_grid))))
@@ -99,6 +101,9 @@ class TimeTable(object):
 		self.__elements = elements
 		self.__num_perod = num_perod
 		self.__cost_function = cost_function
+		self.__pq = PriorityQueue()
+
+
 
 	def _random_init_table(self):
 		
@@ -126,13 +131,12 @@ class TimeTable(object):
 			#print("Printing x,y position: ",x,y) 
 
 		self.__tt_grid = tt_grid
+		
+		#initialize the pq for the first time
+		self._fix_pq()
 
-		# i = 0
-		# for r in range(5):
-		# 	for c in range(self.__num_perod):
-		# 		i+=len(self.__tt_grid[r][c])
 
-		# print("len ",i)
+
 
 	def _get_conflict_count(self,lst):
 		c = Counter(lst)
@@ -142,6 +146,8 @@ class TimeTable(object):
 			conf+=max(0, y-1)
 
 		return conf
+
+
 
 
 	def _calculate_cell_cost(self,lst):
@@ -156,19 +162,72 @@ class TimeTable(object):
 		# print(t)
 		# print(r)
 		# print(c)
-		self._get_conflict_count(t),self._get_conflict_count(r),self._get_conflict_count(c))
+		return self.__cost_function(
+			self._get_conflict_count(t),
+			self._get_conflict_count(r),
+			self._get_conflict_count(c)
+			)
 
 
 
-	def _calculate_cost(self):
-		pass
+	def _calculate_cost(self,time_table):
+		
+		cost = 0
+		
+		for r in range(5):
+			for c in range(self.__num_perod):
+				cost+=self._calculate_cell_cost(time_table[r][c])
+
+		# print(cost)
+		return cost
 
 
-	def _calculate_another_cost(self):
-		pass
+	def _fix_pq(self):
+		
+		def clear(pq):
+			while not pq.empty():
+				try:
+					pq.get(False)
+				except Empty:
+					continue
+				pq.task_done()
+
+		
+		clear(self.__pq)
+
+		cost = 0
+		for r in range(5):
+			for c in range(self.__num_perod):
+				tmp=self._calculate_cell_cost(self.__tt_grid[r][c])
+				self.__pq.put((-1*tmp,(r,c))) #THE MESSY -1 multiplication hack -_-
+				cost+=tmp					# why do I even have to put up with this shit?! -_- 
+
+		self._set_cost(cost) #setting table cost
 
 
 
+
+
+	#for getting the next element
+	def _get_next_cell(self):
+		if(self.__pq.empty()):
+			return None
+		return self.__pq.get()
+
+
+
+	#just for printing purpose
+	def _print_pq(self):
+		while(not self.__pq.empty()):
+			print(self.__pq.get())
+		self._fix_pq()
+
+
+	def _set_cost(self,cost):
+		self.__table_cost = cost
+
+	def _get_cost(self):
+		return self.__table_cost
 
 	def _get_elements(self):
 		return self.__elements
@@ -176,12 +235,15 @@ class TimeTable(object):
 	def _get_table(self):
 		return self.__tt_grid
 
-	def _print_table(self):
+	def _set_table(self,grid):
+		self.__tt_grid = grid
+
+	def _print_table(self,table):
 
 		for r in range(5):
 			for c in range(self.__num_perod):
-				print("Pos: ",r,c,"elements:",len(self.__tt_grid[r][c]))
-				for e in self.__tt_grid[r][c]:
+				print("Pos: ",r,c,"elements:",len(table[r][c]))
+				for e in table[r][c]:
 					print(e)
 
 
@@ -213,6 +275,82 @@ def cost1_1_10(tc,rc,cc):
 
 
 
+
+
+def ClimbTheDamnHill(timetable,num_perod):
+	def get_coord(e):
+		return e[1][0],e[1][1]
+
+
+
+
+	timetable._random_init_table() #evaluating start state
+	#timetable._check_count()
+	#timetable._print_pq()
+
+	if(timetable._get_cost()==0):
+		return
+
+	
+
+	while(True):
+
+		e = timetable._get_next_cell()
+		if(e==None):
+			print("RETURNING BECAUSE OF NONE")
+			return
+		r,c = get_coord(e)
+
+		cur_grid = deepcopy(timetable._get_table())
+
+		cur_lst = cur_grid[r][c]
+
+
+		flg = False
+
+		for i in range(len(cur_lst)):
+			new_cell_state = [cur_lst[x] for x in range(len(cur_lst)) if x!=i]
+			if(timetable._calculate_cell_cost(cur_lst)>timetable._calculate_cell_cost(new_cell_state)):
+				#cost lessens if this item is not in the cell,so try to find a better place for this
+				item = cur_grid[r][c].pop(i)
+				for rr in range(5):
+					for cc in range(num_perod):
+						if(r!=rr and c!=cc):
+							#put the item in the cell
+							cur_grid[rr][cc].append(item)
+							new_cost = timetable._calculate_cost(cur_grid)
+
+							if(new_cost<timetable._get_cost()):
+								timetable._set_cost(new_cost)
+								timetable._set_table(cur_grid)
+								flg = True
+
+							else:
+								cur_grid[rr][cc].pop(len(cur_grid[rr][cc])-1)
+
+						if(flg):
+							break
+					if(flg):
+						break
+				if(not flg):
+					cur_grid[r][c].insert(i,item)
+			if(flg):
+				break
+		timetable._fix_pq()
+		print(timetable._get_cost())
+		timetable._check_count()
+
+
+
+
+
+
+
+
+
+
+
+
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--file","-f",type=str,required = True)
@@ -232,15 +370,33 @@ def main():
 
 	tt = TimeTable(elements=elems, num_perod=num_perod,cost_function=cost1_1_1) #create table from the elements
 
-	tt._random_init_table() #randomly initialize the table
+
+	#print("Number of days: ",5," Number of periods each day: ",num_perod," Total periods: ",5*num_perod)
+	ClimbTheDamnHill(tt,num_perod)
+
+	# print(tt._get_cost())
+
+	# tt._print_table()
+
+
+
+	# tt._random_init_table() #randomly initialize the table
 
 	
-	tt._print_table()
+	# # tt._print_table()
 
-	# tt._check_count()
+	# # tt._check_count()
 
 
-	tt._calculate_cell_cost(tt._get_table()[0][0])
+	# tt._calculate_cell_cost(tt._get_table()[0][0])
+
+	# tt._calculate_cost(tt._get_table())
+
+	# tt._fix_pq()
+
+	# print(tt._get_next_cell())
+
+
 
 
 
