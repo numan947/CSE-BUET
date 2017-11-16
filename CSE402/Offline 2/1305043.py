@@ -377,7 +377,7 @@ def ClimbTheDamnHill(timetable,num_perod,num_simulate):
 
 
 def prepare(lst):
-	s = ""
+	s = "sz: "+str(len(lst))+", "
 	for e in lst:
 		s+=e._describe()+", "
 	return s
@@ -415,7 +415,7 @@ def main():
 
 	tbl = BeautifulTable()
 
-	
+
 	periods = []
 	periods.append("R_C_T")
 	for i in range(num_perod):
