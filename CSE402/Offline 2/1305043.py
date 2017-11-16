@@ -10,6 +10,7 @@ import itertools
 from collections import Counter
 from queue import PriorityQueue
 
+from beautifultable import BeautifulTable
 
 def print_total_periods(tt_grid):
 	print(len(list(itertools.chain.from_iterable(tt_grid))))
@@ -82,10 +83,10 @@ class Element(object):
 	def _getposition(self):
 		return self.__position
 	
-	def __describe__(self):
-		return "Room: "+str(self.__rom)+" Class: "+str(self.__cls)+" Teacher: "+str(self.__tch)
+	def _describe(self):
+		return str(self.__rom)+str(self.__cls)+str(self.__tch)
 
-	def __unicode_describe__(self):
+	def _unicode_describe(self):
 		return u"Room: "+str(self.__rom)+" Class: "+str(self.__cls)+" Teacher: "+str(self.__tch)
 
 	def __str__(self):
@@ -277,78 +278,109 @@ def cost1_1_10(tc,rc,cc):
 
 
 
-def ClimbTheDamnHill(timetable,num_perod):
+def ClimbTheDamnHill(timetable,num_perod,num_simulate):
 	def get_coord(e):
 		return e[1][0],e[1][1]
 
 
 
+	def Simulation():
+		tracker = []
+		while(True):
+			current_cost = timetable._get_cost()
 
-	timetable._random_init_table() #evaluating start state
-	#timetable._check_count()
-	#timetable._print_pq()
+			e = timetable._get_next_cell()
+			if(e==None):
+				print("RETURNING BECAUSE OF NONE")
+				return
+			r,c = get_coord(e)
 
-	if(timetable._get_cost()==0):
-		return
+			cur_grid = deepcopy(timetable._get_table())
 
-	
-
-	while(True):
-
-		e = timetable._get_next_cell()
-		if(e==None):
-			print("RETURNING BECAUSE OF NONE")
-			return
-		r,c = get_coord(e)
-
-		cur_grid = deepcopy(timetable._get_table())
-
-		cur_lst = cur_grid[r][c]
+			cur_lst = cur_grid[r][c]
 
 
-		flg = False
+			flg = False
 
-		for i in range(len(cur_lst)):
-			new_cell_state = [cur_lst[x] for x in range(len(cur_lst)) if x!=i]
-			if(timetable._calculate_cell_cost(cur_lst)>timetable._calculate_cell_cost(new_cell_state)):
-				#cost lessens if this item is not in the cell,so try to find a better place for this
-				item = cur_grid[r][c].pop(i)
-				for rr in range(5):
-					for cc in range(num_perod):
-						if(r!=rr and c!=cc):
-							#put the item in the cell
-							cur_grid[rr][cc].append(item)
-							new_cost = timetable._calculate_cost(cur_grid)
+			for i in range(len(cur_lst)):
+				new_cell_state = [cur_lst[x] for x in range(len(cur_lst)) if x!=i]
+				if(timetable._calculate_cell_cost(cur_lst)>timetable._calculate_cell_cost(new_cell_state)):
+					#cost lessens if this item is not in the cell,so try to find a better place for this
+					item = cur_grid[r][c].pop(i)
+					for rr in range(5):
+						for cc in range(num_perod):
+							if(r!=rr and c!=cc):
+								#put the item in the cell
+								cur_grid[rr][cc].append(item)
+								new_cost = timetable._calculate_cost(cur_grid)
 
-							if(new_cost<timetable._get_cost()):
-								timetable._set_cost(new_cost)
-								timetable._set_table(cur_grid)
-								flg = True
+								if(new_cost<timetable._get_cost()):
+									timetable._set_cost(new_cost)
+									timetable._set_table(cur_grid)
+									flg = True
 
-							else:
-								cur_grid[rr][cc].pop(len(cur_grid[rr][cc])-1)
+								else:
+									cur_grid[rr][cc].pop(len(cur_grid[rr][cc])-1)
 
+							if(flg):
+								break
 						if(flg):
 							break
-					if(flg):
-						break
-				if(not flg):
-					cur_grid[r][c].insert(i,item)
-			if(flg):
-				break
-		timetable._fix_pq()
-		print(timetable._get_cost())
-		timetable._check_count()
+					if(not flg):
+						cur_grid[r][c].insert(i,item)
+				if(flg):
+					break
+			
+			timetable._fix_pq()
+			
+			if(current_cost==timetable._get_cost()):
+				tracker.append(current_cost)
+
+			
+			current_cost = timetable._get_cost()
+			if(len(tracker)>15 or current_cost==0):
+				return current_cost,deepcopy(timetable._get_table())
+
+
+			###############DEBUG PURPOSE##############
+			# print(timetable._get_cost())
+			# timetable._check_count()
 
 
 
+	timetable._random_init_table() #evaluating start state
+		#timetable._check_count()
+		#timetable._print_pq()
+
+	if(timetable._get_cost()==0):
+			return 0,timetable._get_table() 
+
+	best_cost = timetable._get_cost()
+	best_state = timetable._get_table()
+
+
+	for i in range(num_simulate):
+		print("STARTING SIMULATION: ",i+1)
+		cur_cost,cur_state = Simulation()
+
+		if(cur_cost<best_cost):
+			best_cost = cur_cost
+			best_state = cur_state
+
+		print("completed, cost found: ",cur_cost)
+
+		timetable._random_init_table()
+
+
+	return best_cost,best_state
 
 
 
-
-
-
-
+def prepare(lst):
+	s = ""
+	for e in lst:
+		s+=e._describe()+", "
+	return s
 
 
 def main():
@@ -366,44 +398,53 @@ def main():
 	file_read = args.file
 	num_perod = args.periods
 
+	
+	num_sim = 5
+
 	elems = read_input(num_rooms,num_class,num_teach,file_read) #generate elements
 
 	tt = TimeTable(elements=elems, num_perod=num_perod,cost_function=cost1_1_1) #create table from the elements
 
 
 	#print("Number of days: ",5," Number of periods each day: ",num_perod," Total periods: ",5*num_perod)
-	ClimbTheDamnHill(tt,num_perod)
-
-	# print(tt._get_cost())
-
-	# tt._print_table()
+	best_cost,best_table = ClimbTheDamnHill(tt,num_perod,num_simulate = num_sim)
 
 
+	print("FINAL RESULT:")
+	print("BEST COST FOUND AFTER ",num_sim," SIMULATIONS: ",best_cost)
 
-	# tt._random_init_table() #randomly initialize the table
+	tbl = BeautifulTable()
 
 	
-	# # tt._print_table()
+	periods = []
+	periods.append("R_C_T")
+	for i in range(num_perod):
+		periods.append("Period                                        "+str(i+1))
+	tbl.column_headers = periods
 
-	# # tt._check_count()
-
-
-	# tt._calculate_cell_cost(tt._get_table()[0][0])
-
-	# tt._calculate_cost(tt._get_table())
-
-	# tt._fix_pq()
-
-	# print(tt._get_next_cell())
+	routine = []
+	for i in range(5):
+		routine.append([])
+		routine[i].append("Day "+str(i+1))
 
 
+	for r in range(5):
+		for c in range(num_perod):
+			lst = best_table[r][c]
+			s = prepare(lst)
+			routine[r].append(s)
 
+		tbl.append_row(routine[r])
 
+	print(tbl)
 
+	out_file = open("output.txt","w")
 
-
-
-
+	out_file.writelines("FINAL RESULT:")
+	out_file.writelines("BEST COST FOUND AFTER "+str(num_sim)+" SIMULATIONS: "+str(best_cost))
+	out_file.writelines("SOLUTION:\n\n\n")
+	out_file.writelines(str(tbl))
+	out_file.close()
 
 
 
