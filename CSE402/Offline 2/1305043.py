@@ -390,6 +390,7 @@ def main():
 	parser.add_argument("--teachers","-t",type=int,required=True)
 	parser.add_argument("--classes","-c",type=int,required=True)
 	parser.add_argument("--periods","-p",type=int,required=True)
+	parser.add_argument("--simulations","-s",type=int,required=True)
 	args = parser.parse_args()
 
 	num_teach = args.teachers
@@ -397,9 +398,7 @@ def main():
 	num_class = args.classes
 	file_read = args.file
 	num_perod = args.periods
-
-	
-	num_sim = 5
+	num_sim = args.simulations
 
 	elems = read_input(num_rooms,num_class,num_teach,file_read) #generate elements
 
