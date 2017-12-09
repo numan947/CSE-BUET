@@ -287,19 +287,37 @@ def PlayGame():
 	rv.initialize_board()
 	rv._print_board()
 
-	print("White Moves:")
-	print(rv.find_moves(side=0))
+	# print("White Moves:")
+	# print(rv.find_moves(side=0))
 
-	print("Input a comma seperated tuple:")
-	pos = tuple(int(x.strip()) for x in input().split(','))
+	# rv.select_move(pos, side = 0)
 
-	rv.select_move(pos, side = 0)
+	# rv.apply_move(pos)
 
-	rv.apply_move(pos)
+	turn = 1
+	
+	moves = rv.find_moves(turn)
 
 	while(rv.get_total_disks()<64):
+		if turn==0:
+			print("White's Turn!")
+		else:
+			print("Black's Turn!")
+
+		print("Input a comma seperated tuple: "+str(moves))
+		pos = tuple(int(x.strip()) for x in input().split(','))
+		rv.select_move(pos, turn)
+		rv.apply_move(pos)
+
 		rv._print_board()
-		break
+
+		moves = rv.find_moves(1-turn)
+		if len(moves)>0: #moves available for opponent
+			turn = 1-turn
+		else:
+			print("No Move for Opponent!!")
+			moves = rv.find_moves(turn)
+
 
 
 	if rv.get_total_black()>rv.get_total_white():
