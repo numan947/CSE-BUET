@@ -118,7 +118,7 @@ class ReversiBoard():
 
 		def getMoves(moves,pos):
 			posr,posc = pos
-			
+			print("Parent is: ",posr,posc)
 			for idx in range(8):
 				flag = False
 				dirr = self.row_mv[idx]
@@ -127,6 +127,7 @@ class ReversiBoard():
 				curr = posr+dirr
 				curc = posc+dirc
 
+
 				while(True):
 					if(outofbound(curr,curc)):
 						flag=False
@@ -134,6 +135,7 @@ class ReversiBoard():
 					if self.grid[curr][curc]==-1: #Found Empty
 						break
 					elif self.grid[curr][curc]==(1-side): #Found opposite color
+						print("Making True for: ",curr,curc)
 						flag=True
 					else: #Found same color
 						flag=False
@@ -141,7 +143,10 @@ class ReversiBoard():
 					curr = curr+dirr
 					curc = curc+dirc
 
+					
+
 				if(flag):
+					print(curr,curc)
 					moves.append((curr,curc))
 
 
@@ -156,8 +161,8 @@ class ReversiBoard():
 		else: #black
 			for e in self.black_list:
 				getMoves(moves = moves, pos = e.getCurrentPosition())
+		moves.sort()
 		return moves
-
 
 
 
@@ -189,48 +194,62 @@ class ReversiBoard():
 				flag = False
 				dirr = self.row_mv[idx]
 				dirc = self.col_mv[idx]
-				
+
 				curr = posr+dirr
 				curc = posc+dirc
 
+				tr = None
+				tc = None
+
+				to_change = []
+
 				while(True):
-					if(outofbound(curr,curc)):
-						flag=False
+					if outofbound(curr,curc):
 						break
-					if self.grid[curr][curc]==-1: #Found Empty
+
+					curside = self.grid[curr][curc]
+
+					if(curside==-1): #we get -1 after a lot of blacks, so not replacable
+						del to_change[:]
 						break
-					elif self.grid[curr][curc]==(1-side): #Found opposite color
-						self.grid[curr][curc]=side
-						if side==0:#white, so remove from black, add to white
-							to_remove = -1
-							for idx in range(len(self.black_list)):
-								if self.black_list[idx].getCurrentPosition() == (curr,curc):
-									to_remove = idx
-									break
-							if(to_remove != -1):
-								rd = self.black_list.pop(to_remove)
-								rd.setCurrentSide(side)
-								self.white_list.append(rd)
 
-
-						else:#black, so remove from white, add to black
-							to_remove = -1
-							for idx in range(len(self.white_list)):
-								if self.white_list[idx].getCurrentPosition() == (curr,curc):
-									to_remove = idx
-									break
-							if(to_remove != -1):
-								rd = self.white_list.pop(to_remove)
-								rd.setCurrentSide(side)
-								self.black_list.append(rd)
-
-
-					else: #Found same color, this should never be the case
-						flag=False
+					elif (curside==side): #we get a stopping point, we need to change all the lsts
 						break
-					curr = curr+dirr
-					curc = curc+dirc
+					else:
+						to_change.append((curr,curc)) #append the tuple to the list
+					
+					curr+=dirr
+					curc+=dirc
 
+				if(len(to_change)>0):
+					for (r,c) in to_change:
+						self.grid[r][c] = side #make change in main grid
+
+					if(side==0):# side is white, so remove from black,add in white list
+						indx_lst = []
+						for i in range(len(self.black_list)):
+							if(to_change.count(self.black_list[i].getCurrentPosition())==1): #actually 1
+								indx_lst.append(i)
+							elif(to_change.count(self.black_list[i].getCurrentPosition())>1):
+								raise ValueError(f"This shouldn't be printed")
+
+						for i in range(len(indx_lst)):
+							tmp = self.black_list.pop(indx_lst[i])
+							tmp.setCurrentSide(side)
+							self.white_list.append(tmp)
+
+					else:# side is black, so remove from white,add in black list
+						indx_lst = []
+						for i in range(len(self.white_list)):
+							if(to_change.count(self.white_list[i].getCurrentPosition())==1): #actually 1
+								indx_lst.append(i)
+							elif(to_change.count(self.white_list[i].getCurrentPosition())>1):
+								raise ValueError(f"This shouldn't be printed")
+
+						for i in range(len(indx_lst)):
+							tmp = self.white_list.pop(indx_lst[i])
+							tmp.setCurrentSide(side)
+							self.black_list.append(tmp)
 		applyMoves(pos)
 
 
@@ -287,12 +306,16 @@ def PlayGame():
 	rv.initialize_board()
 	rv._print_board()
 
-	# print("White Moves:")
-	# print(rv.find_moves(side=0))
+	# print("Black Moves:")
+	# print(rv.find_moves(side=1))
+	
+	# pos = tuple(int(x.strip()) for x in input().split(','))
 
-	# rv.select_move(pos, side = 0)
+	# rv.select_move(pos, side = 1)
 
 	# rv.apply_move(pos)
+
+	rv._print_board()
 
 	turn = 1
 	
@@ -309,8 +332,11 @@ def PlayGame():
 		rv.select_move(pos, turn)
 		rv.apply_move(pos)
 
+		print("White Score: "+str(rv.get_total_white()))
+		print("Black Score: "+str(rv.get_total_black()))
+		
 		rv._print_board()
-
+		
 		moves = rv.find_moves(1-turn)
 		if len(moves)>0: #moves available for opponent
 			turn = 1-turn
