@@ -358,7 +358,7 @@ class MiniMaxImplementation{
                 h = heuristic.computeHeuristic(rv, player, opponent);
             }
             else
-                h = heuristic.computeHeuristic(rv,opponent,opponent);
+                h = heuristic.computeHeuristic(rv,opponent,player);
             //System.out.println("Computed H For: "+h);
             return h;
         }
@@ -380,6 +380,7 @@ class MiniMaxImplementation{
                     best = tmpVal;
                 }
             }
+            //System.out.println("Returning Max value: at depth: "+depth+" value: "+best);
             return best;
         }
         else {
@@ -398,6 +399,8 @@ class MiniMaxImplementation{
                     best = tmpVal;
                 }
             }
+
+            //System.out.println("Returning Min value: at depth: "+depth+" value: "+best);
             return best;
         }
     }
@@ -417,7 +420,7 @@ class MiniMaxImplementation{
 
 
             int moveVal = minimax(reversiBoard,maxDepth,false,player,opponent);
-
+            System.out.println(g+" MOVE:  "+moveVal);
             if(moveVal>bestVal){
                 bestMove.setPosC(g.getPosC());
                 bestMove.setPosR(g.getPosR());
