@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -10,6 +11,9 @@ class GridPosition implements Serializable
 {
     private int posR;
     private int posC;
+
+    public GridPosition() {
+    }
 
     public GridPosition(int posR, int posC) {
         this.posR = posR;
@@ -142,8 +146,10 @@ class ReversiBoard implements Serializable{
                         isValid = true;
 
                     else if(this.grid[curPosR][curPosC]=='-'){ //we found an empty cell
-                        if(isValid)//the cell is valid, i.e we've seen only opposite color cell before this
-                            ret.add(new GridPosition(curPosR,curPosC));
+                        if(isValid) {//the cell is valid, i.e we've seen only opposite color cell before this
+                            GridPosition gp = new GridPosition(curPosR,curPosC);
+                            if(ret.indexOf(gp)==-1) ret.add(gp);
+                        }
                         break; //not valid, we didn't see any opposite color cell before this
                     }
                 }
@@ -172,6 +178,7 @@ class ReversiBoard implements Serializable{
 
         //update the blank position
         this.grid[move.getPosR()][move.getPosC()] = playerColor;
+        addToList.add(move);
 
         //8 directional update
         ArrayList<GridPosition>toModify = new ArrayList<>();
@@ -191,12 +198,17 @@ class ReversiBoard implements Serializable{
                 curPosR += curDirR;
                 curPosC += curDirC;
                 //we're out of the board
-                if(isOutOfTheBoard(curPosR,curPosC))
+                if(isOutOfTheBoard(curPosR,curPosC)) {
+                    toModify.clear();
                     break;
+                }
 
                 //potential change element
-                else if(this.grid[curPosR][curPosC]==oppositeColor)
-                    toModify.add(new GridPosition(curPosR,curPosC));
+                else if(this.grid[curPosR][curPosC]==oppositeColor) {
+                    GridPosition gp = new GridPosition(curPosR,curPosC);
+                    if(toModify.indexOf(gp)==-1)
+                        toModify.add(new GridPosition(curPosR, curPosC));
+                }
 
                 //nope, we can't go that way
                 else if(this.grid[curPosR][curPosC]=='-') {
@@ -206,8 +218,24 @@ class ReversiBoard implements Serializable{
 
                 //modify all in toModify
                 else if(this.grid[curPosR][curPosC]==playerColor){
-                    removeFromList.remove(toModify);
+
+                    for(GridPosition g: toModify){
+                       int idx = removeFromList.indexOf(g);
+//                       System.out.println(g);
+//                       System.out.println(idx);
+//                        System.out.println("RFL : "+removeFromList);
+//                        System.out.println("ATL : "+addToList);
+//                        System.out.println("TM : "+toModify);
+//                        System.out.println("CurrentMove: "+move);
+                       removeFromList.remove(idx);
+                    }
+
+//                    System.out.println("After Modifying RemoveFromList: ");
+//                    System.out.println(removeFromList);
+
                     addToList.addAll(toModify);
+//                    System.out.println("After Modifying AddToList: ");
+//                    System.out.println(addToList);
                     break;
                 }
             }
@@ -220,7 +248,20 @@ class ReversiBoard implements Serializable{
 
 
 
+    public int getFreePositions()
+    {
+        return (boardSize*boardSize)-getBlackScore()-getBlackScore();
+    }
 
+    public int getWhiteScore()
+    {
+        return this.whiteDisks.size();
+    }
+
+    public int getBlackScore()
+    {
+        return this.blackDisks.size();
+    }
 
     private boolean isOutOfTheBoard(int x, int y)
     {
@@ -228,12 +269,12 @@ class ReversiBoard implements Serializable{
     }
     @Override
     public String toString() {
-        return printBoard()+"\nReversiBoard{\n" +
+        return printBoard();/*+"\nReversiBoard{\n" +
                 "totalDisks=" + totalDisks +
                 ",\n blackDisks=" + blackDisks.size() +
                 ",\n whiteDisks=" + whiteDisks.size() +
                 ",\n boardSize=" + boardSize +
-                "\n}";
+                "\n}";*/
     }
     private String printBoard()
     {
@@ -252,11 +293,32 @@ class ReversiBoard implements Serializable{
         }
         return s;
     }
+
+    public char[][] getGrid() {
+        return grid;
+    }
+
+    public ArrayList<GridPosition> getWhiteDisks() {
+        return whiteDisks;
+    }
+
+    public ArrayList<GridPosition> getBlackDisks() {
+        return blackDisks;
+    }
+
+    public int getBoardSize()
+    {
+        return boardSize;
+    }
 }
 
 
 
 class Utils{
+    public static int log2(int n)
+    {
+        return (n==1) ? 0 : 1+log2(n/2);
+    }
     public static Object deepClone(Object object)
     {
         try {
@@ -276,6 +338,447 @@ class Utils{
     }
 }
 
+class MiniMaxImplementation{
+    private Heuristic heuristic;
+    private int maxDepth;
+
+    public MiniMaxImplementation(Heuristic heuristic,int maxDepth) {
+        this.heuristic = heuristic;
+        this.maxDepth = maxDepth;
+    }
+
+    private int minimax(ReversiBoard rv,int depth,boolean maxPlayer,char player,char opponent)
+    {
+        if(rv.getFreePositions()==0) //no move left
+            return 0;
+
+        if(depth==0){
+            int h;
+            if(maxPlayer) {
+                h = heuristic.computeHeuristic(rv, player, opponent);
+            }
+            else
+                h = heuristic.computeHeuristic(rv,opponent,opponent);
+            //System.out.println("Computed H For: "+h);
+            return h;
+        }
+
+
+        if(maxPlayer){
+            ArrayList<GridPosition>moves = rv.findMoves(player);
+            int best = Integer.MIN_VALUE;
+
+            for(GridPosition g: moves){
+                ReversiBoard crv = (ReversiBoard) Utils.deepClone(rv);
+
+                assert crv != null;
+                crv.applyMove(g,player);
+
+                int tmpVal = minimax(crv,depth-1,false,player,opponent);
+
+                if(tmpVal>best){
+                    best = tmpVal;
+                }
+            }
+            return best;
+        }
+        else {
+            ArrayList<GridPosition>moves = rv.findMoves(opponent);
+            int best = Integer.MAX_VALUE;
+
+            for(GridPosition g:moves){
+                ReversiBoard crv = (ReversiBoard) Utils.deepClone(rv);
+
+                assert crv != null;
+                crv.applyMove(g,player);
+
+                int tmpVal = minimax(crv,depth-1,true,player,opponent);
+
+                if(tmpVal<best){
+                    best = tmpVal;
+                }
+            }
+            return best;
+        }
+    }
+
+
+
+
+    public GridPosition findBestMove(ReversiBoard reversiBoard,ArrayList<GridPosition>validMoves,char player,char opponent)
+    {
+        int bestVal = Integer.MIN_VALUE;
+        GridPosition bestMove = new GridPosition();
+
+        for(GridPosition g:validMoves){
+            ReversiBoard rv = (ReversiBoard) Utils.deepClone(reversiBoard);
+            assert rv != null;
+            rv.applyMove(g,player);
+
+
+            int moveVal = minimax(reversiBoard,maxDepth,false,player,opponent);
+
+            if(moveVal>bestVal){
+                bestMove.setPosC(g.getPosC());
+                bestMove.setPosR(g.getPosR());
+                bestVal = moveVal;
+            }
+        }
+
+        System.out.println("Found Best Move: "+bestMove+" With Value: "+bestVal);
+
+        //todo: fixme
+        return bestMove;
+    }
+
+
+
+}
+
+
+
+class PlayFormat{
+
+    public static void PlayerVsPlayer()
+    {
+        System.out.println("Player Vs Player Initializing.......Black Goes First!!");
+        Scanner scanner = new Scanner(System.in);
+        ReversiBoard rb = new ReversiBoard(8);
+        rb.initializeBoard();
+       // System.out.println(rb.toString());
+
+        String curPlayer = "Black";
+        String oppPlayer = "White";
+        char p = 'B';
+        char opp = 'W';
+
+        ArrayList<GridPosition>currentMoves = rb.findMoves(p);
+
+        while (rb.getFreePositions()!=0){
+
+            System.out.println("Trun: "+curPlayer);
+            System.out.println("Score: White: "+rb.getWhiteScore()+" Black: "+rb.getBlackScore());
+            System.out.println(rb.toString());
+            System.out.println("Please select one of the moves"+" "+currentMoves);
+            int r,c;
+            try{
+
+                String input = scanner.next();
+                String[]inp = input.trim().split(",");
+                r= Integer.parseInt(inp[0]);
+                c = Integer.parseInt(inp[1]);
+            }catch (NumberFormatException e){
+                System.err.println("WRONG FORMAT!!!");
+                continue;
+            }
+
+
+            rb.applyMove(new GridPosition(r,c),p);
+
+
+
+            currentMoves = rb.findMoves(opp);
+
+            if(currentMoves.size()>0){//valid move available for opposition
+                //swap
+                char tmp = opp;
+                opp = p;
+                p = tmp;
+
+                String tmpPlayer = curPlayer;
+                curPlayer = oppPlayer;
+                oppPlayer = tmpPlayer;
+            }
+            else{
+                System.err.println("No Moves Available for opposition: "+oppPlayer+"\nContinuing for ...."+curPlayer);
+                currentMoves = rb.findMoves(p);
+            }
+        }
+    }
+
+
+    public static void PlayerVsComputer(Heuristic heuristic,int maxDepth)
+    {
+        System.out.println("Player Vs Computer Initializing.......");
+        Random random = new Random();
+        int toss = random.nextInt(1234);
+
+        char player,computer;
+
+        MiniMaxImplementation myMiniMax = new MiniMaxImplementation(heuristic,maxDepth);
+
+
+        if(toss%2==0){
+            player = 'B';
+            computer = 'W';
+        }
+        else{
+            player = 'W';
+            computer = 'B';
+        }
+
+        System.out.println("Player is: "+player+" Computer is: "+computer);
+
+        Scanner scanner = new Scanner(System.in);
+        ReversiBoard rb = new ReversiBoard(8);
+        rb.initializeBoard();
+       // System.out.println(rb.toString());
+
+        String curPlayer = "Black";
+        String oppPlayer = "White";
+        char p = 'B';
+        char opp = 'W';
+
+
+        ArrayList<GridPosition>currentMoves = rb.findMoves(p);
+
+        while (rb.getFreePositions()!=0){
+
+            System.out.println("Trun: "+curPlayer);
+            System.out.println("Score: White: "+rb.getWhiteScore()+" Black: "+rb.getBlackScore());
+            System.out.println(rb.toString());
+            System.out.println("Please select one of the moves"+" "+currentMoves);
+            int r = -1,c = -1;
+            GridPosition gp = null;
+            if(p==player) {
+                //Player MOVE
+                try {
+
+                    String input = scanner.next();
+                    String[] inp = input.trim().split(",");
+                    r = Integer.parseInt(inp[0]);
+                    c = Integer.parseInt(inp[1]);
+                    gp = new GridPosition(r,c);
+                } catch (NumberFormatException e) {
+                    System.err.println("WRONG FORMAT!!!");
+                    continue;
+                }
+            }
+            else{
+                //AI MOVE
+                gp = myMiniMax.findBestMove(rb,currentMoves,p,opp);
+            }
+
+
+            rb.applyMove(gp,p);
+
+
+            currentMoves = rb.findMoves(opp);
+
+            if(currentMoves.size()>0){//valid move available for opposition
+                //swap
+                char tmp = opp;
+                opp = p;
+                p = tmp;
+
+                String tmpPlayer = curPlayer;
+                curPlayer = oppPlayer;
+                oppPlayer = tmpPlayer;
+            }
+            else{
+                System.err.println("No Moves Available for opposition: "+oppPlayer+"\nContinuing for ...."+curPlayer);
+                currentMoves = rb.findMoves(p);
+            }
+        }
+    }
+
+    public static void ComputerVsComputer(Heuristic heuristic,int maxDepth)
+    {
+        System.out.println("Computer Vs Computer Initializing.......");
+        Random random = new Random();
+        int toss = random.nextInt(1234);
+
+        char computer1,computer2;
+
+        MiniMaxImplementation myMiniMax = new MiniMaxImplementation(heuristic,maxDepth);
+
+
+        if(toss%2==0){
+            computer1 = 'B';
+            computer2 = 'W';
+        }
+        else{
+            computer1 = 'W';
+            computer2 = 'B';
+        }
+
+        System.out.println("Player is: "+computer1+" Computer is: "+computer2);
+
+        Scanner scanner = new Scanner(System.in);
+        ReversiBoard rb = new ReversiBoard(8);
+        rb.initializeBoard();
+        //System.out.println(rb.toString());
+
+        String curPlayer = "Black";
+        String oppPlayer = "White";
+        char p = 'B';
+        char opp = 'W';
+
+
+        ArrayList<GridPosition>currentMoves = rb.findMoves(p);
+
+        while (rb.getFreePositions()!=0){
+
+            System.out.println("Trun: "+curPlayer);
+            System.out.println("Score: White: "+rb.getWhiteScore()+" Black: "+rb.getBlackScore());
+            System.out.println(rb.toString());
+            System.out.println("Please select one of the moves"+" "+currentMoves);
+            int r = -1,c = -1;
+            GridPosition gp = myMiniMax.findBestMove(rb,currentMoves,p,opp);
+//            if(p==computer1) {
+//                //Player MOVE
+//                try {
+//
+//                    String input = scanner.next();
+//                    String[] inp = input.trim().split(",");
+//                    r = Integer.parseInt(inp[0]);
+//                    c = Integer.parseInt(inp[1]);
+//                    gp = new GridPosition(r,c);
+//                } catch (NumberFormatException e) {
+//                    System.err.println("WRONG FORMAT!!!");
+//                    continue;
+//                }
+//            }
+//            else{
+//                //AI MOVE
+//                gp = myMiniMax.findBestMove(rb,currentMoves,p,opp);
+//            }
+
+
+            rb.applyMove(gp,p);
+
+            currentMoves = rb.findMoves(opp);
+
+            if(currentMoves.size()>0){//valid move available for opposition
+                //swap
+                char tmp = opp;
+                opp = p;
+                p = tmp;
+
+                String tmpPlayer = curPlayer;
+                curPlayer = oppPlayer;
+                oppPlayer = tmpPlayer;
+            }
+            else{
+                System.err.println("No Moves Available for opposition: "+oppPlayer+"\nContinuing for ...."+curPlayer);
+                currentMoves = rb.findMoves(p);
+            }
+        }
+    }
+}
+interface Heuristic{
+    int computeHeuristic(ReversiBoard rv, char player, char opponent);
+}
+
+
+class PositionalHeuristic1 implements Heuristic{
+    private int[][]heurGrid= new int[][]{
+            {4,-3,2,2,2,2,-3,4},
+            {-3,-4,-1,-1,-1,-1,-4,-3},
+            {2,-1,1,0,0,1,-1,2},
+            {2,-1,0,1,1,0,-1,2},
+            {2,-1,0,1,1,0,-1,2},
+            {2,-1,1,0,0,1,-1,2},
+            {-3,-4,-1,-1,-1,-1,-4,-3},
+            {4,-3,2,2,2,2,-3,4}
+    };
+
+    @Override
+    public int computeHeuristic(ReversiBoard rv, char player, char opponent) {
+        int whiteVal = 0;
+        int blackVal = 0;
+        for(GridPosition g: rv.getWhiteDisks()){
+            whiteVal+=heurGrid[g.getPosR()][g.getPosC()];
+        }
+        for(GridPosition g: rv.getBlackDisks()){
+            blackVal+=heurGrid[g.getPosR()][g.getPosC()];
+        }
+
+        if(player=='W')
+            return whiteVal-blackVal;
+        return blackVal-whiteVal;
+
+    }
+}
+
+class PositionalHeuristic2 implements Heuristic{
+    private int[][]heurGrid= new int[][]{
+            {100,-20,10,5,5,10,-20,100},
+            {-20,-50,-2,-2,-2,-2,-50,-20},
+            {10,-2,-1,-1,-1,-1,-2,10},
+            {5,-2,-1,-1,-1,-1,-2,5},
+            {5,-2,-1,-1,-1,-1,-2,5},
+            {10,-2,-1,-1,-1,-1,-2,10},
+            {-20,-50,-2,-2,-2,-2,-50,-20},
+            {100,-20,10,5,5,10,-20,100}
+    };
+
+    @Override
+    public int computeHeuristic(ReversiBoard rv, char player, char opponent) {
+        int whiteVal = 0;
+        int blackVal = 0;
+        for(GridPosition g: rv.getWhiteDisks()){
+            whiteVal+=heurGrid[g.getPosR()][g.getPosC()];
+        }
+        for(GridPosition g: rv.getBlackDisks()){
+            blackVal+=heurGrid[g.getPosR()][g.getPosC()];
+        }
+
+        if(player=='W')
+            return whiteVal-blackVal;
+        return blackVal-whiteVal;
+
+    }
+}
+
+
+
+class MobilityHeuristic implements Heuristic{
+    private static final int W1=10;
+    private static final int W2 = 1;
+    @Override
+    public int computeHeuristic(ReversiBoard rv, char player, char opponent) {
+        //count corners
+        int cPl = 0;
+        int cOp = 0;
+
+        int sz = rv.getBoardSize();
+
+        if(rv.getGrid()[0][0]==player)
+            cPl++;
+        if(rv.getGrid()[0][0]==opponent)
+            cOp++;
+        if(rv.getGrid()[0][sz-1]==player)
+            cPl++;
+        if(rv.getGrid()[0][sz-1]==opponent)
+            cOp++;
+        if(rv.getGrid()[sz-1][0]==player)
+            cPl++;
+        if(rv.getGrid()[0][0]==opponent)
+            cOp++;
+        if(rv.getGrid()[sz-1][sz-1]==player)
+            cPl++;
+        if(rv.getGrid()[sz-1][sz-1]==player)
+            cOp++;
+
+
+        ArrayList<GridPosition>mPl = rv.findMoves(player);
+        ArrayList<GridPosition>mOp = rv.findMoves(opponent);
+
+
+        return (W1*(cPl-cOp) + W2*(mPl.size() - mOp.size()))/(mPl.size() + mOp.size());
+    }
+}
+
+class AbsoluteCountHeuristic implements Heuristic{
+
+    @Override
+    public int computeHeuristic(ReversiBoard rv, char player, char opponent) {
+        if(player=='W')
+            return rv.getWhiteScore() - rv.getBlackScore();
+        return rv.getBlackScore() - rv.getWhiteScore();
+    }
+}
 
 
 
@@ -284,27 +787,8 @@ class Utils{
 public class Reversi
 {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+//        PlayFormat.PlayerVsComputer(new PositionalHeuristic1(),4);
 
-        ReversiBoard rb = new ReversiBoard(8);
-        rb.initializeBoard();
-        System.out.println(rb.toString());
-
-        String player = "Black";
-
-        while (true){
-
-            System.out.println("Please select one of the moves"+" "+rb.findMoves('W'));
-
-            String input = scanner.next("^[0-9]+,[0-9]+");
-
-            String[]inp = input.trim().split(",");
-
-            rb.applyMove(new GridPosition(Integer.parseInt(inp[0]),Integer.parseInt(inp[1])),'W');
-
-            System.out.println(rb.toString());
-
-        }
-
+        PlayFormat.ComputerVsComputer(new AbsoluteCountHeuristic(),4);
     }
 }
