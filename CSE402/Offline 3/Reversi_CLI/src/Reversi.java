@@ -65,6 +65,11 @@ class GridPosition implements Serializable
 
 class ReversiBoard implements Serializable{
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     private int dx[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
     private int dy[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
 
@@ -250,7 +255,7 @@ class ReversiBoard implements Serializable{
 
     public int getFreePositions()
     {
-        return (boardSize*boardSize)-getBlackScore()-getBlackScore();
+        return (boardSize*boardSize)-getBlackScore()-getWhiteScore();
     }
 
     public int getWhiteScore()
@@ -347,26 +352,37 @@ class MiniMaxImplementation{
         this.maxDepth = maxDepth;
     }
 
-    private int minimax(ReversiBoard rv,int depth,boolean maxPlayer,char player,char opponent)
+    private int minimax(ReversiBoard rv, int depth, boolean maxPlayer, char player, char opponent, int alpha, int beta)
     {
+
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+//        System.out.println("Alpha: "+alpha+", Beta: "+beta);
         if(rv.getFreePositions()==0) //no move left
-            return 0;
+            //return heuristic.computeHeuristic(rv,player,opponent);
+            return alpha;
 
         if(depth==0){
-            int h;
-            if(maxPlayer) {
-                h = heuristic.computeHeuristic(rv, player, opponent);
-            }
-            else
-                h = heuristic.computeHeuristic(rv,opponent,player);
-            //System.out.println("Computed H For: "+h);
+            int h = heuristic.computeHeuristic(rv,player,opponent);
+            //System.out.println("ASDASD  "+h);
             return h;
         }
 
+//        System.out.println(rv.toString());
 
+
+        //System.out.println("maxPlayer: "+maxPlayer);
         if(maxPlayer){
+            //System.out.println("Finding for "+player);
             ArrayList<GridPosition>moves = rv.findMoves(player);
             int best = Integer.MIN_VALUE;
+//
+//            if(moves.size()==0)
+//                return alpha;
 
             for(GridPosition g: moves){
                 ReversiBoard crv = (ReversiBoard) Utils.deepClone(rv);
@@ -374,29 +390,41 @@ class MiniMaxImplementation{
                 assert crv != null;
                 crv.applyMove(g,player);
 
-                int tmpVal = minimax(crv,depth-1,false,player,opponent);
+                int tmpVal = minimax(crv,depth-1,false,player,opponent, alpha, beta);
 
-                if(tmpVal>best){
-                    best = tmpVal;
-                }
+                alpha = Math.max(alpha,best);
+                best = Math.max(tmpVal,best);
+
+                //alpha beta pruning
+//                if(beta<=alpha){
+//                    //System.out.println("ALPHA-BETA");
+//                    break;
+//                }
             }
             //System.out.println("Returning Max value: at depth: "+depth+" value: "+best);
             return best;
         }
         else {
+            //System.out.println("Finding for "+opponent);
             ArrayList<GridPosition>moves = rv.findMoves(opponent);
             int best = Integer.MAX_VALUE;
+//
+//            if(moves.size()==0)
+//                return ;
 
             for(GridPosition g:moves){
                 ReversiBoard crv = (ReversiBoard) Utils.deepClone(rv);
 
                 assert crv != null;
-                crv.applyMove(g,player);
+                crv.applyMove(g,opponent);
 
-                int tmpVal = minimax(crv,depth-1,true,player,opponent);
-
-                if(tmpVal<best){
-                    best = tmpVal;
+                int tmpVal = minimax(crv,depth-1,true,player,opponent, alpha, beta);
+                beta = Math.min(beta,best);
+                best = Math.min(tmpVal,best);
+                //alpha beta pruning
+                if(beta<=alpha){
+                    //System.out.println("ALPHA-BETA");
+                    break;
                 }
             }
 
@@ -410,6 +438,9 @@ class MiniMaxImplementation{
 
     public GridPosition findBestMove(ReversiBoard reversiBoard,ArrayList<GridPosition>validMoves,char player,char opponent)
     {
+        if(validMoves.size()==1){
+            return validMoves.get(0);
+        }
         int bestVal = Integer.MIN_VALUE;
         GridPosition bestMove = new GridPosition();
 
@@ -419,16 +450,16 @@ class MiniMaxImplementation{
             rv.applyMove(g,player);
 
 
-            int moveVal = minimax(reversiBoard,maxDepth,false,player,opponent);
-            System.out.println(g+" MOVE:  "+moveVal);
-            if(moveVal>bestVal){
+            int moveVal = minimax(reversiBoard,maxDepth,false,player,opponent,Integer.MIN_VALUE,Integer.MAX_VALUE);
+            //System.out.println(g+" MOVE:  "+moveVal);
+            if(moveVal>=bestVal){
                 bestMove.setPosC(g.getPosC());
                 bestMove.setPosR(g.getPosR());
                 bestVal = moveVal;
             }
         }
 
-        System.out.println("Found Best Move: "+bestMove+" With Value: "+bestVal);
+        //System.out.println("Found Best Move: "+bestMove+" With Value: "+bestVal);
 
         //todo: fixme
         return bestMove;
@@ -454,7 +485,7 @@ class PlayFormat{
         String oppPlayer = "White";
         char p = 'B';
         char opp = 'W';
-
+        boolean breakFlag = false;
         ArrayList<GridPosition>currentMoves = rb.findMoves(p);
 
         while (rb.getFreePositions()!=0){
@@ -495,8 +526,18 @@ class PlayFormat{
             else{
                 System.err.println("No Moves Available for opposition: "+oppPlayer+"\nContinuing for ...."+curPlayer);
                 currentMoves = rb.findMoves(p);
+                if(currentMoves.size()==0) //both has no moves
+                    breakFlag = true;
             }
+
+            if(breakFlag)break;
         }
+
+        System.out.println("Game Finished!!");
+        System.out.println("Score: White: "+rb.getWhiteScore()+" Black: "+rb.getBlackScore());
+        System.out.println(rb.toString());
+
+
     }
 
 
@@ -531,6 +572,7 @@ class PlayFormat{
         String oppPlayer = "White";
         char p = 'B';
         char opp = 'W';
+        boolean breakFlag =false;
 
 
         ArrayList<GridPosition>currentMoves = rb.findMoves(p);
@@ -581,11 +623,19 @@ class PlayFormat{
             else{
                 System.err.println("No Moves Available for opposition: "+oppPlayer+"\nContinuing for ...."+curPlayer);
                 currentMoves = rb.findMoves(p);
+                if(currentMoves.size()==0)
+                    breakFlag=true;
             }
+
+            if(breakFlag)break;
         }
+
+        System.out.println("Game Finished!!");
+        System.out.println("Score: White: "+rb.getWhiteScore()+" Black: "+rb.getBlackScore());
+        System.out.println(rb.toString());
     }
 
-    public static void ComputerVsComputer(Heuristic heuristic,int maxDepth)
+    public static void ComputerVsComputer(int maxDepth)
     {
         System.out.println("Computer Vs Computer Initializing.......");
         Random random = new Random();
@@ -593,8 +643,12 @@ class PlayFormat{
 
         char computer1,computer2;
 
-        MiniMaxImplementation myMiniMax = new MiniMaxImplementation(heuristic,maxDepth);
+        Heuristic h1 = new PositionalHeuristic1();
+        Heuristic h2 = new MobilityHeuristic();
 
+
+        MiniMaxImplementation myMiniMax1 = new MiniMaxImplementation(h1,maxDepth);
+        MiniMaxImplementation myMiniMax2 = new MiniMaxImplementation(h2,maxDepth);
 
         if(toss%2==0){
             computer1 = 'B';
@@ -616,18 +670,25 @@ class PlayFormat{
         String oppPlayer = "White";
         char p = 'B';
         char opp = 'W';
-
+        boolean breakFlag = false;
 
         ArrayList<GridPosition>currentMoves = rb.findMoves(p);
 
         while (rb.getFreePositions()!=0){
 
+            System.out.println("Free positions: "+rb.getFreePositions());
             System.out.println("Trun: "+curPlayer);
             System.out.println("Score: White: "+rb.getWhiteScore()+" Black: "+rb.getBlackScore());
             System.out.println(rb.toString());
-            System.out.println("Please select one of the moves"+" "+currentMoves);
+            //System.out.println("Please select one of the moves"+" "+currentMoves);
             int r = -1,c = -1;
-            GridPosition gp = myMiniMax.findBestMove(rb,currentMoves,p,opp);
+            GridPosition gp = null;
+
+            if(p==computer1)
+                gp = myMiniMax1.findBestMove(rb,currentMoves,p,opp);
+            else
+                gp = myMiniMax2.findBestMove(rb,currentMoves,p,opp);
+
 //            if(p==computer1) {
 //                //Player MOVE
 //                try {
@@ -647,7 +708,7 @@ class PlayFormat{
 //                gp = myMiniMax.findBestMove(rb,currentMoves,p,opp);
 //            }
 
-
+            System.out.println("Selecting: "+gp);
             rb.applyMove(gp,p);
 
             currentMoves = rb.findMoves(opp);
@@ -665,8 +726,17 @@ class PlayFormat{
             else{
                 System.err.println("No Moves Available for opposition: "+oppPlayer+"\nContinuing for ...."+curPlayer);
                 currentMoves = rb.findMoves(p);
+                if(currentMoves.size()==0)
+                    breakFlag=true;
             }
+
+            if(breakFlag)
+                break;
         }
+
+        System.out.println("Game Finished!!");
+        System.out.println("Score: White: "+rb.getWhiteScore()+" Black: "+rb.getBlackScore());
+        System.out.println(rb.toString());
     }
 }
 interface Heuristic{
@@ -768,12 +838,16 @@ class MobilityHeuristic implements Heuristic{
         ArrayList<GridPosition>mPl = rv.findMoves(player);
         ArrayList<GridPosition>mOp = rv.findMoves(opponent);
 
+        //System.out.println(mPl.size()+"  "+mOp.size());
+
+        if((mPl.size()+mOp.size())==0)
+            return 0;
 
         return (W1*(cPl-cOp) + W2*(mPl.size() - mOp.size()))/(mPl.size() + mOp.size());
     }
 }
 
-class AbsoluteCountHeuristic implements Heuristic{
+class AbsoluteCountHeuristic1 implements Heuristic{
 
     @Override
     public int computeHeuristic(ReversiBoard rv, char player, char opponent) {
@@ -786,12 +860,12 @@ class AbsoluteCountHeuristic implements Heuristic{
 
 
 
-
 public class Reversi
 {
     public static void main(String[] args) {
 //        PlayFormat.PlayerVsComputer(new PositionalHeuristic1(),4);
 
-        PlayFormat.ComputerVsComputer(new AbsoluteCountHeuristic(),4);
+        //PlayFormat.ComputerVsComputer(new MobilityHeuristic(),7);
+        PlayFormat.ComputerVsComputer(6);
     }
 }
