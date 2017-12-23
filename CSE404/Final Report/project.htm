@@ -1,0 +1,176 @@
+<html>
+<body style="background-color:9999FF;">
+
+<hr />
+<hr />
+<h1><a name="top">Space Fight</a></h1>
+<hr />
+<hr />
+<br/><br/>
+<br/><br/>
+
+<p><a href="#b_f"><p style="font-size:110%">A Brief Description</p></a></p>
+<a href="#r_e"><p style="font-size:110%">Required Equipments</p></a>
+<a href="#h_w"><p style="font-size:110%">How it works?</p></a>
+<a href="#b_d"><p style="font-size:110%">Block Diagram</p></a>
+<a href="#a_g"><p style="font-size:110%">Algorithm</p></a>
+<a href="#p_d"><p style="font-size:110%">Detailed Pin Diagram</p></a>
+<a href="#p_f"><p style="font-size:110%">Problems Faced</p></a>
+<a href="#p_g"><p style="font-size:110%">Group Members Information</p></a>
+<a href="#p_h"><p style="font-size:110%">Course Teacher</p></a>
+
+
+<br/><br/>
+<br/><br/>
+<hr />
+<h2><a name="b_f">A Brief Description</a></h2>
+<hr />
+<p style="font-size:120%">
+This is our Digital Systems Design course sessional and as part of the class, we have designed and implemented a simple game Space Fights.<br/><br/>
+The game uses Flex sensor and Sonar sensor to get user interaction and act accordingly. 
+</p>
+<br/><br/>
+<br/><br/>
+
+
+<hr />
+<h2><a name="r_e">Required Equipments</a></h2>
+<hr />
+<p style="font-size:120%">
+<ul>
+  <li><p style="font-size:120%">Arduino Macro</p></li>
+  <li><p style="font-size:120%">Sonar Sensor</p></li>
+  <li><p style="font-size:110%">Flex Sensor</p></li>
+  <li><p style="font-size:110%">4X16 Decoders</p></li>
+  <li><p style="font-size:110%">8X8 LED Matrix</p></li>
+  <li><p style="font-size:110%">Buzzer, Nano sound box</p></li>
+</ul>
+</p>
+<br/><br/>
+<br/><br/>
+
+
+<hr />
+<h2><a name="h_w">How it works?</a></h2>
+<hr />
+<p style="font-size:120%">
+We used Arduino Macro for interfacing other hardware peripherals. The whole project is basically an embedded system, which handles the interactions between the inputs and the outputs. The Arduino Mega is interfaced with 2 Flex Sensors as well as 2 Sonar Sensors. The four 8x8 Bi-color LED matrix are intefaced with Arduino Mega through 2 74HC154 4-to-16 decoders.<br>
+<br>
+The Arduino continuously reads the inputs from Flexs and Sonars associated. The Sonars are used to move the player depending on the distance of the Sonar from a fixed reference. The Flexs are used to shoot. Certain thresholds are used in both sensors while reading inputs to resolve the issue of noisy data. When player shoots, the buzzer produce noises accordingly.
+<br>
+The Game has two modes: Single player and Two player. We can choose in which mode we want to play in the beginning of the game.
+</p>
+<br/><br/>
+<br/><br/>
+
+
+<hr />
+<h2><a name="b_d">Block Diagram</a></h2>
+<hr />
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="block_diagram.png" alt="pin diagram" align="top" width="720" height="500" />
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+fig.1 Block Diagram
+</p>
+<br/><br/>
+<br/><br/>
+
+<hr />
+<h2><a name="a_g">Algorithm</a></h2>
+<hr />
+<br/><br/>
+<p style="font-size:120%">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.Start<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.Show option for Player mode<br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.Select Player Mode<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;One Player Mode:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.Enemies are animated from above<br/>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.Player uses Flex and Sonars to move and shoot as long as his lives remains<br/>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.Score of the player is shown at the end.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Two Player Mode:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.Player are shown at the opposite ends of 16x16 LED matrices.<br/>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.Both players uses Flex and Sonars to move and shoot as long as their lives remains<br/>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.Winner Player's number is shown at the end<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.End<br/>
+     
+
+<br/><br/>
+<br/><br/>
+
+<hr />
+<h2><a name="p_d">Detailed Pin Diagram</a></h2>
+<hr />
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="circuit_diagram_cropped.png" alt="pin diagram" align="top" width="1920" height="1080" />
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+fig.2 Detailed Circuit Diagram (Pin Diagram)
+</p>
+</body>
+</html>
+
+<br/><br/>
+<br/><br/>
+
+
+<hr />
+<h2><a name="p_f">Problems Faced</a></h2>
+<hr />
+
+<ol>
+  <p style="font-size:120%"><b>Sonar Sensor interfacing:</b></p>
+  <li><p style="font-size:120%">Sonar Sensor calibration was difficult. We mapped sonar sensor distance with the column numbers on the 16x16 LED matrix board.</p></li>
+  <li><p style="font-size:120%">Sonar sensor was causing some problem, i.e. giving 0 as output for no reason, we needed to fix that too.</p></li>
+    
+  <li><p style="font-size:120%">The most difficult part was when the sonar sensor giving too different values at the same physical distance which was resulting in vibration of the player's ship. For example, if I stop my hand at a particular position, it was giving 15cm for 3-4 time and 16 cm for 7-8 time. We had to handle this problem intellegntly.</p></li>
+  <li><p style="font-size:120%">To measure the distance from  sonar sensor a box like object was giving much better value. So we used a small box rather than human hand, and the sonar sensor had better accuracy.
+  </p></li>
+  <p style="font-size:120%"><b>Flex Sensor interfacing:</b></p>
+  <li><p style="font-size:120%">
+    <img src="flex_discuss.png" alt="pin diagram" align="top" width="400" height="400" /></p></li>
+  <p style="font-size:120%"><b>Coding in Arduino:</b></p>
+  <li><p style="font-size:120%">Once we declared many global variables which resulted into heap memory overflow. The code wad not uploading into the arduino.
+Then we optimized space by making most of them local variables
+  </p></li>
+  <p style="font-size:120%"><b>Led matrix interfacing:</b></p>
+  <li><p style="font-size:120%">For 4 led matrix we needed 24*4 = 96 pins alone ! This much pin was not available in arduino. So we had to use decoder. In this case we used 4x16 low logic decoder. For low logic we had to multiplex the columns of the leds</p></li>
+
+</ol>
+</p>
+<br/><br/>
+<br/><br/>
+
+<hr />
+<h2><a name="p_g">Group Members Information</a></h2>
+<hr />
+<h3><p style="font-size:120%">Section A1: Group 4</p></h3>
+<ul>
+  <li><p style="font-size:120%">Nurul Muttakin [1305009]</p></li>
+  <li><p style="font-size:120%">Tasdiqul Islam [1305033]</p></li>
+  <li><p style="font-size:120%">S.Mahmudul Hasan [1305043]</p></li>
+  <li><p style="font-size:120%">Mahathir Ahmad [1305045]</p></li>
+  <li><p style="font-size:120%">Tanmoy Sarker Pias [1305055]</p></li>
+  <li><p style="font-size:120%">Md. Mahmudul Hasan Masum [1205006]</p></li>
+</ul>
+<br/><br/>
+<br/><br/>
+
+<hr />
+<h2><a name="p_h">Course Teachers</a></h2>
+<hr />
+<ol>
+  <li><p style="font-size:120%">Md Shariful Islam Bhuyan</p></li>
+  <li><p style="font-size:120%">Ch. Md. Rakin Haider</p></li>
+  <li><p style="font-size:120%">Mehnaz Tabassum Mahin</p></li>
+</ol>
+
+<br/><br/>
+<br/><br/>
+
+<a href="#top"><p style="font-size:110%">Back to top</p></a>
