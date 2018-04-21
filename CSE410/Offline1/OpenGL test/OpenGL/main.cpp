@@ -20,6 +20,33 @@ struct point
 	double x,y,z;
 };
 
+struct vect
+{
+	double x,y,z;
+};
+
+
+int crossProduct(vect a, vect b)
+{
+	return a.x*b.x+a.y*b.y+a.z*b.z;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void drawAxes()
 {
@@ -169,6 +196,9 @@ void drawSphere(double radius,int slices,int stacks)
 }
 
 
+
+
+
 void drawSS()
 {
     glColor3f(1,0,0);
@@ -307,13 +337,14 @@ void display(){
 	drawGrid();
 
     //glColor3f(1,0,0);
-    //drawSquare(10);
-
-    drawSS();
+    glTranslatef(10,10,10);
+    drawSquare(10);
+	//drawCircle(200,50);
+   // drawSS();
 
     //drawCircle(30,24);
 
-    //drawCone(20,50,24);
+   // drawCone(20,50,24);
 
 	//drawSphere(30,24,20);
 
@@ -326,7 +357,7 @@ void display(){
 
 
 void animate(){
-	angle+=0.05;
+	angle+=1;
 	//codes for any changes in Models, Camera
 	glutPostRedisplay();
 }
@@ -361,7 +392,7 @@ void init(){
 
 int main(int argc, char **argv){
 	glutInit(&argc,argv);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(600, 600);
 	glutInitWindowPosition(0, 0);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);	//Depth, Double buffer, RGB color
 
