@@ -430,7 +430,7 @@ void realMain()
 			getline(inputFile,tr3);
 			Triangle* tt=new Triangle(tr1,tr2,tr3);
 			
-			//tt->applyMatrix(currentTransMatrix);
+			tt->applyMatrix(*currentTransMatrix);
 
 
 			triangles.pb(tt);
@@ -451,9 +451,12 @@ void realMain()
 			cout<<rot<<endl;
 		}
 		else if(command=="push"){
-			currentTransMatrix->print();
+			cout<<currentTransMatrix<<endl;
 			transStack.push_back(currentTransMatrix);
-			//currentTransMatrix.setVal(0,2,55);
+			currentTransMatrix=new Matrix(*currentTransMatrix);
+			
+			cout<<currentTransMatrix<<endl;
+			currentTransMatrix->setVal(0,2,55);
 		}
 		else if(command=="pop"){
 			if(transStack.size()>0){
