@@ -832,7 +832,8 @@ void realMain()
 	while(true){
 		getline(inputFile,command);
 
-		cout<<command<<endl;
+		//cout<<command<<endl;
+		
 		command=strip(command);
 
 		if(command=="triangle"){
@@ -847,7 +848,7 @@ void realMain()
 			//currentTransMatrix->print();
 			tt->applyMatrix(*currentTransMatrix);
 			
-			tt->print();printf("\n");
+			//tt->print();printf("\n");
 
 
 
@@ -888,12 +889,6 @@ void realMain()
 				printf("ERROR POPPING AN EMPTY MATRIX\n");
 		}
 		else if(command=="end"){
-			//freopen("stage1.txt","w",stdout);
-			for(int i=0;i<triangles.size();i++){
-				//triangles[i]->printNormal();
-				printf("\n");
-			}
-			//fclose(stdout);
 			break;
 		}
 
@@ -903,31 +898,67 @@ void realMain()
 
 
 	//STAGE 2
-	printf("AFTER STAGE 2 APPLIED\n");
+	//printf("AFTER STAGE 2 APPLIED\n");
 	Matrix* V = performStage2(look,eye,up);
 	for(int i=0;i<triangles.size();i++)
 	{
-		printf("\n");
+		//printf("\n");
 		triangles[i]->applyMatrix(*V);
-		triangles[i]->print();
-		printf("\n");
+		//triangles[i]->print();
+		//printf("\n");
 	}
 
 	printToFile(triangles,string("stage2.txt"));
 	//STAGE 3
-	printf("AFTER STAGE 3 APPLIED\n");
+	//printf("AFTER STAGE 3 APPLIED\n");
 	Matrix* P = performStage3(pers);
 
 	for(int i=0;i<triangles.size();i++)
 	{
-		printf("\n");
+		//printf("\n");
 		triangles[i]->applyMatrix(*P);
-		triangles[i]->print();
-		printf("\n");
+		//triangles[i]->print();
+		//printf("\n");
 	}
 	printToFile(triangles,string("stage3.txt"));
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void testFunctionality()
