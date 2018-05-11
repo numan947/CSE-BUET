@@ -9,6 +9,9 @@ using namespace std;
 #define se second
 #define pi (2*acos(0.0))
 
+const int INF = (int) 1e9;
+
+
 inline void tokenize(string str,vector<string> &tokens, string delim){ tokens.clear();size_t s = str.find_first_not_of(delim), e=s; while(s!=std::string::npos){e=str.find(delim,s);tokens.push_back(str.substr(s,e-s));s=str.find_first_not_of(delim,e);}}
 inline string strip(string s){int i=0;while(i<s.size()){if(isspace(s[i]))i++;else break;}s.erase(0,i);i = s.size()-1;while(i>=0){if(isspace(s[i]))i--;else break;}s.erase(i+1,s.size()-i-1);return s;}
 void testFunctionality();
@@ -37,33 +40,6 @@ string doubleToString(double dd)
 }
 
 /************************************/
-
-
-
-const int INF = (int) 1e9;
-
-class Perspective
-{
-	double fovY,aspectRatio,near,far;
-	vector<string>toks;
-public:
-	Perspective(string p)
-	{
-		toks.clear();
-		tokenize(p,toks," ");
-		fovY=stringToDouble(toks[0]);
-		aspectRatio=stringToDouble(toks[1]);
-		near=stringToDouble(toks[2]);
-		far=stringToDouble(toks[3]);
-
-	}
-	void print()
-	{
-		printf("fovY: %lf, aspectRatio: %lf, near: %lf, far: %lf\n",this->fovY,this->aspectRatio,this->near,this->far);
-	}
-};
-
-
 class Matrix
 {
 private:
@@ -224,9 +200,6 @@ public:
 
 	}
 	
-
-
-
 	~Matrix()
 	{
     	for (int i = 0; i < rows; ++i) {
@@ -235,6 +208,9 @@ public:
     
     	delete[] mat;
 	}
+
+
+
 
 	static double dotProduct(Matrix* a, Matrix* b) //must be column matrix
 	{
@@ -413,18 +389,15 @@ public:
 
 			Matrix* AB = new Matrix(A->rows+B->rows,A->cols);
 			
-			//printf("HELIOS %d %d\n",AB->rows,AB->cols);
 			int k=0;
 			for (int i=0;i<AB->rows;i++){
 			    for (int j=0;j<AB->cols;j++){
 			        
 			        if (i<A->rows){
 			            AB->mat[i][j]=A->mat[i][j];
-			            //printf("asdf1\n");
 			        }
 			        else{
 			            AB->mat[i][j]=B->mat[k][j];
-			            //printf("asdf2 %d -- %d\n",i,i-B->rows);
 			        }
 
 			    }
@@ -434,7 +407,7 @@ public:
 
 			return AB;
 		}
-
+		//should not come here -_-
 		return 0;
 	    
 	}
@@ -442,9 +415,6 @@ public:
 
 
 };
-
-
-
 
 
 class Triangle
@@ -471,17 +441,14 @@ public:
 		p1=new Matrix(4,1);
 		p2=new Matrix(4,1);
 		p3=new Matrix(4,1);
+		
 		p1->setVal(3,0,1);
 		p2->setVal(3,0,1);
 		p3->setVal(3,0,1);
 
 		tokenizeAndAdd(p1,v1);
-
 		tokenizeAndAdd(p2,v2);
-
 		tokenizeAndAdd(p3,v3);
-
-
 	}
 
 	void setPoint(int num,double x, double y, double z)
@@ -553,13 +520,11 @@ public:
 		return ret;
 	}
 
-
 	~Triangle(){
 		delete p1;
 		delete p2;
 		delete p3;
 	}
-
 };
 
 
@@ -568,12 +533,15 @@ public:
 Matrix* initializeTranslation(string params)
 {
 	int SIZE=4;
-
-	tokens.clear();
-	tokenize(params,tokens," ");
-	if(tokens.size()!=(SIZE-1))return 0;
-	Matrix* tmp = Matrix::createIdentity(SIZE);
 	
+	tokens.clear();
+	
+	tokenize(params,tokens," ");
+	
+	if(tokens.size()!=(SIZE-1))return 0;
+	
+	Matrix* tmp = Matrix::createIdentity(SIZE);
+
 	for(int i=0;i<(SIZE-1);i++)
 		tmp->setVal(i,(SIZE-1),stringToDouble(tokens[i]));
 	return tmp;
@@ -886,7 +854,7 @@ void realMain()
 				transStack.pop_back();
 			}
 			else
-				printf("ERROR POPPING AN EMPTY MATRIX\n");
+				printf("ERROR POPPING AN EMPTY STACK\n");
 		}
 		else if(command=="end"){
 			break;
@@ -909,6 +877,8 @@ void realMain()
 	}
 
 	printToFile(triangles,string("stage2.txt"));
+	
+
 	//STAGE 3
 	//printf("AFTER STAGE 3 APPLIED\n");
 	Matrix* P = performStage3(pers);
