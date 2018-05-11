@@ -27,6 +27,15 @@ double stringToDouble(string s)
 	return f;
 }
 
+string doubleToString(double dd)
+{
+	ostringstream ostr;
+	ostr.precision(7);
+	ostr<<fixed;
+	ostr<<dd;
+	return ostr.str();
+}
+
 /************************************/
 
 
@@ -129,6 +138,21 @@ public:
 			}
 			printf("\n");
 		}
+	}
+
+	string getPrintableString()
+	{
+		string ss="";
+		for(int i=0;i<rows;i++){
+			// printf("%0.7lf",mat[i][0]);
+			ss+=doubleToString(mat[i][0]);
+			for(int j=1;j<cols;j++){
+				//printf(" %0.7lf",mat[i][j]);
+				ss+=" "+doubleToString(mat[i][j]);
+			}
+			ss+="\n";
+		}
+		return ss;
 	}
 
 
@@ -744,7 +768,17 @@ Matrix* performStage3(Matrix * pers)
 
 
 
-void 
+void printToFile(vector<Triangle*>triangles,string fileName)
+{
+	ofstream ofs;
+	ofs.open(fileName.c_str());
+	for(int i=0;i<triangles.size();i++){
+		ofs<<triangles[i]->getTriangle()->getPrintableString();
+		ofs<<"\n";
+	}
+	ofs.close();
+
+}
 
 
 
@@ -865,6 +899,8 @@ void realMain()
 
 	}
 
+	printToFile(triangles,string("stage1.txt"));
+
 
 	//STAGE 2
 	printf("AFTER STAGE 2 APPLIED\n");
@@ -877,7 +913,7 @@ void realMain()
 		printf("\n");
 	}
 
-	
+	printToFile(triangles,string("stage2.txt"));
 	//STAGE 3
 	printf("AFTER STAGE 3 APPLIED\n");
 	Matrix* P = performStage3(pers);
@@ -889,7 +925,7 @@ void realMain()
 		triangles[i]->print();
 		printf("\n");
 	}
-
+	printToFile(triangles,string("stage3.txt"));
 
 }
 
