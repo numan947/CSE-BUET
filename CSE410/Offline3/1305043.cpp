@@ -11,7 +11,7 @@ using namespace std;
 #define pi (2*acos(0.0))
 
 const int INF = (int) 1e9;
-const double eps = 10e-6;
+const double eps = 1e-9;
 
 
 inline void tokenize(string str,vector<string> &tokens, string delim){ tokens.clear();size_t s = str.find_first_not_of(delim), e=s; while(s!=std::string::npos){e=str.find(delim,s);tokens.push_back(str.substr(s,e-s));s=str.find_first_not_of(delim,e);}}
@@ -47,6 +47,11 @@ class Point{
 public:
 	double x,y,z;
 
+	Point()
+	{
+
+	}
+
 	Point(double xx, double yy, double zz)
 	{
 		this->x=xx;
@@ -58,10 +63,89 @@ public:
 	{
 		printf("%lf %lf %lf\n",this->x,this->y,this->z);
 	}
+
+	void printPoint2D()
+	{
+		printf("%lf %lf \n",this->x,this->y);
+	}
+
+	static void swap(Point &p1, Point &p2){
+		std::swap(p1.x,p2.x);
+		std::swap(p1.y,p2.y);
+		std::swap(p1.z,p2.z);
+	}
 };
+
+
+
+
+class Line2D{
+public:
+	double a,b,c; //ax+by+c=0
+
+	Line2D(double a, double b, double c)
+	{
+		this->a = a;
+		this->b = b;
+		this->c = c;
+	}
+
+	Line2D(Point a, Point b){
+		if(fabs(a.x - b.x)<eps){ //vertical lines
+			this->a = 1.0;
+			this->b = 0;
+			this->c = -a.x;
+		}
+		else{
+			this->a = -(double)(a.y-b.y) / (a.x - b.x);
+			this->b = 1.0;
+			this->c = -(double)(this->a * a.x) - a.y;
+		}
+	}
+
+	static bool areParallel(Line2D l1, Line2D l2)
+	{
+		return (fabs(l1.a-l2.a)<eps) && (fabs(l1.b-l2.b)<eps);
+	}
+
+	static bool areSame(Line2D l1, Line2D l2)
+	{
+		return Line2D::areParallel(l1,l2) && (fabs(l1.c-l2.c)<eps);
+	}
+
+	static bool areIntersect(Line2D l1, Line2D l2, Point &p){
+		if(Line2D::areParallel(l1,l2))return false;
+		
+		double x = (l2.b*l1.c-l1.b*l2.c)/(l2.a*l1.b-l1.a*l2.b);
+
+		double y;
+
+		if(fabs(l1.b)>eps)y = -(l1.a*x + l1.c);
+		else y = -(l2.a*x+l2.c);
+
+		p.x = x;
+		p.y = y;
+
+		return true;
+	}
+
+	static bool insideLineSegment(Point p1, Point p2, Point p3) //p3 inside the line segement defined by p1, p2
+	{
+		return (min(p1.x,p2.x)<=p3.x)&&(p3.x<=max(p1.x,p2.x)) && (min(p1.y,p2.y)<=p3.y)&&(p3.y<=max(p1.y,p2.y));
+	}
+
+};
+
+
 
 class Triangle{
 private:
+	Point *point[3];
+	unsigned char color[3];
+
+	Line2D *line[3];
+
+
 	Point* tokenizeAndAdd(string in){
 
 		tokens.clear();
@@ -75,9 +159,6 @@ private:
 		return p;
 	}
 public:
-	Point *point[3];
-	unsigned char color[3];
-
 	Triangle(vector<string>vs)
 	{
 		if(vs.size()>3){
@@ -86,8 +167,59 @@ public:
 		else{
 			for(int i=0;i<3;i++)
 				point[i]=tokenizeAndAdd(vs[i]);
+
+
+			for(int i=0;i<3;i++)
+				line[i] = new Line2D(*point[i],*point[(i+1)%3]);
 		}
 
+	}
+
+
+	void getScanLineIntersectPoints(double b,Point &p1, Point &p2){
+		Line2D *tmp = new Line2D(0,1,-b);
+
+		Point tp;
+
+		bool xl=false,xr=false;
+
+
+		if(Line2D::areIntersect(*tmp,*line[0],tp) && Line2D::insideLineSegment(*point[0],*point[1],tp)){
+			xl = true;
+			p1.x = tp.x;
+			p1.y = tp.y;
+			p1.z = tp.z;
+		}
+		else if(Line2D::areIntersect(*tmp,*line[1],tp) && Line2D::insideLineSegment(*point[1],*point[2],tp)){
+			if(xl){
+				xr=true;
+				p2.x = tp.x;
+				p2.y = tp.y;
+				p2.z = tp.z;
+			}
+			else{
+				xl=true;
+				p1.x = tp.x;
+				p1.y = tp.y;
+				p1.z = tp.z;
+			}
+		}
+		else if(Line2D::areIntersect(*tmp,*line[2],tp) && Line2D::insideLineSegment(*point[2],*point[0],tp)){
+			p2.x = tp.x;
+			p2.y = tp.y;
+			p2.z = tp.z;
+			xr = true;
+			//this should only be executed if, xr = false
+		}
+
+		p1.printPoint2D();
+		p2.printPoint2D();
+
+		cout<<xl<<" "<<xr<<endl;
+
+
+		if(p1.x>p2.x)
+			Point::swap(p1,p2);
 	}
 
 	void setColor(int pointPos,unsigned char val)
@@ -127,8 +259,10 @@ public:
 
 	~Triangle()
 	{
-		for(int i=0;i<3;i++)
+		for(int i=0;i<3;i++){
 			delete point[i];
+			delete line[i];
+		}
 	}
 };
 
@@ -221,8 +355,8 @@ void initialize_z_buffer_and_frame_buffer()
 	dy = (y_top_limit - y_bottom_limit)/Screen_Height;
 
 	//top, left
-	Top_Y = 1-(dy/2.0);
-	Left_X = -1+(dx/2.0);
+	Top_Y = y_top_limit-(dy/2.0);
+	Left_X = x_left_limit+(dx/2.0);
 
 	//z_buffer
 	z_buffer = new double*[(int)Screen_Height];
@@ -244,7 +378,7 @@ void initialize_z_buffer_and_frame_buffer()
     }
 
     //todo : REMOVE
-    image->save_image("test.bmp");
+    //image->save_image("test.bmp");
 }
 
 
@@ -256,17 +390,15 @@ double getTopScanLine(double maxY)
 {
 	double ss = maxY;
 	if(ss>y_top_limit)ss=y_top_limit;
-	double to_ret = (Top_Y - ss)/dy;
-	cout<<to_ret<<endl;
-	return to_ret;
+	cout<<"Top scan line "<<ss<<endl;
+	return ss;
 }
 int getBottomScanline(double minY)
 {
 	double ss = minY;
 	if(ss<y_bottom_limit)ss=y_bottom_limit;
-	double to_ret = (Top_Y - ss)/dy;
-	cout<<to_ret<<endl;
-	return to_ret;
+	cout<<"Bottom scan line "<<ss<<endl;
+	return ss;
 }
 void apply_procedure()
 {
@@ -278,13 +410,17 @@ void apply_procedure()
 		double bottom_scan_line = getBottomScanline(cur->getMinY());
 
 		double pp = top_scan_line;
-
-		while(pp<=bottom_scan_line){
-			pp+=dy;
-			
+		while(pp>=bottom_scan_line){
+			Point p1,p2;
+			cur->getScanLineIntersectPoints(pp,p1,p2);
+			//p1.printPoint2D();
+			//p2.printPoint2D();
+			pp-=dy;
 		}
-		
-		printf("%lf\n",pp );
+		cout<<endl;
+
+		cout<<dx<<" "<<dy<<endl;
+
 
 
 
