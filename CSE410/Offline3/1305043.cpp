@@ -49,7 +49,9 @@ public:
 
 	Point()
 	{
-
+		this->x = INF;
+		this->y = INF;
+		this->z = INF;
 	}
 
 	Point(double xx, double yy, double zz)
@@ -69,11 +71,20 @@ public:
 		printf("%lf %lf \n",this->x,this->y);
 	}
 
+	bool isValid2D()
+	{
+		return x!=INF && y!=INF;
+	}
+
 	static void swap(Point &p1, Point &p2){
 		std::swap(p1.x,p2.x);
 		std::swap(p1.y,p2.y);
 		std::swap(p1.z,p2.z);
 	}
+	static bool isSame(Point &p1, Point &p2){
+		return fabs(p1.x-p2.x)<eps && fabs(p1.y-p2.y)<eps && fabs(p1.z-p2.z)<eps;
+	}
+
 };
 
 
@@ -81,7 +92,7 @@ public:
 
 class Line2D{
 public:
-	double a,b,c; //ax+by+c=0
+	double a,b,c; //ax+by=c
 
 	Line2D(double a, double b, double c)
 	{
@@ -90,18 +101,11 @@ public:
 		this->c = c;
 	}
 
-	Line2D(Point a, Point b){
-		if(fabs(a.x - b.x)<eps){ //vertical lines
-			this->a = 1.0;
-			this->b = 0;
-			this->c = -a.x;
-		}
-		else{
-			this->a = -(double)(a.y-b.y) / (a.x - b.x);
-			this->b = 1.0;
-			this->c = -(double)(this->a * a.x) - a.y;
-		}
-	}
+	Line2D(Point p1, Point p2){
+		this->a = p2.y - p1.y;
+		this->b = p1.x - p2.x;
+		this->c = (this->a)*p1.x + (this->b)*p1.y;
+	}	
 
 	static bool areParallel(Line2D l1, Line2D l2)
 	{
@@ -114,17 +118,14 @@ public:
 	}
 
 	static bool areIntersect(Line2D l1, Line2D l2, Point &p){
-		if(Line2D::areParallel(l1,l2))return false;
 		
-		double x = (l2.b*l1.c-l1.b*l2.c)/(l2.a*l1.b-l1.a*l2.b);
+		double det = l1.a*l2.b - l2.a*l1.b;
+		if(det==0)return false;
 
-		double y;
 
-		if(fabs(l1.b)>eps)y = -(l1.a*x + l1.c);
-		else y = -(l2.a*x+l2.c);
 
-		p.x = x;
-		p.y = y;
+		p.x = (l2.b*l1.c - l1.b*l2.c) / det;
+		p.y = (l1.a*l2.c - l2.a*l1.c) /det;
 
 		return true;
 	}
@@ -177,49 +178,42 @@ public:
 
 
 	void getScanLineIntersectPoints(double b,Point &p1, Point &p2){
-		Line2D *tmp = new Line2D(0,1,-b);
+		Line2D *tmp = new Line2D(0,1,b);
 
-		Point tp;
+		bool l=false,r=false;
 
-		bool xl=false,xr=false;
+		vector<Point>pp;
+		pp.clear();
 
-
-		if(Line2D::areIntersect(*tmp,*line[0],tp) && Line2D::insideLineSegment(*point[0],*point[1],tp)){
-			xl = true;
-			p1.x = tp.x;
-			p1.y = tp.y;
-			p1.z = tp.z;
+		for(int i=0;i<3;i++){
+			Point x;	
+			Line2D::areIntersect(*tmp,*line[i],x);
+			if(x.isValid2D())pp.pb(x);
+			
 		}
-		else if(Line2D::areIntersect(*tmp,*line[1],tp) && Line2D::insideLineSegment(*point[1],*point[2],tp)){
-			if(xl){
-				xr=true;
-				p2.x = tp.x;
-				p2.y = tp.y;
-				p2.z = tp.z;
+
+		// for(int i=0;i<pp.size();i++)
+		// 	pp[i].printPoint2D();
+
+		if(pp.size()==3 || pp.size()<2 ){
+			printf("FIX IT FELIX\n");
+		}
+		else{
+			if(pp[0].x<pp[1].x){
+				p1.x = pp[0].x;
+				p1.y = pp[0].y;
+
+				p2.x = pp[1].x;
+				p2.y = pp[1].y;
 			}
 			else{
-				xl=true;
-				p1.x = tp.x;
-				p1.y = tp.y;
-				p1.z = tp.z;
+				p2.x = pp[0].x;
+				p2.y = pp[0].y;
+
+				p1.x = pp[1].x;
+				p1.y = pp[1].y;
 			}
 		}
-		else if(Line2D::areIntersect(*tmp,*line[2],tp) && Line2D::insideLineSegment(*point[2],*point[0],tp)){
-			p2.x = tp.x;
-			p2.y = tp.y;
-			p2.z = tp.z;
-			xr = true;
-			//this should only be executed if, xr = false
-		}
-
-		p1.printPoint2D();
-		p2.printPoint2D();
-
-		cout<<xl<<" "<<xr<<endl;
-
-
-		if(p1.x>p2.x)
-			Point::swap(p1,p2);
 	}
 
 	void setColor(int pointPos,unsigned char val)
@@ -385,21 +379,31 @@ void initialize_z_buffer_and_frame_buffer()
 
 
 
+int getRowNumber(double ss)
+{
+	return round((Top_Y-ss)/dy);
+}
+
+int getColNumber(double ss)
+{
+	return round((ss-Left_X)/dx);
+}
+
 
 double getTopScanLine(double maxY)
 {
 	double ss = maxY;
 	if(ss>y_top_limit)ss=y_top_limit;
-	cout<<"Top scan line "<<ss<<endl;
 	return ss;
 }
-int getBottomScanline(double minY)
+double getBottomScanline(double minY)
 {
 	double ss = minY;
 	if(ss<y_bottom_limit)ss=y_bottom_limit;
-	cout<<"Bottom scan line "<<ss<<endl;
 	return ss;
 }
+double getRightClippingline(double )
+
 void apply_procedure()
 {
 	for(int i=0;i<triangles.size();i++)
@@ -409,19 +413,20 @@ void apply_procedure()
 		double top_scan_line = getTopScanLine(cur->getMaxY());
 		double bottom_scan_line = getBottomScanline(cur->getMinY());
 
-		double pp = top_scan_line;
-		while(pp>=bottom_scan_line){
-			Point p1,p2;
-			cur->getScanLineIntersectPoints(pp,p1,p2);
-			//p1.printPoint2D();
-			//p2.printPoint2D();
-			pp-=dy;
+		printf("HEllo\n");
+		Point p1,p2;
+
+		double bb = top_scan_line;
+
+		while(bb>=bottom_scan_line){
+			cur->getScanLineIntersectPoints(bb,p1,p2);
+			printf("Scan Line %lf --------------------------\n",bb );
+			cout<<getRowNumber(bb)<<" "<<getColNumber(p1.x)<<" "<<getColNumber(p2.x)<<endl;
+			p1.printPoint2D();
+			p2.printPoint2D();
+			bb-=dy;
+
 		}
-		cout<<endl;
-
-		cout<<dx<<" "<<dy<<endl;
-
-
 
 
 
