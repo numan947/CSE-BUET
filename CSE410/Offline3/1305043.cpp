@@ -75,6 +75,12 @@ public:
 	{
 		return x!=INF && y!=INF;
 	}
+	void clear()
+	{
+		this->x = INF;
+		this->y = INF;
+		this->z = INF;
+	}
 
 	static void swap(Point &p1, Point &p2){
 		std::swap(p1.x,p2.x);
@@ -93,6 +99,7 @@ public:
 class Line2D{
 public:
 	double a,b,c; //ax+by=c
+	Point p1,p2;
 
 	Line2D(double a, double b, double c)
 	{
@@ -105,7 +112,22 @@ public:
 		this->a = p2.y - p1.y;
 		this->b = p1.x - p2.x;
 		this->c = (this->a)*p1.x + (this->b)*p1.y;
-	}	
+
+		this->p1.x = p1.x;
+		this->p1.y = p1.y;
+		this->p2.x = p2.x;
+		this->p2.y = p2.y;
+	}
+
+
+	void printLine()
+	{
+		// if(p1.isValid2D() && p2.isValid2D()){
+		// 	p1.printPoint2D();
+		// 	p2.printPoint2D();
+		// }
+		cout<<a<<"X+"<<b<<"Y = "<<c<<endl;
+	}
 
 	static bool areParallel(Line2D l1, Line2D l2)
 	{
@@ -132,7 +154,17 @@ public:
 
 	static bool insideLineSegment(Point p1, Point p2, Point p3) //p3 inside the line segement defined by p1, p2
 	{
-		return (min(p1.x,p2.x)<=p3.x)&&(p3.x<=max(p1.x,p2.x)) && (min(p1.y,p2.y)<=p3.y)&&(p3.y<=max(p1.y,p2.y));
+		//return (min(p1.x,p2.x)<=p3.x)&&(p3.x<=max(p1.x,p2.x)) && (min(p1.y,p2.y)<=p3.y)&&(p3.y<=max(p1.y,p2.y));
+
+		double minValX = min(p1.x,p2.x);
+		double minValY = min(p1.y,p2.y);
+
+		double maxValX = max(p1.x,p2.x);
+		double maxValY = max(p1.y,p2.y);
+
+		return
+		(fabs(minValX - p3.x)<=eps || minValX < p3.x) && (fabs(minValY - p3.y)<=eps || minValY < p3.y)&&
+		(fabs(maxValX - p3.x)<=eps || p3.x < maxValX) && (fabs(maxValY - p3.y)<=eps || p3.y < maxValY);  
 	}
 
 };
@@ -184,11 +216,13 @@ public:
 
 		vector<Point>pp;
 		pp.clear();
-
 		for(int i=0;i<3;i++){
 			Point x;	
 			Line2D::areIntersect(*tmp,*line[i],x);
-			if(x.isValid2D())pp.pb(x);
+			if(x.isValid2D()){
+				if(Line2D::insideLineSegment(*point[i],*point[(i+1)%3],x))
+					pp.pb(x);
+			}
 			
 		}
 
@@ -196,7 +230,26 @@ public:
 		// 	pp[i].printPoint2D();
 
 		if(pp.size()==3 || pp.size()<2 ){
-			printf("FIX IT FELIX\n");
+			printf("FIX IT FELIX --size-- %d\n",pp.size());
+/*			for(int i=0;i<invalid.size();i++){
+				invalid[i].printPoint2D();
+
+				cout<<Line2D::insideLineSegment(*point[0],*point[1],invalid[i])<<endl;
+				cout<<Line2D::insideLineSegment(*point[1],*point[2],invalid[i])<<endl;
+				cout<<Line2D::insideLineSegment(*point[2],*point[0],invalid[i])<<endl;
+				
+			}
+
+			pp[0].printPoint2D();
+			line[0]->printLine();
+			line[1]->printLine();
+			line[2]->printLine();
+
+			tmp->printLine();
+
+
+			this->printTriangle();*/
+
 		}
 		else{
 			if(pp[0].x<pp[1].x){
@@ -352,6 +405,9 @@ void initialize_z_buffer_and_frame_buffer()
 	Top_Y = y_top_limit-(dy/2.0);
 	Left_X = x_left_limit+(dx/2.0);
 
+	printf("Top_Y %lf Left_X %lf\n",Top_Y,Left_X);
+	printf("dx %lf dy %lf\n",dx,dy);
+
 	//z_buffer
 	z_buffer = new double*[(int)Screen_Height];
 	for(int i=0;i<Screen_Height;i++){
@@ -381,13 +437,25 @@ void initialize_z_buffer_and_frame_buffer()
 
 int getRowNumber(double ss)
 {
-	return round((Top_Y-ss)/dy);
+	int tp = round((Top_Y-ss)/dy);
+	if(tp<0)tp = 0;
+	else if(tp>=Screen_Height)tp = Screen_Height - 1;
+	return tp;
 }
 
+double getRowValue(int row)
+{
+	return 
+}
 int getColNumber(double ss)
 {
-	return round((ss-Left_X)/dx);
+	//cout<<"WTF  "<<round((ss-Left_X)/dx)<<endl; 
+	int tp = round((1.0*ss-1.0*Left_X)/dx);
+	if(tp<0)tp = 0;
+	else if(tp>=Screen_Width)tp = Screen_Width - 1;
+	return tp;
 }
+
 
 
 double getTopScanLine(double maxY)
@@ -396,35 +464,74 @@ double getTopScanLine(double maxY)
 	if(ss>y_top_limit)ss=y_top_limit;
 	return ss;
 }
-double getBottomScanline(double minY)
+double getBottomScanLine(double minY)
 {
 	double ss = minY;
 	if(ss<y_bottom_limit)ss=y_bottom_limit;
 	return ss;
 }
-double getRightClippingline(double )
+double getRightClippingLine(double maxX)
+{
+	double ss = maxX;
+	if(ss>x_right_limit)ss = x_right_limit;
+	return ss;
+}
+double getLeftClippingLine(double minX)
+{
+	double ss = minX;
+	if(ss<x_left_limit)ss = x_left_limit;
+	return ss;
+}
+
+
 
 void apply_procedure()
 {
+	
+	double top_scan_line,bottom_scan_line,rr,rre,
+		   left_clipping_line,right_clipping_line,cc,cce;
+
+	int row,col;
+
+	Point p1,p2;
+
+
 	for(int i=0;i<triangles.size();i++)
 	{
 		Triangle* cur = triangles[i];
 
-		double top_scan_line = getTopScanLine(cur->getMaxY());
-		double bottom_scan_line = getBottomScanline(cur->getMinY());
+		top_scan_line = getTopScanLine(cur->getMaxY());
+		bottom_scan_line = getBottomScanLine(cur->getMinY());
 
 		printf("HEllo\n");
-		Point p1,p2;
+		p1.clear();
+		p2.clear();
 
-		double bb = top_scan_line;
+		rr = getRowNumber(top_scan_line);
+		rre = getRowNumber(bottom_scan_line);
 
-		while(bb>=bottom_scan_line){
-			cur->getScanLineIntersectPoints(bb,p1,p2);
-			printf("Scan Line %lf --------------------------\n",bb );
-			cout<<getRowNumber(bb)<<" "<<getColNumber(p1.x)<<" "<<getColNumber(p2.x)<<endl;
-			p1.printPoint2D();
-			p2.printPoint2D();
-			bb-=dy;
+
+		while(rr<=rre){
+			
+			cur->getScanLineIntersectPoints(getRow,p1,p2);
+			//printf("Scan Line %lf --------------------------\n",bb );
+			left_clipping_line = getLeftClippingLine(p1.x);
+			right_clipping_line = getRightClippingLine(p2.x);
+
+			cc = left_clipping_line;
+
+			row = getRowNumber(rr);
+
+			while(cc<=right_clipping_line){
+				col = getColNumber(cc);
+
+				cout<<"processing...."<<row<<" "<<col<<endl;
+
+				cc+=dx;
+			}
+
+
+			rr++;
 
 		}
 
