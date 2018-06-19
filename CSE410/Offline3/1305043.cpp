@@ -170,11 +170,41 @@ public:
 };
 
 
+class Vect
+{
+public:
+	double x,y,z;
+
+	Vect(Point p1,Point p2)
+	{
+		this->x = p2.x - p1.x;
+		this->y = p2.y - p1.y;
+		this->z = p2.z - p1.z;
+	}
+
+	Vect(double x, double y, double z)
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+
+};
+
+Vect crossProduct(Vect a,Vect b)
+{
+	Vect tmp(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+ 	return tmp;
+}
 
 class Triangle{
 private:
+
+	double p_a,p_b,p_c,p_d;
+
 	Point *point[3];
 	unsigned char color[3];
+	
 
 	Line2D *line[3];
 
@@ -204,8 +234,25 @@ public:
 
 			for(int i=0;i<3;i++)
 				line[i] = new Line2D(*point[i],*point[(i+1)%3]);
+
+
+			Vect *A = new Vect(*point[0],*point[1]);
+			Vect *B = new Vect(*point[0],*point[2]);
+
+			Vect planeVector = crossProduct(*A,*B);
+
+			this->p_a = planeVector.x;
+			this->p_b = planeVector.y;
+			this->p_c = planeVector.z;
+			this->p_d = (-p_a*(point[0]->x))+(-p_b*point[0]->y)+(-p_c*point[0]->z);
 		}
 
+	}
+
+	double getZValue(double x, double y)
+	{
+		//cout<<p_a <<" "<<p_b<<" "<<p_c<<" "<<p_d<<endl;
+		return (-1.0*p_d - 1.0*p_a*x - 1.0*p_b*y)/p_c;
 	}
 
 
@@ -274,13 +321,22 @@ public:
 		}
 	}
 
-	void setColor(int pointPos,unsigned char val)
+	void setColor(unsigned char r,unsigned char g, unsigned char b)
 	{
-		if(pointPos<0||pointPos>=3){
-			printf("Error in --> TRIANGLE:setColor, value out of bound\n");
-			return;
-		}
-		color[pointPos]=val;
+		color[0]=r;color[1]=g;color[2]=b;
+	}
+
+	unsigned char getR()
+	{
+		return color[0];
+	}
+	unsigned char getG()
+	{
+		return color[1];
+	}
+	unsigned char getB()
+	{
+		return color[2];
 	}
 
 
@@ -317,6 +373,8 @@ public:
 		}
 	}
 };
+
+
 
 
 double Screen_Width,
@@ -437,9 +495,6 @@ void initialize_z_buffer_and_frame_buffer()
 }
 
 
-
-
-
 int getRowNumber(double ss)
 {
 	int tp = round((Top_Y-ss)/dy);
@@ -510,8 +565,11 @@ void apply_procedure()
 	{
 		Triangle* cur = triangles[i];
 
+		cur->setColor(rand()%255 + 1,rand()%255 + 1,rand()%255 + 1); //avoid 0 coloring
+
 		top_scan_line = getTopScanLine(cur->getMaxY());
 		bottom_scan_line = getBottomScanLine(cur->getMinY());
+
 
 		printf("HEllo\n");
 		p1.clear();
@@ -521,7 +579,7 @@ void apply_procedure()
 		rre = getRowNumber(bottom_scan_line);
 
 		printf("Scan Line %d to %d --------------------------\n",rr,rre);
-			
+
 
 		while(rr<=rre){
 			
@@ -534,10 +592,18 @@ void apply_procedure()
 				cc = getColNumber(left_clipping_line);
 				cce = getColNumber(right_clipping_line);
 
-				cout<<cc<<" "<<cce<<endl;
+				//cout<<cc<<" "<<cce<<endl;
+
+				//cout<<getColValue(cc)<<"  "<<getRowValue(rr)<<endl;
+				//cout<<cur->getZValue(getColValue(cc),getRowValue(rr))<<endl;
+				//break;
 
 				while(cc<=cce){
-
+					double zVal = cur->getZValue(getColValue(cc),getRowValue(rr));
+					if(zVal<z_buffer[rr][cc]){
+						z_buffer[rr][cc]=zVal;
+						image->set_pixel(cc,rr,cur->getR(),cur->getG(),cur->getB());
+					}
 					cc++;
 				}
 			}
@@ -594,7 +660,7 @@ int main()
 	read_data();
 	initialize_z_buffer_and_frame_buffer();
 	apply_procedure();
-	//save();
+	save();
 	free_memory();
 
 	return 0;
