@@ -40,6 +40,10 @@ string doubleToString(double dd)
 	return ostr.str();
 }
 
+
+int myRand()
+{int max = 255;int min =1;int randNum = (rand()*rand()) % (max - min + 1) + min;return randNum;}
+
 /************************************/
 
 
@@ -565,7 +569,7 @@ void apply_procedure()
 	{
 		Triangle* cur = triangles[i];
 
-		cur->setColor(rand()%255 + 1,rand()%255 + 1,rand()%255 + 1); //avoid 0 coloring
+		cur->setColor(myRand(),myRand(),myRand()); //avoid 0 coloring
 
 		top_scan_line = getTopScanLine(cur->getMaxY());
 		bottom_scan_line = getBottomScanLine(cur->getMinY());
