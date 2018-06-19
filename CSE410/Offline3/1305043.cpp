@@ -209,7 +209,7 @@ public:
 	}
 
 
-	void getScanLineIntersectPoints(double b,Point &p1, Point &p2){
+	bool getScanLineIntersectPoints(double b,Point &p1, Point &p2){
 		Line2D *tmp = new Line2D(0,1,b);
 
 		bool l=false,r=false;
@@ -222,6 +222,8 @@ public:
 			if(x.isValid2D()){
 				if(Line2D::insideLineSegment(*point[i],*point[(i+1)%3],x))
 					pp.pb(x);
+
+
 			}
 			
 		}
@@ -231,24 +233,26 @@ public:
 
 		if(pp.size()==3 || pp.size()<2 ){
 			printf("FIX IT FELIX --size-- %d\n",pp.size());
-/*			for(int i=0;i<invalid.size();i++){
-				invalid[i].printPoint2D();
+			cout<<"B value --> "<<b<<endl;
+			// for(int i=0;i<invalid.size();i++){
+			// 	invalid[i].printPoint2D();
 
-				cout<<Line2D::insideLineSegment(*point[0],*point[1],invalid[i])<<endl;
-				cout<<Line2D::insideLineSegment(*point[1],*point[2],invalid[i])<<endl;
-				cout<<Line2D::insideLineSegment(*point[2],*point[0],invalid[i])<<endl;
+			// 	cout<<Line2D::insideLineSegment(*point[0],*point[1],invalid[i])<<endl;
+			// 	cout<<Line2D::insideLineSegment(*point[1],*point[2],invalid[i])<<endl;
+			// 	cout<<Line2D::insideLineSegment(*point[2],*point[0],invalid[i])<<endl;
 				
-			}
+			// }
 
-			pp[0].printPoint2D();
-			line[0]->printLine();
-			line[1]->printLine();
-			line[2]->printLine();
+			// pp[0].printPoint2D();
+			// line[0]->printLine();
+			// line[1]->printLine();
+			// line[2]->printLine();
 
-			tmp->printLine();
+			// tmp->printLine();
 
 
-			this->printTriangle();*/
+			// this->printTriangle();
+			return false;
 
 		}
 		else{
@@ -266,6 +270,7 @@ public:
 				p1.x = pp[1].x;
 				p1.y = pp[1].y;
 			}
+			return true;
 		}
 	}
 
@@ -445,7 +450,7 @@ int getRowNumber(double ss)
 
 double getRowValue(int row)
 {
-	return 
+	return Top_Y - row*dy*1.0;
 }
 int getColNumber(double ss)
 {
@@ -455,7 +460,10 @@ int getColNumber(double ss)
 	else if(tp>=Screen_Width)tp = Screen_Width - 1;
 	return tp;
 }
-
+double getColValue(int col)
+{
+	return Left_X + col*1.0*dx;
+}
 
 
 double getTopScanLine(double maxY)
@@ -485,13 +493,15 @@ double getLeftClippingLine(double minX)
 
 
 
+
+
 void apply_procedure()
 {
 	
-	double top_scan_line,bottom_scan_line,rr,rre,
-		   left_clipping_line,right_clipping_line,cc,cce;
+	double top_scan_line,bottom_scan_line,
+		   left_clipping_line,right_clipping_line;
 
-	int row,col;
+	int rr,rre,cc,cce;
 
 	Point p1,p2;
 
@@ -510,27 +520,27 @@ void apply_procedure()
 		rr = getRowNumber(top_scan_line);
 		rre = getRowNumber(bottom_scan_line);
 
+		printf("Scan Line %d to %d --------------------------\n",rr,rre);
+			
 
 		while(rr<=rre){
 			
-			cur->getScanLineIntersectPoints(getRow,p1,p2);
-			//printf("Scan Line %lf --------------------------\n",bb );
-			left_clipping_line = getLeftClippingLine(p1.x);
-			right_clipping_line = getRightClippingLine(p2.x);
+			if(cur->getScanLineIntersectPoints(getRowValue(rr),p1,p2)){
+			
 
-			cc = left_clipping_line;
+				left_clipping_line = getLeftClippingLine(p1.x);
+				right_clipping_line = getRightClippingLine(p2.x);
 
-			row = getRowNumber(rr);
+				cc = getColNumber(left_clipping_line);
+				cce = getColNumber(right_clipping_line);
 
-			while(cc<=right_clipping_line){
-				col = getColNumber(cc);
+				cout<<cc<<" "<<cce<<endl;
 
-				cout<<"processing...."<<row<<" "<<col<<endl;
+				while(cc<=cce){
 
-				cc+=dx;
+					cc++;
+				}
 			}
-
-
 			rr++;
 
 		}
