@@ -44,6 +44,12 @@ string doubleToString(double dd)
 int myRand()
 {int max = 255;int min =1;int randNum = (rand()*rand()) % (max - min + 1) + min;return randNum;}
 
+
+int myRound(double dd)
+{
+	if(dd-(int)dd>0.5)return (int)dd + 1;
+	else return (int)dd;
+}
 /************************************/
 
 
@@ -515,7 +521,7 @@ void initialize_z_buffer_and_frame_buffer()
 
 int getRowNumber(double ss)
 {
-	int tp = round((Top_Y-ss)/dy);
+	int tp = myRound((Top_Y-ss)/dy);
 	if(tp<0)tp = 0;
 	else if(tp>=Screen_Height)tp = Screen_Height - 1;
 	return tp;
@@ -528,7 +534,7 @@ double getRowValue(int row)
 int getColNumber(double ss)
 {
 	//cout<<"WTF  "<<round((ss-Left_X)/dx)<<endl; 
-	int tp = round((1.0*ss-1.0*Left_X)/dx);
+	int tp = myRound((1.0*ss-1.0*Left_X)/dx);
 	if(tp<0)tp = 0;
 	else if(tp>=Screen_Width)tp = Screen_Width - 1;
 	return tp;
@@ -596,8 +602,8 @@ void apply_procedure()
 		rr = getRowNumber(top_scan_line);
 		rre = getRowNumber(bottom_scan_line);
 
-		//printf("Scan Line %d to %d --------------------------\n",rr,rre);
-		//printf("Scan Line %lf to %lf --------------------------\n",getRowValue(rr),getRowValue(rre));
+		printf("Scan Line %d to %d --------------------------\n",rr,rre);
+		printf("Scan Line %lf to %lf --------------------------\n",getRowValue(rr),getRowValue(rre));
 
 		while(rr<=rre){
 			//printf("Scan Line %d to %d --------------------------\n",rr,rre);
