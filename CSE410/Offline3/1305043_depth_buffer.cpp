@@ -282,7 +282,7 @@ public:
 		// for(int i=0;i<pp.size();i++)
 		// 	pp[i].printPoint2D();
 
-		if(pp.size()==3 || pp.size()<2 ){
+		if(pp.size()<2 ){
 			printf("FIX IT FELIX --size-- %d\n",pp.size());
 			cout<<"B value --> "<<b<<endl;
 			// for(int i=0;i<invalid.size();i++){
@@ -307,6 +307,20 @@ public:
 
 		}
 		else{
+			if(pp.size()==3){
+				for(int i=0;i<2;i++){
+					for(int j=i+1;j<3;j++){
+						if(Point::isSame(pp[i],pp[j])){
+							pp.erase(pp.begin()+i);
+							break;
+						}
+					}
+					if(pp.size()<3)break;
+				}
+
+			}
+
+
 			if(pp[0].x<pp[1].x){
 				p1.x = pp[0].x;
 				p1.y = pp[0].y;
@@ -582,11 +596,13 @@ void apply_procedure()
 		rr = getRowNumber(top_scan_line);
 		rre = getRowNumber(bottom_scan_line);
 
-		printf("Scan Line %d to %d --------------------------\n",rr,rre);
-
+		//printf("Scan Line %d to %d --------------------------\n",rr,rre);
+		//printf("Scan Line %lf to %lf --------------------------\n",getRowValue(rr),getRowValue(rre));
 
 		while(rr<=rre){
-			
+			//printf("Scan Line %d to %d --------------------------\n",rr,rre);
+			//printf("Scan Line %lf to %lf --------------------------\n",getRowValue(rr),getRowValue(rre));
+
 			if(cur->getScanLineIntersectPoints(getRowValue(rr),p1,p2)){
 			
 
