@@ -626,7 +626,7 @@ void apply_procedure()
 
 				while(cc<=cce){
 					double zVal = cur->getZValue(getColValue(cc),getRowValue(rr));
-					if(zVal<z_buffer[rr][cc]){
+					if(zVal>=z_front_limit && zVal<=z_rear_limit && zVal<z_buffer[rr][cc]){
 						z_buffer[rr][cc]=zVal;
 						image->set_pixel(cc,rr,cur->getR(),cur->getG(),cur->getB());
 					}
