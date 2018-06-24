@@ -56,11 +56,12 @@ def getValue(tmp,template):
 
 
 def ExhaustiveSearch(template,main):
+	print("Running: ExhaustiveSearch")
 	
-	print("Temlate Size-->",end="")	
-	print(template.shape)
-	print("Main Image Size-->",end="")	
-	print(main.shape)
+	# print("Temlate Size-->",end="")	
+	# print(template.shape)
+	# print("Main Image Size-->",end="")	
+	# print(main.shape)
 
 	startTime = time.time()
 	print("Start Time: ",startTime)
@@ -69,7 +70,7 @@ def ExhaustiveSearch(template,main):
 	m_h,m_w,m_d = main.shape
 	#show_image(main,'chunked')
 
-	D = np.ones((m_h,m_w))
+	D = np.ones((m_h-t_h,m_w-t_w))
 	D*=np.inf
 
 	#print(D.shape==main.shape)
@@ -84,94 +85,100 @@ def ExhaustiveSearch(template,main):
 	print(unravel_index(D.argmin(),D.shape))
 
 	r,c = unravel_index(D.argmin(),D.shape)
-
-	cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),2)
+	
 
 	endTime = time.time()
 	print("End Time: ",endTime)
-
 	print("Total Time Taken: ",endTime-startTime," second(s)")
-	#cv2.rectangle(main,(0,0),(50,50),(250,250,250),cv2.FILLED)
 
-	#cv2.arrowedLine(main,())
-
-
+	
+	cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),2)
 	show_image(main, 'ExhaustiveSearch')
 
+	return ((r,c),endTime-startTime)
 
 
 
-def TDLSearch(template,main):
-	print("Temlate Size-->",end="")	
-	print(template.shape)
-	print("Main Image Size-->",end="")	
-	print(main.shape)
+
+
+def TDLSearch(template,main,p):
+	print("Running: 2DLogarithmicSearch")
+	# print("Temlate Size-->",end="")	
+	# print(template.shape)
+	# print("Main Image Size-->",end="")	
+	# print(main.shape)
+
+	startTime = time.time()
+	print("Start Time: ",startTime)
+
 
 	t_h,t_w,t_d = template.shape
 	m_h,m_w,m_d = main.shape
 
 
-	print(np.ceil(np.log2(m_h)))
-	print(np.ceil(np.log2(m_w)))
+	k=np.ceil(np.log2(p))
+	d = 2**(k-1)
+
+	centerR,centerC = np.ceil(m_h/2.0),np.ceil(m_w/2.0)
+	centerPoint = (int(centerR),int(centerC))	
+
+	# 8 direction
+	dx = [1,1,1,0,0,-1,-1,-1]
+	dy = [0,1,-1,1,-1,0,1,-1]
+
+	def getPoints(center,d):
+		pts=[]
+		for i in range(8):
+			pts.append((int(center[0]+dy[i]*d),int(center[1]+dx[i]*d)))
+		return pts
+
+	def showPts(pts):
+		for pt in pts:
+			cv2.circle(main,(int(pt[0]),int(pt[1])), 1, (0,0,255), -1)
+
+	while(p>=1):
+		k=np.ceil(np.log2(p))
+		d = 2**(k-1)
+		print(d,k)
+		pts = getPoints(centerPoint,d)
+		
+		pts.append(centerPoint)
+		mn = np.inf
+		mnPt = (np.inf,np.inf)
+		
+		for pt in pts:
+			if(pt[0]+t_h<m_h and pt[1]+t_w<m_w):
+				tmp = main[pt[0]:pt[0]+t_h,pt[1]:pt[1]+t_w,:]
+				cur = getValue(tmp, template)
+				if(cur<=mn):
+					mn = cur
+					mnPt = pt
+
+		if(mnPt==centerPoint):
+			p/=2
+		else:
+			centerPoint=mnPt
+			#p/=2
+
+
+	c = centerPoint[1]
+	r = centerPoint[0]
 	
-	k_h = np.ceil(np.log2(m_h))
-	k_w = np.ceil(np.log2(m_h))
+	print("MAX MATCHED IMAGE-->",end="")
+	print(r,c)
+
+
 	
-	d1 = 2**(k_h-1)
-	d2 = 2**(k_w-1)
-
-	# centerR,centerC = np.ceil(m_h/2.0),np.ceil(m_w/2.0)
-
-	# print(centerR,centerC)
-	# print(d1,d2)
-	print("AT MOST",m_h/d1,m_w/d2)
-	
-
-	pts = []
-	# dx = [1,1,1,0,0,0,-1,-1,-1]
-	# dy = [0,1,-1,0,1,-1,0,1,-1]
+	endTime = time.time()
+	print("End Time: ",endTime)
+	print("Total Time Taken: ",endTime-startTime," second(s)")
 
 
-
-	# pts.append((centerR,centerC))
-
-	# scl=1
-
-	# while(True):
-	# 	tmp = []
-	# 	for i in range(9):
-	# 		curR = centerR + dx[i]*scl*d1
-	# 		curC = centerC + dy[i]*scl*d2
-	# 		print(curR,curC)
-	# 		print(dx[i],dy[i])
-	# 		if(curR>=0 and curR<=m_h and curC>=0 and curC<=m_w):
-	# 			tmp.append((curR,curC))
-	# 	pts.extend(tmp)
-	# 	break
-	# 	scl+=1
-
-	# print(len(pts))
-	# print(pts)
+	cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),2)
+	show_image(main, '2DLogarithmicSearch')
 
 
-	for i in range(0,int(m_h/d1)):
-		for j in range(0,int(m_w/d2)):
-			pts.append((np.float(i)*d1,np.float(j)*d2))
-
-	print(pts)
-
-	for pt in pts:
-		 cv2.circle(main,(int(pt[0]),int(pt[1])), 5, (0,0,255), -1)
-
-
-	show_image(main, "asdf")
-
-
-
-
-
-
-
+	return ((r,c),endTime-startTime)
 
 
 
@@ -197,8 +204,12 @@ def main():
 	print(imgMain)
 	print(imgTemplate)
 
-	#ExhaustiveSearch(template,mainImage)
-	TDLSearch(template, mainImage)
+	#t_es = (ExhaustiveSearch(template,mainImage))[1]
+	t_tdls= (TDLSearch(template, mainImage,20))[1]
+
+
+	#print(t_es,t_tdls)
+
 
 
 	#Test(imgTemplate, imgMain)
