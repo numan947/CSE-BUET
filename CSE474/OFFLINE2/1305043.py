@@ -56,16 +56,17 @@ def getValue(tmp,template):
 	return np.sum(dTmp**2)
 
 
-def ExhaustiveSearch(template,main):
-	print("Running: ExhaustiveSearch")
+def ExhaustiveSearch(template,main,show=True):
+	if(show==True):
+		print("Running: ExhaustiveSearch")
 	
 	# print("Temlate Size-->",end="")	
 	# print(template.shape)
 	# print("Main Image Size-->",end="")	
 	# print(main.shape)
 
-	startTime = time.time()
-	print("Start Time: ",startTime)
+		startTime = time.time()
+		print("Start Time: ",startTime)
 
 	t_h,t_w,t_d = template.shape
 	m_h,m_w,m_d = main.shape
@@ -81,36 +82,36 @@ def ExhaustiveSearch(template,main):
 			#print(main[i:i+t_h,j:j+t_w,:].shape,template.shape)
 			tmp = main[i:i+t_h,j:j+t_w,:]
 			D[i][j] = getValue(tmp, template)
-
-	print("MAX MATCHED IMAGE-->",end="")	
-	print(unravel_index(D.argmin(),D.shape))
-
 	r,c = unravel_index(D.argmin(),D.shape)
 	
-
-	endTime = time.time()
-	print("End Time: ",endTime)
-	print("Total Time Taken: ",endTime-startTime," second(s)")
+	if(show==True):
+		print("MAX MATCHED IMAGE-->",end="")	
+		print(r,c)
+		endTime = time.time()
+		print("End Time: ",endTime)
+		print("Total Time Taken: ",endTime-startTime," second(s)")
 
 	
-	cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),2)
-	show_image(main, 'ExhaustiveSearch',True)
+		cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),1)
+		show_image(main, 'ExhaustiveSearch',True)
 
-	return ((r,c),endTime-startTime)
-
-
-
+		return ((r,c),endTime-startTime)
+	return (r,c)
 
 
-def TDLSearch(template,main,p):
-	print("Running: 2DLogarithmicSearch")
+
+
+
+def TDLSearch(template,main,p,show=True):
+	if(show==True):
+		print("Running: 2DLogarithmicSearch")
 	# print("Temlate Size-->",end="")	
 	# print(template.shape)
 	# print("Main Image Size-->",end="")	
 	# print(main.shape)
 
-	startTime = time.time()
-	print("Start Time: ",startTime)
+		startTime = time.time()
+		print("Start Time: ",startTime)
 
 
 	t_h,t_w,t_d = template.shape
@@ -140,7 +141,7 @@ def TDLSearch(template,main,p):
 	while(p>=1):
 		k=np.ceil(np.log2(p))
 		d = 2**(k-1)
-		print(d,k)
+		#print(d,k)
 		pts = getPoints(centerPoint,d)
 		
 		pts.append(centerPoint)
@@ -165,27 +166,53 @@ def TDLSearch(template,main,p):
 	c = centerPoint[1]
 	r = centerPoint[0]
 	
-	print("MAX MATCHED IMAGE-->",end="")
-	print(r,c)
+	if(show==True):
+		print("MAX MATCHED IMAGE-->",end="")
+		print(r,c)
 
 
 	
-	endTime = time.time()
-	print("End Time: ",endTime)
-	print("Total Time Taken: ",endTime-startTime," second(s)")
+		endTime = time.time()
+		print("End Time: ",endTime)
+		print("Total Time Taken: ",endTime-startTime," second(s)")
 
 
-	cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),2)
-	show_image(main, '2DLogarithmicSearch',True)
+		cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),1)
+		show_image(main, '2DLogarithmicSearch',True)
 
 
-	return ((r,c),endTime-startTime)
+		return ((r,c),endTime-startTime)
+
+	return (r,c)
 
 
 
 
+def HeirarchicalSearch(template,main,level,show=True):
 
-def HeirarchicalSearch(template,main,level):
+	if(show==True):
+		print("Running: HeirarchicalSearch")
+	# print("Temlate Size-->",end="")	
+	# print(template.shape)
+	# print("Main Image Size-->",end="")	
+	# print(main.shape)
+
+		startTime = time.time()
+		print("Start Time: ",startTime)
+
+
+	t_h,t_w,t_d = template.shape
+	m_h,m_w,m_d = main.shape
+
+	blur_main = main.copy()
+	blur_temp = template.copy()
+	
+	m_arr = []
+	t_arr = []
+
+	m_arr.append(main)
+	t_arr.append(template)
+
 
 	for i in range(level):
 		blur_main = cv2.GaussianBlur(main,(9,9),0)  #blur
@@ -194,7 +221,76 @@ def HeirarchicalSearch(template,main,level):
 		blur_temp = cv2.GaussianBlur(template,(9,9),0)
 		blur_temp = blur_temp[1::2,1::2]
 
+		m_arr.append(blur_main.copy())
+		t_arr.append(blur_temp.copy())
+
+
+	
+
+	dx = [1,1,1,0,0,-1,-1,-1]
+	dy = [0,1,-1,1,-1,0,1,-1]
+
+	def getPoints(center,d):
+		pts=[]
+		for i in range(8):
+			pts.append((int(center[0]+dy[i]*d),int(center[1]+dx[i]*d)))
+		return pts
+
+
+
+	centerPoint = (np.inf,np.inf)
+
+	for i in range(level):
 		
+		centerPoint = TDLSearch(blur_temp, blur_main,25,show=False)
+		
+		mmain = m_arr[level-i]
+		ttmpl = t_arr[level-i]
+
+
+		tt_h,tt_w,tt_d = ttmpl.shape
+		mm_h,mm_w,mm_d = mmain.shape
+
+
+		pts = getPoints(centerPoint, 1)
+		pts.append(centerPoint)
+
+		mn = np.inf
+
+		for pt in pts:
+			if(pt[0]+tt_h<mm_h and pt[1]+tt_w<mm_w):
+				tmp = mmain[pt[0]:pt[0]+tt_h,pt[1]:pt[1]+tt_w,:]
+				cur = getValue(tmp, ttmpl)
+				if(cur<=mn):
+					mn = cur
+					centerPoint = pt
+
+		centerPoint = (int(2.0*centerPoint[0]),int(2.0*centerPoint[1]))
+
+
+
+	r,c = centerPoint
+
+	if(show==True):
+		print("MAX MATCHED IMAGE-->",end="")
+		print(r,c)
+
+
+	
+		endTime = time.time()
+		print("End Time: ",endTime)
+		print("Total Time Taken: ",endTime-startTime," second(s)")
+
+
+		cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),1)
+		show_image(main, 'HeirarchicalSearch',True)
+
+
+		return ((r,c),endTime-startTime)
+
+	return (r,c)
+
+
 
 
 
@@ -219,18 +315,26 @@ def main():
 	print(imgMain)
 	print(imgTemplate)
 
-	#t_es = (ExhaustiveSearch(template,mainImage))[1]
-	#t_tdls= (TDLSearch(template, mainImage,20))[1]
-	HeirarchicalSearch(template, mainImage, 2)
-
-	#print(t_es,t_tdls)
 
 
+
+
+	t_es = (ExhaustiveSearch(template.copy(),mainImage.copy()))[1]
+
+	P=20
+	t_tdls = (TDLSearch(template.copy(), mainImage.copy(),P))[1]
+	
+	LEVEL = 2
+	t_hs = (HeirarchicalSearch(template.copy(), mainImage.copy(), LEVEL))[1]
+
+
+
+
+	print("ExhaustiveSearch: ",t_es)
+	print("2DLogarithmicSearch: ",t_tdls)
+	print("HeirarchicalSearch: ",t_hs)
 
 	#Test(imgTemplate, imgMain)
-
-
-
 
 
 
