@@ -682,7 +682,7 @@ void free_memory()
 
 int main()
 {
-	srand(time(NULL));
+	//srand(time(NULL));
 	read_data();
 	initialize_z_buffer_and_frame_buffer();
 	apply_procedure();
