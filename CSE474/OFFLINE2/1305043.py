@@ -235,39 +235,35 @@ def HeirarchicalSearch(template,main,level,show=True):
 		for i in range(8):
 			pts.append((int(center[0]+dy[i]*d),int(center[1]+dx[i]*d)))
 		return pts
-
-
-
-	centerPoint = (np.inf,np.inf)
-
-	for i in range(level):
-		
-		centerPoint = TDLSearch(blur_temp, blur_main,25,show=False)
-		
-		mmain = m_arr[level-i]
-		ttmpl = t_arr[level-i]
-
-
+	
+	def getCenterPoint(ttmpl,mmain,cc):
 		tt_h,tt_w,tt_d = ttmpl.shape
 		mm_h,mm_w,mm_d = mmain.shape
-
-
-		pts = getPoints(centerPoint, 1)
-		pts.append(centerPoint)
-
+		pts = getPoints(cc, 1)
+		pts.append(cc)
 		mn = np.inf
-
 		for pt in pts:
 			if(pt[0]+tt_h<mm_h and pt[1]+tt_w<mm_w):
 				tmp = mmain[pt[0]:pt[0]+tt_h,pt[1]:pt[1]+tt_w,:]
 				cur = getValue(tmp, ttmpl)
 				if(cur<=mn):
 					mn = cur
-					centerPoint = pt
+					cc = pt
+		return cc
 
+
+
+
+
+	centerPoint = (np.inf,np.inf)
+
+	for i in range(level):
+		mmain = m_arr[level-i]
+		ttmpl = t_arr[level-i]
+		centerPoint = getCenterPoint(ttmpl, mmain, TDLSearch(ttmpl, mmain,25,show=False))
 		centerPoint = (int(2.0*centerPoint[0]),int(2.0*centerPoint[1]))
 
-
+	centerPoint = getCenterPoint(t_arr[0], m_arr[0], centerPoint)
 
 	r,c = centerPoint
 
