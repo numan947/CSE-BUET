@@ -42,11 +42,12 @@ def Test(imgTemplate,imgMain):
 
 
 
-def show_image(image,title):
+def show_image(image,title,w=False):
 	cv2.imshow(title,image)
 	cv2.waitKey(0) & 0xFF
 	cv2.destroyAllWindows()
-	cv2.imwrite(str(title)+'.png',image)
+	if(w==True):
+		cv2.imwrite(str(title)+'.png',image)
 
 
 
@@ -93,7 +94,7 @@ def ExhaustiveSearch(template,main):
 
 	
 	cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),2)
-	show_image(main, 'ExhaustiveSearch')
+	show_image(main, 'ExhaustiveSearch',True)
 
 	return ((r,c),endTime-startTime)
 
@@ -175,11 +176,25 @@ def TDLSearch(template,main,p):
 
 
 	cv2.rectangle(main,(c,r), (c+t_w,r+t_h),(0,0,0),2)
-	show_image(main, '2DLogarithmicSearch')
+	show_image(main, '2DLogarithmicSearch',True)
 
 
 	return ((r,c),endTime-startTime)
 
+
+
+
+
+def HeirarchicalSearch(template,main,level):
+
+	for i in range(level):
+		blur_main = cv2.GaussianBlur(main,(9,9),0)  #blur
+		blur_main = blur_main[1::2,1::2] #downsample
+
+		blur_temp = cv2.GaussianBlur(template,(9,9),0)
+		blur_temp = blur_temp[1::2,1::2]
+
+		
 
 
 
@@ -205,8 +220,8 @@ def main():
 	print(imgTemplate)
 
 	#t_es = (ExhaustiveSearch(template,mainImage))[1]
-	t_tdls= (TDLSearch(template, mainImage,20))[1]
-
+	#t_tdls= (TDLSearch(template, mainImage,20))[1]
+	HeirarchicalSearch(template, mainImage, 2)
 
 	#print(t_es,t_tdls)
 
