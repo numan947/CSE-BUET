@@ -50,6 +50,11 @@ int myRound(double dd)
 	else return (int)dd;
 }
 
+double close_enough(double a, double b)
+{
+	return fabs(a-b)<=eps;
+}
+
 /************************************/
 
 
@@ -215,6 +220,7 @@ public:
 	void printPolygon()
 	{
 		printf("%d|%lfX+%lfY+%lfZ+%lf|(%d,%d,%d)|%d",id,p_a,p_b,p_c,p_d,color[0],color[1],color[2],inOutFlag);
+
 	}
 
 	~Triangle()
@@ -230,10 +236,10 @@ public:
 
 class EdgeBucket{
 public:
-	double yMax,x,dX;
-	int id,tableIdx;
+	double x,dX;
+	int id,tableIdx,yMax;
 
-	EdgeBucket(int tableIdx,double yMax,double x, double dX, int id)
+	EdgeBucket(int tableIdx,int yMax,double x, double dX, int id)
 	{
 		this->tableIdx = tableIdx;
 		this->yMax = yMax;
@@ -253,7 +259,7 @@ public:
 
     void printEdgeBucket2()
     {
-    	cout<<"yMax: "<<yMax<<"| x: "<<x<<"|dX: "<<dX<<"|"<<id;
+    	cout<<"tableIdx: "<<tableIdx<<" yMax: "<<yMax<<"| x: "<<x<<"|dX: "<<dX<<"|"<<id;
     }
 };
 
@@ -333,9 +339,9 @@ vector<Triangle*>triangles;
 
 EdgeTableEntry *edgeTable;
 
+int totalPolygons;
+bool*activePolygonList;
 
-
-vector<int>activePolygonList;
 vector<EdgeBucket*>activeEdgeList;
 
 
@@ -395,6 +401,9 @@ void read_data()
 		}
 	}
 
+	totalPolygons = ids;
+	
+
 
 	//validate
 
@@ -415,7 +424,7 @@ int getRowNumber(double ss)
 
 double getRowValue(int row)
 {
-	return -Bottom_Y + row*dy*1.0;
+	return Bottom_Y + row*dy*1.0;
 }
 int getColNumber(double ss)
 {
@@ -430,22 +439,45 @@ double getColValue(int col)
 	return Left_X + col*1.0*dx;
 }
 
+double getRightClippingLine(double maxX)
+{
+	double ss = maxX;
+	if(ss>x_right_limit)ss = x_right_limit;
+	return ss;
+}
+double getLeftClippingLine(double minX)
+{
+	double ss = minX;
+	if(ss<x_left_limit)ss = x_left_limit;
+	return ss;
+}
+
+
+
 EdgeBucket* makeEdgeBucket(Point p1, Point p2,int id)
 {
 	EdgeBucket* ret;
 
+	// p1.printPoint();
+	// p2.printPoint();
+
 	double dX = p1.x - p2.x;
 	double dY = p1.y - p2.y;	
 
-	if(dX*dY<0)dX = -1.0 * fabs(dX);
+	// if(dX*dY<0)dX = -1.0 * fabs(dX);
+	// else dX = fabs(dX);
+
+	double mX ;
+	if(close_enough(dX,0))mX=0;
+	else mX = dY/dX;
 
 	if(fabs(p1.y - p2.y)<=eps || p1.y < p2.y){ //p1 has minY, p2 has maxY
 		int tdx = getRowNumber(p1.y);
-		ret = new EdgeBucket(tdx,p2.y,p1.x,dX,id);
+		ret = new EdgeBucket(tdx,getRowNumber(p2.y),p1.x,mX,id);
 	}
 	else{
 		int tdx = getRowNumber(p2.y);
-		ret = new EdgeBucket(tdx,p1.y,p2.x,dX,id);
+		ret = new EdgeBucket(tdx,getRowNumber(p1.y),p2.x,mX,id);
 	}
 
 	return ret;
@@ -453,6 +485,7 @@ EdgeBucket* makeEdgeBucket(Point p1, Point p2,int id)
 
 void initialize_edge_table_and_polygon_table()
 {
+	printf("***************************************************************\n");
 	//dx, dy
 	dx = (x_right_limit - x_left_limit)/Screen_Width;
 	dy = (y_top_limit - y_bottom_limit)/Screen_Height;
@@ -465,7 +498,7 @@ void initialize_edge_table_and_polygon_table()
 	printf("dx %lf dy %lf\n",dx,dy);
 
 
-	edgeTable = new EdgeTableEntry[myRound(Screen_Width)];
+	edgeTable = new EdgeTableEntry[myRound(Screen_Height)];
 
 	Triangle* cur;
 
@@ -478,11 +511,15 @@ void initialize_edge_table_and_polygon_table()
 		EdgeBucket* e2 = makeEdgeBucket(*(cur->point[0]),*(cur->point[2]),cur->id);
 		EdgeBucket* e3 = makeEdgeBucket(*(cur->point[1]),*(cur->point[2]),cur->id);
 
-		edgeTable[e1->tableIdx].addEdgeBucket(e1);
-		edgeTable[e2->tableIdx].addEdgeBucket(e2);
-		edgeTable[e3->tableIdx].addEdgeBucket(e3);
-/*
-		e1->printEdgeBucket();
+		
+		if(e1->yMax!=e1->tableIdx)
+			edgeTable[e1->tableIdx].addEdgeBucket(e1);
+		if(e2->yMax!=e2->tableIdx)
+			edgeTable[e2->tableIdx].addEdgeBucket(e2);
+		if(e3->yMax!=e3->tableIdx)
+			edgeTable[e3->tableIdx].addEdgeBucket(e3);
+
+/*		e1->printEdgeBucket();
 
 		cout<<endl;
 
@@ -491,11 +528,10 @@ void initialize_edge_table_and_polygon_table()
 		cout<<endl;
 
 		e3->printEdgeBucket();
-		cout<<endl;
-*/
+		cout<<endl;*/
+
 
 	}
-
 
 	printf("EDGE TABLE\n\n");
 	for(int i=0;i<Screen_Height;i++)
@@ -524,40 +560,63 @@ void initialize_edge_table_and_polygon_table()
             image->set_pixel(i,j,0,0,0);
         }
     }
+
+
+
+	//initialize activePolygonList
+	activePolygonList = new bool[totalPolygons];
+
+
+	printf("\n\n***************************************************************\n\n\n");
+}
+
+
+void printActiveEdgeList()
+{
+	for(int i=0;i<activeEdgeList.size();i++){
+		activeEdgeList[i]->printEdgeBucket2();
+		cout<<endl;
+	}
 }
 
 
 void updateActivePolygonList(int polyId)
 {
-	if(find(activePolygonList.begin(),activePolygonList.end(),polyId)==activePolygonList.end() && idToTriangle[polyId]->inOutFlag)
-		activePolygonList.pb(polyId);
-	else if(!(idToTriangle[polyId]->inOutFlag)){
-		activePolygonList.erase(find(activePolygonList.begin(),activePolygonList.end(),polyId));
-	}
+	activePolygonList[polyId]=!(activePolygonList[polyId]);
 }
 
 int getPolygonIdOfSmallestZ(double x, double y)
 {
 	int id = -1;
 	double zmn = (double)INF;
+	
 
-	for(int i=0;i<activePolygonList.size();i++){
-		double zz = idToTriangle[activePolygonList[i]]->getZValue(x,y);
+	for(int i=0;i<totalPolygons;i++){
+		if(!activePolygonList[i])continue;
+		double zz = idToTriangle[i]->getZValue(x,y);
 
-		if(zz>=z_front_limit && zz<=z_rear_limit && zz<=zmn){
+		// idToTriangle[i]->printPolygon();
+		// cout<<endl;
+		// cout<<x<<" "<<y<<" "<<zz<<" "<<zmn<<endl;
+
+		if(zz>=z_front_limit && zz<=z_rear_limit && zz<zmn){
 			zmn = zz;
-			id = activePolygonList[i];
+			id = i;
 			//printf("zmn --> %lf -->%d\n",zmn,id);
 		}
+	
+
 	}
+
+	//cout<<"returning...."<<id<<endl;
 
 	//printf("FINAL::::zmn --> %lf -->%d\n",zmn,id);
 	
 	if(id==-1)
-		for(int i=0;i<activePolygonList.size();i++){
-			double zz = idToTriangle[activePolygonList[i]]->getZValue(x,y);
+		for(int i=0;i<totalPolygons;i++){
+			double zz = idToTriangle[i]->getZValue(x,y);
 			
-			printf("%d --> %lf %lf : %lf\n",activePolygonList[i],x,y,zz);
+			printf("%d --> %lf %lf : %lf\n",i,x,y,zz);
 		}
 
 
@@ -573,7 +632,7 @@ void updateActiveEdgeList(int y)
 	vector<EdgeBucket*>tmp;
 
 	for(int i=0;i<sz;i++){
-		if(getRowNumber(activeEdgeList[i]->yMax)!=y)
+		if((activeEdgeList[i]->yMax)>=y)
 			tmp.pb(activeEdgeList[i]);
 	}
 
@@ -585,18 +644,29 @@ void updateActiveEdgeList(int y)
 
 	sz = activeEdgeList.size();
 	for(int i=0;i<sz;i++){
-		activeEdgeList[i]->x-=(1.0/activeEdgeList[i]->dX);
-		//cout<<activeEdgeList[i]->x<<endl
+		if(!close_enough(activeEdgeList[i]->dX,0))
+			activeEdgeList[i]->x+=(dy/activeEdgeList[i]->dX);
+		if(y==291)
+			cout<<activeEdgeList[i]->x<<endl;
+	}
+
+	tmp.clear();
+
+	for(int i=0;i<activeEdgeList[i].size();i++){
+		for(int j=i+1;j<activeEdgeList[i].size();j++){
+			if(activeEdgeList[i]->id == activeEdgeList[j]->id)
+		}
 	}
 
 }
 
 void apply_procedure()
 {
-	activePolygonList.clear();
+
 	activeEdgeList.clear();
 
-	for(int y=0;y<Screen_Height;y++){
+	for(int y=0;y<Screen_Height;){
+		bool bb = false;
 		//if(edgeTable[y].isEmpty())continue;
 		if(!edgeTable[y].isEmpty()){
 			int sz = edgeTable[y].edgeBucketList.size();
@@ -609,33 +679,64 @@ void apply_procedure()
 
 		int sz = activeEdgeList.size();
 
+		//if(sz)cout<<y<<"  "<<sz<<endl;
+
+		// if(y==249){
+		// 	for(int i=0;i<activeEdgeList.size();i++){
+		// 		activeEdgeList[i]->printEdgeBucket2();
+		// 		cout<<endl;
+		// 	}
+		// 	break;
+		// }
+
 		for(int i=0;i<(sz-1);i++){
-			int polyId = activeEdgeList[i]->id;
 			
+			int polyId = activeEdgeList[i]->id;
 			idToTriangle[polyId]->inOutFlag = !(idToTriangle[polyId]->inOutFlag);
 			updateActivePolygonList(polyId);
 
-			polyId = getPolygonIdOfSmallestZ(activeEdgeList[i]->x,getRowValue(y));
+
+
+/*			double clipped = getLeftClippingLine(activeEdgeList[i]->x);
+			clipped = getRightClippingLine(clipped);
+
 			
+			int cc = getColNumber(clipped);
+
+			cout<<cc<<endl;
+			clipped = getColValue(cc);
+			cout<<clipped<<" is clipped"<<endl;
+			cout<<getRowValue(y)<<endl;*/
+
+			polyId = getPolygonIdOfSmallestZ(activeEdgeList[i]->x,getRowValue(y));
+	
+			// if(y==292){
+			// 	cout<<sz<<endl;
+			// 	printActiveEdgeList();
+			// 	cout<<polyId<<endl;
+			// 	activeEdgeList[i]->printEdgeBucket2();
+			// 	cout<<endl;
+			// }			
+			//cout<<polyId<<" "<<activeEdgeList[i]->x<<" "<<getRowValue(y)<<endl;
+
 			if(polyId==-1)
 				continue;
-			//printf("%d\n",activePolygonList.size());
+			
+
+
 			int r = idToTriangle[polyId]->getR(),g = idToTriangle[polyId]->getG(),b = idToTriangle[polyId]->getB();
 
-			int left = getColNumber(max(activeEdgeList[i]->x,x_left_limit)),right = getColNumber(min(x_right_limit,activeEdgeList[i+1]->x));
+			int left = getColNumber(getLeftClippingLine(activeEdgeList[i]->x)),right = getColNumber(getRightClippingLine(activeEdgeList[i+1]->x));
 
-			//printf("%d\n",y );
-			
-			if(left==0)
-				printf("%lf %d\n",activeEdgeList[i]->x,polyId);
-
-			printf("%d %d\n",left,right );
 			for(int j=left;j<=right;j++)
 				image->set_pixel(j,Screen_Height-y,r,g,b);
-			
 		}
+		//if(bb)break;
+		y++;
 		updateActiveEdgeList(y);
+		memset(activePolygonList,0,sizeof(activePolygonList));
 
+		//printActiveEdgeList();
 		
 
 	}
@@ -671,7 +772,8 @@ void free_memory()
 	triangles.clear();
 
 	idToTriangle.clear();
-	activePolygonList.clear();
+	
+	delete activePolygonList;
 	
 	//free image memeory
 	delete image;
@@ -681,6 +783,7 @@ void free_memory()
 int main()
 {
 	//srand(time(NULL));
+	freopen("debug.txt", "w", stdout);
 	read_data();
 	initialize_edge_table_and_polygon_table();
 	apply_procedure();

@@ -620,8 +620,8 @@ void apply_procedure()
 
 				//cout<<cc<<" "<<cce<<endl;
 
-				//cout<<getColValue(cc)<<"  "<<getRowValue(rr)<<endl;
-				//cout<<cur->getZValue(getColValue(cc),getRowValue(rr))<<endl;
+				cout<<getColValue(cc)<<"  "<<getRowValue(rr)<<endl;
+				cout<<cur->getZValue(getColValue(cc),getRowValue(rr))<<endl;
 				//break;
 
 				while(cc<=cce){
@@ -683,6 +683,7 @@ void free_memory()
 int main()
 {
 	//srand(time(NULL));
+	freopen("debug2.txt", "w", stdout);
 	read_data();
 	initialize_z_buffer_and_frame_buffer();
 	apply_procedure();
