@@ -117,13 +117,15 @@ def TDLSearch(template,main,p,show=True):
 	t_h,t_w,t_d = template.shape
 	m_h,m_w,m_d = main.shape
 
+	print("tt",template.shape)
+	print("mm",main.shape)
 
 	k=np.ceil(np.log2(p))
 	d = 2**(k-1)
 
-	centerR,centerC = np.ceil(m_h/2.0),np.ceil(m_w/2.0)
+	centerR,centerC = np.ceil((m_h-t_h)/2.0),np.ceil((m_w-t_w)/2.0)
 	centerPoint = (int(centerR),int(centerC))	
-
+	print(centerPoint)
 	# 8 direction
 	dx = [1,1,1,0,0,-1,-1,-1]
 	dy = [0,1,-1,1,-1,0,1,-1]
@@ -131,6 +133,7 @@ def TDLSearch(template,main,p,show=True):
 	def getPoints(center,d):
 		pts=[]
 		for i in range(8):
+			#if(int(center[0]+dy[i]*d)>=0 and int(center[1]+dx[i]*d)>=0):
 			pts.append((int(center[0]+dy[i]*d),int(center[1]+dx[i]*d)))
 		return pts
 
@@ -141,7 +144,7 @@ def TDLSearch(template,main,p,show=True):
 	while(p>=1):
 		k=np.ceil(np.log2(p))
 		d = 2**(k-1)
-		#print(d,k)
+		print(d,k)
 		pts = getPoints(centerPoint,d)
 		
 		pts.append(centerPoint)
@@ -150,9 +153,12 @@ def TDLSearch(template,main,p,show=True):
 		
 		for pt in pts:
 			if(pt[0]+t_h<m_h and pt[1]+t_w<m_w):
+				print(pt)
 				tmp = main[pt[0]:pt[0]+t_h,pt[1]:pt[1]+t_w,:]
+				print(tmp.shape)
+				print(template.shape)
 				cur = getValue(tmp, template)
-				if(cur<=mn):
+				if(cur<mn):
 					mn = cur
 					mnPt = pt
 
@@ -233,8 +239,10 @@ def HeirarchicalSearch(template,main,level,show=True):
 	def getPoints(center,d):
 		pts=[]
 		for i in range(8):
-			pts.append((int(center[0]+dy[i]*d),int(center[1]+dx[i]*d)))
+			if(int(center[0]+dy[i]*d)>=0 and int(center[1]+dx[i]*d)>=0):
+				pts.append((int(center[0]+dy[i]*d),int(center[1]+dx[i]*d)))
 		return pts
+
 	
 	def getCenterPoint(ttmpl,mmain,cc):
 		tt_h,tt_w,tt_d = ttmpl.shape
@@ -246,7 +254,7 @@ def HeirarchicalSearch(template,main,level,show=True):
 			if(pt[0]+tt_h<mm_h and pt[1]+tt_w<mm_w):
 				tmp = mmain[pt[0]:pt[0]+tt_h,pt[1]:pt[1]+tt_w,:]
 				cur = getValue(tmp, ttmpl)
-				if(cur<=mn):
+				if(cur<mn):
 					mn = cur
 					cc = pt
 		return cc
@@ -260,7 +268,7 @@ def HeirarchicalSearch(template,main,level,show=True):
 	for i in range(level):
 		mmain = m_arr[level-i]
 		ttmpl = t_arr[level-i]
-		centerPoint = getCenterPoint(ttmpl, mmain, TDLSearch(ttmpl, mmain,25,show=False))
+		centerPoint = getCenterPoint(ttmpl, mmain, ExhaustiveSearch(ttmpl,mmain,False))
 		centerPoint = (int(2.0*centerPoint[0]),int(2.0*centerPoint[1]))
 
 	centerPoint = getCenterPoint(t_arr[0], m_arr[0], centerPoint)
@@ -317,10 +325,10 @@ def main():
 
 	t_es = (ExhaustiveSearch(template.copy(),mainImage.copy()))[1]
 
-	P=20
+	P=25
 	t_tdls = (TDLSearch(template.copy(), mainImage.copy(),P))[1]
 	
-	LEVEL = 2
+	LEVEL = 3
 	t_hs = (HeirarchicalSearch(template.copy(), mainImage.copy(), LEVEL))[1]
 
 
