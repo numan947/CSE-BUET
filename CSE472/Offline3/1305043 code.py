@@ -8,6 +8,10 @@ from collections import defaultdict
 import gzip
 
 
+RATE_LOW = 0
+RATE_HIGH = 5
+
+
 def readGz(f):
   for l in gzip.open(f):
     yield eval(l)
@@ -32,16 +36,15 @@ def read_GZIP():
 
 def make_dummy():
 	print("\nREADING DATA.................................\n")
-	MAXITEM = 10
-	MAXUSER = 10
-	RATE_LOW = 0
-	RATE_HIGH = 5
+	MAXITEM = 5
+	MAXUSER = 5
 
-	ratings = np.random.randint(RATE_LOW,RATE_HIGH,(MAXUSER, MAXITEM))
+	ratings = np.random.uniform(low=RATE_LOW,high=RATE_HIGH,size=(MAXUSER, MAXITEM))
 	print(ratings)
-	sparsity = 100.0*float(np.count_nonzero(ratings)/(ratings.shape[0]*ratings.shape[1]))
+	wRat = make_weight_matrix(ratings)
+	sparsity = 100.0*float(np.count_nonzero(wRat)/(wRat.shape[0]*wRat.shape[1]))
 
-
+	#print(ratings.shape,wRat.shape)
 
 	print("sparsity:",sparsity)
 	print("\nDATA READING COMPLETED.......................\n")
@@ -57,12 +60,20 @@ def train_validation_test_split(ratings):
 	print(len(train))
 	print(len(validation))
 	print(len(test))
+
+
+	#	return np.array([[5,0,5,0,0],[5,3,5,0,0],[1,2,3,4,5]]),validation,test
 	return train,validation,test
 
 def calculate_rmse(pred,actual):
 	pred=pred[actual.nonzero()].flatten()
 	actual=actual[actual.nonzero()].flatten()
 	return np.sqrt(mean_squared_error(pred,actual))
+
+def make_weight_matrix(ratingMatrix):
+	tmp = ratingMatrix>=(RATE_LOW+1)
+	#print(tmp*1)
+	return tmp*1
 
 
 
@@ -75,45 +86,85 @@ class Matrix_Factorization():
 		self.lambdaU = lambdaU
 		self.lambdaV = lambdaV
 		self.pr = printIntermediate
+		self.W = make_weight_matrix(ratingMatrix)
+
 
 
 	def ALSU(self,U,V,X,lam):
-		VTV = V.T.dot(V)
-		lamI = np.eye(VTV.shape[0])*lam
+		#print(self.W)
+		lamI = np.eye(self.latentFactors)*lam
 
 		#print(X[0,:].shape)
 
 		#print(V.shape)
 
 		for p in range(U.shape[0]):
-			pass
-			U[p,:] = solve((VTV+lamI), X[p,:].T.dot(V))
+			Wu = np.diag(self.W[p,:])
+
+			#print("Wu ",Wu.shape)
+			#print(Wu)
+			
+			VTV = Wu.dot(V)
+			#print("VTV1 shape ",VTV.shape)
+			VTV = V.T.dot(VTV)
+		#	print("VTV2 shape ",VTV.shape)
+
+			#print(X[p,:].shape)
+
+			U[p,:] = solve((VTV+lamI), (X[p,:].T.dot(Wu)).dot(V))
+
 		return U
 
 	def ALSV(self,U,V,X,lam):
-		UTU = U.T.dot(U)
-		lamI = np.eye(UTU.shape[0])*lam
+		
+		lamI = np.eye(self.latentFactors)*lam
 		for p in range(V.shape[0]):
-			V[p,:] = solve(UTU+lamI, X[:,p].T.dot(U))
+			Wi = np.diag(self.W[:,p])
+
+			UTU = Wi.dot(U)
+			UTU = U.T.dot(UTU)
+		
+			V[p,:] = solve(UTU+lamI,(X[:,p].T.dot(Wi)).dot(U))
 		return V
 
-	def Train(self,iter = 20):
 
-		self.U = np.random.random((self.u_len,self.latentFactors))
-		self.V = np.random.random((self.v_len,self.latentFactors))
+	def calculate_loss(self):
+		UTV = self.U.dot(self.V.T)
+		XNM = np.multiply(self.ratingMatrix,self.W) - UTV
+		#print(self.W)
+		#print(XNM)
+
+		total1 = np.sum(np.square(XNM))
+
+		total2 = self.lambdaU * np.sum(np.square(self.U))
+		total3 = self.lambdaV * np.sum(np.square(self.V))
+
+		return np.sqrt(total1+total2+total3)
+
+
+	def Train(self,iter = 33,converge=False):
+
+		self.U = 5*np.random.random((self.u_len,self.latentFactors))
+		self.V = 5*np.random.random((self.v_len,self.latentFactors))
 
 
 		cur = 0
 
 		while(cur<iter):
-			if self.pr==True and cur%5==4:
-				print("------------->Iteration Number....",cur+1)
+			#if self.pr==True and cur%5==4:
+			#ss	print("------------->Iteration Number....",cur+1)
 			
 			self.U = self.ALSU(self.U, self.V, self.ratingMatrix, self.lambdaU)
 			self.V = self.ALSV(self.U, self.V, self.ratingMatrix, self.lambdaV)
 
+			
+			loss = self.calculate_loss()
+			print("Iteration ",cur,"-->",loss)
+
 			cur+=1
 
+		#print(self.U)
+		#print(self.V)
 
 	def Predict_one(self,u,v):
 		return self.U[u,:].dot(self.V[v,:].T)
@@ -157,13 +208,15 @@ def main():
 	train,validation,test = train_validation_test_split(ratings)
 
 
-	print(train)
-
-	MF = Matrix_Factorization(train,latentFactors=7,printIntermediate=True)
+	
+	MF = Matrix_Factorization(train,latentFactors=50,printIntermediate=True,lambdaV=1,lambdaU=1)
 
 	MF.Train()
-
+	
+	print(train)
+	
 	print(MF.Predict())
+
 
 
 	print(calculate_rmse(MF.Predict(),train))
