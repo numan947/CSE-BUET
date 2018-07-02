@@ -6,29 +6,60 @@ from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import gzip
-
+from collections import Counter
 
 RATE_LOW = 0
 RATE_HIGH = 5
+TOTAL_INPUT = 150
+ITER_DEFAULT = 50
+np.set_printoptions(threshold=np.nan)
 
 
 def readGz(f):
   for l in gzip.open(f):
     yield eval(l)
 
-def read_GZIP():
+def read_GZIP(MXRATINGS):
 	cnt=0
+	
 	allRatings = []
+	all_users = []
+	all_items = []
+
+
 	userRatings = defaultdict(list)
 	for l in readGz("assignment2/train.json.gz"):
+		
 		user,item = l['reviewerID'],l['itemID']
+		
+		
 		allRatings.append(l['rating'])
+		all_items.append(item)
+		all_users.append(user)
+
 		userRatings[user].append(l['rating'])
+		
 		cnt+=1
-		print(user,item)
-		if(cnt>=100):
+		
+		#print(user,item)
+		
+		if(cnt>=MXRATINGS):
 			break
-	print(userRatings)
+
+
+	mat = np.zeros((len(Counter(all_users).keys()),len(Counter(all_items).keys())))
+
+	d_u = dict([(y,x) for x,y in enumerate(sorted(set(all_users)))])
+	d_i = dict([(y,x) for x,y in enumerate(sorted(set(all_items)))])
+
+	for x,y,r in zip(all_users, all_items, allRatings):
+		mat[d_u[x],d_i[y]] = r
+
+
+	#print(mat)
+
+	return mat
+
 
 
 
@@ -40,7 +71,7 @@ def make_dummy():
 	MAXUSER = 100
 
 	ratings = np.random.uniform(low=RATE_LOW,high=RATE_HIGH,size=(MAXUSER, MAXITEM))
-	print(ratings)
+	#print(ratings)
 	wRat = make_weight_matrix(ratings)
 	sparsity = 100.0*float(np.count_nonzero(wRat)/(wRat.shape[0]*wRat.shape[1]))
 
@@ -51,8 +82,24 @@ def make_dummy():
 	return ratings,sparsity
 
 
-def read_data():
-	return make_dummy()
+def read_data(dummy=False):
+	
+	if(dummy):
+		return make_dummy()
+
+	print("\nREADING DATA.................................\n")
+	ratings = read_GZIP(TOTAL_INPUT)
+
+	print(ratings.shape)
+	
+	wRat = make_weight_matrix(ratings)
+	
+	sparsity = 100.0*float(np.count_nonzero(wRat)/(wRat.shape[0]*wRat.shape[1]))
+
+
+	print("sparsity:",sparsity)
+	print("\nDATA READING COMPLETED.......................\n")
+	return ratings,sparsity
 
 
 
@@ -160,7 +207,7 @@ class Matrix_Factorization():
 		return np.sqrt(total1+total2+total3)
 
 
-	def Train(self,iter = 33,converge=False):
+	def Train(self,iter = ITER_DEFAULT,converge=False):
 
 		self.U = self.scl*np.random.random((self.u_len,self.latentFactors))
 		self.V = self.scl*np.random.random((self.v_len,self.latentFactors))
@@ -196,7 +243,7 @@ class Matrix_Factorization():
 		return predictions
 
 
-	def Test_Predict(self,testSet,iter=33):
+	def Test_Predict(self,testSet,iter=ITER_DEFAULT):
 		n_u,n_i = testSet.shape
 		UU = self.scl*np.random.random((n_u,self.latentFactors))
 
@@ -239,7 +286,7 @@ class Matrix_Factorization():
 
 
 
-def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=None,latentFactorList=None,iter_array=None):
+def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=None,latentFactorList=None,iter_array=None,debug=False):
 	
 	lf = [10,15,20,25,30,35,40,45,50]
 	
@@ -281,24 +328,38 @@ def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=
 				print("Latent Factor: {}".format(f))
 				print("Regularization Parameter: lambdaU->{} lambdaV->{}".format(ru,ri))
 
-				model = Matrix_Factorization(trainSet,latentFactors = f,lambdaU = ru, lambdaV = ri)
+				model = Matrix_Factorization(trainSet,latentFactors = f,lambdaU = ru, lambdaV = ri,debug=debug)
 				model.Train()
 
 				valid_rmse = calculate_rmse(model.Test_Predict(validationSet),validationSet)
+				train_rmse = calculate_rmse(model.Train_Predict(), trainSet)
 
 				print("validationSet RMSE--> ",valid_rmse)
+				print("trainSet RMSE--> ",train_rmse)
 
 				if(valid_rmse<best_params['valid_rmse']):
 					best_params['latentFactors'] = f
 					best_params['lambdaU'] = ru
 					best_params['lambdaV'] = ri
-					best_params['train_rmse'] = calculate_rmse(model.Train_Predict(), trainSet)
+					best_params['train_rmse'] = train_rmse
 					best_params['valid_rmse'] = valid_rmse
 					best_params['model'] = model
 
 					print("FOUND NEW HYPER PARAMS")
 					with pd.option_context('display.max_rows', None, 'display.max_columns', 5):
 						print(pd.Series(best_params))
+				elif (valid_rmse == best_params['valid_rmse'] and train_rmse<best_params["train_rmse"]):
+					best_params['latentFactors'] = f
+					best_params['lambdaU'] = ru
+					best_params['lambdaV'] = ri
+					best_params['train_rmse'] = train_rmse
+					best_params['valid_rmse'] = valid_rmse
+					best_params['model'] = model
+
+					print("FOUND NEW HYPER PARAMS")
+					with pd.option_context('display.max_rows', None, 'display.max_columns', 5):
+						print(pd.Series(best_params))
+
 
 	return best_params,best_params['model']
 
@@ -312,29 +373,22 @@ def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=
 
 def main():
 	
-	np.random.seed()
+	np.random.seed(947)
+
 
 
 	ratings,sparsity = read_data()
 
 	train,validation,test = train_validation_test_split(ratings)
 
-	config,model = regularized_hyperparameter_search(train, validation)
+	config,model = regularized_hyperparameter_search(train, validation,debug=False)
+
 
 
 	print("\n\n\n")
 	print("TEST RMSE")
-
 	print(calculate_rmse(model.Test_Predict(test),test))
-	
 	print("\n\n\n")
-	#print(test)
-
-	#print()
-	
-	#print(model.Test_Predict(test))
-
-
 	print("BEST MODEL")
 	print(pd.Series(config))
 
