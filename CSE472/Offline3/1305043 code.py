@@ -36,8 +36,8 @@ def read_GZIP():
 
 def make_dummy():
 	print("\nREADING DATA.................................\n")
-	MAXITEM = 5
-	MAXUSER = 5
+	MAXITEM = 10
+	MAXUSER = 100
 
 	ratings = np.random.uniform(low=RATE_LOW,high=RATE_HIGH,size=(MAXUSER, MAXITEM))
 	print(ratings)
@@ -51,8 +51,10 @@ def make_dummy():
 	return ratings,sparsity
 
 
-def read_data(col_names):
+def read_data():
 	return make_dummy()
+
+
 
 def train_validation_test_split(ratings):
 	train,test = train_test_split(ratings,test_size=0.4,random_state=94743)
@@ -79,37 +81,51 @@ def make_weight_matrix(ratingMatrix):
 
 class Matrix_Factorization():
 
-	def __init__(self,ratingMatrix,latentFactors=5,lambdaU=0,lambdaV=0,printIntermediate=False):
+	def __init__(self,ratingMatrix,latentFactors=5,lambdaU=0,lambdaV=0,scl=5,debug=False):
 		self.u_len,self.v_len = ratingMatrix.shape
 		self.ratingMatrix = ratingMatrix
 		self.latentFactors = latentFactors
 		self.lambdaU = lambdaU
 		self.lambdaV = lambdaV
-		self.pr = printIntermediate
+		self.debug = debug
 		self.W = make_weight_matrix(ratingMatrix)
-
+		self.scl = 5
 
 
 	def ALSU(self,U,V,X,lam):
-		#print(self.W)
+		if(self.debug):
+			print(self.W)
+		
+
 		lamI = np.eye(self.latentFactors)*lam
 
-		#print(X[0,:].shape)
-
-		#print(V.shape)
+		if(self.debug):
+			print(X[0,:].shape)
+			print(V.shape)
 
 		for p in range(U.shape[0]):
 			Wu = np.diag(self.W[p,:])
 
-			#print("Wu ",Wu.shape)
-			#print(Wu)
+			if(self.debug):
+				print("Wu ",Wu.shape)
+				print(Wu)
 			
 			VTV = Wu.dot(V)
-			#print("VTV1 shape ",VTV.shape)
-			VTV = V.T.dot(VTV)
-		#	print("VTV2 shape ",VTV.shape)
+			
 
-			#print(X[p,:].shape)
+			if(self.debug):
+				print("VTV1 shape ",VTV.shape)
+			
+
+
+
+			VTV = V.T.dot(VTV)
+			
+
+			if(self.debug):
+				print("VTV2 shape ",VTV.shape)
+				print(X[p,:].shape)
+
 
 			U[p,:] = solve((VTV+lamI), (X[p,:].T.dot(Wu)).dot(V))
 
@@ -131,8 +147,10 @@ class Matrix_Factorization():
 	def calculate_loss(self):
 		UTV = self.U.dot(self.V.T)
 		XNM = np.multiply(self.ratingMatrix,self.W) - UTV
-		#print(self.W)
-		#print(XNM)
+		
+		if(self.debug):
+			print(self.W)
+			print(XNM)
 
 		total1 = np.sum(np.square(XNM))
 
@@ -144,36 +162,66 @@ class Matrix_Factorization():
 
 	def Train(self,iter = 33,converge=False):
 
-		self.U = 5*np.random.random((self.u_len,self.latentFactors))
-		self.V = 5*np.random.random((self.v_len,self.latentFactors))
+		self.U = self.scl*np.random.random((self.u_len,self.latentFactors))
+		self.V = self.scl*np.random.random((self.v_len,self.latentFactors))
 
 
 		cur = 0
 
 		while(cur<iter):
-			#if self.pr==True and cur%5==4:
-			#ss	print("------------->Iteration Number....",cur+1)
-			
+
 			self.U = self.ALSU(self.U, self.V, self.ratingMatrix, self.lambdaU)
 			self.V = self.ALSV(self.U, self.V, self.ratingMatrix, self.lambdaV)
 
 			
-			loss = self.calculate_loss()
-			print("Iteration ",cur,"-->",loss)
+			
+			
+			if(self.debug==True):
+				loss = self.calculate_loss()
+				print("Iteration ",cur,"-->",loss)
+		
 
 			cur+=1
 
-		#print(self.U)
-		#print(self.V)
+		if(self.debug):
+			print(self.U)
+			print(self.V)
 
-	def Predict_one(self,u,v):
-		return self.U[u,:].dot(self.V[v,:].T)
 
-	def Predict(self):
+	def Train_Predict(self):
 		predictions = np.zeros((self.u_len,self.v_len))
 		for u in range(self.u_len):
 			for v in range(self.v_len):
-				predictions[u,v] = self.Predict_one(u,v)
+				predictions[u,v] = self.U[u,:].dot(self.V[v,:].T)
+		return predictions
+
+
+	def Test_Predict(self,testSet,iter=33):
+		n_u,n_i = testSet.shape
+		UU = self.scl*np.random.random((n_u,self.latentFactors))
+
+		cur = 0
+
+		while(cur<iter):
+			UU = self.ALSU(UU, self.V, testSet, self.lambdaU)
+			
+			
+			
+			if(self.debug==True):
+				loss = self.calculate_loss()
+				print("Iteration ",cur,"-->",loss)
+			cur+=1
+
+		if(self.debug):
+			print(UU)
+
+
+		predictions = np.zeros((n_u,n_i))
+
+		for u in range(n_u):
+			for v in range(n_i):
+				predictions[u,v] = UU[u,:].dot(self.V[v,:].T)
+
 		return predictions
 
 
@@ -191,6 +239,70 @@ class Matrix_Factorization():
 
 
 
+def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=None,latentFactorList=None,iter_array=None):
+	
+	lf = [10,15,20,25,30,35,40,45,50]
+	
+	rg = [ 0.01, 0.1, 1.0,10.0]
+	
+	#it = [10,20,30,40,50]
+
+
+	if(regularizationList is not None):
+		rg = regularizationList
+	if(latentFactorList is not None):
+		lf = latentFactorList
+	if(iter_array is not None):
+		it = iter_array
+
+	rg.sort()
+
+
+	best_params = {}
+	best_params['latentFactors'] = lf[0]
+	best_params['lambdaU'] = rg[0]
+	best_params['lambdaV'] = rg[0]
+
+	best_params['train_rmse']=np.inf
+	
+	best_params['valid_rmse']=np.inf
+	
+	best_params['model']=None
+
+
+
+	for f in lf:
+		
+		
+		
+		for ru in rg:
+			for ri in rg:
+
+				print("Latent Factor: {}".format(f))
+				print("Regularization Parameter: lambdaU->{} lambdaV->{}".format(ru,ri))
+
+				model = Matrix_Factorization(trainSet,latentFactors = f,lambdaU = ru, lambdaV = ri)
+				model.Train()
+
+				valid_rmse = calculate_rmse(model.Test_Predict(validationSet),validationSet)
+
+				print("validationSet RMSE--> ",valid_rmse)
+
+				if(valid_rmse<best_params['valid_rmse']):
+					best_params['latentFactors'] = f
+					best_params['lambdaU'] = ru
+					best_params['lambdaV'] = ri
+					best_params['train_rmse'] = calculate_rmse(model.Train_Predict(), trainSet)
+					best_params['valid_rmse'] = valid_rmse
+					best_params['model'] = model
+
+					print("FOUND NEW HYPER PARAMS")
+					with pd.option_context('display.max_rows', None, 'display.max_columns', 5):
+						print(pd.Series(best_params))
+
+	return best_params,best_params['model']
+
+
 
 
 
@@ -199,27 +311,32 @@ class Matrix_Factorization():
 
 
 def main():
-	np.random.seed(94743)
+	
+	np.random.seed()
 
 
-	col_names = ['UID','IID','RTN','TMS']
-	ratings,sparsity = read_data(col_names)
+	ratings,sparsity = read_data()
 
 	train,validation,test = train_validation_test_split(ratings)
 
+	config,model = regularized_hyperparameter_search(train, validation)
 
+
+	print("\n\n\n")
+	print("TEST RMSE")
+
+	print(calculate_rmse(model.Test_Predict(test),test))
 	
-	MF = Matrix_Factorization(train,latentFactors=50,printIntermediate=True,lambdaV=1,lambdaU=1)
+	print("\n\n\n")
+	#print(test)
 
-	MF.Train()
+	#print()
 	
-	print(train)
-	
-	print(MF.Predict())
+	#print(model.Test_Predict(test))
 
 
-
-	print(calculate_rmse(MF.Predict(),train))
+	print("BEST MODEL")
+	print(pd.Series(config))
 
 
 
