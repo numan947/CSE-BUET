@@ -10,8 +10,14 @@ from collections import Counter
 
 RATE_LOW = 0
 RATE_HIGH = 5
-TOTAL_INPUT = 150
-ITER_DEFAULT = 50
+
+MAXITEM = 10
+MAXUSER = 1000
+
+
+
+TOTAL_INPUT = 500
+ITER_DEFAULT = 20
 np.set_printoptions(threshold=np.nan)
 
 
@@ -67,9 +73,7 @@ def read_GZIP(MXRATINGS):
 
 def make_dummy():
 	print("\nREADING DATA.................................\n")
-	MAXITEM = 10
-	MAXUSER = 100
-
+	
 	ratings = np.random.uniform(low=RATE_LOW,high=RATE_HIGH,size=(MAXUSER, MAXITEM))
 	#print(ratings)
 	wRat = make_weight_matrix(ratings)
@@ -249,19 +253,9 @@ class Matrix_Factorization():
 
 		cur = 0
 
-		while(cur<iter):
-			UU = self.ALSU(UU, self.V, testSet, self.lambdaU)
-			
-			
-			
-			if(self.debug==True):
-				loss = self.calculate_loss()
-				print("Iteration ",cur,"-->",loss)
-			cur+=1
-
+		UU = self.ALSU(UU, self.V, testSet, self.lambdaU)
 		if(self.debug):
 			print(UU)
-
 
 		predictions = np.zeros((n_u,n_i))
 
@@ -288,7 +282,7 @@ class Matrix_Factorization():
 
 def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=None,latentFactorList=None,iter_array=None,debug=False):
 	
-	lf = [10,15,20,25,30,35,40,45,50]
+	lf = [5,10,15,20,25,30,35,40,45,50]
 	
 	rg = [ 0.01, 0.1, 1.0,10.0]
 	
@@ -377,7 +371,7 @@ def main():
 
 
 
-	ratings,sparsity = read_data()
+	ratings,sparsity = read_data(dummy=True)
 
 	train,validation,test = train_validation_test_split(ratings)
 
