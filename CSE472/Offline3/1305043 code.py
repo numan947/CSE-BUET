@@ -11,13 +11,15 @@ from collections import Counter
 RATE_LOW = 0
 RATE_HIGH = 5
 
-MAXITEM = 10
-MAXUSER = 1000
+MAXITEM = 50
+MAXUSER = 50
 
 
 
-TOTAL_INPUT = 500
+TOTAL_INPUT = 700
 ITER_DEFAULT = 20
+
+
 np.set_printoptions(threshold=np.nan)
 
 
@@ -68,6 +70,52 @@ def read_GZIP(MXRATINGS):
 
 
 
+def read_csv_file(csvFileName):
+	df = pd.read_csv(csvFileName)
+
+	all_users = df['user'].tolist()
+	all_items = df['item'].tolist()
+	all_rates = df['rating'].tolist()
+
+	all_users=all_users[0:TOTAL_INPUT]
+	all_items=all_items[0:TOTAL_INPUT]
+	all_rates=all_rates[0:TOTAL_INPUT]
+
+	print(len(all_items))
+	print(len(all_users))
+	print(len(all_rates))
+
+	d_u = dict([(y,x) for x,y in enumerate(sorted(set(all_users)))])
+	d_i = dict([(y,x) for x,y in enumerate(sorted(set(all_items)))])
+	
+	mat = np.zeros((len(Counter(all_users).keys()),len(Counter(all_items).keys())))
+
+	for x,y,r in zip(all_users,all_items,all_rates):
+		mat[d_u[x],d_i[y]] = r
+
+	return mat
+
+
+
+
+def read_csv():
+
+	all_mat = read_csv_file('amazon_ratings.csv')
+
+
+	return all_mat
+	# trainMat = read_csv_file('train.csv')
+
+	# testMat = read_csv_file('test.csv')
+
+	# validMat = read_csv_file('validation.csv')
+
+
+	# print(trainMat.shape)
+	# print(validMat.shape)
+	# print(testMat.shape)
+
+
 
 
 
@@ -86,13 +134,19 @@ def make_dummy():
 	return ratings,sparsity
 
 
-def read_data(dummy=False):
+def read_data(dummy=False,csv=False):
 	
 	if(dummy):
 		return make_dummy()
 
+
+
 	print("\nREADING DATA.................................\n")
-	ratings = read_GZIP(TOTAL_INPUT)
+	
+	if(csv):
+		ratings = read_csv()
+	else:	
+		ratings = read_GZIP(TOTAL_INPUT)
 
 	print(ratings.shape)
 	
@@ -132,13 +186,14 @@ def make_weight_matrix(ratingMatrix):
 
 class Matrix_Factorization():
 
-	def __init__(self,ratingMatrix,latentFactors=5,lambdaU=0,lambdaV=0,scl=5,debug=False):
+	def __init__(self,ratingMatrix,latentFactors=5,lambdaU=0,lambdaV=0,scl=5,debug=False,debugLoss=False):
 		self.u_len,self.v_len = ratingMatrix.shape
 		self.ratingMatrix = ratingMatrix
 		self.latentFactors = latentFactors
 		self.lambdaU = lambdaU
 		self.lambdaV = lambdaV
 		self.debug = debug
+		self.debugLoss = debugLoss
 		self.W = make_weight_matrix(ratingMatrix)
 		self.scl = 5
 
@@ -195,8 +250,8 @@ class Matrix_Factorization():
 		return V
 
 
-	def calculate_loss(self):
-		UTV = self.U.dot(self.V.T)
+	def calculate_loss(self,U,V):
+		UTV = U.dot(V.T)
 		XNM = np.multiply(self.ratingMatrix,self.W) - UTV
 		
 		if(self.debug):
@@ -205,8 +260,8 @@ class Matrix_Factorization():
 
 		total1 = np.sum(np.square(XNM))
 
-		total2 = self.lambdaU * np.sum(np.square(self.U))
-		total3 = self.lambdaV * np.sum(np.square(self.V))
+		total2 = self.lambdaU * np.sum(np.square(U))
+		total3 = self.lambdaV * np.sum(np.square(V))
 
 		return np.sqrt(total1+total2+total3)
 
@@ -219,19 +274,25 @@ class Matrix_Factorization():
 
 		cur = 0
 
+		loss = np.inf
+
 		while(cur<iter):
 
-			self.U = self.ALSU(self.U, self.V, self.ratingMatrix, self.lambdaU)
-			self.V = self.ALSV(self.U, self.V, self.ratingMatrix, self.lambdaV)
+			UU = self.ALSU(self.U, self.V, self.ratingMatrix, self.lambdaU)
+			VV = self.ALSV(self.U, self.V, self.ratingMatrix, self.lambdaV)
+			
+			tmpLoss = self.calculate_loss(UU,VV)
 
-			
-			
-			
-			if(self.debug==True):
-				loss = self.calculate_loss()
-				print("Iteration ",cur,"-->",loss)
-		
 
+			if(self.debugLoss):
+				print("Iteration ",cur,"-->",tmpLoss)
+
+			if(tmpLoss<loss):
+				self.U = UU
+				self.V = VV
+				loss = tmpLoss
+			else:
+				break
 			cur+=1
 
 		if(self.debug):
@@ -249,11 +310,11 @@ class Matrix_Factorization():
 
 	def Test_Predict(self,testSet,iter=ITER_DEFAULT):
 		n_u,n_i = testSet.shape
+
 		UU = self.scl*np.random.random((n_u,self.latentFactors))
 
-		cur = 0
-
 		UU = self.ALSU(UU, self.V, testSet, self.lambdaU)
+		
 		if(self.debug):
 			print(UU)
 
@@ -313,9 +374,6 @@ def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=
 
 
 	for f in lf:
-		
-		
-		
 		for ru in rg:
 			for ri in rg:
 
@@ -353,8 +411,6 @@ def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=
 					print("FOUND NEW HYPER PARAMS")
 					with pd.option_context('display.max_rows', None, 'display.max_columns', 5):
 						print(pd.Series(best_params))
-
-
 	return best_params,best_params['model']
 
 
@@ -371,19 +427,48 @@ def main():
 
 
 
-	ratings,sparsity = read_data(dummy=True)
+	ratings,sparsity = read_data(dummy=True,csv=False)
 
 	train,validation,test = train_validation_test_split(ratings)
 
-	config,model = regularized_hyperparameter_search(train, validation,debug=False)
+	# print(train[0:10])
 
+	# mm = Matrix_Factorization(train,latentFactors=50,lambdaU=0.01,lambdaV=0.01,debugLoss=True)
+
+	# mm.Train()
+	# model = mm
+
+
+	# print(train)
+	# print()
+	# print(mm.Train_Predict())
+
+
+
+
+	config,model = regularized_hyperparameter_search(train, validation,debug=False)
 
 
 	print("\n\n\n")
 	print("TEST RMSE")
 	print(calculate_rmse(model.Test_Predict(test),test))
+	
+
+
+
+	# print()
+
+	# print(test)
+
+	# print()
+
+	# print(model.Test_Predict(test))
+
+
+
 	print("\n\n\n")
 	print("BEST MODEL")
+	print("------------------------------------------------------------------")
 	print(pd.Series(config))
 
 
