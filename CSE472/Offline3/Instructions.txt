@@ -1,0 +1,11 @@
+ratings_train.xlsx (uploaded)             : Ratings from 16,000 users for 100 products, a matrix with dimensions 16000 X 100
+ratings_validate.xlsx (uploaded)          : Ratings from  4,000 users for 100 products, a matrix with dimensions  4000 X 100
+ratings_test.xlsx (will be uploaded later): Ratings from  4,000 users for 100 products, a matrix with dimensions  4000 X 100
+
+1. Products are same in all three datafiles, but there are no overlapping users.
+2. Ratings are real values ranging from 0.00 to 5.00 (the value "-1" corresponds to "null" = "not rated").
+3. Each row represents a user.
+4. Report training RMSE and validation RMSE in the Results_StudentID.xlsx file. 
+5. Report test RMSE after ratings_test.xlsx is available to you. 
+6. Replace StudentID in the file name with your actual student id.
+7. Follow all the instructions before coming to the lab. Don't waste our time. You will be penalized for dalay.

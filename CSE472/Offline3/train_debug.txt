@@ -1,0 +1,10 @@
+STARTING ..............
+Latent Factor: 10
+Regularization Parameter: lambdaU->0.01 lambdaV->0.01
+Iteration  0 --> 2179.48825847973  iteration time---> 281.78556811000453 second(s)
+Iteration  1 --> 2131.235125228646  iteration time---> 290.34709443399333 second(s)
+Iteration  2 --> 2117.998446136996  iteration time---> 303.18844186901697 second(s)
+Iteration  3 --> 2111.7844856551646  iteration time---> 289.0650179310178 second(s)
+Iteration  4 --> 2108.1555357626735  iteration time---> 281.048856777983 second(s)
+Iteration  5 --> 2105.650634621104  iteration time---> 280.88679102199967 second(s)
+Iteration  6 --> 2103.850867620167  iteration time---> 294.6028704700002 second(s)

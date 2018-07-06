@@ -122,5 +122,6 @@
 **/*.mp4
 **/*.wmv
 **/*.csv
+**/*.pkl
 
 CSE472/Offline3/assignment2/

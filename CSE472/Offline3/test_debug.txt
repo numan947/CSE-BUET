@@ -1,0 +1,37 @@
+Calculating Test RMSE...........
+Latent Factor: 10
+Regularization Parameter: lambdaU->0.01 lambdaV->0.01
+testSet RMSE-->  0.7509130537961596
+Latent Factor: 10
+Regularization Parameter: lambdaU->0.1 lambdaV->0.1
+testSet RMSE-->  0.5884257005185818
+Latent Factor: 10
+Regularization Parameter: lambdaU->1.0 lambdaV->1.0
+testSet RMSE-->  0.6765715114300147
+Latent Factor: 10
+Regularization Parameter: lambdaU->10.0 lambdaV->10.0
+testSet RMSE-->  1.8641606219976483
+Latent Factor: 20
+Regularization Parameter: lambdaU->0.01 lambdaV->0.01
+testSet RMSE-->  0.7191902975983819
+Latent Factor: 20
+Regularization Parameter: lambdaU->0.1 lambdaV->0.1
+testSet RMSE-->  0.572788829781509
+Latent Factor: 20
+Regularization Parameter: lambdaU->1.0 lambdaV->1.0
+testSet RMSE-->  0.6755747442317346
+Latent Factor: 20
+Regularization Parameter: lambdaU->10.0 lambdaV->10.0
+testSet RMSE-->  1.8685457055439127
+Latent Factor: 40
+Regularization Parameter: lambdaU->0.01 lambdaV->0.01
+testSet RMSE-->  0.5831903959895821
+Latent Factor: 40
+Regularization Parameter: lambdaU->0.1 lambdaV->0.1
+testSet RMSE-->  0.5923774417209453
+Latent Factor: 40
+Regularization Parameter: lambdaU->1.0 lambdaV->1.0
+testSet RMSE-->  0.6758486627992951
+Latent Factor: 40
+Regularization Parameter: lambdaU->10.0 lambdaV->10.0
+testSet RMSE-->  1.8725797842985528
