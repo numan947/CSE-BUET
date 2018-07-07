@@ -17,7 +17,7 @@ RATE_HIGH = 5
 MAXITEM = 5
 MAXUSER = 50
 
-THRESH=0.01
+
 
 
 TOTAL_INPUT = 700
@@ -191,7 +191,7 @@ def calculate_sparsity(mat):
 
 class Matrix_Factorization(object):
 
-	def __init__(self,ratingMatrix,latentFactors=5,lambdaU=0,lambdaV=0,scl=5,debug=False,debugLoss=False):
+	def __init__(self,ratingMatrix,latentFactors=5,lambdaU=0,lambdaV=0,scl=5,thresh=0.01,debug=False,debugLoss=False):
 		self.u_len,self.v_len = ratingMatrix.shape
 		self.ratingMatrix = ratingMatrix
 		self.latentFactors = latentFactors
@@ -201,6 +201,7 @@ class Matrix_Factorization(object):
 		self.debugLoss = debugLoss
 		self.W = make_weight_matrix(ratingMatrix)
 		self.scl = 5
+		self.thresh=thresh
 
 
 	def ALSU(self,U,V,X,lam,it):
@@ -300,7 +301,7 @@ class Matrix_Factorization(object):
 			if(self.debugLoss):
 				print("Iteration ",cur,"-->",tmpLoss," iteration time--->",eeee-ssss,"second(s)",file=open("train_debug.txt","a"))
 
-			if(tmpLoss<loss and np.abs(tmpLoss-loss)>=THRESH):
+			if(tmpLoss<loss and np.abs(tmpLoss-loss)>=self.thresh):
 				self.U = UU
 				self.V = VV
 				loss = tmpLoss
