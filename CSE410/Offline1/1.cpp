@@ -425,6 +425,7 @@ void init(){
 	/ set-up projection here
 	************************/
 	//load the PROJECTION matrix
+	glutDisplayFunc(display);
 	glMatrixMode(GL_PROJECTION);
 
 	//initialize the matrix
@@ -451,7 +452,7 @@ int main(int argc, char **argv){
 
 	glEnable(GL_DEPTH_TEST);	//enable Depth Testing
 
-	glutDisplayFunc(display);	//display callback function
+		//display callback function
 	glutIdleFunc(animate);		//what you want to do in the idle time (when no drawing is occuring)
 
 	glutKeyboardFunc(keyboardListener);

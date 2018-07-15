@@ -21,7 +21,7 @@ MAXUSER = 50
 
 
 TOTAL_INPUT = 700
-ITER_DEFAULT = 20
+ITER_DEFAULT = 15
 
 
 np.set_printoptions(threshold=np.nan)
@@ -175,10 +175,22 @@ def train_validation_test_split(ratings):
 	#	return np.array([[5,0,5,0,0],[5,3,5,0,0],[1,2,3,4,5]]),validation,test
 	return train,validation,test
 
-def calculate_rmse(pred,actual):
-	pred=pred[actual.nonzero()].flatten()
-	actual=actual[actual.nonzero()].flatten()
-	return np.sqrt(mean_squared_error(pred,actual))
+def calculate_rmse(pred,actual,W,n_elem):
+	
+	pred = pred[W.nonzero()].flatten()
+	actual = actual[W.nonzero()].flatten()
+	
+	diff = pred-actual
+	er = np.sum(np.square(diff))
+	er/=n_elem
+	return np.sqrt(er)
+	
+	#mse = mean_squared_error(pred,actual)
+	#mse/=n_elem
+	#return np.sqrt(mse)
+
+
+
 
 def make_weight_matrix(ratingMatrix):
 	tmp = ratingMatrix>=(RATE_LOW+1)
@@ -204,11 +216,8 @@ class Matrix_Factorization(object):
 		self.thresh=thresh
 
 
-	def ALSU(self,U,V,X,lam,it):
+	def ALSU(self,U,V,X,W,lam,it):
 		print("IN-->ALSU")
-		if(self.debug):
-			print(self.W)
-		
 
 		lamI = np.eye(self.latentFactors)*lam
 
@@ -218,7 +227,7 @@ class Matrix_Factorization(object):
 
 		for p in range(U.shape[0]):
 			print("Iteration-->",it,"ALSU-->",p)
-			Wu = np.diag(self.W[p,:])
+			Wu = np.diag(W[p,:])
 
 			if(self.debug):
 				print("Wu ",Wu.shape)
@@ -245,12 +254,12 @@ class Matrix_Factorization(object):
 
 		return U
 
-	def ALSV(self,U,V,X,lam,it):
+	def ALSV(self,U,V,X,W,lam,it):
 		print("IN-->ALSV")
 		lamI = np.eye(self.latentFactors)*lam
 		for p in range(V.shape[0]):
 			print("Iteration-->",it,"ALSV-->",p)
-			Wi = np.diag(self.W[:,p])
+			Wi = np.diag(W[:,p])
 
 			UTU = Wi.dot(U)
 			UTU = U.T.dot(UTU)
@@ -259,12 +268,12 @@ class Matrix_Factorization(object):
 		return V
 
 
-	def calculate_loss(self,U,V):
+	def calculate_loss(self,U,V,W):
 		UTV = U.dot(V.T)
-		XNM = np.multiply(self.ratingMatrix,self.W) - UTV
+		XNM = np.multiply(self.ratingMatrix,W) - UTV
 		
 		if(self.debug):
-			print(self.W)
+			print(W)
 			print(XNM)
 
 		total1 = np.sum(np.square(XNM))
@@ -289,13 +298,13 @@ class Matrix_Factorization(object):
 
 			ssss = timeit.default_timer()
 
-			UU = self.ALSU(self.U, self.V, self.ratingMatrix, self.lambdaU,cur)
+			UU = self.ALSU(self.U, self.V, self.ratingMatrix, self.W, self.lambdaU,cur)
 
-			VV = self.ALSV(self.U, self.V, self.ratingMatrix, self.lambdaV,cur)
+			VV = self.ALSV(self.U, self.V, self.ratingMatrix, self.W, self.lambdaV,cur)
 			
 			eeee = timeit.default_timer()
 
-			tmpLoss = self.calculate_loss(UU,VV)
+			tmpLoss = self.calculate_loss(UU,VV,self.W)
 
 
 			if(self.debugLoss):
@@ -325,9 +334,11 @@ class Matrix_Factorization(object):
 	def Test_Predict(self,testSet,iter=ITER_DEFAULT):
 		n_u,n_i = testSet.shape
 
+		WW = make_weight_matrix(testSet)
+
 		UU = self.scl*np.random.random((n_u,self.latentFactors))
 
-		UU = self.ALSU(UU, self.V, testSet, self.lambdaU,0)
+		UU = self.ALSU(UU, self.V, testSet, WW, self.lambdaU,0)
 		
 		if(self.debug):
 			print(UU)
@@ -355,7 +366,7 @@ class Matrix_Factorization(object):
 
 
 
-def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=None,latentFactorList=None,iter_array=None,debug=False):
+def regularized_hyperparameter_search(testSet,trainSet,validationSet,regularizationList=None,latentFactorList=None,iter_array=None,debug=False):
 	
 	lf = [10,20,40]
 	
@@ -387,26 +398,37 @@ def regularized_hyperparameter_search(trainSet,validationSet,regularizationList=
 
 	print("STARTING ..............",file=open("train_debug.txt","w"))
 
+	wv = make_weight_matrix(validationSet)
+	wtr = make_weight_matrix(trainSet)
+	wts = make_weight_matrix(testSet)
+
+	n_valid = np.count_nonzero(wv)
+	n_train = np.count_nonzero(wtr)
+	n_test = np.count_nonzero(wts)
+
 
 	for f in lf:
 		for ru in rg:
-			print("Latent Factor: {}".format(f),file=open("train_debug.txt","a"))
-			print("Regularization Parameter: lambdaU->{} lambdaV->{}".format(ru,ru),file=open("train_debug.txt","a"))
 
 			model = Matrix_Factorization(trainSet,latentFactors = f,lambdaU = ru, lambdaV = ru,debug=debug,debugLoss=True)
 			model.Train()
 
-			valid_rmse = calculate_rmse(model.Test_Predict(validationSet),validationSet)
-			train_rmse = calculate_rmse(model.Train_Predict(), trainSet)
+			train_rmse = calculate_rmse(model.Train_Predict(), trainSet,wtr,n_train)
+			valid_rmse = calculate_rmse(model.Test_Predict(validationSet),validationSet,wv,n_valid)
+			test_rmse = calculate_rmse(model.Test_Predict(testSet),testSet,wts, n_test)
+
+			print(file=open("train_debug.txt","a"))
+			print("Latent Factor: {}".format(f),file=open("train_debug.txt","a"))
+			print("Regularization Parameter: lambdaU->{} lambdaV->{}".format(ru,ru),file=open("train_debug.txt","a"))
 
 			print("trainSet RMSE--> ",train_rmse,file=open("train_debug.txt","a"))
 			print("validationSet RMSE--> ",valid_rmse,file=open("train_debug.txt","a"))
-			
+			print("testSet RMSE--> ",test_rmse,file=open("train_debug.txt","a"))
+			print(file=open("train_debug.txt","a"))
 
 
-
-			with open("models/"+str(f)+"_"+str(ru)+"_model.pkl", 'wb') as output:
-				pickle.dump(model, output, pickle.HIGHEST_PROTOCOL)
+			# with open("models/"+str(f)+"_"+str(ru)+"_model.pkl", 'wb') as output:
+			# 	pickle.dump(model, output, pickle.HIGHEST_PROTOCOL)
 
 
 
@@ -462,9 +484,17 @@ def main(train=False):
 		
 		train,validation = read_xlsx(filePath="data/ratings_train.xlsx"),read_xlsx(filePath="data/ratings_validate.xlsx")
 
+		train = train[0:500,:]
+
+		vv = validation[0:20,:]
+		tt = validation[50:80,:]
+
+
+
 
 		print(train.shape,calculate_sparsity(train))
-		print(validation.shape,calculate_sparsity(validation))
+		print(vv.shape,calculate_sparsity(vv))
+		print(tt.shape,calculate_sparsity(tt))
 
 		# print(train[0:10])
 
@@ -481,7 +511,7 @@ def main(train=False):
 
 
 
-		config,model = regularized_hyperparameter_search(train, validation,debug=False)
+		config,model = regularized_hyperparameter_search(tt,train, vv,debug=False)
 
 
 		# print("\n\n\n")
@@ -501,10 +531,10 @@ def main(train=False):
 
 
 
-		# print("\n\n\n")
-		# print("BEST MODEL")
-		# print("------------------------------------------------------------------")
-		# print(pd.Series(config))
+		print("\n\n\n")
+		print("BEST MODEL")
+		print("------------------------------------------------------------------")
+		print(pd.Series(config))
 	else:
 		
 		#test = read_xlsx(filePath="data/ratings_train.xlsx")

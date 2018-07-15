@@ -1,0 +1,170 @@
+STARTING ..............
+Latent Factor: 10
+Regularization Parameter: lambdaU->0.01 lambdaV->0.01
+Iteration  0 --> 2179.48825847973  iteration time---> 273.5972823900229 second(s)
+Iteration  1 --> 2131.235125228646  iteration time---> 272.48673025198514 second(s)
+Iteration  2 --> 2117.998446136996  iteration time---> 280.54492173099425 second(s)
+Iteration  3 --> 2111.7844856551646  iteration time---> 288.0202037690033 second(s)
+Iteration  4 --> 2108.1555357626735  iteration time---> 287.059603103 second(s)
+Iteration  5 --> 2105.650634621104  iteration time---> 286.9556764489971 second(s)
+Iteration  6 --> 2103.850867620167  iteration time---> 286.22131263199844 second(s)
+Iteration  7 --> 2102.5483126710747  iteration time---> 294.9871051950031 second(s)
+Iteration  8 --> 2101.582715152684  iteration time---> 290.9194557379815 second(s)
+Iteration  9 --> 2100.839015584696  iteration time---> 289.5451818309957 second(s)
+Iteration  10 --> 2100.240540670383  iteration time---> 290.29404147400055 second(s)
+Iteration  11 --> 2099.7401403656904  iteration time---> 288.67112071000156 second(s)
+Iteration  12 --> 2099.312680156937  iteration time---> 292.06068533001235 second(s)
+Iteration  13 --> 2098.9473312776977  iteration time---> 288.2135281130031 second(s)
+Iteration  14 --> 2098.639921291192  iteration time---> 290.46037363499636 second(s)
+Iteration  15 --> 2098.3870693703816  iteration time---> 293.2556652799831 second(s)
+Iteration  16 --> 2098.183570318771  iteration time---> 290.40528621699195 second(s)
+Iteration  17 --> 2098.022488545541  iteration time---> 289.6178230419755 second(s)
+Iteration  18 --> 2097.896301715189  iteration time---> 277.79464089797693 second(s)
+Iteration  19 --> 2097.7979174071274  iteration time---> 278.936407428002 second(s)
+trainSet RMSE-->  2.108113207477478
+validationSet RMSE-->  1.2422854968755819
+Latent Factor: 10
+Regularization Parameter: lambdaU->0.1 lambdaV->0.1
+Iteration  0 --> 2125.950716515425  iteration time---> 284.7575868309941 second(s)
+Iteration  1 --> 2091.2220233646744  iteration time---> 285.3947616579826 second(s)
+Iteration  2 --> 2099.7974073443697  iteration time---> 275.8126845450024 second(s)
+trainSet RMSE-->  2.1087895756810897
+validationSet RMSE-->  1.3792227286041394
+Latent Factor: 10
+Regularization Parameter: lambdaU->1.0 lambdaV->1.0
+Iteration  0 --> 2137.488599082578  iteration time---> 277.4277746070002 second(s)
+Iteration  1 --> 2100.6284507826795  iteration time---> 279.04375605098903 second(s)
+Iteration  2 --> 2099.2260475705525  iteration time---> 278.10335812999983 second(s)
+Iteration  3 --> 2098.994486314111  iteration time---> 277.9907719119801 second(s)
+Iteration  4 --> 2098.0719934036247  iteration time---> 278.88201838199166 second(s)
+Iteration  5 --> 2096.5438853410046  iteration time---> 289.278798971005 second(s)
+Iteration  6 --> 2094.8044295316367  iteration time---> 290.2216390300018 second(s)
+Iteration  7 --> 2093.228162207994  iteration time---> 289.61359588598134 second(s)
+Iteration  8 --> 2091.974715239861  iteration time---> 294.9140145019919 second(s)
+Iteration  9 --> 2091.0447931412837  iteration time---> 294.1160097079992 second(s)
+Iteration  10 --> 2090.381451648068  iteration time---> 283.9666254449985 second(s)
+Iteration  11 --> 2089.9229465954454  iteration time---> 291.4080821959942 second(s)
+Iteration  12 --> 2089.6190660345355  iteration time---> 288.9781689220108 second(s)
+Iteration  13 --> 2089.43246195103  iteration time---> 276.0489268050005 second(s)
+Iteration  14 --> 2089.3357892279373  iteration time---> 275.1134840279992 second(s)
+Iteration  15 --> 2089.308534103098  iteration time---> 275.23459732101765 second(s)
+Iteration  16 --> 2089.33460592671  iteration time---> 274.92619415500667 second(s)
+trainSet RMSE-->  2.100539077957638
+validationSet RMSE-->  1.2751837356597076
+Latent Factor: 10
+Regularization Parameter: lambdaU->10.0 lambdaV->10.0
+Iteration  0 --> 2127.868324616792  iteration time---> 278.58280285898945 second(s)
+Iteration  1 --> 2085.9140665370123  iteration time---> 278.3175570029998 second(s)
+Iteration  2 --> 2067.890127413144  iteration time---> 278.9347921820008 second(s)
+Iteration  3 --> 2059.862171907973  iteration time---> 326.98945484901196 second(s)
+Iteration  4 --> 2055.7768629990946  iteration time---> 324.1573858539923 second(s)
+Iteration  5 --> 2053.544301494177  iteration time---> 292.15733189097955 second(s)
+Iteration  6 --> 2052.2248228974727  iteration time---> 274.0402761180012 second(s)
+Iteration  7 --> 2051.361520365746  iteration time---> 274.01223771099467 second(s)
+Iteration  8 --> 2050.741196745794  iteration time---> 273.9149390270177 second(s)
+Iteration  9 --> 2050.2619608815558  iteration time---> 274.17562454601284 second(s)
+Iteration  10 --> 2049.8713750724733  iteration time---> 273.8561891440186 second(s)
+Iteration  11 --> 2049.5401400047012  iteration time---> 274.19664719401044 second(s)
+Iteration  12 --> 2049.250801564944  iteration time---> 274.4924095729948 second(s)
+Iteration  13 --> 2048.9925264835956  iteration time---> 274.1403994979919 second(s)
+Iteration  14 --> 2048.7584186620206  iteration time---> 274.056248014007 second(s)
+Iteration  15 --> 2048.544001076342  iteration time---> 273.834702941007 second(s)
+Iteration  16 --> 2048.346299124742  iteration time---> 273.1288487340207 second(s)
+Iteration  17 --> 2048.1632689075755  iteration time---> 273.21853172700503 second(s)
+Iteration  18 --> 2047.9934376333456  iteration time---> 273.0811396630015 second(s)
+Iteration  19 --> 2047.835678952321  iteration time---> 273.2970604180009 second(s)
+trainSet RMSE-->  2.0508678520408976
+validationSet RMSE-->  1.2395427370798087
+FINISHED ..............
+Latent Factor: 20
+Regularization Parameter: lambdaU->0.01 lambdaV->0.01
+Iteration  0 --> 2184.2980294782433  iteration time---> 275.67661810299614 second(s)
+Iteration  1 --> 2128.7847508979644  iteration time---> 276.0074669510068 second(s)
+Iteration  2 --> 2144.2707991124603  iteration time---> 276.0294158930192 second(s)
+trainSet RMSE-->  2.1392876339141758
+validationSet RMSE-->  1.3978906426905442
+Latent Factor: 20
+Regularization Parameter: lambdaU->0.1 lambdaV->0.1
+Iteration  0 --> 2218.6898418681717  iteration time---> 276.0471438319946 second(s)
+Iteration  1 --> 2132.0662007951305  iteration time---> 275.68933050500345 second(s)
+Iteration  2 --> 2153.1172636400356  iteration time---> 275.7754966469947 second(s)
+trainSet RMSE-->  2.1447948600082904
+validationSet RMSE-->  1.3431695458620656
+Latent Factor: 20
+Regularization Parameter: lambdaU->1.0 lambdaV->1.0
+Iteration  0 --> 2158.735318776297  iteration time---> 275.8551018059952 second(s)
+Iteration  1 --> 2120.6066963373823  iteration time---> 275.49288719901233 second(s)
+Iteration  2 --> 2123.541133186658  iteration time---> 275.6450267780165 second(s)
+trainSet RMSE-->  2.1236762902646436
+validationSet RMSE-->  1.4001585552043954
+Latent Factor: 20
+Regularization Parameter: lambdaU->10.0 lambdaV->10.0
+Iteration  0 --> 2074.4556582511327  iteration time---> 276.05201217500144 second(s)
+Iteration  1 --> 2055.9875134497506  iteration time---> 276.4308341249998 second(s)
+Iteration  2 --> 2047.5998154087201  iteration time---> 275.8111141929985 second(s)
+Iteration  3 --> 2040.7863508347748  iteration time---> 276.2050536290044 second(s)
+Iteration  4 --> 2035.7498289996097  iteration time---> 275.85307874300634 second(s)
+Iteration  5 --> 2032.0780776797842  iteration time---> 276.15083670199965 second(s)
+Iteration  6 --> 2029.3590434827197  iteration time---> 276.56223107798724 second(s)
+Iteration  7 --> 2027.274853593329  iteration time---> 277.4156039869995 second(s)
+Iteration  8 --> 2025.600670435034  iteration time---> 276.1627316759841 second(s)
+Iteration  9 --> 2024.2046334909842  iteration time---> 276.2398533579835 second(s)
+Iteration  10 --> 2023.0146058528005  iteration time---> 275.7791685569973 second(s)
+Iteration  11 --> 2021.988685148615  iteration time---> 275.72911740801646 second(s)
+Iteration  12 --> 2021.0989376165712  iteration time---> 275.95294209200074 second(s)
+Iteration  13 --> 2020.3239531966033  iteration time---> 276.5866073030047 second(s)
+Iteration  14 --> 2019.6458585985038  iteration time---> 281.6271347089787 second(s)
+Iteration  15 --> 2019.0493980753008  iteration time---> 278.9235162670084 second(s)
+Iteration  16 --> 2018.521805967382  iteration time---> 276.73197682900354 second(s)
+Iteration  17 --> 2018.0527663398298  iteration time---> 276.0741661140055 second(s)
+Iteration  18 --> 2017.634168092891  iteration time---> 276.32703172400943 second(s)
+Iteration  19 --> 2017.2596659230207  iteration time---> 276.5933591219946 second(s)
+trainSet RMSE-->  2.0244128665312964
+validationSet RMSE-->  1.1596646109314972
+FINISHED ..............
+Latent Factor: 40
+Regularization Parameter: lambdaU->0.01 lambdaV->0.01
+Iteration  0 --> 3158.5656050877537  iteration time---> 290.22203737599193 second(s)
+Iteration  1 --> 3126.652651626564  iteration time---> 290.0375984249986 second(s)
+Iteration  2 --> 3203.789590029369  iteration time---> 289.90930904701236 second(s)
+trainSet RMSE-->  2.851354367331452
+validationSet RMSE-->  2.928478346410803
+Latent Factor: 40
+Regularization Parameter: lambdaU->0.1 lambdaV->0.1
+Iteration  0 --> 2659.7475186151023  iteration time---> 290.16187032300513 second(s)
+Iteration  1 --> 2610.924462011723  iteration time---> 290.62719540001126 second(s)
+Iteration  2 --> 2632.2313462976626  iteration time---> 290.5150012979866 second(s)
+trainSet RMSE-->  2.459397514610857
+validationSet RMSE-->  2.069512985947373
+Latent Factor: 40
+Regularization Parameter: lambdaU->1.0 lambdaV->1.0
+Iteration  0 --> 2323.1898914914  iteration time---> 289.920976361027 second(s)
+Iteration  1 --> 2244.3427345555615  iteration time---> 289.54630693400395 second(s)
+Iteration  2 --> 2249.8938809757014  iteration time---> 289.46150521500385 second(s)
+trainSet RMSE-->  2.2011101692595716
+validationSet RMSE-->  1.5793441985509513
+Latent Factor: 40
+Regularization Parameter: lambdaU->10.0 lambdaV->10.0
+Iteration  0 --> 2152.391423543675  iteration time---> 289.38601831399137 second(s)
+Iteration  1 --> 2031.1665968015222  iteration time---> 291.5325597820047 second(s)
+Iteration  2 --> 2000.2707938341239  iteration time---> 289.19310033202055 second(s)
+Iteration  3 --> 1987.0776431541808  iteration time---> 287.45784826000454 second(s)
+Iteration  4 --> 1979.564907473417  iteration time---> 288.75867171998834 second(s)
+Iteration  5 --> 1974.5132981270608  iteration time---> 288.91120869800216 second(s)
+Iteration  6 --> 1970.8376899686516  iteration time---> 288.4213488349924 second(s)
+Iteration  7 --> 1968.046306343216  iteration time---> 288.3541813589982 second(s)
+Iteration  8 --> 1965.8608854747035  iteration time---> 288.6208029020054 second(s)
+Iteration  9 --> 1964.1051049056568  iteration time---> 289.843678122008 second(s)
+Iteration  10 --> 1962.66307981248  iteration time---> 294.51061299900175 second(s)
+Iteration  11 --> 1961.4595451414518  iteration time---> 294.0758414979791 second(s)
+Iteration  12 --> 1960.4458912972746  iteration time---> 291.3181135850027 second(s)
+Iteration  13 --> 1959.5896140861253  iteration time---> 315.9158817419957 second(s)
+Iteration  14 --> 1958.8675571670767  iteration time---> 314.9299329940113 second(s)
+Iteration  15 --> 1958.2620109216555  iteration time---> 333.1673593869782 second(s)
+Iteration  16 --> 1957.7584270984585  iteration time---> 335.1491996529803 second(s)
+Iteration  17 --> 1957.3440631940323  iteration time---> 304.4554215579992 second(s)
+Iteration  18 --> 1957.0072822634468  iteration time---> 301.4000950389891 second(s)
+Iteration  19 --> 1956.7373248913873  iteration time---> 297.3285535000032 second(s)
+trainSet RMSE-->  1.9708018728147707
+validationSet RMSE-->  1.0701911444647976
+FINISHED ..............
