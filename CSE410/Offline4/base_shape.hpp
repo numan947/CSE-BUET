@@ -53,10 +53,9 @@ vect rotateVector(vect a,vect ref, double angle)
 vect normalizeVector(vect a) {
     double dd = a.x*a.x + a.y*a.y + a.z*a.z;
     dd = sqrt(dd);
-    dd = 1/dd;
-    return scaleVector(a,dd);
+    vect tmp = {a.x/dd,a.y/dd,a.z/dd};
+    return tmp;
 }
-
 
 class LightRay{
 public:
@@ -65,7 +64,7 @@ public:
     LightRay(point stp,vect dir)
     {
         this->start = stp;
-        this->dir = dir;
+        this->dir = normalizeVector(dir);
     }
 };
 
@@ -82,6 +81,11 @@ public:
     BaseObject(){}
 
     virtual void draw() = 0; //pure virtual function
+    virtual double getIntersectingT(LightRay* r) = 0;
+    virtual double  intersect(LightRay *r, double colorAt[3], int level){
+        return -1;
+    }
+
 
 
     void setColor(double r, double g, double b){
@@ -164,6 +168,84 @@ public:
             }
         }
     }
+
+
+
+    double getIntersectingT(LightRay* r)
+    {
+
+        double a = dotProduct(r->dir,r->dir);
+
+        vect ro = vectSum({r->start.x,r->start.y,r->start.z},scaleVector({this->reference_point.x,this->reference_point.y,this->reference_point.z},-1));
+
+        //cout<<ro.x<<" "<<ro.y<<" "<<ro.z<<endl;
+
+        double b = 2.0*dotProduct(r->dir,ro);
+
+        double c = dotProduct(ro,ro) - length*length;
+
+        double d = b*b - 4*a*c;
+
+       // cout<<a<<" "<<b<<" "<<c<<" "<<d<<endl;
+
+        if(d<0)return -1;
+
+
+        d = sqrt(d);
+
+        double t1 = (-b+d)/(2.0*a);
+        double t2 = (-b-d)/(2.0*a);
+
+        return min(t1,t2);
+    }
+
+
+
+     double  intersect(LightRay *r, double colorAt[3], int level)
+     {
+
+        double minT = getIntersectingT(r);
+        
+        if(minT<=0)
+            return -1;
+
+        if(level==0){
+            return minT;
+        }
+
+
+        point intersectionPoint = movePointAlongvect(r->start,r->dir,minT);
+
+        //getColor ---> color
+        //setColor ---> this loop
+        for(int i=0;i<3;i++)
+            colorAt[i] = color[i]*coeffs[AMBIENT];
+
+        vect normal = getNormal(intersectionPoint);
+
+        vect reflection = getReflection()
+
+
+
+        return minT;
+
+
+
+
+
+     }
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 

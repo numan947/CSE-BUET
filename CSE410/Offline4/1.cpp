@@ -17,6 +17,14 @@ using namespace std;
 
 #define AXIS_SIZE 400
 
+#define FOVY 80.0
+#define ASPECT 1.0
+#define ZNEAR 1.0
+#define ZFAR 1000.0
+
+#define INF 99999999
+
+
 
 //GLOBAL VARIABLES: Offline1
 double cameraHeight;
@@ -31,7 +39,7 @@ vect u,r,l;
 vector<BaseObject*> objects;
 vector<vect> lights;
 int image_width,image_height;
-
+bitmap_image *image;
 
 
 void drawAxes()
@@ -61,9 +69,104 @@ void drawAxes()
 
 
 
+
+void capture(){
+	
+	cout<<camPos.x<<" "<<camPos.y<<" "<<camPos.z<<endl;
+
+	image = new bitmap_image(image_width,image_height);
+
+    for(int i=0;i<image_width;i++){
+        for(int j=0;j<image_height;j++){
+            image->set_pixel(i,j,0,0,0); //initialized to black
+        }
+    }
+
+
+    double plane_distance = (1.0*WINDOW_HEIGHT/2.0)/tan(1.0*FOVY*pi/360.0);
+
+
+    vect tmp = vectSum(vectSum(
+    							scaleVector(l,1.0*plane_distance), //l*plane_distance
+    							scaleVector(
+    										scaleVector(r,1.0*WINDOW_WIDTH/2.0), //r*WINDOW_WIDTH/2.0
+    									-1.0) // minus
+    						),
+    					scaleVector(u,1.0*WINDOW_HEIGHT/2.0) //u*WINDOW_HEIGHT/2.0
+    				); //final addition
+
+    //cout<<tmp.x<<" "<<tmp.y<<" "<<tmp.z<<" "<<endl;
+    vect topLeft = vectSum({camPos.x,camPos.y,camPos.z},tmp);
+
+
+
+    double du = 1.0 * WINDOW_WIDTH/image_width;
+    double dv = 1.0* WINDOW_HEIGHT/image_height;
+
+
+   // cout<<topLeft.x<<" "<<topLeft.y<<" "<<topLeft.z<<endl;
+    //cout<<" DU DV "<<du<<", "<<dv<<endl;
+
+
+    for(int i=0;i<image_width;i++){
+    	for(int j=0;j<image_height;j++){
+
+    		vect ttmp = vectSum(scaleVector(r,j*du),scaleVector(scaleVector(u,i*dv),-1));
+    		vect corner = vectSum(topLeft,ttmp);
+
+    		//cout<<corner.x<<" "<<corner.y<<" "<<corner.z<<endl;
+    		//break;
+
+    		LightRay* ray = new LightRay(camPos,vectSum(corner,scaleVector({camPos.x,camPos.y,camPos.z},-1)));
+
+    		
+
+    		//cout<<"RAY"<<endl;
+    		//cout<<ray->start.x<<" "<<ray->start.y<<" "<<ray->start.z<<endl;
+    		//cout<<ray->dir.x<<" "<<ray->dir.y<<" "<<ray->dir.z<<endl;
+    		
+    	
+
+    		int nearest = -1;
+    		double colorAt[3];
+    		double t_min = INF;
+    		
+
+    		for(int k=0;k<objects.size();k++){
+    			double t = objects[k]->intersect(ray,colorAt,0);
+
+    			//
+    			if(t<=0)continue;
+    			else if(t<t_min){
+    				t_min = t;
+    				nearest = k;
+    				//printf("%d\n",k );
+    			}
+    			cout<<t<<endl;
+    		}
+
+    		if(nearest!=-1){
+    			double t = objects[nearest]->intersect(ray,colorAt,1);
+
+    			image->set_pixel(j,i,colorAt[0]*255.0,colorAt[1]*255.0,colorAt[2]*255.0);
+    		}
+    	}
+    }
+
+
+    image->save_image("1.bmp");
+
+    printf("DONE\n");
+}
+
+
+
+
 void keyboardListener(unsigned char key, int x,int y){
 	switch(key){
-
+		case '0':
+			capture();
+			break;
 		case '1':
 			l=rotateVector(l,u,ROTATIONSPEED);
 			r=rotateVector(r,u,ROTATIONSPEED);
@@ -132,7 +235,7 @@ void mouseListener(int button, int state, int x, int y){	//x, y is the x-y of th
 	switch(button){
 		case GLUT_LEFT_BUTTON:
 			if(state == GLUT_DOWN){
-				
+
 			}
 			break;
 
@@ -208,7 +311,7 @@ void init(){
 	//initializing camera params
 	camPos.x=100;
 	camPos.y=100;
-	camPos.z=40;
+	camPos.z=10;
 	drawaxes=1;
 
 
@@ -238,7 +341,7 @@ void init(){
 	glLoadIdentity();
 
 	//give PERSPECTIVE parameters
-	gluPerspective(80,	1,	1,	1000.0);
+	gluPerspective(FOVY,ASPECT,ZNEAR,ZFAR);
 	//field of view in the Y (vertically)
 	//aspect ratio that determines the field of view in the X direction (horizontally)
 	//near distance
@@ -251,20 +354,26 @@ void loadTestData()
 {	
 	image_width = image_height = 768;
 
-	point aa = {50,20,10};
+	point aa = {20,20,10};
 	BaseObject* tmp = new Sphere(aa,10);
 	tmp->setColor(1,0,0);
 	tmp->setCoeffs(0.4,0.2,0.2,0.2);
 	tmp->setShine(1);
 	objects.push_back(tmp);
 
+	aa = {0,15,15};
+	tmp = new Sphere(aa,5);
+	tmp->setColor(0,1,0);
+	tmp->setCoeffs(0.4,0.2,0.2,0.2);
+	tmp->setShine(1);
+	objects.push_back(tmp);
 
-	BaseObject* tmp2 = new Floor(1000,20);
+/*	BaseObject* tmp2 = new Floor(1000,20);
 	tmp2->setCoeffs(0.4,0.2,0.2,0.2);
 	tmp2->setShine(1);
 	//tmp2->setColor(1,0,0);
 	objects.push_back(tmp2);
-
+*/
 
 
 	vect light1 = {-50,50,50};
@@ -281,7 +390,7 @@ void loadTestData()
 
 int main(int argc, char **argv){
 	
-
+	//freopen("out.txt", "w", stdout);
 	loadTestData();
 
 
