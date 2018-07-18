@@ -2,10 +2,8 @@
 #include<stdlib.h>
 #include<math.h>
 
-
-#include <GL/freeglut.h>
-#include <GL/gl.h>
- 
+#include <windows.h>
+#include <glut.h>
 
 #define pi (2*acos(0.0))
 
@@ -19,33 +17,6 @@ struct point
 {
 	double x,y,z;
 };
-
-struct vect
-{
-	double x,y,z;
-};
-
-
-int crossProduct(vect a, vect b)
-{
-	return a.x*b.x+a.y*b.y+a.z*b.z;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void drawAxes()
@@ -196,9 +167,6 @@ void drawSphere(double radius,int slices,int stacks)
 }
 
 
-
-
-
 void drawSS()
 {
     glColor3f(1,0,0);
@@ -337,14 +305,13 @@ void display(){
 	drawGrid();
 
     //glColor3f(1,0,0);
-    glTranslatef(10,10,10);
-    drawSquare(10);
-	//drawCircle(200,50);
-   // drawSS();
+    //drawSquare(10);
+
+    drawSS();
 
     //drawCircle(30,24);
 
-   // drawCone(20,50,24);
+    //drawCone(20,50,24);
 
 	//drawSphere(30,24,20);
 
@@ -357,7 +324,7 @@ void display(){
 
 
 void animate(){
-	angle+=1;
+	angle+=0.05;
 	//codes for any changes in Models, Camera
 	glutPostRedisplay();
 }
@@ -392,7 +359,7 @@ void init(){
 
 int main(int argc, char **argv){
 	glutInit(&argc,argv);
-	glutInitWindowSize(600, 600);
+	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(0, 0);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);	//Depth, Double buffer, RGB color
 
