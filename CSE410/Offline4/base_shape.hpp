@@ -139,9 +139,11 @@ extern vector<vect>lights;
 extern vector<BaseObject*>objects;
 
 
-class Sphere: public BaseObject{
+class Sphere: public BaseObject
+{
 public:
-    Sphere(point center,double radius){
+    Sphere(point center,double radius)
+    {
         this->reference_point = {center.x,center.y,center.z};
         this->length = radius;
     }
@@ -161,8 +163,7 @@ public:
         int slices = 43;
 
         //generate points
-        for(i=0;i<=stacks;i++)
-        {
+        for(i=0;i<=stacks;i++){
             h=radius*sin(((double)i/(double)stacks)*(pi/2));
             r=radius*cos(((double)i/(double)stacks)*(pi/2));
             for(j=0;j<=slices;j++)
@@ -173,11 +174,9 @@ public:
             }
         }
         //draw quads using generated points
-        for(i=0;i<stacks;i++)
-        {
+        for(i=0;i<stacks;i++){
             //glColor3f((double)i/(double)stacks,(double)i/(double)stacks,(double)i/(double)stacks);
-            for(j=0;j<slices;j++)
-            {
+            for(j=0;j<slices;j++){
                 glBegin(GL_QUADS);{
                     //upper hemisphere
                     glVertex3f(points[i][j].x+(this->reference_point.x),points[i][j].y+(this->reference_point.y),points[i][j].z+(this->reference_point.z));
@@ -235,17 +234,13 @@ public:
 
      double  intersect(LightRay *r, double colorAt[3], int level)
      {
-
         double minT = getIntersectingT(r);
-        
         if(minT<=0)
             return -1;
-
         if(level==0){
             return minT;
         }
-
-
+        
         point intersectionPoint = movePointAlongvect(r->start,r->dir,minT);
 
         //getColor ---> color
@@ -254,7 +249,6 @@ public:
             colorAt[i] = color[i]*coeffs[AMBIENT];
 
         vect normal = getNormal(intersectionPoint);
-
         vect reflection = getReflection(normal,r->dir);
 
         for(int i=0;i<lights.size();i++){
@@ -284,8 +278,8 @@ public:
 
             if(!obscured){
                 //apply phong modeling
-                double lambertValue = dotProduct(tmpRay->dir,normal);
-                double phongValue = pow(dotProduct(r->dir,reflection),shine);
+                double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
+                double phongValue = max(pow(dotProduct(r->dir,reflection),shine),0.0);
 
                 for(int ii=0;ii<3;ii++)
                     colorAt[ii]+= (this->color[ii] * this->source_factor) *
@@ -316,38 +310,22 @@ public:
 
                 if(nearest!=-1){
                     objects[nearest]->intersect(reflectedRay,reflectColor,level+1);
-                    for(int j=0;j<3;j++)
+                    for(int j=0;j<3;j++){
                         colorAt[j]+=reflectColor[j]*coeffs[REFLECT];
+                        
+                        colorAt[j]=min(1.0,colorAt[j]);
+                        colorAt[j]=max(0.0,colorAt[j]);
+                    }
                 }
 
             }
-
-
-
         }
-
-
-
         return minT;
-
-
-
-
-
-     }
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 };
+
+
+
 
 
 
@@ -358,7 +336,7 @@ public:
     
     Floor(double floorWidth,double tileWidth)
     {
-        this->reference_point = {-floorWidth/2.0,-floorWidth/2.0};
+        this->reference_point = {-floorWidth/2.0,-floorWidth/2.0,0};
         this->length = tileWidth;
     }
 
@@ -391,4 +369,496 @@ public:
             }
         }
     }
+
+    vect getNormal(point intersectionPoint)
+    {
+        vect tmp = {0,0,1};
+        return tmp;
+    }
+
+    double getIntersectingT(LightRay* r)
+    {
+        vect normal = getNormal({0,0,0}); //dummyvalue
+
+        //the plane goes through the origin, so in Ax+By+Cz+D = 0, D = 0
+
+        double t = -1.0*dotProduct(normal,{r->start.x,r->start.y,r->start.z}) / dotProduct(r->dir,normal);
+        return t;
+    }
+
+    double  intersect(LightRay *r, double colorAt[3], int level)
+    {
+
+        double minT = getIntersectingT(r);
+        point intersectionPoint = movePointAlongvect(r->start,r->dir,minT);
+
+        double minX = reference_point.x;
+        double maxX = -minX;
+        double minY = reference_point.y;
+        double maxY = -minY;
+
+        if(intersectionPoint.x < minX|| intersectionPoint.y < minY|| intersectionPoint.x > maxX || intersectionPoint.y >maxY)//outside the valid region
+            return -1;
+
+        if(level==0)
+            return minT;
+
+
+        int tileX = (intersectionPoint.x - reference_point.x)/length;
+        int tileY = (intersectionPoint.y - reference_point.y)/length;
+
+
+        if((tileX+tileY)%2){
+            double tmp=color[0];
+            if(!colorSet)
+                tmp=1;
+            color[0]=color[1]=color[2]=tmp;
+        }
+        else
+            color[0]=color[1]=color[2]=0;
+
+        for(int i=0;i<3;i++)
+            colorAt[i] = color[i]*coeffs[AMBIENT];
+
+
+        vect normal = getNormal(intersectionPoint);
+
+        vect reflection = getReflection(normal,r->dir);
+
+
+        for(int i=0;i<lights.size();i++){
+
+            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            
+            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            
+            dirVector = normalizeVector(dirVector);
+
+            point startPoint = movePointAlongvect(intersectionPoint,dirVector,1.0);
+
+            LightRay* tmpRay = new LightRay(startPoint,dirVector);
+
+            bool obscured=false;
+            
+            for (int j=0;j<objects.size();j++){
+                double tmp = objects[i]->getIntersectingT(tmpRay);
+
+                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                    obscured = true;
+                    break;
+                }
+
+                //not obscured
+            }
+
+            if(!obscured){
+                //apply phong modeling
+                double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
+                double phongValue = max(0.0,pow(dotProduct(r->dir,reflection),shine));
+
+
+
+                for(int ii=0;ii<3;ii++)
+                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
+                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
+                                                        phongValue*(this->coeffs[SPECULR]));
+            }
+
+            if(level<recursion_level){
+
+                point startPoint = movePointAlongvect(intersectionPoint,reflection,1.0);
+
+                LightRay* reflectedRay = new LightRay(startPoint,reflection);
+
+                int nearest=-1;
+                double t_min = INF;
+                double reflectColor[3];
+
+                for(int j=0;j<objects.size();j++){
+                    double t = objects[j]->getIntersectingT(reflectedRay);
+
+                    if(t<=0)
+                        continue;
+                    else if(t<t_min){
+                        t_min=t;
+                        nearest = j;
+                    }
+                }
+
+                if(nearest!=-1){
+                    objects[nearest]->intersect(reflectedRay,reflectColor,level+1);
+                    for(int j=0;j<3;j++){
+                        colorAt[j]+=reflectColor[j]*coeffs[REFLECT];
+                        
+                        colorAt[j]=min(1.0,colorAt[j]);
+                        colorAt[j]=max(0.0,colorAt[j]);
+                    }
+                }
+
+            }
+        }
+        return minT;
+    }
+};
+
+
+class Triangle: public BaseObject{
+public:
+    point p1,p2,p3;
+
+    Triangle(point a,point b, point c)
+    {
+        p1=a;p2=b;p3=c;
+    }
+
+    void draw(){
+        glColor3f(this->color[0],this->color[1],this->color[2]);
+        glBegin(GL_TRIANGLES);{
+            glVertex3f(p1.x,p1.y,p1.z);
+            glVertex3f(p2.x,p2.y,p2.z);
+            glVertex3f(p3.x,p3.y,p3.z);
+        }glEnd();
+    }
+
+    
+    vect getNormal(point intersectionPoint){
+        vect a = {p2.x-p1.x,p2.y-p1.y,p2.z-p1.z}; //p2-p1== p1--->p2   
+        vect b = {p3.x-p1.x,p3.y-p1.y,p3.z-p1.z}; //p3-p1== p1--->p3
+        vect c = crossProduct(a,b);
+        return normalizeVector(c);
+    }
+
+
+
+    double getIntersectingT(LightRay* r)
+    {
+        const float EPSILON = 0.0000001; 
+
+        vect edge1 = {p2.x-p1.x,p2.y-p1.y,p2.z-p1.z}; 
+        vect edge2 = {p3.x-p1.x,p3.y-p1.y,p3.z-p1.z}; 
+
+
+        vect h = crossProduct(r->dir,edge2);
+
+        double a = dotProduct(edge1,h);
+
+        if(a > -EPSILON && a < EPSILON)
+            return -1;
+
+        double f = 1.0/a;
+
+        vect s = {r->start.x-p1.x,r->start.y-p1.y,r->start.z-p1.z};
+
+        double u = f*dotProduct(s,h);
+
+        if(u<0.0||u>1.0)
+            return -1;
+
+        vect q = crossProduct(s,edge1);
+
+        double v = f*dotProduct(r->dir,q);
+
+        if(v<0.0||u+v>1.0)
+            return -1;
+
+        double t =  f*dotProduct(edge2,q);
+
+        if(t > EPSILON)
+            return t;
+        return -1;
+
+    }
+    double  intersect(LightRay *r, double colorAt[3], int level){
+        double minT = getIntersectingT(r);
+
+        if(minT<=0)
+            return -1;
+
+        if(level==0)
+            return minT;
+
+
+        point intersectionPoint = movePointAlongvect(r->start,r->dir,minT);
+
+        //getColor ---> color
+        //setColor ---> this loop
+        for(int i=0;i<3;i++)
+            colorAt[i] = color[i]*coeffs[AMBIENT];
+
+        vect normal = getNormal(intersectionPoint);
+        vect reflection = getReflection(normal,r->dir);
+
+        for(int i=0;i<lights.size();i++){
+
+            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            
+            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            
+            dirVector = normalizeVector(dirVector);
+
+            point startPoint = movePointAlongvect(intersectionPoint,dirVector,1.0);
+
+            LightRay* tmpRay = new LightRay(startPoint,dirVector);
+
+            bool obscured=false;
+            
+            for (int j=0;j<objects.size();j++){
+                double tmp = objects[i]->getIntersectingT(tmpRay);
+
+                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                    obscured = true;
+                    break;
+                }
+
+                //not obscured
+            }
+
+            if(!obscured){
+                //apply phong modeling
+                double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
+                double phongValue = max(pow(dotProduct(r->dir,reflection),shine),0.0);
+
+                for(int ii=0;ii<3;ii++)
+                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
+                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
+                                                        phongValue*(this->coeffs[SPECULR]));
+            }
+
+            if(level<recursion_level){
+
+                point startPoint = movePointAlongvect(intersectionPoint,reflection,1.0);
+
+                LightRay* reflectedRay = new LightRay(startPoint,reflection);
+
+                int nearest=-1;
+                double t_min = INF;
+                double reflectColor[3];
+
+                for(int j=0;j<objects.size();j++){
+                    double t = objects[j]->getIntersectingT(reflectedRay);
+
+                    if(t<=0)
+                        continue;
+                    else if(t<t_min){
+                        t_min=t;
+                        nearest = j;
+                    }
+                }
+
+                if(nearest!=-1){
+                    objects[nearest]->intersect(reflectedRay,reflectColor,level+1);
+                    for(int j=0;j<3;j++){
+                        colorAt[j]+=reflectColor[j]*coeffs[REFLECT];
+                        
+                        colorAt[j]=min(1.0,colorAt[j]);
+                        colorAt[j]=max(0.0,colorAt[j]);
+                    }
+                }
+
+            }
+        }
+        return minT;
+
+
+    }
+};
+
+
+
+class GenericQuad:public BaseObject{
+
+public:
+    double A,B,C,D,E,F,G,H,I,J;
+    GenericQuad(double allCoeffs[10],point reference_point,double length,double width,double height)
+    {
+        this->A = allCoeffs[0];
+        this->B = allCoeffs[1];
+        this->C = allCoeffs[2];
+        this->D = allCoeffs[3];
+        this->E = allCoeffs[4];
+        this->F = allCoeffs[5];
+        this->G = allCoeffs[6];
+        this->H = allCoeffs[7];
+        this->I = allCoeffs[8];
+        this->J = allCoeffs[9];
+
+        this->reference_point = {reference_point.x,reference_point.y,reference_point.z};
+        this->length = length;
+        this->width = width;
+        this->height = height;
+    }
+
+    void draw(){
+        glColor3f(color[0],color[1],color[2]);
+        
+        glPointSize(7);
+        
+        glBegin(GL_POINTS);
+        {
+            glVertex3f(reference_point.x,reference_point.y,reference_point.z);
+        }
+        glEnd();
+    }
+    vect getNormal(point intersectionPoint){
+        double df_dx = 2.0*A*intersectionPoint.x+D*intersectionPoint.y+E*intersectionPoint.z+G;
+        double df_dy = 2.0*B*intersectionPoint.y+D*intersectionPoint.x+F*intersectionPoint.z+H;
+        double df_dz = 2.0*C*intersectionPoint.z+E*intersectionPoint.x+F*intersectionPoint.z+I;
+
+        vect v = {df_dx,df_dy,df_dz};
+
+        return normalizeVector(v);
+    }
+    bool isInsideLimit(point p1,point pMin,point  pMax)
+    {
+        return (length>0 && p1.x>=pMin.x && p1.x<=pMax.x)||(width>0&&p1.y>=pMin.y && p1.y<=pMax.y)||(height>0&&p1.z>=pMin.z && p1.z<=pMax.z);
+    }
+
+
+
+    double getIntersectingT(LightRay* r)
+    {
+        vect d = r->dir;
+        point o = r->start;
+
+
+
+        double a = (A*d.x*d.x) + (B*d.y*d.y) + (C*d.z*d.z) + (D*d.x*d.y) + (E*d.x*d.z) + (F*d.z*d.y);
+        double b = (2.0*A*o.x*d.x)+(2.0*B*o.y*d.y)+(2.0*C*o.z*d.z)+(1.0*D*(o.x*d.y+d.x*o.y))+(1.0*E*(o.z*d.x+o.x*d.z))+(1.0*F*(o.z*d.y+d.z*o.y))+(G*d.x)+(H*d.y)+(I*d.z);
+        double c = (A*o.x*o.x)+(B*o.y*o.y)+(C*o.z*o.z)+(D*o.x*o.y)+(E*o.x*o.z)+(F*o.z*o.y)+(G*o.x)+(H*o.y)+(I*o.z)+J;
+
+        //cout<<a<<" "<<b<<" "<<c<<endl;
+
+        double D = b*b - 4*a*c;
+
+        if(D<0)return  -1;
+
+        D = sqrt(D);
+
+        double t1 = (-b+D)/(2.0*a);
+        double t2 = (-b-D)/(2.0*a);
+
+
+        point ip1 = movePointAlongvect(r->start,r->dir,t1);
+        point ip2 = movePointAlongvect(r->start,r->dir,t2);
+
+        double minX = reference_point.x;
+        double maxX = reference_point.x+length;
+        
+        double minY = reference_point.y;
+        double maxY = reference_point.y+width;
+        
+        double minZ = reference_point.z;
+        double maxZ = reference_point.z+height;
+
+        if(isInsideLimit(ip1,{minX,minY,minZ},{maxX,maxY,maxZ})&&isInsideLimit(ip2,{minX,minY,minZ},{maxX,maxY,maxZ})){
+            return min(t1,t2);
+        }
+        else if(isInsideLimit(ip1,{minX,minY,minZ},{maxX,maxY,maxZ})){
+            return  t1;
+        }
+        else if(isInsideLimit(ip2,{minX,minY,minZ},{maxX,maxY,maxZ})){
+            return t2;
+        }
+        else 
+            return -1;
+
+    }
+
+ double  intersect(LightRay *r, double colorAt[3], int level){
+        
+        double minT = getIntersectingT(r);
+        //cout<<minT<<endl;
+
+
+        if(minT<=0)
+            return -1;
+
+        if(level==0)
+            return minT;
+
+
+        point intersectionPoint = movePointAlongvect(r->start,r->dir,minT);
+
+        //getColor ---> color
+        //setColor ---> this loop
+        for(int i=0;i<3;i++)
+            colorAt[i] = color[i]*coeffs[AMBIENT];
+
+        vect normal = getNormal(intersectionPoint);
+        vect reflection = getReflection(normal,r->dir);
+
+        for(int i=0;i<lights.size();i++){
+
+            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            
+            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            
+            dirVector = normalizeVector(dirVector);
+
+            point startPoint = movePointAlongvect(intersectionPoint,dirVector,1.0);
+
+            LightRay* tmpRay = new LightRay(startPoint,dirVector);
+
+            bool obscured=false;
+            
+            for (int j=0;j<objects.size();j++){
+                double tmp = objects[i]->getIntersectingT(tmpRay);
+
+                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                    obscured = true;
+                    break;
+                }
+
+                //not obscured
+            }
+
+            if(!obscured){
+                //apply phong modeling
+                double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
+                double phongValue = max(pow(dotProduct(r->dir,reflection),shine),0.0);
+
+                for(int ii=0;ii<3;ii++)
+                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
+                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
+                                                        phongValue*(this->coeffs[SPECULR]));
+            }
+
+            if(level<recursion_level){
+
+                point startPoint = movePointAlongvect(intersectionPoint,reflection,1.0);
+
+                LightRay* reflectedRay = new LightRay(startPoint,reflection);
+
+                int nearest=-1;
+                double t_min = INF;
+                double reflectColor[3];
+
+                for(int j=0;j<objects.size();j++){
+                    double t = objects[j]->getIntersectingT(reflectedRay);
+
+                    if(t<=0)
+                        continue;
+                    else if(t<t_min){
+                        t_min=t;
+                        nearest = j;
+                    }
+                }
+
+                if(nearest!=-1){
+                    objects[nearest]->intersect(reflectedRay,reflectColor,level+1);
+                    for(int j=0;j<3;j++){
+                        colorAt[j]+=reflectColor[j]*coeffs[REFLECT];
+                        
+                        colorAt[j]=min(1.0,colorAt[j]);
+                        colorAt[j]=max(0.0,colorAt[j]);
+                    }
+                }
+
+            }
+        }
+        return minT;
+    }
+    
+
+
 };

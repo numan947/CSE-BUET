@@ -132,7 +132,7 @@ void capture(){
     		
 
     		for(int k=0;k<objects.size();k++){
-    			double t = objects[k]->getIntersectingT(ray);
+    			double t = objects[k]->intersect(ray,colorAt,0);
 
     			//
     			if(t<=0)continue;
@@ -147,8 +147,10 @@ void capture(){
     		if(nearest!=-1){
     			double t = objects[nearest]->intersect(ray,colorAt,1);
 
-    			for(int k=0;k<3;k++)
+    			for(int k=0;k<3;k++){
     				colorAt[k]=min(1.0,colorAt[k]);
+    				colorAt[k]=max(0.0,colorAt[k]);
+    			}
 
     			image->set_pixel(j,i,colorAt[0]*255.0,colorAt[1]*255.0,colorAt[2]*255.0);
     		}
@@ -358,7 +360,7 @@ void loadTestData()
 	recursion_level = 3;
 	image_width = image_height = 768;
 
-	point aa = {20,20,10};
+	point aa = {30,30,10};
 	BaseObject* tmp = new Sphere(aa,10);
 	tmp->setColor(1,0,0);
 	tmp->setCoeffs(0.4,0.2,0.2,0.2);
@@ -377,14 +379,41 @@ void loadTestData()
 	tmp->setColor(0,0,1);
 	tmp->setCoeffs(0.4,0.2,0.2,0.2);
 	tmp->setShine(1);
+	//objects.push_back(tmp);
+
+
+	// point p1 = {20.0,20.0,20.0};
+	// point p2 = {40.0,30.0,10.0};
+	// point p3 = {50.0,40.0,0.0};
+
+	point p1 = {70,20,0};
+	point p2 = {40,55,10};
+	point p3 = {50,40,0};
+
+	tmp = new Triangle(p1,p2,p3);
+	tmp->setColor(0.1,0.8,0.5);
+	tmp->setCoeffs(0.4, 0.2, 0.1, 0.3);
+	tmp->setShine(5);
 	objects.push_back(tmp);
 
-/*	BaseObject* tmp2 = new Floor(1000,20);
+
+    double cfs[] = {1, 1, 1, 0, 0, 0, -20, -20, -20, 200};
+    point reff = {0, 0, 0};
+
+    BaseObject* temp = new GenericQuad(cfs, reff, 0, 0, 5);
+    temp->setColor(1, 0, 1);
+    temp->setCoeffs(0.4, 0.2, 0.1, 0.3);
+    temp->setShine(3);
+    objects.push_back(temp);
+
+
+
+	BaseObject* tmp2 = new Floor(1000,20);
 	tmp2->setCoeffs(0.4,0.2,0.2,0.2);
 	tmp2->setShine(1);
 	//tmp2->setColor(1,0,0);
 	objects.push_back(tmp2);
-*/
+
 
 
 	vect light1 = {-50,50,50};
@@ -423,13 +452,6 @@ int main(int argc, char **argv){
 	glutKeyboardFunc(keyboardListener);
 	glutSpecialFunc(specialKeyListener);
 	glutMouseFunc(mouseListener);
-
-
-	vect aa = {100,200,300};
-
-	aa = normalizeVector(aa);
-
-	cout<<aa.x<<" "<<aa.y<<" "<<aa.z<<endl;
 
 
 	glutMainLoop();		//The main loop of OpenGL
