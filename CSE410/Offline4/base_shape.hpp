@@ -6,6 +6,7 @@
 #define SPECULR 2
 #define REFLECT 3
 
+
 typedef struct pp
 {
     double x,y,z;
@@ -57,6 +58,8 @@ vect normalizeVector(vect a) {
     return tmp;
 }
 
+
+
 class LightRay{
 public:
     point start;
@@ -72,7 +75,7 @@ public:
 class BaseObject{
 public:
     vect reference_point;
-    double height,width,length;
+    double height,width,length,source_factor = 1.0,eta = 1.5;
     int shine;
     double color[3];
     double coeffs[4];
@@ -85,7 +88,17 @@ public:
     virtual double  intersect(LightRay *r, double colorAt[3], int level){
         return -1;
     }
+    virtual vect getNormal(point intersectionPoint) = 0;
 
+
+
+    vect getReflection(vect normal, vect dirVector)
+    {
+        double scl = -2.0* dotProduct(normal,dirVector);
+        vect tmp = scaleVector(normal,scl);
+        tmp = vectSum(dirVector,tmp);
+        return normalizeVector(tmp);
+    }
 
 
     void setColor(double r, double g, double b){
@@ -108,10 +121,22 @@ public:
         this->coeffs[REFLECT] = r;
     }
 
+    void setSourceFactor(double val)
+    {
+        this->source_factor = val;
+    }
+
+    void setEta(double val)
+    {
+        this->eta = val;
+    }
+
 };
 
 
-
+extern int recursion_level;
+extern vector<vect>lights;
+extern vector<BaseObject*>objects;
 
 
 class Sphere: public BaseObject{
@@ -170,6 +195,13 @@ public:
     }
 
 
+    vect getNormal(point intersectionPoint)
+    {
+        vect tmp = {intersectionPoint.x - reference_point.x,intersectionPoint.y - reference_point.y,intersectionPoint.z - reference_point.z};
+        return normalizeVector(tmp);
+    }
+
+
 
     double getIntersectingT(LightRay* r)
     {
@@ -223,7 +255,76 @@ public:
 
         vect normal = getNormal(intersectionPoint);
 
-        vect reflection = getReflection()
+        vect reflection = getReflection(normal,r->dir);
+
+        for(int i=0;i<lights.size();i++){
+
+            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            
+            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            
+            dirVector = normalizeVector(dirVector);
+
+            point startPoint = movePointAlongvect(intersectionPoint,dirVector,1.0);
+
+            LightRay* tmpRay = new LightRay(startPoint,dirVector);
+
+            bool obscured=false;
+            
+            for (int j=0;j<objects.size();j++){
+                double tmp = objects[i]->getIntersectingT(tmpRay);
+
+                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                    obscured = true;
+                    break;
+                }
+
+                //not obscured
+            }
+
+            if(!obscured){
+                //apply phong modeling
+                double lambertValue = dotProduct(tmpRay->dir,normal);
+                double phongValue = pow(dotProduct(r->dir,reflection),shine);
+
+                for(int ii=0;ii<3;ii++)
+                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
+                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
+                                                        phongValue*(this->coeffs[SPECULR]));
+            }
+
+            if(level<recursion_level){
+
+                point startPoint = movePointAlongvect(intersectionPoint,reflection,1.0);
+
+                LightRay* reflectedRay = new LightRay(startPoint,reflection);
+
+                int nearest=-1;
+                double t_min = INF;
+                double reflectColor[3];
+
+                for(int j=0;j<objects.size();j++){
+                    double t = objects[j]->getIntersectingT(reflectedRay);
+
+                    if(t<=0)
+                        continue;
+                    else if(t<t_min){
+                        t_min=t;
+                        nearest = j;
+                    }
+                }
+
+                if(nearest!=-1){
+                    objects[nearest]->intersect(reflectedRay,reflectColor,level+1);
+                    for(int j=0;j<3;j++)
+                        colorAt[j]+=reflectColor[j]*coeffs[REFLECT];
+                }
+
+            }
+
+
+
+        }
 
 
 

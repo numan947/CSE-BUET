@@ -2,18 +2,13 @@
 #include<stdlib.h>
 #include<iostream>
 #include<vector>
-using namespace std;
-#include <GL/freeglut.h>
-#include <GL/gl.h>
-#include "base_shape.hpp"
-#include "bitmap_image.hpp"
 
+#define INF 1e9
 #define MOVESPEED 2
 #define ROTATIONSPEED 1.5
 
 #define WINDOW_WIDTH 500
 #define WINDOW_HEIGHT 500
-
 
 #define AXIS_SIZE 400
 
@@ -22,8 +17,11 @@ using namespace std;
 #define ZNEAR 1.0
 #define ZFAR 1000.0
 
-#define INF 99999999
-
+using namespace std;
+#include <GL/freeglut.h>
+#include <GL/gl.h>
+#include "base_shape.hpp"
+#include "bitmap_image.hpp"
 
 
 //GLOBAL VARIABLES: Offline1
@@ -39,6 +37,7 @@ vect u,r,l;
 vector<BaseObject*> objects;
 vector<vect> lights;
 int image_width,image_height;
+int recursion_level;
 bitmap_image *image;
 
 
@@ -133,7 +132,7 @@ void capture(){
     		
 
     		for(int k=0;k<objects.size();k++){
-    			double t = objects[k]->intersect(ray,colorAt,0);
+    			double t = objects[k]->getIntersectingT(ray);
 
     			//
     			if(t<=0)continue;
@@ -147,6 +146,9 @@ void capture(){
 
     		if(nearest!=-1){
     			double t = objects[nearest]->intersect(ray,colorAt,1);
+
+    			for(int k=0;k<3;k++)
+    				colorAt[k]=min(1.0,colorAt[k]);
 
     			image->set_pixel(j,i,colorAt[0]*255.0,colorAt[1]*255.0,colorAt[2]*255.0);
     		}
@@ -352,6 +354,8 @@ void init(){
 
 void loadTestData()
 {	
+	
+	recursion_level = 3;
 	image_width = image_height = 768;
 
 	point aa = {20,20,10};
@@ -364,6 +368,13 @@ void loadTestData()
 	aa = {0,15,15};
 	tmp = new Sphere(aa,5);
 	tmp->setColor(0,1,0);
+	tmp->setCoeffs(0.4,0.2,0.2,0.2);
+	tmp->setShine(1);
+	objects.push_back(tmp);
+
+	aa = {30,30,30};
+	tmp = new Sphere(aa,25);
+	tmp->setColor(0,0,1);
 	tmp->setCoeffs(0.4,0.2,0.2,0.2);
 	tmp->setShine(1);
 	objects.push_back(tmp);
