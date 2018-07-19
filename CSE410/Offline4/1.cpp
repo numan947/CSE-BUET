@@ -1,7 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<iostream>
-#include<vector>
+#include <bits/stdc++.h>
+using namespace std;
 
 #define INF 1e9
 #define MOVESPEED 2
@@ -16,13 +14,9 @@
 #define ASPECT 1.0
 #define ZNEAR 1.0
 #define ZFAR 1000.0
-
-using namespace std;
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include "base_shape.hpp"
-#include "bitmap_image.hpp"
-
 
 //GLOBAL VARIABLES: Offline1
 double cameraHeight;
@@ -65,14 +59,7 @@ void drawAxes()
 }
 
 
-
-
-
-
 void capture(){
-	
-	cout<<camPos.x<<" "<<camPos.y<<" "<<camPos.z<<endl;
-
 	image = new bitmap_image(image_width,image_height);
 
     for(int i=0;i<image_width;i++){
@@ -354,6 +341,9 @@ void init(){
 
 
 
+
+
+
 void loadTestData()
 {	
 	
@@ -397,10 +387,8 @@ void loadTestData()
 	objects.push_back(tmp);
 
 
-    double cfs[] = {1, 1, 1, 0, 0, 0, -20, -20, -20, 200};
-    point reff = {0, 0, 0};
 
-    BaseObject* temp = new GenericQuad(cfs, reff, 0, 0, 5);
+    BaseObject* temp = new GenericQuad(1, 1, 1, 0, 0, 0, -20, -20, -20, 200, {0, 0, 0}, 0, 0, 5);
     temp->setColor(1, 0, 1);
     temp->setCoeffs(0.4, 0.2, 0.1, 0.3);
     temp->setShine(3);
@@ -423,7 +411,96 @@ void loadTestData()
 
 }
 
+void loadActualData()
+{
+	freopen("scene.txt", "r", stdin);
 
+	cin>>recursion_level;
+	
+	cin>>image_width;
+	image_height=image_width;
+
+	string tmp;
+	int totalObjects;
+
+	cin>>totalObjects;
+
+	for(int i=0;i<totalObjects;i++){
+		cin>>tmp;
+
+		if(tmp=="sphere"){
+			point tmp;
+			double r,g,b,a,d,s,ref;
+			double  radii;
+			int shine;
+			cin>>tmp.x>>tmp.y>>tmp.z;
+			cin>>radii;
+			cin>>r>>g>>b;
+			cin>>a>>d>>s>>ref;
+			cin>>shine;
+
+			BaseObject* tmp1 = new Sphere(tmp,radii);
+			tmp1->setCoeffs(a,d,s,ref);
+			tmp1->setShine(shine);
+			tmp1->setColor(r,g,b);
+			objects.push_back(tmp1);
+		}
+
+		if(tmp=="triangle"){
+			point tmp1,tmp2,tmp3;
+			double r,g,b,a,d,s,ref;
+			int shine;
+			cin>>tmp1.x>>tmp1.y>>tmp1.z;
+			cin>>tmp2.x>>tmp2.y>>tmp2.z;
+			cin>>tmp3.x>>tmp3.y>>tmp3.z;
+			cin>>r>>g>>b;
+			cin>>a>>d>>s>>ref;
+			cin>>shine;
+
+			BaseObject* tmp = new Triangle(tmp1,tmp2,tmp3);
+			tmp->setCoeffs(a,d,s,ref);
+			tmp->setShine(shine);
+			tmp->setColor(r,g,b);
+			objects.push_back(tmp);
+		}
+
+		if(tmp=="general"){
+			point reff;
+			double A,B,C,D,E,F,G,H,I,J,l,w,h;
+			double r,g,b,a,d,s,ref;
+			int shine;
+			cin>>A>>B>>C>>D>>E>>F>>G>>H>>I>>J;
+			cin>>reff.x>>reff.y>>reff.z>>l>>w>>h;
+			cin>>r>>g>>b;
+			cin>>a>>d>>s>>ref;
+			cin>>shine;
+
+			BaseObject* tmp = new GenericQuad(A,B,C,D,E,F,G,H,I,J,reff,l,w,h);
+			tmp->setCoeffs(a,d,s,ref);
+			tmp->setShine(shine);
+			tmp->setColor(r,g,b);
+			objects.push_back(tmp);
+		}
+	}
+
+	int numLightSource;
+	cin>>numLightSource;
+
+	for(int i=0;i<numLightSource;i++){
+		vect tmp;
+		cin>>tmp.x>>tmp.y>>tmp.z;
+		lights.push_back(tmp);
+	}
+
+
+	BaseObject* tmp2 = new Floor(1000,20);
+	tmp2->setCoeffs(0.4,0.2,0.2,0.2);
+	tmp2->setShine(1);
+	//tmp2->setColor(1,0,0);
+	objects.push_back(tmp2);
+
+	//cin.close();
+}
 
 
 
@@ -431,7 +508,10 @@ void loadTestData()
 int main(int argc, char **argv){
 	
 	//freopen("out.txt", "w", stdout);
-	loadTestData();
+	
+	//loadTestData();
+
+	loadActualData();
 
 
 
@@ -440,7 +520,7 @@ int main(int argc, char **argv){
 	glutInitWindowPosition(0, 0);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);	//Depth, Double buffer, RGB color
 
-	glutCreateWindow("Task 1 & 2");
+	glutCreateWindow("RayTracing---1305043");
 
 	init();
 
@@ -455,6 +535,8 @@ int main(int argc, char **argv){
 
 
 	glutMainLoop();		//The main loop of OpenGL
+
+	printf("HELLO WORLD\n");
 
 	return 0;
 }
