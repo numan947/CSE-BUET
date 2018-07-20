@@ -10,9 +10,9 @@ using namespace std;
 
 #define AXIS_SIZE 400
 
-#define EYE_X 24.808
-#define EYE_Y -41.8681
-#define EYE_Z 22.7117
+#define EYE_X 50
+#define EYE_Y 50
+#define EYE_Z 10
 
 
 
@@ -102,6 +102,7 @@ void capture(){
 
 
     for(int i=0;i<image_width;i++){
+    	printf("c-->%d\n",i);
     	for(int j=0;j<image_height;j++){
 
     		vect ttmp = vectSum(scaleVector(r,j*du),scaleVector(scaleVector(u,i*dv),-1));
@@ -326,9 +327,9 @@ void init(){
 	r.z=0;
 
 	//remove these
-	r.x = 0.978148;
-	r.y = -0.207912;
-	r.z = 0;
+	// r.x = 0.978148;
+	// r.y = -0.207912;
+	// r.z = 0;
 
 
 
@@ -337,9 +338,9 @@ void init(){
 	l.z=0;
 
 
-	l.x = 0.207912;
-	l.y = 0.978148;
-	l.z = 0;
+	// l.x = 0.207912;
+	// l.y = 0.978148;
+	// l.z = 0;
 
 
 	//clear the screen
@@ -371,7 +372,7 @@ void loadTestData()
 {	
 	
 	recursion_level = 3;
-	image_width = image_height = 768;
+	image_width = image_height = 2048;
 
 	point aa = {20,20,10};
 	BaseObject* tmp = new Sphere(aa,10);
@@ -380,7 +381,7 @@ void loadTestData()
 	tmp->setShine(1);
 	objects.push_back(tmp);
 
-	aa = {40,15,15};
+	aa = {40,15,5};
 	tmp = new Sphere(aa,5);
 	tmp->setColor(0,1,0);
 	tmp->setCoeffs(0.4,0.2,0.2,0.2);
@@ -427,7 +428,7 @@ void loadTestData()
 
 
 
-	vect light1 = {40,40,40};
+	vect light1 = {40,40,10};
 
 	lights.push_back(light1);
 
@@ -530,11 +531,11 @@ void loadActualData()
 
 int main(int argc, char **argv){
 	
-	freopen("out.txt", "w", stdout);
+	//freopen("out.txt", "w", stdout);
 	
-	loadTestData();
+	//loadTestData();
 
-	//loadActualData();
+	loadActualData();
 
 
 

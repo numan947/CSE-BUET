@@ -51,6 +51,21 @@ vect normalizeVector(vect a) {
     vect tmp = {a.x/dd,a.y/dd,a.z/dd};
     return tmp;
 }
+vect pointToVector(point tmp)
+{
+    return {tmp.x,tmp.y,tmp.z};
+}
+point vectorToPoint(vect tmp)
+{
+    return {tmp.x,tmp.y,tmp.z};
+}
+double vectorLength(vect tmp)
+{
+    return sqrt(tmp.x*tmp.x+tmp.y*tmp.y+tmp.z*tmp.z);
+}
+
+
+
 class LightRay{
 public:
     point start;
@@ -115,7 +130,7 @@ public:
     double eta = 2.5;
     Sphere(point center,double radius)
     {
-        this->reference_point = {center.x,center.y,center.z};
+        this->reference_point = pointToVector(center);
         this->length = radius;
     }
     void draw()
@@ -164,7 +179,10 @@ public:
     }
     vect getNormal(point intersectionPoint)
     {
-        vect tmp = {intersectionPoint.x - reference_point.x,intersectionPoint.y - reference_point.y,intersectionPoint.z - reference_point.z};
+        //vect tmp = {intersectionPoint.x - reference_point.x,intersectionPoint.y - reference_point.y,intersectionPoint.z - reference_point.z};
+        
+        vect tmp = vectSum(pointToVector(intersectionPoint),scaleVector(reference_point,-1));
+
         return normalizeVector(tmp);
     }
     void setEta(double val){
@@ -230,9 +248,9 @@ public:
 
         for(int i=0;i<lights.size();i++){
 
-            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            vect dirVector = vectSum(lights[i],scaleVector(pointToVector(intersectionPoint),-1.0));
             
-            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            double maxDistanceFromObjecttoLightSource = vectorLength(dirVector);
             
             dirVector = normalizeVector(dirVector);
 
@@ -387,7 +405,7 @@ public:
 
         //the plane goes through the origin, so in Ax+By+Cz+D = 0, D = 0
 
-        double t = -1.0*dotProduct(normal,{r->start.x,r->start.y,r->start.z}) / dotProduct(r->dir,normal);
+        double t = -1.0*dotProduct(normal,pointToVector(r->start)) / dotProduct(r->dir,normal);
         return t;
     }
 
@@ -443,9 +461,9 @@ public:
 
         for(int i=0;i<lights.size();i++){
 
-            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            vect dirVector = vectSum(lights[i],scaleVector(pointToVector(intersectionPoint),-1.0));
             
-            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            double maxDistanceFromObjecttoLightSource = vectorLength(dirVector);
             
             dirVector = normalizeVector(dirVector);
 
@@ -597,9 +615,9 @@ public:
 
         for(int i=0;i<lights.size();i++){
 
-            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            vect dirVector = vectSum(lights[i],scaleVector(pointToVector(intersectionPoint),-1.0));
             
-            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            double maxDistanceFromObjecttoLightSource = vectorLength(dirVector);
             
             dirVector = normalizeVector(dirVector);
 
@@ -684,7 +702,7 @@ public:
         this->I = I;
         this->J = J;
 
-        this->reference_point = {reference_point.x,reference_point.y,reference_point.z};
+        this->reference_point = pointToVector(reference_point);
         this->length = length;
         this->width = width;
         this->height = height;
@@ -774,9 +792,9 @@ public:
 
         for(int i=0;i<lights.size();i++){
 
-            vect dirVector = vectSum(lights[i],scaleVector({intersectionPoint.x,intersectionPoint.y,intersectionPoint.z},-1.0));
+            vect dirVector = vectSum(lights[i],scaleVector(pointToVector(intersectionPoint),-1.0));
             
-            double maxDistanceFromObjecttoLightSource = sqrt(dirVector.x*dirVector.x+dirVector.y*dirVector.y+dirVector.z*dirVector.z);
+            double maxDistanceFromObjecttoLightSource = vectorLength(dirVector);
             
             dirVector = normalizeVector(dirVector);
 
