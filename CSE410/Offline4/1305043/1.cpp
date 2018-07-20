@@ -10,17 +10,19 @@ using namespace std;
 
 #define AXIS_SIZE 400
 
-#define EYE_X 100
-#define EYE_Y 100
+#define EYE_X 150
+#define EYE_Y 150
 #define EYE_Z 10
+
+
+
 
 #define FOVY 80.0
 #define ASPECT 1.0
 #define ZNEAR 1.0
 #define ZFAR 1000.0
-
-
-#include "GL/freeglut.h"
+#include <GL/freeglut.h>
+#include <GL/gl.h>
 #include "base_shape.hpp"
 
 //GLOBAL VARIABLES: Offline1
@@ -120,12 +122,13 @@ void capture(){
     	
 
     		int nearest = -1;
-    		double colorAt[3];
+    		double *colorAt = new double[3];
+    		double *dummycolorAt = new double[3];
     		double t_min = INF;
     		
 
     		for(int k=0;k<objects.size();k++){
-    			double t = objects[k]->intersect(ray,colorAt,0);
+    			double t = objects[k]->intersect(ray,dummycolorAt,0);
 
     			//
     			if(t<=0)continue;
@@ -140,10 +143,15 @@ void capture(){
     		if(nearest!=-1){
     			double t = objects[nearest]->intersect(ray,colorAt,1);
 
+    			//cout<<"Before: ";
+    			//cout<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
     			for(int k=0;k<3;k++){
     				colorAt[k]=min(1.0,colorAt[k]);
     				colorAt[k]=max(0.0,colorAt[k]);
     			}
+
+    			//cout<<"After: ";
+    			//cout<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
 
     			image->set_pixel(j,i,colorAt[0]*255.0,colorAt[1]*255.0,colorAt[2]*255.0);
     		}
@@ -529,7 +537,7 @@ void loadActualData()
 
 int main(int argc, char **argv){
 	
-	//freopen("out.txt", "w", stdout);
+	//freopen("red.txt", "w", stdout);
 	
 	//loadTestData();
 

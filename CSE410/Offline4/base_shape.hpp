@@ -6,6 +6,8 @@
 #define DIFFUSE 1
 #define SPECULR 2
 #define REFLECT 3
+
+#define EPS 0.00001
 typedef struct pp
 {
     double x,y,z;
@@ -64,8 +66,27 @@ double vectorLength(vect tmp)
     return sqrt(tmp.x*tmp.x+tmp.y*tmp.y+tmp.z*tmp.z);
 }
 
+bool GT(double a, double b, double epsilon=EPS)
+{
+    return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
 
-
+bool LT(double a, double b, double epsilon=EPS)
+{
+    return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+bool EQ(double a, double b, double epsilon=EPS)
+{
+    return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+bool GTE(double a, double b)
+{
+    return GT(a,b)||EQ(a,b);
+}
+bool LTE(double a, double b)
+{
+    return LT(a,b)||EQ(a,b);
+}
 class LightRay{
 public:
     point start;
@@ -194,7 +215,7 @@ public:
 
         double sinT2 = eta*eta*(1.0-cosI*cosI);
 
-        if(sinT2>1.0){
+        if(GT(sinT2,1.0)){
             //total internal reflection
             return {0,0,0};
         }
@@ -219,7 +240,7 @@ public:
         double d = b*b - 4*a*c;
 
        // cout<<a<<" "<<b<<" "<<c<<" "<<d<<endl;
-        if(d<0)return -1;
+        if(LT(d,0))return -1;
         d = sqrt(d);
 
         double t1 = (-b+d)/(2.0*a);
@@ -229,19 +250,22 @@ public:
     double  intersect(LightRay *r, double colorAt[3], int level)
      {
         double minT = getIntersectingT(r);
-        if(minT<=0)
+        if(LT(minT,0.0)||EQ(minT,0.0))
             return -1;
-        if(level==0){
-            return minT;
-        }
+
         
         point intersectionPoint = movePointAlongvect(r->start,r->dir,minT);
 
+        //cout<<minT<<endl;
+
         //getColor ---> color
         //setColor ---> this loop
-        for(int i=0;i<3;i++)
+        for(int i=0;i<3;i++){
             colorAt[i] = color[i]*coeffs[AMBIENT];
-
+        }
+        if(level==0){
+            return minT;
+        }
         vect normal = getNormal(intersectionPoint);
         vect reflection = getReflection(normal,r->dir);
         vect refraction = getRefraction(normal,r->dir);
@@ -263,7 +287,7 @@ public:
             for (int j=0;j<objects.size();j++){
                 double tmp = objects[j]->getIntersectingT(tmpRay);
 
-                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                if(GT(tmp,0) && LT(tmp,maxDistanceFromObjecttoLightSource)){//obscured
                     obscured = true;
                     break;
                 }
@@ -273,13 +297,36 @@ public:
 
             if(!obscured){
                 //apply phong modeling
+                //cout<<"IN: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
+                
+
                 double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
                 double phongValue = max(pow(dotProduct(r->dir,reflection),shine),0.0);
 
-                for(int ii=0;ii<3;ii++)
-                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
-                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
-                                                        phongValue*(this->coeffs[SPECULR]));
+                //cout<<"lambert and phong: "<<level<<": ";
+
+               // cout<<lambertValue<<" "<<phongValue<<endl;
+
+                double tmp_diffuse = lambertValue*coeffs[DIFFUSE];
+                double tmp_speculr = phongValue*coeffs[SPECULR];
+
+                //cout<<tmp_diffuse<<" "<<tmp_speculr<<endl;
+
+                double added = tmp_diffuse + tmp_speculr;
+
+                //cout<<added<<endl;
+                
+                for(int ii=0;ii<3;ii++){
+                    if(added>0){
+                       // cout<<"Before: "<<colorAt[ii]<<endl;
+                        double asdf=(color[ii]*source_factor)*added;
+                        colorAt[ii]+=asdf;
+                        //cout<<"After: "<<colorAt[ii]<<endl;
+                    }
+                }
+
+                
+                //cout<<"OUT: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
             }
 
             if(level<recursion_level){
@@ -291,14 +338,14 @@ public:
 
                 int nearest=-1;
                 double t_min = INF;
-                double reflectColor[3];
+                double *reflectColor=new double[3];
 
                 for(int j=0;j<objects.size();j++){
                     double t = objects[j]->getIntersectingT(reflectedRay);
 
-                    if(t<=0)
+                    if(LT(t,0)||EQ(t,0))
                         continue;
-                    else if(t<t_min){
+                    else if(LT(t,t_min)){
                         t_min=t;
                         nearest = j;
                     }
@@ -309,10 +356,12 @@ public:
                     for(int j=0;j<3;j++){
                         colorAt[j]+=reflectColor[j]*coeffs[REFLECT];
                         
-                        colorAt[j]=min(1.0,colorAt[j]);
-                        colorAt[j]=max(0.0,colorAt[j]);
+                        // colorAt[j]=min(1.0,colorAt[j]);
+                        // colorAt[j]=max(0.0,colorAt[j]);
                     }
                 }
+
+
 
                 //refraction
                 startPoint = movePointAlongvect(intersectionPoint,refraction,1.0);
@@ -321,14 +370,14 @@ public:
 
                 nearest=-1;
                 t_min = INF;
-                double refractedColor[3];
+                double *refractedColor = new double[3];
 
                 for(int j=0;j<objects.size();j++){
                     double t = objects[j]->getIntersectingT(refractedRay);
 
-                    if(t<=0)
+                    if(LT(t,0)||EQ(t,0))
                         continue;
-                    else if(t<t_min){
+                    else if(LT(t,t_min)){
                         t_min=t;
                         nearest = j;
                     }
@@ -339,12 +388,15 @@ public:
                     for(int j=0;j<3;j++){
                         colorAt[j]+=refractedColor[j]*eta;
                         
-                        colorAt[j]=min(1.0,colorAt[j]);
-                        colorAt[j]=max(0.0,colorAt[j]);
+                        // colorAt[j]=min(1.0,colorAt[j]);
+                        // colorAt[j]=max(0.0,colorAt[j]);
                     }
                 }
             }
         }
+
+
+
         return minT;
     }
 };
@@ -358,7 +410,7 @@ public:
     {
         this->reference_point = {-floorWidth/2.0,-floorWidth/2.0,0};
         this->length = tileWidth;
-        this->txt_img = bitmap_image("texture.bmp");
+        this->txt_img = bitmap_image("Texture/texture.bmp");
         this->hMul = (1.0*txt_img.height())/floorWidth;
         this->wMul = (1.0*txt_img.width())/floorWidth;
     }
@@ -448,7 +500,7 @@ public:
 
         txt_img.get_pixel(tx,ty,rr,gg,bb);
 
-        double txt_color[] = {rr,gg,bb};
+        double txt_color[] = {1.0*rr,1.0*gg,1.0*bb};
 
         for(int i=0;i<3;i++)
             colorAt[i] = color[i]*coeffs[AMBIENT]*(1.0*txt_color[i]/255.0);
@@ -476,7 +528,7 @@ public:
             for (int j=0;j<objects.size();j++){
                 double tmp = objects[j]->getIntersectingT(tmpRay);
 
-                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                if(GT(tmp,0) && LT(tmp,maxDistanceFromObjecttoLightSource)){//obscured
                     obscured = true;
                     break;
                 }
@@ -486,15 +538,34 @@ public:
 
             if(!obscured){
                 //apply phong modeling
+                //cout<<"IN: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
                 double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
-                double phongValue = max(0.0,pow(dotProduct(r->dir,reflection),shine));
+                double phongValue = max(pow(dotProduct(r->dir,reflection),shine),0.0);
 
+                //cout<<"lambert and phong: "<<level<<": ";
 
+               // cout<<lambertValue<<" "<<phongValue<<endl;
 
-                for(int ii=0;ii<3;ii++)
-                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
-                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
-                                                        phongValue*(this->coeffs[SPECULR]));
+                double tmp_diffuse = lambertValue*coeffs[DIFFUSE];
+                double tmp_speculr = phongValue*coeffs[SPECULR];
+
+                //cout<<tmp_diffuse<<" "<<tmp_speculr<<endl;
+
+                double added = tmp_diffuse + tmp_speculr;
+
+                //cout<<added<<endl;
+
+                
+                for(int ii=0;ii<3;ii++){
+                    if(added>0){
+                       // cout<<"Before: "<<colorAt[ii]<<endl;
+                        colorAt[ii]+= (color[ii] *source_factor)*added;
+                        //cout<<"After: "<<colorAt[ii]<<endl;
+                    }
+                }
+
+                
+                //cout<<"OUT: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
             }
 
             if(level<recursion_level){
@@ -505,14 +576,14 @@ public:
 
                 int nearest=-1;
                 double t_min = INF;
-                double reflectColor[3];
+                double *reflectColor = new double[3];
 
                 for(int j=0;j<objects.size();j++){
                     double t = objects[j]->getIntersectingT(reflectedRay);
 
-                    if(t<=0)
+                    if(LT(t,0)||EQ(t,0))
                         continue;
-                    else if(t<t_min){
+                    else if(LT(t,t_min)){
                         t_min=t;
                         nearest = j;
                     }
@@ -567,7 +638,7 @@ public:
 
         double a = dotProduct(edge1,h);
 
-        if(a > -EPSILON && a < EPSILON)
+        if(GT(a , -EPSILON) && LT(a , EPSILON))
             return -1;
 
         double f = 1.0/a;
@@ -576,19 +647,19 @@ public:
 
         double u = f*dotProduct(s,h);
 
-        if(u<0.0||u>1.0)
+        if(LT(u,0.0)||GT(u,1.0))
             return -1;
 
         vect q = crossProduct(s,edge1);
 
         double v = f*dotProduct(r->dir,q);
 
-        if(v<0.0||u+v>1.0)
+        if(LT(v,0.0)||GT(u+v,1.0))
             return -1;
 
         double t =  f*dotProduct(edge2,q);
 
-        if(t > EPSILON)
+        if(GT(t,EPSILON))
             return t;
         return -1;
 
@@ -596,7 +667,7 @@ public:
     double  intersect(LightRay *r, double colorAt[3], int level){
         double minT = getIntersectingT(r);
 
-        if(minT<=0)
+        if(LT(minT,0.0)||EQ(minT,0.0))
             return -1;
 
         if(level==0)
@@ -630,7 +701,7 @@ public:
             for (int j=0;j<objects.size();j++){
                 double tmp = objects[j]->getIntersectingT(tmpRay);
 
-                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                if(GT(tmp,0) && LT(tmp,maxDistanceFromObjecttoLightSource)){//obscured
                     obscured = true;
                     break;
                 }
@@ -640,13 +711,34 @@ public:
 
             if(!obscured){
                 //apply phong modeling
+                //cout<<"IN: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
                 double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
                 double phongValue = max(pow(dotProduct(r->dir,reflection),shine),0.0);
 
-                for(int ii=0;ii<3;ii++)
-                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
-                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
-                                                        phongValue*(this->coeffs[SPECULR]));
+                //cout<<"lambert and phong: "<<level<<": ";
+
+               // cout<<lambertValue<<" "<<phongValue<<endl;
+
+                double tmp_diffuse = lambertValue*coeffs[DIFFUSE];
+                double tmp_speculr = phongValue*coeffs[SPECULR];
+
+                //cout<<tmp_diffuse<<" "<<tmp_speculr<<endl;
+
+                double added = tmp_diffuse + tmp_speculr;
+
+                //cout<<added<<endl;
+
+                
+                for(int ii=0;ii<3;ii++){
+                    if(added>0){
+                       // cout<<"Before: "<<colorAt[ii]<<endl;
+                        colorAt[ii]+= (color[ii] *source_factor)*added;
+                        //cout<<"After: "<<colorAt[ii]<<endl;
+                    }
+                }
+
+                
+                //cout<<"OUT: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
             }
 
             if(level<recursion_level){
@@ -657,14 +749,14 @@ public:
 
                 int nearest=-1;
                 double t_min = INF;
-                double reflectColor[3];
+                double *reflectColor=new double[3];
 
                 for(int j=0;j<objects.size();j++){
                     double t = objects[j]->getIntersectingT(reflectedRay);
 
-                    if(t<=0)
+                    if(LT(t,0)||EQ(t,0))
                         continue;
-                    else if(t<t_min){
+                    else if(LT(t,t_min)){
                         t_min=t;
                         nearest = j;
                     }
@@ -729,7 +821,7 @@ public:
     }
     bool isInsideLimit(point p1,point pMin,point  pMax)
     {
-        return (length>0 && p1.x>=pMin.x && p1.x<=pMax.x)||(width>0&&p1.y>=pMin.y && p1.y<=pMax.y)||(height>0&&p1.z>=pMin.z && p1.z<=pMax.z);
+        return (GT(length,0) && GTE(p1.x,pMin.x) && LTE(p1.x,pMax.x))||(GT(width,0)&&GTE(p1.y,pMin.y) && LTE(p1.y,pMax.y))||(GT(height,0)&&GTE(p1.z,pMin.z) && LTE(p1.z,pMax.z));
     }
     double getIntersectingT(LightRay* r)
     {
@@ -777,7 +869,7 @@ public:
         
         double minT = getIntersectingT(r);
         //cout<<minT<<endl;
-        if(minT<=0)
+        if(LT(minT,0.0)||EQ(minT,0.0))
             return -1;
 
         if(level==0)
@@ -807,7 +899,7 @@ public:
             for (int j=0;j<objects.size();j++){
                 double tmp = objects[j]->getIntersectingT(tmpRay);
 
-                if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
+                if(GT(tmp,0) && LT(tmp,maxDistanceFromObjecttoLightSource)){//obscured
                     obscured = true;
                     break;
                 }
@@ -817,13 +909,36 @@ public:
 
             if(!obscured){
                 //apply phong modeling
+                //cout<<"IN: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
+                
+
                 double lambertValue = max(0.0,dotProduct(tmpRay->dir,normal));
                 double phongValue = max(pow(dotProduct(r->dir,reflection),shine),0.0);
 
-                for(int ii=0;ii<3;ii++)
-                    colorAt[ii]+= (this->color[ii] * this->source_factor) *
-                                                    (lambertValue*(this->coeffs[DIFFUSE]) + 
-                                                        phongValue*(this->coeffs[SPECULR]));
+                //cout<<"lambert and phong: "<<level<<": ";
+
+               // cout<<lambertValue<<" "<<phongValue<<endl;
+
+                double tmp_diffuse = lambertValue*coeffs[DIFFUSE];
+                double tmp_speculr = phongValue*coeffs[SPECULR];
+
+                //cout<<tmp_diffuse<<" "<<tmp_speculr<<endl;
+
+                double added = tmp_diffuse + tmp_speculr;
+
+                //cout<<added<<endl;
+
+                
+                for(int ii=0;ii<3;ii++){
+                    if(added>0){
+                       // cout<<"Before: "<<colorAt[ii]<<endl;
+                        colorAt[ii]+= (color[ii] *source_factor)*added;
+                        //cout<<"After: "<<colorAt[ii]<<endl;
+                    }
+                }
+
+                
+                //cout<<"OUT: "<<colorAt[0]<<" "<<colorAt[1]<<" "<<colorAt[2]<<endl;
             }
 
             if(level<recursion_level){
@@ -834,14 +949,14 @@ public:
 
                 int nearest=-1;
                 double t_min = INF;
-                double reflectColor[3];
+                double *reflectColor=new double[3];
 
                 for(int j=0;j<objects.size();j++){
                     double t = objects[j]->getIntersectingT(reflectedRay);
 
-                    if(t<=0)
+                    if(LT(t,0)||EQ(t,0))
                         continue;
-                    else if(t<t_min){
+                    else if(LT(t,t_min)){
                         t_min=t;
                         nearest = j;
                     }
