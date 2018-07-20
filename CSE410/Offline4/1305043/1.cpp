@@ -10,19 +10,17 @@ using namespace std;
 
 #define AXIS_SIZE 400
 
-#define EYE_X 150
-#define EYE_Y 150
+#define EYE_X 100
+#define EYE_Y 100
 #define EYE_Z 10
-
-
-
 
 #define FOVY 80.0
 #define ASPECT 1.0
 #define ZNEAR 1.0
 #define ZFAR 1000.0
-#include <GL/freeglut.h>
-#include <GL/gl.h>
+
+
+#include "GL/freeglut.h"
 #include "base_shape.hpp"
 
 //GLOBAL VARIABLES: Offline1
