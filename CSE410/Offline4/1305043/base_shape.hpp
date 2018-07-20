@@ -404,15 +404,15 @@ public:
 class Floor:public BaseObject{
 public:
     bitmap_image txt_img;
-    double hMul,wMul;
+    double hMul,wMul,floorWidth;
+    bool textureAvailable=false;
     
     Floor(double floorWidth,double tileWidth)
     {
         this->reference_point = {-floorWidth/2.0,-floorWidth/2.0,0};
         this->length = tileWidth;
-        this->txt_img = bitmap_image("Texture/texture.bmp");
-        this->hMul = (1.0*txt_img.height())/floorWidth;
-        this->wMul = (1.0*txt_img.width())/floorWidth;
+
+        this->floorWidth =floorWidth;
     }
 
     void draw(){
@@ -443,6 +443,14 @@ public:
                 glEnd();
             }
         }
+    }
+
+    void setTextureFile(string fileName)
+    {
+    	this->txt_img = bitmap_image(fileName);
+        this->hMul = (1.0*txt_img.height())/floorWidth;
+        this->wMul = (1.0*txt_img.width())/floorWidth;
+    	this->textureAvailable = true;
     }
 
     vect getNormal(point intersectionPoint)
@@ -493,18 +501,19 @@ public:
             color[0]=color[1]=color[2]=0;
 
 
-        unsigned char rr,gg,bb;
+        if(this->textureAvailable){
+	        unsigned char rr,gg,bb;
 
-        int tx = (intersectionPoint.x+fabs(reference_point.x))*wMul;
-        int ty = (intersectionPoint.y+fabs(reference_point.y))*hMul;
+	        int tx = (intersectionPoint.x+fabs(reference_point.x))*wMul;
+	        int ty = (intersectionPoint.y+fabs(reference_point.y))*hMul;
 
-        txt_img.get_pixel(tx,ty,rr,gg,bb);
+	        txt_img.get_pixel(tx,ty,rr,gg,bb);
 
-        double txt_color[] = {1.0*rr,1.0*gg,1.0*bb};
+	        double txt_color[] = {1.0*rr,1.0*gg,1.0*bb};
 
-        for(int i=0;i<3;i++)
-            colorAt[i] = color[i]*coeffs[AMBIENT]*(1.0*txt_color[i]/255.0);
-
+	        for(int i=0;i<3;i++)
+	            colorAt[i] = color[i]*coeffs[AMBIENT]*(1.0*txt_color[i]/255.0);
+	    }
 
         vect normal = getNormal(intersectionPoint);
 

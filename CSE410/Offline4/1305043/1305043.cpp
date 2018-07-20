@@ -523,9 +523,10 @@ void loadActualData()
 	}
 
 
-	BaseObject* tmp2 = new Floor(1000,20);
+	Floor* tmp2 = new Floor(1000,20);
 	tmp2->setCoeffs(0.4,0.2,0.2,0.2);
 	tmp2->setShine(1);
+	tmp2->setTextureFile("Texture/texture.bmp");
 	//tmp2->setColor(1,0,0);
 	objects.push_back(tmp2);
 
