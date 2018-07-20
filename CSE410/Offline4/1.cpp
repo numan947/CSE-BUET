@@ -10,6 +10,13 @@ using namespace std;
 
 #define AXIS_SIZE 400
 
+#define EYE_X 24.808
+#define EYE_Y -41.8681
+#define EYE_Z 22.7117
+
+
+
+
 #define FOVY 80.0
 #define ASPECT 1.0
 #define ZNEAR 1.0
@@ -128,7 +135,7 @@ void capture(){
     				nearest = k;
     				//printf("%d\n",k );
     			}
-    			cout<<t<<endl;
+    			//cout<<t<<endl;
     		}
 
     		if(nearest!=-1){
@@ -148,6 +155,10 @@ void capture(){
     image->save_image("1.bmp");
 
     printf("DONE\n");
+    cout<<camPos.x<<" "<<camPos.y<<" "<<camPos.z<<endl;
+    cout<<l.x<<" "<<l.y<<" "<<l.z<<" "<<endl;
+    cout<<r.x<<" "<<r.y<<" "<<r.z<<" "<<endl;
+    cout<<u.x<<" "<<u.y<<" "<<u.z<<" "<<endl;
 }
 
 
@@ -281,7 +292,7 @@ void display(){
 		objects[i]->draw();
 	}
 
-	glColor3f(1.0, 0.0, 1.0);
+	glColor3f(1.0, 0.0, 0.0);
 	glPointSize(2);
 	glBegin(GL_POINTS);	
 	for(int i=0;i<lights.size();i++){
@@ -300,9 +311,9 @@ void animate(){
 }
 void init(){
 	//initializing camera params
-	camPos.x=100;
-	camPos.y=100;
-	camPos.z=10;
+	camPos.x=EYE_X;
+	camPos.y=EYE_Y;
+	camPos.z=EYE_Z;
 	drawaxes=1;
 
 
@@ -313,10 +324,22 @@ void init(){
 	r.x=-1.0/(sqrt(2));
 	r.y=1.0/(sqrt(2));
 	r.z=0;
-	
+
+	//remove these
+	r.x = 0.978148;
+	r.y = -0.207912;
+	r.z = 0;
+
+
+
 	l.x=-1.0/(sqrt(2));
 	l.y=-1.0/(sqrt(2));
 	l.z=0;
+
+
+	l.x = 0.207912;
+	l.y = 0.978148;
+	l.z = 0;
 
 
 	//clear the screen
@@ -350,14 +373,14 @@ void loadTestData()
 	recursion_level = 3;
 	image_width = image_height = 768;
 
-	point aa = {30,30,10};
+	point aa = {20,20,10};
 	BaseObject* tmp = new Sphere(aa,10);
 	tmp->setColor(1,0,0);
 	tmp->setCoeffs(0.4,0.2,0.2,0.2);
 	tmp->setShine(1);
 	objects.push_back(tmp);
 
-	aa = {0,15,15};
+	aa = {40,15,15};
 	tmp = new Sphere(aa,5);
 	tmp->setColor(0,1,0);
 	tmp->setCoeffs(0.4,0.2,0.2,0.2);
@@ -384,7 +407,7 @@ void loadTestData()
 	tmp->setColor(0.1,0.8,0.5);
 	tmp->setCoeffs(0.4, 0.2, 0.1, 0.3);
 	tmp->setShine(5);
-	objects.push_back(tmp);
+	//objects.push_back(tmp);
 
 
 
@@ -392,7 +415,7 @@ void loadTestData()
     temp->setColor(1, 0, 1);
     temp->setCoeffs(0.4, 0.2, 0.1, 0.3);
     temp->setShine(3);
-    objects.push_back(temp);
+    //objects.push_back(temp);
 
 
 
@@ -404,7 +427,7 @@ void loadTestData()
 
 
 
-	vect light1 = {-50,50,50};
+	vect light1 = {40,40,40};
 
 	lights.push_back(light1);
 
@@ -507,11 +530,11 @@ void loadActualData()
 
 int main(int argc, char **argv){
 	
-	//freopen("out.txt", "w", stdout);
+	freopen("out.txt", "w", stdout);
 	
-	//loadTestData();
+	loadTestData();
 
-	loadActualData();
+	//loadActualData();
 
 
 

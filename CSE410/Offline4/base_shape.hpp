@@ -243,7 +243,7 @@ public:
             bool obscured=false;
             
             for (int j=0;j<objects.size();j++){
-                double tmp = objects[i]->getIntersectingT(tmpRay);
+                double tmp = objects[j]->getIntersectingT(tmpRay);
 
                 if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
                     obscured = true;
@@ -456,7 +456,7 @@ public:
             bool obscured=false;
             
             for (int j=0;j<objects.size();j++){
-                double tmp = objects[i]->getIntersectingT(tmpRay);
+                double tmp = objects[j]->getIntersectingT(tmpRay);
 
                 if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
                     obscured = true;
@@ -610,7 +610,7 @@ public:
             bool obscured=false;
             
             for (int j=0;j<objects.size();j++){
-                double tmp = objects[i]->getIntersectingT(tmpRay);
+                double tmp = objects[j]->getIntersectingT(tmpRay);
 
                 if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
                     obscured = true;
@@ -787,7 +787,7 @@ public:
             bool obscured=false;
             
             for (int j=0;j<objects.size();j++){
-                double tmp = objects[i]->getIntersectingT(tmpRay);
+                double tmp = objects[j]->getIntersectingT(tmpRay);
 
                 if(tmp>0 && tmp<maxDistanceFromObjecttoLightSource){//obscured
                     obscured = true;
