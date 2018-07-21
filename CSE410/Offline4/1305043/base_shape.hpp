@@ -499,7 +499,11 @@ public:
         }
         else
             color[0]=color[1]=color[2]=0;
+        
 
+        for(int i=0;i<3;i++)
+            colorAt[i] = color[i]*coeffs[AMBIENT];
+        
 
         if(this->textureAvailable){
 	        unsigned char rr,gg,bb;
@@ -512,7 +516,7 @@ public:
 	        double txt_color[] = {1.0*rr,1.0*gg,1.0*bb};
 
 	        for(int i=0;i<3;i++)
-	            colorAt[i] = color[i]*coeffs[AMBIENT]*(1.0*txt_color[i]/255.0);
+	            colorAt[i] = colorAt[i]*(1.0*txt_color[i]/255.0);
 	    }
 
         vect normal = getNormal(intersectionPoint);
