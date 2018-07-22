@@ -148,7 +148,7 @@ extern vector<BaseObject*>objects;
 class Sphere: public BaseObject
 {
 public:
-    double eta = 2.5;
+    double eta = 3	;
     Sphere(point center,double radius)
     {
         this->reference_point = pointToVector(center);

@@ -30,8 +30,10 @@ def build_priors(trainBits,n,w,sigma_sq):
 	priors = np.zeros(2**n)
 	states = []
 	xks = [[] for x in range(2**n)]
+	
 	#print(xks)
 	for i in range(len(trainBits)-n+1):
+		print("IN BUILD PRIORS ",i)
 		state = int(trainBits[i:i+n],2)
 		xk = calculate_xk(trainBits[i:i+n], w, sigma_sq)
 		xks[state].append(xk)
@@ -62,6 +64,7 @@ def build_transitions(stateSeq,n):
 	transitions = np.zeros((2**n,2**n))
 
 	for i in range(len(stateSeq)-1):
+		print("IN BUILD Transitions ",i)
 		transitions[stateSeq[i],stateSeq[i+1]]+=1
 
 	#print(transitions)
@@ -82,6 +85,7 @@ def build_observation_probabilities(testBits,means,sigma_sq,n,w):
 	obs = []
 	obs_states=[]
 	for i in range(len(testBits)-n+1):
+		print("IN BUILD Observations ",i)
 		tmp = []
 		xk = calculate_xk(testBits[i:i+n], w, sigma_sq)
 
@@ -113,6 +117,9 @@ def viterbi(transition_probs,prior_probs,emission_probs):
 
 	for samp in range(1,emission_probs.shape[0]):
 		for state in range(emission_probs.shape[1]):
+			print("IN Viterbi ",samp," ",state)
+			print(samp," ",state)
+
 			trans_prob = prob_table[samp-1,:]*transition_probs[state,:]
 
 			max_idx,max_val = trans_prob.argmax(),max(trans_prob)
@@ -201,24 +208,12 @@ def go(seed):
 	priors,stateSeq,means = build_priors(train,n,w,sigma_sq)
 
 
-	print("Prior Probabilities:\n")
-	print(priors)
-	print("\n\n")
-
-	
 
 	#print(stateSeq)
 	#print(means)
 
 	transitions = build_transitions(stateSeq,n)
-	print("Transition Probabilities:\n")
-	print(transitions)
-	print("\n\n")
 
-	print("Observation Means:\n")
-	print(means)
-	print("\n\n")
-	#print(priors)
 	#print(transitions)
 
 	obs_probs,obs_states = build_observation_probabilities(test,means,sigma_sq,n,w)
@@ -240,13 +235,26 @@ def go(seed):
 		best_estimation+=temp[len(temp)-1]
 
 	#print(best_estimation)
+	print("Prior Probabilities:\n",file=open("report.txt","a"))
+	print(priors)
+	print("\n\n",file=open("report.txt","a"))
 
-	print("Metrics:\n")
+	print("Transition Probabilities:\n",file=open("report.txt","a"))
+	print(transitions)
+	print("\n\n",file=open("report.txt","a"))
+
+	print("Observation Means:\n",file=open("report.txt","a"))
+	print(means)
+	print("\n\n",file=open("report.txt","a"))
+	#print(priors)
+	
+
+	print("Metrics:\n",file=open("report.txt","a"))
 
 	accuracy,error=calculate_accuracy(test[n-1:],best_estimation)
 
 
-	print("Accuray: ",accuracy)
+	print("Accuray: ",accuracy,file=open("report.txt","a"))
 
 	
 

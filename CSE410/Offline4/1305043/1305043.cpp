@@ -12,7 +12,7 @@ using namespace std;
 
 #define EYE_X 150
 #define EYE_Y 150
-#define EYE_Z 10
+#define EYE_Z 100
 
 
 
