@@ -127,3 +127,10 @@
 CSE472/Offline3/assignment2/
 
 CSE410/**/*.bmp
+
+
+CSE472/Project/fer2013
+CSE472/Project/**/*.tar.gz
+CSE472/Project/**/*.csv
+CSE472/Project/**/*.bib
+CSE472/Project/**/*.h5
