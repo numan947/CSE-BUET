@@ -32,7 +32,7 @@ def saveModel(model,path,config):
         json_file.write(model_json)
     # serialize weights to HDF5
     model.save_weights(path+"best_model.h5")
-    print(config,,file = open(log_file_path+"/Tune.log","a"))
+    print(config,file = open(log_file_path+"/Tune.log","a"))
     print("Saved model to disk-->",path+"best_model.h5")
 
 
@@ -41,18 +41,17 @@ def saveModel(model,path,config):
 
 def train_and_tune():
     
-    valid_data_gen = ImageDataGenerator(rescale=1.0/255)
-    valid_generator = valid_data_gen.flow_from_directory(valid_data, (img_width, img_height), batch_size=batch_size,class_mode='categorical')
-    fnames = valid_generator.filenames
+	valid_data_gen = ImageDataGenerator(rescale=1.0/255)
+	valid_generator = valid_data_gen.flow_from_directory(valid_data, (img_width, img_height), batch_size=batch_size,class_mode='categorical')
+	fnames = valid_generator.filenames
 	ground_truth = valid_generator.classes
 	label2index = valid_generator.class_indices
 	idx2label = dict((v,k) for k,v in label2index.items())
 
-
 	cur_best = None
 	cur_error = np.inf
 
-   	for o in optimizers:
+	for o in optimizers:
 		for lr in learn_rate:
 			for activation in activation_function:
 				for dr in dropout_rate:

@@ -71,9 +71,9 @@ def TrainModel(activation_function,learning_rate,optimizer,dropout_rate,denselay
     opt = None
     if(optimizer=="Adam"):
         opt = optimizers.Adam(lr = learning_rate)
-    else if(optimizer=="SGD"):
+    elif(optimizer=="SGD"):
         opt = optimizers.SGD(lr = learning_rate)
-    else if(optimizer == "RMSprop"):
+    elif(optimizer == "RMSprop"):
         opt = optimizers.RMSprop(lr = learning_rate)
 
 
