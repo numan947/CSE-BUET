@@ -123,11 +123,16 @@
 **/*.wmv
 **/*.csv
 **/*.pkl
+**/*.pyc
+**/*.h5
+
 
 CSE472/Offline3/assignment2/
 
 CSE410/**/*.bmp
 
 
-CSE472/Project/fer2013
-CSE472/Project/**/*.h5
+CSE472/Project/**/*.json
+CSE472/Project/**/*.png
+CSE472/Project/logs
+CSE472/Project/models
