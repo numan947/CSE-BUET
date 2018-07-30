@@ -51,25 +51,22 @@ def train_and_tune():
 	cur_best = None
 	cur_error = np.inf
 
-	for o in optimizers:
-		for lr in learn_rate:
-			for activation in activation_function:
-				for dr in dropout_rate:
-					for conv in train_conv_layer:
-						for dense in denselayer_size:
-							print("Training Model With Hyper Paramters: ",file = open(log_file_path+"/Tune.log","a"))
-							model = train.TrainModel(activation_function=activation,learning_rate=lr,optimizer=o,dropout_rate=dr,denselayer_size=dense,train_conv_layer=conv,resnetModel = "resnet152")
-							
-							predictions = loaded_model.predict_generator(test_generator, steps=test_generator.samples/test_generator.batch_size,verbose=1)
-							predicted_classes = np.argmax(predictions,axis=1)
+	for lr in learn_rate:
+		for dr in dropout_rate:
+			for conv in train_conv_layer:
+					print("Training Model With Hyper Paramters: ",file = open(log_file_path+"/Tune.log","a"))
+					model = train.TrainModel(learning_rate=lr,dropout_rate=dr,train_conv_layer=conv,resnetModel = "resnet152")
+					
+					predictions = loaded_model.predict_generator(test_generator, steps=test_generator.samples/test_generator.batch_size,verbose=1)
+					predicted_classes = np.argmax(predictions,axis=1)
 
-							errors = np.where(predicted_classes != ground_truth)[0]
-							print("No of errors = {}/{}".format(len(errors),test_generator.samples),file = open(log_file_path+"/Tune.log","a"))
+					errors = np.where(predicted_classes != ground_truth)[0]
+					print("No of errors = {}/{}".format(len(errors),test_generator.samples),file = open(log_file_path+"/Tune.log","a"))
 
-							if(erros<cur_error):
-								cur_best = model
-								cur_error = errors
-								saveModel(model,best_models_path,trained_models_path,str(activation)+'_'+str(lr)+'_'+str(o)+'_'+str(dr)+'_'+str(dense)+'_'+str(conv))
+					if(erros<cur_error):
+						cur_best = model
+						cur_error = errors
+						saveModel(model,best_models_path,trained_models_path,str(lr)+'_'+str(dr)+'_'+str(conv))
 
 
 

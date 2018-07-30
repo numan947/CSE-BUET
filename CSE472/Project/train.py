@@ -19,7 +19,7 @@ def module_from_file(module_name, file_path):
     spec.loader.exec_module(module)
     return module
 
-def TrainModel(activation_function,learning_rate,optimizer,dropout_rate,denselayer_size,resnetModel='resnet50',train_conv_layer=10):
+def TrainModel(activation_function='softmax',learning_rate,optimizer='Adam',dropout_rate,denselayer_size=1024,resnetModel='resnet50',train_conv_layer=10):
 
 
     img_width, img_height = 224, 224
