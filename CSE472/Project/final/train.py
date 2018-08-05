@@ -94,16 +94,18 @@ def TrainModel(train_data,resnet_conv,learning_rate,valid_data=None,dropout_rate
                                         height_shift_range=0.1,
                                         zoom_range=0.1,
                                         horizontal_flip=True)
-    valid_data_gen = ImageDataGenerator(rescale=1.0/255)
-    valid_generator = valid_data_gen.flow_from_directory(valid_data, (img_width, img_height), batch_size=batch_size,class_mode='categorical')
+    
+    if(valid_data is not None):
+        valid_data_gen = ImageDataGenerator(rescale=1.0/255)
+        valid_generator = valid_data_gen.flow_from_directory(valid_data, (img_width, img_height), batch_size=batch_size,class_mode='categorical')
 
 
     # callbacks
-    tensor_board = keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=0, write_graph=True, write_images=True)
+    tensor_board = keras.callbacks.TensorBoard(log_dir=os.path.join("logs"), histogram_freq=0, write_graph=True, write_images=True)
     
     csv_logger = CSVLogger(log_file_path, append=False)
-    early_stop = EarlyStopping('val_acc', patience=patience)
-    reduce_lr = ReduceLROnPlateau('val_acc', factor=0.1, patience=int(patience / 4), verbose=1)
+    early_stop = EarlyStopping( patience=patience)
+    reduce_lr = ReduceLROnPlateau( factor=0.1, patience=int(patience / 4), verbose=1)
     
     # model_names = str(trained_models_path) +'_'+str(activation_function)+'_'+str(learning_rate)+'_'+str(optimizer)+'_'+str(dropout_rate)+'_'+str(denselayer_size)+'_'+str(train_conv_layer)+'.{epoch:02d}-{val_acc:.2f}.hdf5'
     # model_checkpoint = ModelCheckpoint(model_names, monitor='val_acc', verbose=1, save_best_only=True)
@@ -119,14 +121,23 @@ def TrainModel(train_data,resnet_conv,learning_rate,valid_data=None,dropout_rate
     print("Starting Fine Tuning the Model")
 
     #fine tune the model
-    model.fit_generator(
-      train_generator,
-      steps_per_epoch=train_generator.samples/train_generator.batch_size ,
-      epochs=num_epochs,
-      validation_data=valid_generator,
-      validation_steps=valid_generator.samples/valid_generator.batch_size,
-      verbose=1,
-      callbacks=callbacks)
+    if(valid_data is not None):
+        model.fit_generator(
+          train_generator,
+          steps_per_epoch=train_generator.samples/train_generator.batch_size ,
+          epochs=num_epochs,
+          validation_data=valid_generator,
+          validation_steps=valid_generator.samples/valid_generator.batch_size,
+          verbose=1,
+          callbacks=callbacks)
+    else:
+        model.fit_generator(
+          train_generator,
+          steps_per_epoch=train_generator.samples/train_generator.batch_size ,
+          epochs=num_epochs,
+          verbose=1,
+          callbacks=callbacks)
+
     return model
 
 
@@ -156,16 +167,23 @@ if __name__ == '__main__':
     zip_ref.extractall(os.path.join(os.path.dirname(train_data),"MAIN_DATA"))
     zip_ref.close()
     train_data = os.path.join(os.path.dirname(train_data),"MAIN_DATA")
+
+    epoch=3
+    if 'Under_90' in train_data:
+        epoch = 10
+    if 'Under_10' in train_data:
+        epoch = 5
     
+
 
     resnet_conv = resnet50.ResNet50(include_top=False, weights='imagenet',input_shape=(img_height,img_width, num_channels))
 
-    model = TrainModel(train_data=train_data, resnet_conv=resnet_conv, learning_rate=learning_rate, valid_data=None, train_conv_layer=train_conv, num_epochs=1)
+    model = TrainModel(train_data=train_data, resnet_conv=resnet_conv, learning_rate=learning_rate, valid_data=None, train_conv_layer=train_conv, num_epochs=epoch)
 
     print("Training........Done!")
     model_json = model.to_json()
     with open(os.path.join("model.json"), "w") as json_file:
         json_file.write(model_json)
     # serialize weights to HDF5
-    model.save_weights(os.path_join("model.h5"))
+    model.save_weights(os.path.join("model.h5"))
     print("Model saved.")

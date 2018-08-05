@@ -18,7 +18,7 @@ def saveModel(model,path,config,log_file_path):
     with open(os.path.join(path,config+"_"+"best_model.json"), "w") as json_file:
         json_file.write(model_json)
     # serialize weights to HDF5
-    model.save_weights(os.path_join(path,config+"_"+"best_model.h5"))
+    model.save_weights(os.path.join(path,config+"_"+"best_model.h5"))
     print(config,file = open(os.path.join(log_file_path,"Tune.log"),"a"))
     print("Saved model to disk-->",path+"best_model.h5")
 
@@ -61,6 +61,7 @@ def train_and_tune(train_data,valid_data):
 	batch_size = 32
 	patience = 50
 
+	epoch=3
 	if 'Under_90' in train_data:
 		epoch = 10
 	if 'Under_10' in train_data:
