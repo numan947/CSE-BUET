@@ -12,9 +12,15 @@ from keras.models import model_from_json
 import numpy as np
 import os
 import importlib, importlib.util, os.path
+import zipfile
+import sys
+
+def make_dirs(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
-def TrainModel(resnet_conv,learning_rate,dropout_rate=0.5,activation_function='softmax',optimizer='Adam',denselayer_size=1024,train_conv_layer=10):
+def TrainModel(train_data,resnet_conv,learning_rate,valid_data=None,dropout_rate=0.5,activation_function='softmax',optimizer='Adam',denselayer_size=1024,train_conv_layer=10,num_epochs=10):
 
 
     img_width, img_height = 224, 224
@@ -22,15 +28,18 @@ def TrainModel(resnet_conv,learning_rate,dropout_rate=0.5,activation_function='s
     num_classes = 7
     # train_data = 'fer2013/Training1'
     # valid_data = 'fer2013/PublicTest1'
-    train_data ='drive/COLAB_NOTEBOOKS/sample/Training1'
-    valid_data = 'drive/COLAB_NOTEBOOKS/sample/PublicTest1'
+    # train_data ='drive/COLAB_NOTEBOOKS/sample/Training1'
+    # valid_data = 'drive/COLAB_NOTEBOOKS/sample/PublicTest1'
 
     verbose = 1
     batch_size = 32
-    num_epochs =1 #10000
-    patience = 50
-    log_file_path = './logs/training.log'
-    trained_models_path = 'models/model'
+    #num_epochs =1 #10000
+    patience = 3
+    log_file_path = os.path.join(os.getcwd(),'logs','training.log')
+    trained_models_path = os.path.join(os.getcwd(),'models','model')
+
+    make_dirs(log_file_path)
+    make_dirs(trained_models_path)
 
     for layer in resnet_conv.layers[:-train_conv_layer]:
         layer.trainable = False
@@ -107,7 +116,7 @@ def TrainModel(resnet_conv,learning_rate,dropout_rate=0.5,activation_function='s
                                                          class_mode='categorical')
 
 
-    print("Starting Tuning the Model")
+    print("Starting Fine Tuning the Model")
 
     #fine tune the model
     model.fit_generator(
@@ -119,3 +128,44 @@ def TrainModel(resnet_conv,learning_rate,dropout_rate=0.5,activation_function='s
       verbose=1,
       callbacks=callbacks)
     return model
+
+
+if __name__ == '__main__':
+    
+    img_width, img_height = 224, 224
+    num_channels = 3
+    num_classes = 7
+
+    train_data = sys.argv[1]
+    hyper_params = sys.argv[2]
+    
+    learning_rate = -1
+    train_conv = -1
+
+    with open(hyper_params) as f:
+        hyp = f.readline()
+        hh = hyp.split(" ")
+        learning_rate = np.float(hh[0])
+        train_conv = np.int(hh[1])
+
+    print(train_conv,learning_rate)
+
+    print(os.path.dirname(train_data))
+
+    zip_ref = zipfile.ZipFile(train_data,'r')
+    zip_ref.extractall(os.path.join(os.path.dirname(train_data),"MAIN_DATA"))
+    zip_ref.close()
+    train_data = os.path.join(os.path.dirname(train_data),"MAIN_DATA")
+    
+
+    resnet_conv = resnet50.ResNet50(include_top=False, weights='imagenet',input_shape=(img_height,img_width, num_channels))
+
+    model = TrainModel(train_data=train_data, resnet_conv=resnet_conv, learning_rate=learning_rate, valid_data=None, train_conv_layer=train_conv, num_epochs=1)
+
+    print("Training........Done!")
+    model_json = model.to_json()
+    with open(os.path.join("model.json"), "w") as json_file:
+        json_file.write(model_json)
+    # serialize weights to HDF5
+    model.save_weights(os.path_join("model.h5"))
+    print("Model saved.")

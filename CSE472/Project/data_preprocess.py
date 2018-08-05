@@ -55,11 +55,11 @@ def main():
 	TestSet = dataset[dataset.Usage=='PrivateTest']
 
 
-	read_process_save(TestSet,"PrivateTest")
+	read_process_save(TestSet,"PrivateTest1",200)
 
-	read_process_save(TrainingSet,"Training")
+	read_process_save(TrainingSet,"Training1",200)
 
-	read_process_save(ValidationSet,"PublicTest")
+	read_process_save(ValidationSet,"PublicTest1",20)
 
 
 if __name__ == '__main__':

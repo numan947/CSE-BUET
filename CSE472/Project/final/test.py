@@ -11,6 +11,11 @@ from keras.optimizers import SGD
 from keras.models import model_from_json
 import numpy as np
 import os
+import zipfile
+
+def make_dirs(path):
+	if not os.path.exists(path):
+		os.makedirs(path)
 
 def loadModel(path):
 	# load json and create model
